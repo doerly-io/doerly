@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Doerly.Module.Authorization.DataAccess.Migrations
 {
     [DbContext(typeof(AuthorizationDbContext))]
-    [Migration("20250119002628_InitialAuthorization")]
-    partial class InitialAuthorization
+    [Migration("20250124001928_Authorization_Initial")]
+    partial class Authorization_Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

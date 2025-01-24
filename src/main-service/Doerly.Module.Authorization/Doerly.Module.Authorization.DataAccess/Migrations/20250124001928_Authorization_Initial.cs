@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Doerly.Module.Authorization.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialAuthorization : Migration
+    public partial class Authorization_Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
