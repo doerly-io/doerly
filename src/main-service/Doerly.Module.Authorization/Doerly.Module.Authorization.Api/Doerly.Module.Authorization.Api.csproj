@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
+      <ProjectReference Include="..\..\Doerly.Api.Infrastructure\Doerly.Api.Infrastructure.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Authorization.Domain\Doerly.Module.Authorization.Domain.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Authorization.DataAccess\Doerly.Module.Authorization.DataAccess.csproj" />
+    </ItemGroup>
+
+</Project>
