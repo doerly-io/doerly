@@ -36,7 +36,7 @@ public class BaseAuthHandler : BaseHandler<AuthorizationDbContext>
             Claims = claims,
             IssuedAt = DateTime.UtcNow,
             NotBefore = DateTime.UtcNow,
-            Expires = DateTime.UtcNow.AddSeconds(JwtOptions.Value.AccessTokenExpiration),
+            Expires = DateTime.UtcNow.AddMinutes(JwtOptions.Value.AccessTokenExpiration),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtOptions.Value.SecretKey)),
                 SecurityAlgorithms.HmacSha256Signature),
         };
