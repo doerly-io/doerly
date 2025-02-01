@@ -1,0 +1,25 @@
+.password-container {
+  width: 100%;
+  position: relative;
+
+  input {
+    width: 100%;
+  }
+  i {
+    opacity: 80%;
+  }
+
+  .password-toggle-icon {
+    position: absolute;
+    top: 52%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+}
+
+label {
+  padding-left: 0;
+  padding-right: 0;
+}
+

@@ -1,0 +1,32 @@
+<p-header size="small" class="container d-flex justify-content-between align-items-center p-3"
+          pStyleClass="p-primary-color">
+
+  <div class="d-flex align-items-center">
+    <h4 class="navbar-brand" [pStyleClass]="'primary'">Doerly</h4>
+  </div>
+
+  <div class="d-flex flex-row">
+    <p-button variant="text" size="small" [severity]="lang === 'en' ? 'primary' : 'secondary'"
+              (onClick)="setLanguage('en')">EN
+    </p-button>
+    <p-divider layout="vertical" styleClass="mx-0"/>
+    <p-button variant="text" size="small" [severity]="lang === 'uk' ? 'primary' : 'secondary'"
+              (onClick)="setLanguage('uk')">UKR
+    </p-button>
+    <p-button class="mx-1" size="small" icon="{{theme == 'dark' ? 'pi pi-moon' : 'pi pi-sun' }}" [rounded]="true"
+              [text]="true" [raised]="false"
+              severity="secondary" (onClick)="toggleDarkMode()"
+              [outlined]="true"/>
+    <p-button class="ms-2" size="small" icon="pi pi-user" [rounded]="true" [text]="true" [raised]="false"
+              severity="success"
+              [outlined]="true"/>
+
+  </div>
+
+</p-header>
+<section class="container">
+  <router-outlet></router-outlet>
+</section>
+<p-footer></p-footer>
+
+
