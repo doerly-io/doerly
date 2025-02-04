@@ -1,5 +1,6 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Module.Order.DataAccess;
+using Doerly.Module.Order.DataAccess.Enums;
 using Doerly.Module.Order.Domain.Dtos.Requests.Order;
 using Doerly.Module.Order.Domain.Dtos.Responses.Order;
 using OrderEntity = Doerly.Module.Order.DataAccess.Models.Order;
@@ -22,7 +23,7 @@ public class CreateOrderHandler : BaseOrderHandler
             Price = dto.Price,
             PaymentKind = dto.PaymentKind,
             DueDate = dto.DueDate,
-            Status = dto.Status,
+            Status = OrderStatus.Placed,
             CustomerId = dto.CustomerId,
         };
 
@@ -31,7 +32,7 @@ public class CreateOrderHandler : BaseOrderHandler
 
         var result = new CreateOrderResponse()
         {
-            OrderId = order.Id
+            Id = order.Id
         };
 
         return HandlerResult.Success(result);

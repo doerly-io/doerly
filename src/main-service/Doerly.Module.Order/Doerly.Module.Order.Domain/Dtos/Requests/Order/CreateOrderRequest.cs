@@ -24,8 +24,5 @@ public class CreateOrderRequest
     public DateTime DueDate { get; set; }
 
     [Required]
-    public OrderStatus Status { get; set; }
-
-    [Required]
     public int CustomerId { get; set; }
 }

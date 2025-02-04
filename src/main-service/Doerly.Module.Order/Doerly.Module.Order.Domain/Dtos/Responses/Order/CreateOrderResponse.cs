@@ -8,5 +8,5 @@ namespace Doerly.Module.Order.Domain.Dtos.Responses.Order;
 
 public class CreateOrderResponse
 {
-    public int OrderId { get; set; }
+    public int Id { get; set; }
 }

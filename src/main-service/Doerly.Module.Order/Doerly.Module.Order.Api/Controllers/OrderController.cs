@@ -13,11 +13,11 @@ namespace Doerly.Module.Order.Api.Controllers;
 [Route("api/[area]")]
 public class OrderController : BaseApiController
 {
-    [HttpPost("create-order")]
+    [HttpPost("create")]
     public async Task<IActionResult> CreateOrder(CreateOrderRequest dto)
     {
         var result = await ResolveHandler<CreateOrderHandler>().HandleAsync(dto);
 
-        return Ok(result.Value.OrderId);
+        return Ok(result.Value);
     }
 }
