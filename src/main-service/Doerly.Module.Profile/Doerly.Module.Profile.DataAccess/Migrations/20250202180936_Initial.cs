@@ -1,0 +1,49 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+
+#nullable disable
+
+namespace Doerly.Module.Profile.DataAccess.Migrations
+{
+    /// <inheritdoc />
+    public partial class Initial : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.EnsureSchema(
+                name: "profile");
+
+            migrationBuilder.CreateTable(
+                name: "profile",
+                schema: "profile",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    first_name = table.Column<string>(type: "text", nullable: false),
+                    last_name = table.Column<string>(type: "text", nullable: false),
+                    patronymic = table.Column<string>(type: "text", nullable: true),
+                    date_of_birth = table.Column<DateOnly>(type: "date", nullable: true),
+                    sex = table.Column<int>(type: "integer", nullable: true),
+                    bio = table.Column<string>(type: "text", nullable: true),
+                    user_id = table.Column<int>(type: "integer", nullable: false),
+                    date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_profile", x => x.id);
+                });
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "profile",
+                schema: "profile");
+        }
+    }
+}

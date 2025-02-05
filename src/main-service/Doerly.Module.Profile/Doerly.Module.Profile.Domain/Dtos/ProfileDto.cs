@@ -1,0 +1,16 @@
+﻿using Doerly.Module.Profile.DataAccess.Dicts;
+
+namespace Doerly.Module.Profile.Domain.Dtos;
+
+public class ProfileDto
+{
+    public required int Id { get; set; }
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public string? Patronymic { get; set; }
+    public DateOnly? DateOfBirth { get; set; }
+    public Sex? Sex { get; set; }
+    public string? Bio { get; set; }
+    public DateTime DateCreated { get; set; }
+    public DateTime LastModifiedDate { get; set; }
+}

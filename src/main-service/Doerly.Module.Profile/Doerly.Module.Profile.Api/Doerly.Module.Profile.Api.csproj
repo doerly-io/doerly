@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Doerly.Api.Infrastructure\Doerly.Api.Infrastructure.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Profile.DataAccess\Doerly.Module.Profile.DataAccess.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Profile.Domain\Doerly.Module.Profile.Domain.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Profile.Localization\Doerly.Module.Profile.Localization.csproj" />
+    </ItemGroup>
+
+</Project>
