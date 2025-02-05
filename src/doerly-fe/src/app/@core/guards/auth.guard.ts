@@ -1,18 +1,28 @@
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
-import {Injectable} from '@angular/core';
+import {CanActivateFn, Router} from '@angular/router';
+import {inject} from '@angular/core';
 import {JwtTokenHelper} from '../helpers/jwtToken.helper';
+import {AuthService} from '../../modules/authorization/domain/auth.service';
 
-@Injectable({providedIn: 'root'})
-export class AuthGuard implements CanActivate {
-  constructor(private jwtTokenHelper: JwtTokenHelper, private router: Router) {
-  }
+export const authGuard: CanActivateFn = (route, state) => {
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this.jwtTokenHelper.isLoggedIn()) {
-      return true;
-    } else {
-      this.router.navigate(['/auth/login'], {queryParams: {returnUrl: state.url}});
-      return false;
-    }
+  const jwtTokenHelper = inject(JwtTokenHelper);
+  const router = inject(Router);
+  if (jwtTokenHelper.isLoggedIn()) {
+    return true;
+  } else {
+    const authService = inject(AuthService);
+    authService.refreshToken().subscribe({
+      next: (result) => {
+        jwtTokenHelper.setToken(result.value!.accessToken);
+        router.navigate([state.url]);
+        return true;
+      },
+      error: (error) => {
+        router.navigate(['/auth/login'], {queryParams: {returnUrl: state.url}});
+        return false;
+      }
+    });
+
+    return false;
   }
 }

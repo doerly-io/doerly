@@ -1,6 +1,6 @@
 using System.Resources;
 
-namespace Doerly.Module.Authorization.Localization;
+namespace Doerly.Localization;
 
 public static class Resources
 {

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Doerly.Domain.Handlers;
 using Doerly.Common;
@@ -13,9 +14,9 @@ namespace Doerly.Module.Authorization.Domain.Handlers;
 
 public class BaseAuthHandler : BaseHandler<AuthorizationDbContext>
 {
-    protected readonly IOptions<JwtSettings> JwtOptions;
+    protected readonly IOptions<AuthSettings> JwtOptions;
 
-    public BaseAuthHandler(AuthorizationDbContext dbContext, IOptions<JwtSettings> jwtOptions) : base(dbContext)
+    public BaseAuthHandler(AuthorizationDbContext dbContext, IOptions<AuthSettings> jwtOptions) : base(dbContext)
     {
         JwtOptions = jwtOptions;
     }
@@ -36,7 +37,7 @@ public class BaseAuthHandler : BaseHandler<AuthorizationDbContext>
             Claims = claims,
             IssuedAt = DateTime.UtcNow,
             NotBefore = DateTime.UtcNow,
-            Expires = DateTime.UtcNow.AddMinutes(JwtOptions.Value.AccessTokenExpiration),
+            Expires = DateTime.UtcNow.AddMinutes(JwtOptions.Value.AccessTokenLifetime),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtOptions.Value.SecretKey)),
                 SecurityAlgorithms.HmacSha256Signature),
         };
@@ -45,7 +46,7 @@ public class BaseAuthHandler : BaseHandler<AuthorizationDbContext>
         var token = handler.CreateToken(tokenDescriptor);
         return token;
     }
-    
+
     protected async Task CreateRefreshTokenAsync(Guid tokenGuid, int userId)
     {
         await DbContext.RefreshTokens.Where(x => x.UserId == userId).ExecuteDeleteAsync();
@@ -58,5 +59,21 @@ public class BaseAuthHandler : BaseHandler<AuthorizationDbContext>
 
         DbContext.RefreshTokens.Add(refreshToken);
         await DbContext.SaveChangesAsync();
+    }
+
+    protected (string passwordHash, string passwordSalt) GetPasswordHash(string password)
+    {
+        using var hmac = new HMACSHA512();
+        var passwordSalt = Convert.ToBase64String(hmac.Key);
+        var passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+        return (Convert.ToBase64String(passwordHash), passwordSalt);
+    }
+
+    protected int? GetUserIdFromJwtToken(string accessToken)
+    {
+        var handler = new JsonWebTokenHandler();
+        var token = (JsonWebToken)handler.ReadToken(accessToken);
+        var userIdClaim = token.TryGetValue<int>(ClaimTypes.NameIdentifier, out var userId);
+        return userIdClaim ? userId : null;
     }
 }

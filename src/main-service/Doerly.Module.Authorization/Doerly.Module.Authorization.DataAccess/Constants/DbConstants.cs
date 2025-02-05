@@ -9,5 +9,6 @@ internal class DbConstants
         internal const string User = "user";
         internal const string Role = "role";
         internal const string RefreshToken = "refresh_token";
+        internal const string ResetToken = "reset_token";
     }
 }

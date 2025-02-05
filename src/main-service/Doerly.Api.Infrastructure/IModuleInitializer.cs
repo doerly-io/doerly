@@ -7,7 +7,7 @@ namespace Doerly.Api.Infrastructure;
 
 public interface IModuleInitializer
 {
-    void ConfigureServices(IHostApplicationBuilder builder, IMvcBuilder mvcBuilder);
+    void ConfigureServices(IHostApplicationBuilder builder);
 
     void Configure(IApplicationBuilder app, IWebHostEnvironment env);
 }

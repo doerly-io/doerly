@@ -12,7 +12,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {Checkbox} from 'primeng/checkbox';
 import {Ripple} from 'primeng/ripple';
 import {Card} from 'primeng/card';
-import {RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Divider} from 'primeng/divider';
 
 @Component({
@@ -37,15 +37,19 @@ export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
   isPasswordVisible: boolean = false;
+  returnUrl!: string;
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
+              private router: Router,
+              private route: ActivatedRoute,
               private tokenHelper: JwtTokenHelper
   ) {
   }
 
   ngOnInit() {
     this.initForm();
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   initForm(): void {
@@ -63,6 +67,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(request).subscribe({
       next: (value) => {
         this.tokenHelper.setToken(value.value!.accessToken);
+        this.router.navigate([this.returnUrl]);
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 401) {

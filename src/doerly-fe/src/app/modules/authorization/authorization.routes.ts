@@ -16,9 +16,9 @@ export const routes: Routes = [
     path: 'reset-password',
     component: RequestPasswordResetComponent
   },
-  {
-    path: 'password-reset/:token',
-
-
-  }
+  // {
+  //   path: 'password-reset/:token',
+  //
+  //
+  // }
 ]

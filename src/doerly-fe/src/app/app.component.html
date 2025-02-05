@@ -17,9 +17,21 @@
               [text]="true" [raised]="false"
               severity="secondary" (onClick)="toggleDarkMode()"
               [outlined]="true"/>
+    <p-button class="ms-1" size="small" text="true" [raised]="false" [outlined]="true"
+              routerLink="/auth/login" label="{{ 'auth.login' | translate }}"
+              [severity]="'success'" *ngIf="!isLoggedIn"/>
     <p-button class="ms-2" size="small" icon="pi pi-user" [rounded]="true" [text]="true" [raised]="false"
-              severity="success"
+              severity="success" *ngIf="isLoggedIn" (click)="op.toggle($event)"
               [outlined]="true"/>
+
+    <p-popover #op position="left">
+      <div class="d-flex flex-column gap-2">
+<!--        <p-button label="{{ 'auth.profile' | translate }}" [routerLink]="'/profile'" [severity]="'success'"-->
+<!--                  [icon]="'pi pi-user'"></p-button>-->
+        <p-button label="{{ 'auth.logout' | translate }}" [outlined]="true" [severity]="'danger'" [icon]="'pi pi-sign-out'"
+                  (click)="logout()"></p-button>
+      </div>
+    </p-popover>
 
   </div>
 

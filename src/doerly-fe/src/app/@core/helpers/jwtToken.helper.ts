@@ -6,11 +6,11 @@ const ACCESS_TOKEN = 'access_token';
 export class JwtTokenHelper {
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem(ACCESS_TOKEN);
+    return !this.isTokenExpired();
   }
 
   isTokenExpired(): boolean {
-    const token = localStorage.getItem(ACCESS_TOKEN);
+    const token = this.getToken();
     if (!token) {
       return true;
     }
@@ -19,8 +19,12 @@ export class JwtTokenHelper {
   }
 
   getPayload(token: string): any {
-    const payload = token.split('.')[1];
-    return JSON.parse(atob(payload));
+    try {
+      const payload = token.split('.')[1];
+      return JSON.parse(atob(payload));
+    } catch (e) {
+      localStorage.removeItem(ACCESS_TOKEN);
+    }
   }
 
   getToken(): string | null {
@@ -29,6 +33,10 @@ export class JwtTokenHelper {
 
   setToken(token: string): void {
     localStorage.setItem(ACCESS_TOKEN, token);
+  }
+
+  removeToken(): void {
+    localStorage.removeItem(ACCESS_TOKEN);
   }
 
 }

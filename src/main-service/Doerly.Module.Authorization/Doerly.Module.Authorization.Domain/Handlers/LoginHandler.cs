@@ -4,7 +4,7 @@ using Doerly.Common;
 using Doerly.Domain.Models;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Module.Authorization.Domain.Dtos;
-using Doerly.Module.Authorization.Localization;
+using Doerly.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -12,7 +12,7 @@ namespace Doerly.Module.Authorization.Domain.Handlers;
 
 public class LoginHandler : BaseAuthHandler
 {
-    public LoginHandler(AuthorizationDbContext dbContext, IOptions<JwtSettings> options) : base(dbContext, options)
+    public LoginHandler(AuthorizationDbContext dbContext, IOptions<AuthSettings> options) : base(dbContext, options)
     {
     }
 

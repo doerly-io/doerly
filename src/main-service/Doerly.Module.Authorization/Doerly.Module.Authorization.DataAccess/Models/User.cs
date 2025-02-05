@@ -14,4 +14,6 @@ public class User : BaseEntity
     public virtual Role? Role { get; set; }
 
     public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
+    
+    public virtual ICollection<ResetToken> ResetTokens { get; set; }
 }

@@ -1,11 +1,9 @@
-using System.Security.Cryptography;
-using System.Text;
 using Doerly.Common;
 using Doerly.Domain.Models;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Module.Authorization.DataAccess.Models;
 using Doerly.Module.Authorization.Domain.Dtos;
-using Doerly.Module.Authorization.Localization;
+using Doerly.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -13,7 +11,7 @@ namespace Doerly.Module.Authorization.Domain.Handlers;
 
 public class RegisterHandler : BaseAuthHandler
 {
-    public RegisterHandler(AuthorizationDbContext dbContext, IOptions<JwtSettings> jwtOptions) : base(dbContext, jwtOptions)
+    public RegisterHandler(AuthorizationDbContext dbContext, IOptions<AuthSettings> jwtOptions) : base(dbContext, jwtOptions)
     {
     }
 
@@ -23,7 +21,7 @@ public class RegisterHandler : BaseAuthHandler
         if (userExist)
             return HandlerResult.Failure(Resources.Get("UserAlreadyExist"));
 
-        var (passwordHash, passwordSalt) = GetHash(dto.Password);
+        var (passwordHash, passwordSalt) = GetPasswordHash(dto.Password);
 
         var user = new User
         {
@@ -37,12 +35,5 @@ public class RegisterHandler : BaseAuthHandler
 
         return HandlerResult.Success();
     }
-
-    private (string passwordHash, string passwordSalt) GetHash(string password)
-    {
-        using var hmac = new HMACSHA512();
-        var passwordSalt = Convert.ToBase64String(hmac.Key);
-        var passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-        return (Convert.ToBase64String(passwordHash), passwordSalt);
-    }
+    
 }

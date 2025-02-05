@@ -18,11 +18,19 @@ export class AuthService {
   }
 
   login(model: LoginRequest): Observable<BaseApiResponse<LoginResponse>> {
-    return this.httpClient.post<BaseApiResponse<LoginResponse>>(`${this.baseUrl}/login`, model)
+    return this.httpClient.post<BaseApiResponse<LoginResponse>>(`${this.baseUrl}/login`, model, {withCredentials: true})
   }
 
   register(model: RegisterRequest): Observable<BaseApiResponse> {
     return this.httpClient.post<BaseApiResponse>(`${this.baseUrl}/register`, model)
+  }
+
+  refreshToken(): Observable<BaseApiResponse<LoginResponse>> {
+    return this.httpClient.get<BaseApiResponse<LoginResponse>>(`${this.baseUrl}/refresh`, {withCredentials: true});
+  }
+
+  logout(): Observable<BaseApiResponse> {
+    return this.httpClient.post<BaseApiResponse>(`${this.baseUrl}/logout`, null, {withCredentials: true});
   }
 
   requestPasswordRequest(email: string): Observable<BaseApiResponse> {

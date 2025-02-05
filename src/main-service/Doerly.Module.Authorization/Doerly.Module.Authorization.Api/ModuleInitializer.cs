@@ -11,15 +11,10 @@ namespace Doerly.Module.Authorization.Api;
 
 public class ModuleInitializer : IModuleInitializer
 {
-    public void ConfigureServices(IHostApplicationBuilder builder, IMvcBuilder mvcBuilder)
+    public void ConfigureServices(IHostApplicationBuilder builder)
     {
         builder.Services.AddDbContext<AuthorizationDbContext>();
         builder.Services.RegisterHandlers(typeof(Domain.IAssemblyMarker).Assembly);
-        builder.Services.AddLocalization(x => x.ResourcesPath = "Resources");
-        mvcBuilder.AddDataAnnotationsLocalization(options =>
-        {
-            options.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(Localization.Resources));
-        });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

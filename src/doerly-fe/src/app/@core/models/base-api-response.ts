@@ -1,5 +1,5 @@
 export interface BaseApiResponse<TValue = unknown> {
   isSuccess: boolean;
-  message: string | null;
+  errorMessage: string | null;
   value: TValue | null;
 }
