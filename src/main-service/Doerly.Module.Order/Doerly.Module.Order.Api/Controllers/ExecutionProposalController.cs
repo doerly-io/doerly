@@ -20,4 +20,15 @@ public class ExecutionProposalController : BaseApiController
 
         return BadRequest(result);
     }
+
+    [HttpPost("resolve")]
+    public async Task<IActionResult> Resolve(ResolveExecutionProposalRequest dto)
+    {
+        var result = await ResolveHandler<ResolveExecutionProposalHandler>().HandleAsync(dto);
+        if (result.IsSuccess)
+            return Ok(result);
+
+        return BadRequest(result);
+    }
+    
 }

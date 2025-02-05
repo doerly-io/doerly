@@ -100,4 +100,7 @@
   <data name="ORDER_NOT_FOUND" xml:space="preserve">
     <value>Замовлення не знайдено</value>
   </data>
+  <data name="EXECUTION_PROPOSAL_NOT_FOUND" xml:space="preserve">
+    <value>Пропозиція виконання роботи не знайдена</value>
+  </data>
 </root>
