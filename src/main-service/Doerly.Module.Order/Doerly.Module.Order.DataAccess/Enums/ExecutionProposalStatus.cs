@@ -2,7 +2,8 @@
 
 public enum ExecutionProposalStatus
 {
+    WaitingForApproval,
     Accepted,
     Rejected,
-    WaitingForApproval
+    Revoked
 }

@@ -18,10 +18,7 @@ public class ResolveExecutionProposalHandler : BaseOrderHandler
         if (executionProposal == null)
             return HandlerResult.Failure(Resources.Get("EXECUTION_PROPOSAL_NOT_FOUND"));
 
-        if (dto.IsAccepted)
-            executionProposal.Status = ExecutionProposalStatus.Accepted;
-        else
-            executionProposal.Status = ExecutionProposalStatus.Rejected;
+        executionProposal.Status = dto.ExecutionProposalStatus;
 
         await DbContext.SaveChangesAsync();
 

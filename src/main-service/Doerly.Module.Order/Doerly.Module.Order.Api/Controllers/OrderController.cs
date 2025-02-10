@@ -20,4 +20,24 @@ public class OrderController : BaseApiController
 
         return Ok(result.Value);
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> CreateOrder(int id)
+    {
+        var result = await ResolveHandler<GetOrderByIdHandler>().HandleAsync(id);
+        if (result.IsSuccess)
+            return Ok(result.Value);
+
+        return BadRequest(result);
+    }
+
+    [HttpGet("history")]
+    public async Task<IActionResult> GetOrderHistory([FromQuery] GetOrderHistoryRequest dto)
+    {
+        var result = await ResolveHandler<GetOrderHistoryHandler>().HandleAsync(dto);
+        if (result.IsSuccess)
+            return Ok(result.Value);
+
+        return BadRequest(result);
+    }
 }
