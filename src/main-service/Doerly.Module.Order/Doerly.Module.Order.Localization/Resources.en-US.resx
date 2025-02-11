@@ -103,4 +103,7 @@
   <data name="EXECUTION_PROPOSAL_NOT_FOUND" xml:space="preserve">
     <value>Execution proposal not found</value>
   </data>
+  <data name="EXECUTION_PROPOSAL_ALREADY_SENT" xml:space="preserve">
+    <value>Execution proposal to this user has already been sent</value>
+  </data>
 </root>

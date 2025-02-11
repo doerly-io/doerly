@@ -103,4 +103,7 @@
   <data name="EXECUTION_PROPOSAL_NOT_FOUND" xml:space="preserve">
     <value>Пропозиція виконання роботи не знайдена</value>
   </data>
+  <data name="EXECUTION_PROPOSAL_ALREADY_SENT" xml:space="preserve">
+    <value>Пропозиція виконання роботи вже надіслана цьому користувачу</value>
+  </data>
 </root>
