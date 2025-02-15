@@ -9,7 +9,7 @@ using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Domain.Dtos.Responses.Order;
 using Doerly.Module.Order.Localization;
 
-namespace Doerly.Module.Order.Domain.Handlers;
+namespace Doerly.Module.Order.Domain.Handlers.Order;
 public class GetOrderByIdHandler : BaseOrderHandler
 {
     public GetOrderByIdHandler(OrderDbContext dbContext) : base(dbContext)
@@ -30,6 +30,7 @@ public class GetOrderByIdHandler : BaseOrderHandler
             Price = order.Price,
             PaymentKind = order.PaymentKind,
             DueDate = order.DueDate,
+            Status = order.Status,
             CustomerId = order.CustomerId,
             ExecutorId = order.ExecutorId,
             ExecutionDate = order.ExecutionDate,

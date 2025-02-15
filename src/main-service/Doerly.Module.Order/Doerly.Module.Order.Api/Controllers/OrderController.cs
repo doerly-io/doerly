@@ -1,7 +1,8 @@
 ﻿using Doerly.Api.Infrastructure;
 using Doerly.Domain.Models;
 using Doerly.Module.Order.Domain.Dtos.Requests.Order;
-using Doerly.Module.Order.Domain.Handlers;
+using Doerly.Module.Order.Domain.Handlers.Order;
+
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,26 @@ public class OrderController : BaseApiController
         var result = await ResolveHandler<GetOrderHistoryHandler>().HandleAsync(dto);
         if (result.IsSuccess)
             return Ok(result.Value);
+
+        return BadRequest(result);
+    }
+
+    [HttpPut("update")]
+    public async Task<IActionResult> UpdateOrder(UpdateOrderRequest dto)
+    {
+        var result = await ResolveHandler<UpdateOrderHandler>().HandleAsync(dto);
+        if (result.IsSuccess)
+            return Ok(result);
+
+        return BadRequest(result);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteOrder(int id)
+    {
+        var result = await ResolveHandler<DeleteOrderHandler>().HandleAsync(id);
+        if (result.IsSuccess)
+            return Ok(result);
 
         return BadRequest(result);
     }

@@ -9,7 +9,7 @@ using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Domain.Dtos.Responses.ExecutionProposal;
 using Doerly.Module.Order.Localization;
 
-namespace Doerly.Module.Order.Domain.Handlers;
+namespace Doerly.Module.Order.Domain.Handlers.ExecutionProposal;
 public class GetExecutionProposalByIdHandler : BaseOrderHandler
 {
     public GetExecutionProposalByIdHandler(OrderDbContext dbContext) : base(dbContext)

@@ -3,9 +3,10 @@ using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Enums;
 using Doerly.Module.Order.Domain.Dtos.Requests.Order;
 using Doerly.Module.Order.Domain.Dtos.Responses.Order;
+
 using OrderEntity = Doerly.Module.Order.DataAccess.Models.Order;
 
-namespace Doerly.Module.Order.Domain.Handlers;
+namespace Doerly.Module.Order.Domain.Handlers.Order;
 
 public class CreateOrderHandler : BaseOrderHandler
 {

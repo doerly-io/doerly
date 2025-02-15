@@ -5,14 +5,15 @@ using Doerly.Module.Order.DataAccess.Models;
 using Doerly.Module.Order.Domain.Dtos.Requests.ExecutionProposal;
 using Doerly.Module.Order.Domain.Dtos.Responses.ExecutionProposal;
 using Doerly.Module.Order.Localization;
+using ExecutionProposalEntity = Doerly.Module.Order.DataAccess.Models.ExecutionProposal;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Doerly.Module.Order.Domain.Handlers;
+namespace Doerly.Module.Order.Domain.Handlers.ExecutionProposal;
 public class SendExecutionProposalHandler : BaseOrderHandler
 {
     public SendExecutionProposalHandler(OrderDbContext dbContext) : base(dbContext)
-    {}
+    { }
 
     public async Task<HandlerResult<SendExecutionProposalResponse>> HandleAsync(SendExecutionProposalRequest dto)
     {
@@ -26,7 +27,7 @@ public class SendExecutionProposalHandler : BaseOrderHandler
         if (existingExecutionProposal != null)
             return HandlerResult.Failure<SendExecutionProposalResponse>(Resources.Get("EXECUTION_PROPOSAL_ALREADY_SENT"));
 
-        var executionProposal = new ExecutionProposal()
+        var executionProposal = new ExecutionProposalEntity()
         {
             OrderId = dto.OrderId,
             Comment = dto.Comment,

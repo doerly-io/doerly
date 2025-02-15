@@ -6,7 +6,7 @@ using Doerly.Module.Order.Localization;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Doerly.Module.Order.Domain.Handlers;
+namespace Doerly.Module.Order.Domain.Handlers.ExecutionProposal;
 public class ResolveExecutionProposalHandler : BaseOrderHandler
 {
     public ResolveExecutionProposalHandler(OrderDbContext dbContext) : base(dbContext)
@@ -28,10 +28,15 @@ public class ResolveExecutionProposalHandler : BaseOrderHandler
                 return HandlerResult.Failure(Resources.Get("ORDER_NOT_FOUND"));
 
             order.Status = OrderStatus.InProgress;
+            if (order.CustomerId == executionProposal.ReceiverId)
+                order.ExecutorId = executionProposal.SenderId;
+            else
+                order.ExecutorId = executionProposal.ReceiverId;
 
             await DbContext.ExecutionProposals
-                .Where(x => x.OrderId == order.Id && x.Id != executionProposal.Id)
-                .ForEachAsync(executionProposal => {
+                .Where(x => x.OrderId == order.Id && x.Id != executionProposal.Id && x.Status == ExecutionProposalStatus.WaitingForApproval)
+                .ForEachAsync(executionProposal =>
+                {
                     executionProposal.Status = ExecutionProposalStatus.Revoked;
                 });
         }

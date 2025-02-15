@@ -12,23 +12,19 @@ using Doerly.Module.Order.Localization;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Doerly.Module.Order.Domain.Handlers;
+namespace Doerly.Module.Order.Domain.Handlers.ExecutionProposal;
 public class GetExecutionProposalsByPredicatesHandler : BaseOrderHandler
 {
     public GetExecutionProposalsByPredicatesHandler(OrderDbContext context) : base(context)
-    {}
+    { }
 
     public async Task<HandlerResult<List<GetExecutionProposalResponse>>> HandleAsync(GetExecutionProposalsByPredicateRequest dto)
     {
         var executionProposals = DbContext.ExecutionProposals.AsNoTracking();
         if (dto.ReceiverId.HasValue)
-        {
             executionProposals = executionProposals.Where(x => x.ReceiverId == dto.ReceiverId);
-        }
         if (dto.SenderId.HasValue)
-        {
             executionProposals = executionProposals.Where(x => x.SenderId == dto.SenderId);
-        }
 
         var result = await executionProposals
             .Select(x => new GetExecutionProposalResponse

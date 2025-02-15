@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 using Doerly.Module.Order.DataAccess.Enums;
 
-namespace Doerly.Module.Order.Domain.Dtos.Responses.Order;
-public class GetOrderResponse
+namespace Doerly.Module.Order.Domain.Dtos.Requests.Order;
+public class UpdateOrderRequest
 {
     public int Id { get; set; }
     public int CategoryId { get; set; }
@@ -16,9 +16,4 @@ public class GetOrderResponse
     public decimal Price { get; set; }
     public PaymentKind PaymentKind { get; set; }
     public DateTime DueDate { get; set; }
-    public OrderStatus Status { get; set; }
-    public int CustomerId { get; set; }
-    public int? ExecutorId { get; set; }
-    public DateTime? ExecutionDate { get; set; }
-    public int? BillId { get; set; }
 }

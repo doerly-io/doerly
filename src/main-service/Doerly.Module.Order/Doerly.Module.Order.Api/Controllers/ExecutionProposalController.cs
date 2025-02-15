@@ -1,6 +1,6 @@
 ﻿using Doerly.Api.Infrastructure;
 using Doerly.Module.Order.Domain.Dtos.Requests.ExecutionProposal;
-using Doerly.Module.Order.Domain.Handlers;
+using Doerly.Module.Order.Domain.Handlers.ExecutionProposal;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,7 +41,7 @@ public class ExecutionProposalController : BaseApiController
         return BadRequest(result);
     }
 
-    [HttpPost("update")]
+    [HttpPut("update")]
     public async Task<IActionResult> UpdateExecutionProposal(UpdateExecutionProposalRequest dto)
     {
         var result = await ResolveHandler<UpdateExecutionProposalHandler>().HandleAsync(dto);
