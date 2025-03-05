@@ -5,9 +5,11 @@ using System.Text;
 using Doerly.Domain.Factories;
 using Doerly.Common;
 using Doerly.Api.Infrastructure;
+using Doerly.Notification.EmailSender;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.IdentityModel.Tokens;
+using SendGrid.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +55,7 @@ foreach (var moduleAssembly in loadedAssemblies)
 
 #endregion
 
+builder.Services.AddScoped<SendEmailHandler>();
 
 builder.Services.AddScoped<IHandlerFactory, HandlerFactory>();
 
@@ -88,6 +91,8 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSendGrid(opt => { opt.ApiKey = sendGridSettings.ApiKey; });
 
 
 var app = builder.Build();

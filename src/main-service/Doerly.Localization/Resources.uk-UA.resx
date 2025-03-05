@@ -33,4 +33,23 @@
     <data name="InvalidEmailFormatInput" xml:space="preserve">
         <value>Неправильний формат електронної пошти</value>
     </data>
+    <data name="ValidTokenNotFound" xml:space="preserve">
+        <value>Не знайдено валідний токен</value>
+    </data>
+    <data name="ResetPasswordEmailVerificationText" xml:space="preserve">
+        <value>Вітаємо,
+
+Ми отримали запит на скидання вашого пароля. Якщо ви не надсилали цей запит, просто ігноруйте це повідомлення.
+
+Щоб скинути пароль, перейдіть за посиланням нижче:</value>
+    </data>
+    <data name="ResetPasswordEmailBestRegardsText" xml:space="preserve">
+        <value>Якщо у вас виникли запитання, зверніться до нашої служби підтримки.
+
+З повагою,
+Doerly</value>
+    </data>
+    <data name="ResetPasswordEmailSubject" xml:space="preserve">
+        <value>Скидання паролю</value>
+    </data>
 </root>

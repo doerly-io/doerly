@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Doerly.Module.Authorization.DataAccess.Migrations
 {
     [DbContext(typeof(AuthorizationDbContext))]
-    [Migration("20250203234011_Authorization_ResetTokens")]
-    partial class Authorization_ResetTokens
+    [Migration("20250305231708_Auth_Initial")]
+    partial class Auth_Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,68 +24,6 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.RefreshToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_created");
-
-                    b.Property<Guid>("Guid")
-                        .HasColumnType("uuid")
-                        .HasColumnName("guid");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_date");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_refresh_token");
-
-                    b.HasIndex("Guid")
-                        .IsUnique()
-                        .HasDatabaseName("ix_refresh_token_guid");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_refresh_token_user_id");
-
-                    b.ToTable("refresh_token", "authorization");
-                });
-
-            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.ResetToken", b =>
-                {
-                    b.Property<Guid>("Guid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("guid");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_created");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Guid")
-                        .HasName("pk_reset_token");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_reset_token_user_id");
-
-                    b.ToTable("reset_token", "authorization");
-                });
 
             modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.Role", b =>
                 {
@@ -112,7 +50,47 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("pk_role");
 
-                    b.ToTable("role", "authorization");
+                    b.ToTable("role", "auth");
+                });
+
+            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.Token", b =>
+                {
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("guid");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_created");
+
+                    b.Property<byte>("TokenKind")
+                        .HasColumnType("smallint")
+                        .HasColumnName("token_kind");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(44)
+                        .HasColumnType("character(44)")
+                        .HasColumnName("value")
+                        .IsFixedLength();
+
+                    b.HasKey("Guid")
+                        .HasName("pk_token");
+
+                    b.HasIndex("Value")
+                        .HasDatabaseName("ix_token_value");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Value"), "hash");
+
+                    b.HasIndex("UserId", "TokenKind")
+                        .HasDatabaseName("ix_token_user_id_token_kind");
+
+                    b.ToTable("token", "auth");
                 });
 
             modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.User", b =>
@@ -161,29 +139,17 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_user_role_id");
 
-                    b.ToTable("user", "authorization");
+                    b.ToTable("user", "auth");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.RefreshToken", b =>
-                {
-                    b.HasOne("Doerly.Module.Authorization.DataAccess.Models.User", "User")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_refresh_token_user_user_id");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.ResetToken", b =>
+            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.Token", b =>
                 {
                     b.HasOne("Doerly.Module.Authorization.DataAccess.Models.User", "User")
                         .WithMany("ResetTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_reset_token_user_user_id");
+                        .HasConstraintName("fk_token_user_user_id");
 
                     b.Navigation("User");
                 });
@@ -205,8 +171,6 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
 
             modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.User", b =>
                 {
-                    b.Navigation("RefreshTokens");
-
                     b.Navigation("ResetTokens");
                 });
 #pragma warning restore 612, 618

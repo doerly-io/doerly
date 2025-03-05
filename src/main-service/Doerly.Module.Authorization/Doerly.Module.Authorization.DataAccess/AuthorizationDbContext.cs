@@ -14,9 +14,7 @@ public class AuthorizationDbContext : BaseDbContext
     public DbSet<User> Users { get; set; }
     
     public DbSet<Role> Roles { get; set; }
-    public DbSet<RefreshToken> RefreshTokens { get; set; }
-
-    public DbSet<ResetToken> ResetTokens { get; set; }
+    public DbSet<Token> Tokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -7,17 +7,17 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Doerly.Module.Authorization.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Authorization_Initial : Migration
+    public partial class Auth_Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "authorization");
+                name: "auth");
 
             migrationBuilder.CreateTable(
                 name: "role",
-                schema: "authorization",
+                schema: "auth",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -33,7 +33,7 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
 
             migrationBuilder.CreateTable(
                 name: "user",
-                schema: "authorization",
+                schema: "auth",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -51,58 +51,57 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                     table.ForeignKey(
                         name: "fk_user_role_role_id",
                         column: x => x.role_id,
-                        principalSchema: "authorization",
+                        principalSchema: "auth",
                         principalTable: "role",
                         principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "refresh_token",
-                schema: "authorization",
+                name: "token",
+                schema: "auth",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     guid = table.Column<Guid>(type: "uuid", nullable: false),
-                    user_id = table.Column<int>(type: "integer", nullable: false),
+                    value = table.Column<string>(type: "character(44)", fixedLength: true, maxLength: 44, nullable: false),
                     date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    user_id = table.Column<int>(type: "integer", nullable: false),
+                    token_kind = table.Column<byte>(type: "smallint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_refresh_token", x => x.id);
+                    table.PrimaryKey("pk_token", x => x.guid);
                     table.ForeignKey(
-                        name: "fk_refresh_token_user_user_id",
+                        name: "fk_token_user_user_id",
                         column: x => x.user_id,
-                        principalSchema: "authorization",
+                        principalSchema: "auth",
                         principalTable: "user",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_refresh_token_guid",
-                schema: "authorization",
-                table: "refresh_token",
-                column: "guid",
-                unique: true);
+                name: "ix_token_user_id_token_kind",
+                schema: "auth",
+                table: "token",
+                columns: new[] { "user_id", "token_kind" });
 
             migrationBuilder.CreateIndex(
-                name: "ix_refresh_token_user_id",
-                schema: "authorization",
-                table: "refresh_token",
-                column: "user_id");
+                name: "ix_token_value",
+                schema: "auth",
+                table: "token",
+                column: "value")
+                .Annotation("Npgsql:IndexMethod", "hash");
 
             migrationBuilder.CreateIndex(
                 name: "ix_user_email",
-                schema: "authorization",
+                schema: "auth",
                 table: "user",
                 column: "email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_user_role_id",
-                schema: "authorization",
+                schema: "auth",
                 table: "user",
                 column: "role_id");
         }
@@ -111,16 +110,16 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "refresh_token",
-                schema: "authorization");
+                name: "token",
+                schema: "auth");
 
             migrationBuilder.DropTable(
                 name: "user",
-                schema: "authorization");
+                schema: "auth");
 
             migrationBuilder.DropTable(
                 name: "role",
-                schema: "authorization");
+                schema: "auth");
         }
     }
 }

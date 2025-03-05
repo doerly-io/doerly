@@ -3,6 +3,7 @@ using Doerly.Domain.Models;
 using Doerly.Module.Authorization.Api.Constants;
 using Doerly.Module.Authorization.Domain.Dtos;
 using Doerly.Module.Authorization.Domain.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,39 +45,56 @@ public class AuthController : BaseApiController
     public async Task<IActionResult> Refresh()
     {
         var refreshToken = Request.Cookies[AuthConstants.RefreshTokenCookieName];
-        if (string.IsNullOrEmpty(refreshToken))
-            return Unauthorized();
-        
-        var accessToken = Request.Headers[AuthConstants.AuthorizationHeaderName].ToString();
-        if (string.IsNullOrEmpty(accessToken))
         var accessToken = GetBearerToken();
 
-        if (string.IsNullOrEmpty(refreshToken) || string.IsNullOrEmpty(accessToken) ||
-            !Guid.TryParse(refreshToken, out var refreshTokenGuid))
+        if (string.IsNullOrEmpty(refreshToken) || string.IsNullOrEmpty(accessToken))
             return Unauthorized();
 
-        var result = await ResolveHandler<RefreshTokenHandler>().HandleAsync(refreshTokenGuid, accessToken);
+        var result = await ResolveHandler<RefreshTokenHandler>().HandleAsync(refreshToken, accessToken);
         if (!result.IsSuccess)
             return Unauthorized(result);
 
         SetHttpCookie(AuthConstants.RefreshTokenCookieName, result.Value.refreshToken);
 
-        return Ok(result.Value.resultDto);
         return Ok(HandlerResult.Success(result.Value.resultDto));
     }
-    
+
+    [Authorize]
     [HttpGet("logout")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> Logout()
     {
         var refreshToken = Request.Cookies[AuthConstants.RefreshTokenCookieName];
-        if (string.IsNullOrEmpty(refreshToken) || !Guid.TryParse(refreshToken, out var refreshTokenGuid))
+        if (string.IsNullOrEmpty(refreshToken))
             return Ok();
-
-        await ResolveHandler<LogoutHandler>().HandleAsync(refreshTokenGuid);
+    
+        var result = await ResolveHandler<LogoutHandler>().HandleAsync(refreshToken);
         Response.Cookies.Delete(AuthConstants.RefreshTokenCookieName);
-
+    
         return Ok();
     }
-    
+
+
+    //ToDo: enable ratelimiting
+    [HttpGet("password-reset/{email}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType<HandlerResult>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Get(string email)
+    {
+        var result = await ResolveHandler<RequestPasswordResetHandler>().HandeAsync(email);
+        return Accepted(result);
+    }
+
+    //ToDo: enable ratelimiting
+    [HttpPost("password-reset")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType<HandlerResult>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Post(ResetPasswordDto dto)
+    {
+        var result = await ResolveHandler<ResetPasswordHandler>().HandleAsync(dto);
+        if (result.IsSuccess)
+            return Ok();
+
+        return NotFound(result);
+    }
 }

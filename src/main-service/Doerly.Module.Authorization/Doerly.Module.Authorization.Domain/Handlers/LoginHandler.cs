@@ -39,8 +39,8 @@ public class LoginHandler : BaseAuthHandler
             return HandlerResult.Failure<(LoginResultDto, string)>(Resources.Get("InvalidPassword"));
 
         var accessToken = CreateAccessToken(user.Id, user.Email, user.RoleName);
-        var refreshToken = Guid.NewGuid();
-        await CreateRefreshTokenAsync(refreshToken, user.Id);
+        var refreshTokenValue = GetResetToken();
+        await CreateRefreshTokenAsync(refreshTokenValue.hashedToken, user.Id);
 
         var loginResultDto = new LoginResultDto
         {
@@ -48,7 +48,7 @@ public class LoginHandler : BaseAuthHandler
             UserEmail = user.Email
         };
 
-        return HandlerResult.Success((loginResultDto, refreshToken.ToString()));
+        return HandlerResult.Success((loginResultDto, refreshTokenValue.hashedToken));
     }
 
     private bool VerifyPasswordHash(string password, string passwordHash, string passwordSalt)

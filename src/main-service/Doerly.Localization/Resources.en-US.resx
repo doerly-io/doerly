@@ -33,4 +33,23 @@
     <data name="InvalidEmailFormatInput" xml:space="preserve">
         <value>Invalid email format</value>
     </data>
+    <data name="ValidTokenNotFound" xml:space="preserve">
+        <value>Valid token not found</value>
+    </data>
+    <data name="ResetPasswordEmailVerificationText" xml:space="preserve">
+        <value>Hello,
+
+We received a request to reset your password. If you did not make this request, please ignore this message.
+
+To reset your password, please click the link below:</value>
+    </data>
+    <data name="ResetPasswordEmailBestRegardsText" xml:space="preserve">
+        <value>If you have any questions, please contact our support team.
+
+Best regards,
+Doerly</value>
+    </data>
+    <data name="ResetPasswordEmailSubject" xml:space="preserve">
+        <value>Reset password</value>
+    </data>
 </root>

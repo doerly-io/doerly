@@ -11,7 +11,7 @@ namespace Doerly.Module.Authorization.Domain.Handlers;
 
 public class RegisterHandler : BaseAuthHandler
 {
-    public RegisterHandler(AuthorizationDbContext dbContext, IOptions<AuthSettings> jwtOptions) : base(dbContext, jwtOptions)
+    public RegisterHandler(AuthorizationDbContext dbContext, IOptions<AuthSettings> authOptions) : base(dbContext, authOptions)
     {
     }
 

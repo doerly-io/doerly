@@ -5,6 +5,7 @@ using Doerly.Domain.Handlers;
 using Doerly.Common;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Module.Authorization.DataAccess.Models;
+using Doerly.Module.Authorization.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -14,11 +15,12 @@ namespace Doerly.Module.Authorization.Domain.Handlers;
 
 public class BaseAuthHandler : BaseHandler<AuthorizationDbContext>
 {
-    protected readonly IOptions<AuthSettings> JwtOptions;
+    private const int TokenLengthByteCount = 32;
+    protected readonly IOptions<AuthSettings> AuthOptions;
 
-    public BaseAuthHandler(AuthorizationDbContext dbContext, IOptions<AuthSettings> jwtOptions) : base(dbContext)
+    public BaseAuthHandler(AuthorizationDbContext dbContext, IOptions<AuthSettings> authOptions) : base(dbContext)
     {
-        JwtOptions = jwtOptions;
+        AuthOptions = authOptions;
     }
 
     protected string CreateAccessToken(int userId, string email, string userRole)
@@ -32,13 +34,13 @@ public class BaseAuthHandler : BaseHandler<AuthorizationDbContext>
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Audience = JwtOptions.Value.Audience,
-            Issuer = JwtOptions.Value.Issuer,
+            Audience = AuthOptions.Value.Audience,
+            Issuer = AuthOptions.Value.Issuer,
             Claims = claims,
             IssuedAt = DateTime.UtcNow,
             NotBefore = DateTime.UtcNow,
-            Expires = DateTime.UtcNow.AddMinutes(JwtOptions.Value.AccessTokenLifetime),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtOptions.Value.SecretKey)),
+            Expires = DateTime.UtcNow.AddMinutes(AuthOptions.Value.AccessTokenLifetime),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthOptions.Value.SecretKey)),
                 SecurityAlgorithms.HmacSha256Signature),
         };
 
@@ -47,17 +49,19 @@ public class BaseAuthHandler : BaseHandler<AuthorizationDbContext>
         return token;
     }
 
-    protected async Task CreateRefreshTokenAsync(Guid tokenGuid, int userId)
+    protected async Task CreateRefreshTokenAsync(string tokenValue, int userId)
     {
-        await DbContext.RefreshTokens.Where(x => x.UserId == userId).ExecuteDeleteAsync();
+        await DbContext.Tokens.Where(x => x.UserId == userId && x.TokenKind == ETokenKind.RefreshToken).ExecuteDeleteAsync();
 
-        var refreshToken = new RefreshToken
+        var refreshToken = new Token
         {
             UserId = userId,
-            Guid = tokenGuid
+            Guid = Guid.NewGuid(),
+            Value = tokenValue,
+            TokenKind = ETokenKind.RefreshToken
         };
 
-        DbContext.RefreshTokens.Add(refreshToken);
+        DbContext.Tokens.Add(refreshToken);
         await DbContext.SaveChangesAsync();
     }
 
@@ -75,5 +79,21 @@ public class BaseAuthHandler : BaseHandler<AuthorizationDbContext>
         var token = (JsonWebToken)handler.ReadToken(accessToken);
         var userIdClaim = token.TryGetValue<int>(ClaimTypes.NameIdentifier, out var userId);
         return userIdClaim ? userId : null;
+    }
+    
+    protected string GetResetTokenHash(byte[] tokenBytes)
+    {
+        var secretKey = Encoding.UTF8.GetBytes(AuthOptions.Value.SecretKey);
+        using var hmac = new HMACSHA256(secretKey);
+        var token = hmac.ComputeHash(tokenBytes);
+        return Convert.ToBase64String(token);
+    }
+
+    protected (string hashedToken, string originalToken) GetResetToken()
+    {
+        var tokenBytes = RandomNumberGenerator.GetBytes(TokenLengthByteCount);
+        var originalToken = Convert.ToBase64String(tokenBytes);
+        var token = GetResetTokenHash(tokenBytes);
+        return (token, originalToken);
     }
 }
