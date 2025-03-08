@@ -1,0 +1,25 @@
+{
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "password_confirmation": "Password confirmation",
+    "remember_me": "Remember me",
+    "forgot_password": "Forgot password?",
+    "register": "Register",
+    "name": "Name",
+    "password_reset": "Password reset",
+    "send_password_reset_link": "Send password reset link",
+    "confirm_password": "Confirm password",
+    "reset_password": "Reset password",
+    "want_to_join_us": "Want to join us?",
+    "register_now": "Register now!",
+    "already_has_account": "Already has account?",
+    "login_now": "Login now!",
+    "reset_link_sent": "A password reset link has been sent to your email address.",
+    "password_mismatch": "Entered passwords do not match.",
+    "field_required": "This field is required.",
+    "email_not_valid": "Enter a valid email address."
+  }
+}

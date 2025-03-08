@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>annotations</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources.en-US.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.en-US.Designer.cs</LastGenOutput>
+        <DependentUpon>Resources.cs</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources.uk-UA.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.uk-UA.Designer.cs</LastGenOutput>
+        <DependentUpon>Resources.cs</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Remove="Resources\LocalizationResources.resx" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.2" />
+    </ItemGroup>
+
+</Project>

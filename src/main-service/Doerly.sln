@@ -23,8 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doerly.Api.Infrastructure",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doerly.Common", "Doerly.Common\Doerly.Common.csproj", "{AE80C043-1A56-44DE-81AA-E8839153CB74}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doerly.Module.Authorization.Localization", "Doerly.Module.Authorization\Doerly.Module.Authorization.Localization\Doerly.Module.Authorization.Localization.csproj", "{DAAFE7F4-BE53-4DDF-8025-DD4CF06BFF98}"
-EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notifications", "Notifications", "{00F83D99-820C-470A-8F4F-73883B7E8F2D}"
+
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Order", "Order", "{65FBD588-7C94-4087-9ACD-0A0A6EE30B06}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Order.Api", "Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj", "{7620B544-74FE-4EE1-8BA8-233D786C0307}"
@@ -34,6 +34,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Order.Domain", "Doerly.Module.Order\Doerly.Module.Order.Domain\Doerly.Module.Order.Domain.csproj", "{BB512DCB-8A08-4972-BBEA-1A2CA31C474F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Order.Localization", "Doerly.Module.Order\Doerly.Module.Order.Localization\Doerly.Module.Order.Localization.csproj", "{7D9BA277-BCF7-423E-9F10-622BBA1EA310}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Notification.EmailSender", "Doerly.Notification.EmailSender\Doerly.Notification.EmailSender.csproj", "{0AD326C6-1AA0-4102-94B1-E5D874F60930}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Localization", "Doerly.Localization\Doerly.Localization.csproj", "{293667C2-6EF0-437A-852E-D21D39CFBB08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Authorization.Enums", "Doerly.Module.Authorization\Doerly.Module.Authorization.Enums\Doerly.Module.Authorization.Enums.csproj", "{B6E52E36-7123-4F69-B5A5-22086B0B7521}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +99,18 @@ Global
 		{7D9BA277-BCF7-423E-9F10-622BBA1EA310}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D9BA277-BCF7-423E-9F10-622BBA1EA310}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D9BA277-BCF7-423E-9F10-622BBA1EA310}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AD326C6-1AA0-4102-94B1-E5D874F60930}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AD326C6-1AA0-4102-94B1-E5D874F60930}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AD326C6-1AA0-4102-94B1-E5D874F60930}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AD326C6-1AA0-4102-94B1-E5D874F60930}.Release|Any CPU.Build.0 = Release|Any CPU
+		{293667C2-6EF0-437A-852E-D21D39CFBB08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{293667C2-6EF0-437A-852E-D21D39CFBB08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{293667C2-6EF0-437A-852E-D21D39CFBB08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{293667C2-6EF0-437A-852E-D21D39CFBB08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6E52E36-7123-4F69-B5A5-22086B0B7521}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6E52E36-7123-4F69-B5A5-22086B0B7521}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6E52E36-7123-4F69-B5A5-22086B0B7521}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6E52E36-7123-4F69-B5A5-22086B0B7521}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,5 +129,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99A65EAB-DEE3-4022-A263-54A18727A8D9}
+		{0AD326C6-1AA0-4102-94B1-E5D874F60930} = {00F83D99-820C-470A-8F4F-73883B7E8F2D}
+		{B6E52E36-7123-4F69-B5A5-22086B0B7521} = {E416C0D8-CEEC-432E-82F1-8C91C1D4F1C7}
 	EndGlobalSection
 EndGlobal

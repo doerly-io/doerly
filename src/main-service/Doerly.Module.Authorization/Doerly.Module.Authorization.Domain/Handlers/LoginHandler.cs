@@ -4,7 +4,7 @@ using Doerly.Common;
 using Doerly.Domain.Models;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Module.Authorization.Domain.Dtos;
-using Doerly.Module.Authorization.Localization;
+using Doerly.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -12,7 +12,7 @@ namespace Doerly.Module.Authorization.Domain.Handlers;
 
 public class LoginHandler : BaseAuthHandler
 {
-    public LoginHandler(AuthorizationDbContext dbContext, IOptions<JwtSettings> options) : base(dbContext, options)
+    public LoginHandler(AuthorizationDbContext dbContext, IOptions<AuthSettings> options) : base(dbContext, options)
     {
     }
 
@@ -39,8 +39,8 @@ public class LoginHandler : BaseAuthHandler
             return HandlerResult.Failure<(LoginResultDto, string)>(Resources.Get("InvalidPassword"));
 
         var accessToken = CreateAccessToken(user.Id, user.Email, user.RoleName);
-        var refreshToken = Guid.NewGuid();
-        await CreateRefreshTokenAsync(refreshToken, user.Id);
+        var refreshTokenValue = GetResetToken();
+        await CreateRefreshTokenAsync(refreshTokenValue.hashedToken, user.Id);
 
         var loginResultDto = new LoginResultDto
         {
@@ -48,7 +48,7 @@ public class LoginHandler : BaseAuthHandler
             UserEmail = user.Email
         };
 
-        return HandlerResult.Success((loginResultDto, refreshToken.ToString()));
+        return HandlerResult.Success((loginResultDto, refreshTokenValue.hashedToken));
     }
 
     private bool VerifyPasswordHash(string password, string passwordHash, string passwordSalt)

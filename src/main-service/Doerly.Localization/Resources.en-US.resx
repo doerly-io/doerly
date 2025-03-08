@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="UserNotFound" xml:space="preserve">
+        <value>User not found</value>
+    </data>
+    <data name="InvalidPassword" xml:space="preserve">
+        <value>Invalid password</value>
+    </data>
+    <data name="UserAlreadyExist" xml:space="preserve">
+        <value>User with this username already exists</value>
+    </data>
+    <data name="InvalidPasswordInput" xml:space="preserve">
+        <value>Incorrect password format</value>
+    </data>
+    <data name="InvalidEmailFormatInput" xml:space="preserve">
+        <value>Invalid email format</value>
+    </data>
+    <data name="ValidTokenNotFound" xml:space="preserve">
+        <value>Valid token not found</value>
+    </data>
+    <data name="ResetPasswordEmailVerificationText" xml:space="preserve">
+        <value>Hello,
+
+We received a request to reset your password. If you did not make this request, please ignore this message.
+
+To reset your password, please click the link below:</value>
+    </data>
+    <data name="ResetPasswordEmailBestRegardsText" xml:space="preserve">
+        <value>If you have any questions, please contact our support team.
+
+Best regards,
+Doerly</value>
+    </data>
+    <data name="ResetPasswordEmailSubject" xml:space="preserve">
+        <value>Reset password</value>
+    </data>
+</root>

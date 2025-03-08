@@ -1,0 +1,85 @@
+/* You can add global styles to this file, and also import other style files */
+
+@use "bootstrap/scss/bootstrap-reboot";
+@use "bootstrap/scss/bootstrap-grid";
+@use "bootstrap/scss/bootstrap-utilities";
+
+@use "primeicons/primeicons.css";
+
+html {
+  //font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+  //Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+
+  font-family: 'Segoe UI', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  //font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: (var(--p-surface-0), var(--p-surface-950));
+}
+
+
+.c-primary {
+  color: var(--p-primary-color);
+}
+
+label {
+  color: var(--p-surface-600);
+}
+
+p {
+  color: var(--p-surface-600);
+}
+
+a {
+  color: var(--p-blue-600);
+  font-weight: 500;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+a:hover {
+  color: var(--p-blue-500) !important;
+}
+
+
+.my-app-dark {
+
+  p {
+    color: var(--p-surface-400);
+  }
+
+  label {
+    color: var(--p-surface-400);
+  }
+
+  a {
+    color: var(--p-blue-400) !important;
+  }
+
+  a:hover {
+    color: var(--p-blue-500) !important;
+  }
+}
+
+
+.input-validation-item {
+  color: var(--p-red-500);
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
+
+
+
+

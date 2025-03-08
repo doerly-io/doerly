@@ -30,4 +30,10 @@ public class ModuleInitializer : IModuleInitializer
             dbContext.Database.Migrate();
         }
     }
+
+    public void ConfigureServices(IHostApplicationBuilder builder)
+    {
+        builder.Services.AddDbContext<OrderDbContext>();
+        builder.Services.RegisterHandlers(typeof(Domain.IAssemblyMarker).Assembly);
+    }
 }
