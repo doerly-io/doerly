@@ -2,6 +2,7 @@ using Doerly.Common;
 using Doerly.Domain.Models;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Module.Authorization.Domain.Dtos;
+using Doerly.Module.Authorization.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -9,20 +10,26 @@ namespace Doerly.Module.Authorization.Domain.Handlers;
 
 public class RefreshTokenHandler : BaseAuthHandler
 {
-    public RefreshTokenHandler(AuthorizationDbContext dbContext, IOptions<JwtSettings> options) : base(dbContext, options)
+    public RefreshTokenHandler(AuthorizationDbContext dbContext, IOptions<AuthSettings> options) : base(dbContext, options)
     {
     }
 
     public async Task<HandlerResult<(LoginResultDto resultDto, string refreshToken)>> HandleAsync(string refreshToken, string accessToken)
     {
-        var token = await DbContext.RefreshTokens
+        var userId = GetUserIdFromJwtToken(accessToken);
+        var refreshTokenBytes = Convert.FromBase64String(refreshToken);
+        var refreshTokenHash = GetResetTokenHash(refreshTokenBytes);
+
+        var token = await DbContext.Tokens
             .AsNoTracking()
             .Include(x => x.User)
-            .Where(x => x.Guid == Guid.Parse(refreshToken))
-            .Select(x => new { x.Guid, x.User.Email, x.UserId, Role = x.User.Role.Name })
+            .Where(x => x.TokenKind == ETokenKind.RefreshToken
+                        && x.Value == refreshTokenHash
+                        && (userId != null && x.UserId == userId))
+            .Select(x => new { x.Guid, x.DateCreated, x.User.Email, x.UserId, Role = x.User.Role.Name })
             .FirstOrDefaultAsync();
 
-        if (token == null)
+        if (token == null || token.DateCreated.AddMinutes(AuthOptions.Value.RefreshTokenLifetime) < DateTime.UtcNow)
             return HandlerResult.Failure<(LoginResultDto resultDto, string refreshToken)>("Unauthorized");
 
         var accessTokenNew = CreateAccessToken(token.UserId, token.Email, token.Role);
@@ -32,9 +39,9 @@ public class RefreshTokenHandler : BaseAuthHandler
             AccessToken = accessTokenNew
         };
 
-        var refreshTokenNew = Guid.NewGuid();
-        await CreateRefreshTokenAsync(refreshTokenNew, token.UserId);
+        var refreshTokenNew = GetResetToken();
+        await CreateRefreshTokenAsync(refreshTokenNew.hashedToken, token.UserId);
 
-        return HandlerResult.Success((loginResultDto, refreshTokenNew.ToString()));
+        return HandlerResult.Success((loginResultDto, refreshTokenNew.hashedToken));
     }
 }

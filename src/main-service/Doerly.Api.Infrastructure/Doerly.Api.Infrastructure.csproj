@@ -12,6 +12,7 @@
 
 
     <ItemGroup>
+        <ProjectReference Include="..\Doerly.Common\Doerly.Common.csproj" />
         <ProjectReference Include="..\Doerly.Domain\Doerly.Domain.csproj" />
     </ItemGroup>
 

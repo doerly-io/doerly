@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Doerly.Common.Constants;
 using Doerly.Domain.Factories;
 using Doerly.Domain.Handlers;
 using Microsoft.AspNetCore.Http;
@@ -9,20 +10,27 @@ namespace Doerly.Api.Infrastructure;
 
 public class BaseApiController : ControllerBase
 {
-
     [DebuggerStepThrough]
     protected THandler ResolveHandler<THandler>() where THandler : IHandler
     {
         var handlerFactory = HttpContext.RequestServices.GetRequiredService<IHandlerFactory>();
-        return handlerFactory.CreateHandler<THandler>();
+        return handlerFactory.Get<THandler>();
     }
 
     [NonAction]
-    public void SetHttpCookie(string key, string value)
+    protected void SetHttpCookie(string key, string value)
     {
         Response.Cookies.Append(key, value, new CookieOptions
         {
             HttpOnly = true,
+            SameSite = SameSiteMode.Lax
         });
+    }
+
+    [NonAction]
+    protected string GetBearerToken()
+    {
+        var authorizationHeader = Request.Headers[AuthConstants.AuthorizationHeaderName].ToString();
+        return authorizationHeader.Replace("Bearer ", "");
     }
 }

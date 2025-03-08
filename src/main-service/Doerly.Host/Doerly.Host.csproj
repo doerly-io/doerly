@@ -16,11 +16,14 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0"/>
+        <PackageReference Include="SendGrid" Version="9.29.3" />
+        <PackageReference Include="SendGrid.Extensions.DependencyInjection" Version="1.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0"/>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Doerly.Domain\Doerly.Domain.csproj" />
+        <ProjectReference Include="..\Doerly.Localization\Doerly.Localization.csproj" />
         <ProjectReference Include="..\Doerly.Module.Authorization\Doerly.Module.Authorization.Api\Doerly.Module.Authorization.Api.csproj"/>
     </ItemGroup>
 

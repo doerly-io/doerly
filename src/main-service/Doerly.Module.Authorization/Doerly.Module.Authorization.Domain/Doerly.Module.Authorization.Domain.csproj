@@ -9,8 +9,9 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
       <ProjectReference Include="..\..\Doerly.Common\Doerly.Common.csproj" />
+      <ProjectReference Include="..\..\Doerly.Localization\Doerly.Localization.csproj" />
+      <ProjectReference Include="..\..\Doerly.Notification.EmailSender\Doerly.Notification.EmailSender.csproj" />
       <ProjectReference Include="..\Doerly.Module.Authorization.DataAccess\Doerly.Module.Authorization.DataAccess.csproj" />
-      <ProjectReference Include="..\Doerly.Module.Authorization.Localization\Doerly.Module.Authorization.Localization.csproj" />
     </ItemGroup>
 
     <ItemGroup>

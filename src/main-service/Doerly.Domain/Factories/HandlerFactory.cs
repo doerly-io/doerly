@@ -12,7 +12,7 @@ public class HandlerFactory : IHandlerFactory
         _serviceProvider = serviceProvider;
     }
 
-    public THandler CreateHandler<THandler>() where THandler : IHandler
+    public THandler Get<THandler>() where THandler : IHandler
     {
         return _serviceProvider.GetRequiredService<THandler>();
     }

@@ -4,5 +4,5 @@ namespace Doerly.Domain.Factories;
 
 public interface IHandlerFactory : IFactory
 {
-    THandler CreateHandler<THandler>() where THandler : IHandler;
+    THandler Get<THandler>() where THandler : IHandler;
 }

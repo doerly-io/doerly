@@ -1,19 +1,41 @@
 using System.Globalization;
 using Doerly.Host;
 using System.Reflection;
+using System.Resources;
 using System.Text;
 using Doerly.Domain.Factories;
 using Doerly.Common;
 using Doerly.Api.Infrastructure;
+using Doerly.Localization;
+using Doerly.Notification.EmailSender;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.IdentityModel.Tokens;
+using SendGrid.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
-var mvcBuilder = builder.Services.AddControllers();
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.AddControllers(options =>
+    {
+        options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider());
+    })
+    .AddDataAnnotationsLocalization(options =>
+    {
+        options.DataAnnotationLocalizerProvider = (type, factory) =>
+        {
+            var resourceManager = new ResourceManager("Doerly.Localization.Resources", typeof(Resources).Assembly);
+            return new DataAnnotationsStringLocalizer(resourceManager);
+        };
+    })
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    });
 
 #region Configure Modules
 
@@ -43,17 +65,30 @@ foreach (var moduleAssembly in loadedAssemblies)
 
     var moduleInitializer = (IModuleInitializer)Activator.CreateInstance(moduleInitializerType);
     builder.Services.AddSingleton(moduleInitializer);
-    moduleInitializer.ConfigureServices(builder, mvcBuilder);
+    moduleInitializer.ConfigureServices(builder);
 }
 
 #endregion
 
+builder.Services.AddScoped<SendEmailHandler>();
 
 builder.Services.AddScoped<IHandlerFactory, HandlerFactory>();
 
-var jwtSettingsConfiguration = configuration.GetSection(JwtSettings.JwtSettingsName);
-var jwtSettings = jwtSettingsConfiguration.Get<JwtSettings>();
-builder.Services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.JwtSettingsName));
+#region Configure Settings
+
+var frontendSettingsCfg = configuration.GetSection(FrontendSettings.FrontendSettingsName);
+var frontendSettings = frontendSettingsCfg.Get<FrontendSettings>();
+builder.Services.Configure<FrontendSettings>(configuration.GetSection(FrontendSettings.FrontendSettingsName));
+
+var sendGridSettingsCfg = configuration.GetSection(SendGridSettings.SendGridSettingsName);
+var sendGridSettings = sendGridSettingsCfg.Get<SendGridSettings>();
+builder.Services.Configure<SendGridSettings>(configuration.GetSection(SendGridSettings.SendGridSettingsName));
+
+var authSettingsConfiguration = configuration.GetSection(AuthSettings.AuthSettingsName);
+var authSettings = authSettingsConfiguration.Get<AuthSettings>();
+builder.Services.Configure<AuthSettings>(configuration.GetSection(AuthSettings.AuthSettingsName));
+
+#endregion
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -64,10 +99,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtSettings.Issuer,
-            ValidAudience = jwtSettings.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
-            ClockSkew = TimeSpan.FromMinutes(jwtSettings.AccessTokenExpiration),
+            ValidIssuer = authSettings.Issuer,
+            ValidAudience = authSettings.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.SecretKey)),
+            ClockSkew = TimeSpan.FromMinutes(authSettings.AccessTokenLifetime),
         };
     });
 
@@ -75,6 +110,8 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSendGrid(opt => { opt.ApiKey = sendGridSettings.ApiKey; });
 
 
 var app = builder.Build();
@@ -90,7 +127,7 @@ app.UseRequestLocalization(options =>
 {
     var supportedCultures = new List<CultureInfo>
     {
-        new("en-US")
+        new(HostConstants.EnUsCulture)
         {
             DateTimeFormat =
             {
@@ -98,7 +135,7 @@ app.UseRequestLocalization(options =>
                 ShortTimePattern = "MM/DD/YYYY"
             }
         },
-        new("uk-UA")
+        new(HostConstants.UkUaCulture)
         {
             DateTimeFormat =
             {
@@ -108,14 +145,18 @@ app.UseRequestLocalization(options =>
         }
     };
 
-    options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
+    options.DefaultRequestCulture = new RequestCulture(culture: HostConstants.EnUsCulture, uiCulture: HostConstants.EnUsCulture);
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
 });
 
 app.UseRouting();
 
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
+app.UseCors(policy => policy
+    .WithOrigins(frontendSettings.FrontendUrl)
+    .AllowCredentials()
+    .AllowAnyHeader()
+    .AllowAnyMethod());
 
 app.UseAuthentication();
 
