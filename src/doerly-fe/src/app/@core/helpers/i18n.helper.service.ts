@@ -39,4 +39,8 @@ export class I18nHelperService {
     this.translate.use('en');
     localStorage.setItem(LANGUAGE, 'en');
   }
+
+  getAcceptedLanguageHeader(): string {
+    return this.getLanguage() === 'uk' ? 'uk-UA' : 'en-US';
+  }
 }

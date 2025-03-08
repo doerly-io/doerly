@@ -1,35 +1,29 @@
 import {Component, OnInit} from '@angular/core';
 import {ButtonDirective} from "primeng/button";
 import {Card} from "primeng/card";
-import {Checkbox} from "primeng/checkbox";
 import {InputText} from "primeng/inputtext";
-import {NgIf} from "@angular/common";
-import {PasswordDirective} from "primeng/password";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Ripple} from "primeng/ripple";
 import {Router, RouterLink} from "@angular/router";
 import {TranslatePipe} from "@ngx-translate/core";
 import {AuthService} from '../../domain/auth.service';
-import {JwtTokenHelper} from '../../../../@core/helpers/jwtToken.helper';
-import {LoginRequest} from '../../models/requests/login-request';
 import {HttpErrorResponse} from '@angular/common/http';
 import {RegisterRequest} from '../../models/requests/register-request';
 import {Divider} from 'primeng/divider';
+import {PasswordInputComponent} from '../../../../@components/password/password-input.component';
 
 @Component({
   selector: 'app-register',
   imports: [
     ButtonDirective,
     Card,
-    Checkbox,
     InputText,
-    NgIf,
-    PasswordDirective,
     ReactiveFormsModule,
     Ripple,
     RouterLink,
     TranslatePipe,
-    Divider
+    Divider,
+    PasswordInputComponent
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
@@ -56,16 +50,12 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  togglePasswordVisibility = () => this.isPasswordVisible = !this.isPasswordVisible;
-
   register(): void {
     const request = this.registerForm.value as RegisterRequest;
 
     this.authService.register(request).subscribe({
       next: (value) => {
-        if (value.isSuccess) {
-          this.router.navigate(['/login']);
-        }
+        this.router.navigate(['/login']);
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 401) {

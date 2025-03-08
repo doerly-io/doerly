@@ -16,6 +16,10 @@
     "want_to_join_us": "Want to join us?",
     "register_now": "Register now!",
     "already_has_account": "Already has account?",
-    "login_now": "Login now!"
+    "login_now": "Login now!",
+    "reset_link_sent": "A password reset link has been sent to your email address.",
+    "password_mismatch": "Entered passwords do not match.",
+    "field_required": "This field is required.",
+    "email_not_valid": "Enter a valid email address."
   }
 }

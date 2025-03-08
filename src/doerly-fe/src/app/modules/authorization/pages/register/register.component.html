@@ -13,18 +13,13 @@
             <input pInputText formControlName="email" class="w-100" id="email" placeholder="example@mail.com"/>
           </div>
           <div class="row mb-3 mx-0 px-0">
-            <label for="password">{{ 'auth.password' | translate }}</label>
-            <div class="password-container px-0">
-              <input pPassword formControlName="password" class="w-100" id="password" placeholder=""
-                     feedback="false" [showPassword]="isPasswordVisible"/>
-              <span class="password-toggle-icon" (click)="togglePasswordVisibility()">
-                          <i class="pi pi-eye" *ngIf="isPasswordVisible"></i>
-                          <i class="pi pi-eye-slash" *ngIf="!isPasswordVisible"></i>
-                        </span>
-            </div>
+            <doerly-password-input
+              [inputControl]="registerForm.get('password')!"
+              [label]="'auth.password' | translate">
+            </doerly-password-input>
           </div>
           <div class="row mx-0 px-0 mt-3">
-            <button pButton pRipple label="{{'auth.register' | translate }}" icon="pi pi-user-plus" class="w-100"
+            <button pButton pRipple label="{{'auth.register' | translate }}" icon="pi pi-user-plus" class="w-100" [disabled]="!registerForm.valid"
                     (click)="register()"></button>
           </div>
         </form>

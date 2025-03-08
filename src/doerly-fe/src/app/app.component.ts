@@ -35,7 +35,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLoggedIn = this.jwtTokenHelper.isLoggedIn();
+    this.jwtTokenHelper.isLoggedIn$.subscribe(isLoggedIn => {
+      this.isLoggedIn = isLoggedIn;
+    });
   }
 
   setDefaults() {

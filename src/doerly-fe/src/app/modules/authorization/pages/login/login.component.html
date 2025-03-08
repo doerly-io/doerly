@@ -9,31 +9,37 @@
             <h3 class="c-primary text-center mb-3">{{ 'auth.login' | translate }}</h3>
           </div>
           <div class="row mb-3 mx-0 px-0">
-            <label for="email">{{ 'auth.email' | translate }}</label>
-            <input pInputText formControlName="email" class="w-100" id="email" placeholder="example@mail.com"/>
+            <div>
+              <label for="email">{{ 'auth.email' | translate }}</label>
+              <input pInputText formControlName="email" class="w-100" id="email"
+                     placeholder="example@mail.com"/>
+              <small *ngIf="isInvalid(loginForm,'email')" class="input-validation-item">
+                {{ getError(loginForm, 'email', 'required', 'auth.field_required' | translate) }}
+                {{ getError(loginForm, 'email', 'email', 'auth.email_not_valid' | translate) }}
+                {{ getServersideError(loginForm, 'email') }}
+              </small>
+            </div>
           </div>
           <div class="row mb-3 mx-0 px-0">
-            <label for="password">{{ 'auth.password' | translate }}</label>
-            <div class="password-container px-0">
-              <input pPassword formControlName="password" class="w-100" id="password" placeholder=""
-                     feedback="false" [showPassword]="isPasswordVisible"/>
-              <span class="password-toggle-icon" (click)="togglePasswordVisibility()">
-                          <i class="pi pi-eye" *ngIf="isPasswordVisible"></i>
-                          <i class="pi pi-eye-slash" *ngIf="!isPasswordVisible"></i>
-                        </span>
-            </div>
+            <doerly-password-input
+              [inputControl]="loginForm.get('password')!"
+              [label]="'auth.password' | translate">
+            </doerly-password-input>
           </div>
           <div class="row mx-0 px-0">
-            <div class="col-xl-6 col-lg-12 px-0 mb-3">
-              <p-checkbox id="remember-me" [binary]="true"></p-checkbox>
+            <div class="col-xl-6 col-lg-12 mb-3">
+              <p-checkbox id="remember-me" formControlName="rememberMe" [binary]="true"></p-checkbox>
               <label for="remember-me" class="ms-2">{{ 'auth.remember_me' | translate }}</label>
             </div>
-            <div class="col-xl-6 col-lg-12 px-0 d-flex justify-content-xl-end justify-content-lg-start mb-3">
-              <a class="text-end" routerLink="/auth/reset-password">{{ 'auth.forgot_password' | translate }}</a>
+            <div class="col-xl-6 col-lg-12 d-flex justify-content-xl-end justify-content-lg-start mb-3">
+              <a class="text-end"
+                 routerLink="/auth/request-password-reset">{{ 'auth.forgot_password' | translate }}</a>
             </div>
           </div>
           <div class="row mx-0 px-0 mt-3">
-            <button pButton pRipple label="{{'auth.login' | translate }}" icon="pi pi-user" class="w-100"
+            <button pButton pRipple [type]="'submit'" label="{{'auth.login' | translate }}"
+                    icon="pi pi-user"
+                    class="w-100" [disabled]="!loginForm.valid"
                     (click)="login()"></button>
           </div>
         </form>
@@ -49,6 +55,7 @@
       </div>
     </div>
   </p-card>
+
 </section>
 
 
