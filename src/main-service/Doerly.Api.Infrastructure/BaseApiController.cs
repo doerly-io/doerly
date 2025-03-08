@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Doerly.Common.Constants;
 using Doerly.Domain.Factories;
 using Doerly.Domain.Handlers;
 using Microsoft.AspNetCore.Http;
@@ -29,7 +30,7 @@ public class BaseApiController : ControllerBase
     [NonAction]
     protected string GetBearerToken()
     {
-        var authorizationHeader = Request.Headers["Authorization"].ToString();
+        var authorizationHeader = Request.Headers[AuthConstants.AuthorizationHeaderName].ToString();
         return authorizationHeader.Replace("Bearer ", "");
     }
 }

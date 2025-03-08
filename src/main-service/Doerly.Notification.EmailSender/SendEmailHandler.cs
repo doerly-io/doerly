@@ -1,8 +1,6 @@
 using System.Net;
 using Doerly.Common;
 using Doerly.Domain.Handlers;
-using Doerly.Domain.Models;
-using Doerly.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SendGrid;

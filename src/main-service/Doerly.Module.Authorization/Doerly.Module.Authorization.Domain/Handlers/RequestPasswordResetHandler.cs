@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using Doerly.Common;
 using Doerly.Domain.Factories;
 using Doerly.Domain.Models;

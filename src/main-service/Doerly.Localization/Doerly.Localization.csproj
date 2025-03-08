@@ -10,11 +10,20 @@
       <EmbeddedResource Update="Resources.en-US.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Resources.en-US.Designer.cs</LastGenOutput>
+        <DependentUpon>Resources.cs</DependentUpon>
       </EmbeddedResource>
       <EmbeddedResource Update="Resources.uk-UA.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Resources.uk-UA.Designer.cs</LastGenOutput>
+        <DependentUpon>Resources.cs</DependentUpon>
       </EmbeddedResource>
+      <EmbeddedResource Remove="Resources\LocalizationResources.resx" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.Extensions.Localization.Abstractions">
+        <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.13\Microsoft.Extensions.Localization.Abstractions.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

@@ -1,14 +1,18 @@
 using System.Resources;
 
-namespace Doerly.Localization;
-
-public static class Resources
+namespace Doerly.Localization
 {
-    private static readonly ResourceManager _resourceManager = new(typeof(Resources).FullName, typeof(Resources).Assembly);
-    
-    public static string Get(string key)
+    public static class Resources
     {
-        var resourceValue = _resourceManager.GetString(key);
-        return resourceValue ?? key;
+        private static readonly ResourceManager _resourceManager = new ResourceManager("Doerly.Localization.Resources", typeof(Resources).Assembly);
+
+        public static string Get(string key)
+        {
+            var resourceValue = _resourceManager.GetString(key);
+            return resourceValue ?? key;
+        }
+        
+        //public static string InvalidEmailFormatInput => _resourceManager.GetString(nameof(InvalidEmailFormatInput));
+
     }
 }

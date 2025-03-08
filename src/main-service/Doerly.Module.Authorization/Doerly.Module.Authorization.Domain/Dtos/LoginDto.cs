@@ -4,11 +4,10 @@ namespace Doerly.Module.Authorization.Domain.Dtos;
 
 public class LoginDto
 {
-    [Required]
-    [DataType(DataType.EmailAddress, ErrorMessage = "InvalidEmailFormatInput")]
+    [Required(ErrorMessage = "InvalidEmailFormatInput")]
+    [EmailAddress(ErrorMessage = "InvalidEmailFormatInput")]
     public string Email { get; set; }
     
-    [Required]
-    [DataType(DataType.Password, ErrorMessage = "InvalidPasswordInput")]
+    [Required(ErrorMessage = "PasswordRequired")]
     public string Password { get; set; }
 }

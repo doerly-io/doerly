@@ -7,6 +7,6 @@ public class ResetPasswordDto
     [Required]
     public string Token { get; set; }
     
-    [Required]
+    [Required(ErrorMessage = "InvalidPasswordInput")]
     public string Password { get; set; }
 }

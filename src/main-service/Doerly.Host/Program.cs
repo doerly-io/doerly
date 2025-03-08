@@ -1,13 +1,16 @@
 using System.Globalization;
 using Doerly.Host;
 using System.Reflection;
+using System.Resources;
 using System.Text;
 using Doerly.Domain.Factories;
 using Doerly.Common;
 using Doerly.Api.Infrastructure;
+using Doerly.Localization;
 using Doerly.Notification.EmailSender;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.IdentityModel.Tokens;
 using SendGrid.Extensions.DependencyInjection;
 
@@ -15,11 +18,23 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
-builder.Services.AddLocalization(x => x.ResourcesPath = "Resources");
-builder.Services.AddControllers()
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.AddControllers(options =>
+    {
+        options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider());
+    })
     .AddDataAnnotationsLocalization(options =>
     {
-        options.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(Doerly.Localization.Resources));
+        options.DataAnnotationLocalizerProvider = (type, factory) =>
+        {
+            var resourceManager = new ResourceManager("Doerly.Localization.Resources", typeof(Resources).Assembly);
+            return new DataAnnotationsStringLocalizer(resourceManager);
+        };
+    })
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
     });
 
 #region Configure Modules
@@ -59,6 +74,8 @@ builder.Services.AddScoped<SendEmailHandler>();
 
 builder.Services.AddScoped<IHandlerFactory, HandlerFactory>();
 
+#region Configure Settings
+
 var frontendSettingsCfg = configuration.GetSection(FrontendSettings.FrontendSettingsName);
 var frontendSettings = frontendSettingsCfg.Get<FrontendSettings>();
 builder.Services.Configure<FrontendSettings>(configuration.GetSection(FrontendSettings.FrontendSettingsName));
@@ -70,6 +87,8 @@ builder.Services.Configure<SendGridSettings>(configuration.GetSection(SendGridSe
 var authSettingsConfiguration = configuration.GetSection(AuthSettings.AuthSettingsName);
 var authSettings = authSettingsConfiguration.Get<AuthSettings>();
 builder.Services.Configure<AuthSettings>(configuration.GetSection(AuthSettings.AuthSettingsName));
+
+#endregion
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

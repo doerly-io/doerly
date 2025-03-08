@@ -1,9 +1,9 @@
 using Doerly.Domain.Extensions;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Api.Infrastructure;
+using Doerly.DataAccess.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -19,10 +19,6 @@ public class ModuleInitializer : IModuleInitializer
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        using (var scope = app.ApplicationServices.CreateScope())
-        {
-            var dbContext = scope.ServiceProvider.GetRequiredService<AuthorizationDbContext>();
-            dbContext.Database.Migrate();
-        }
+        app.ApplicationServices.MigrateDatabase<AuthorizationDbContext>();
     }
 }
