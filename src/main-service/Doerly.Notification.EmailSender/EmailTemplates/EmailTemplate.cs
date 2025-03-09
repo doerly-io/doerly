@@ -6,7 +6,7 @@ public static class EmailTemplate
 {
     public const string ResetPassword = nameof(ResetPassword);
     
-    private static readonly ResourceManager _resourceManager = new(typeof(EmailTemplate).FullName, typeof(EmailTemplate).Assembly);
+    private static readonly ResourceManager _resourceManager = new(typeof(EmailTemplate).FullName!, typeof(EmailTemplate).Assembly);
 
     public static string Get(string key)
     {
