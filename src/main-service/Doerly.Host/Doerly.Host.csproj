@@ -1,31 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <Nullable>annotations</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>3851f2fa-89ab-4e93-9dbc-ca006ba5eaf5</UserSecretsId>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0"/>
-        <PackageReference Include="SendGrid" Version="9.29.3" />
-        <PackageReference Include="SendGrid.Extensions.DependencyInjection" Version="1.0.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Doerly.Domain\Doerly.Domain.csproj" />
-        <ProjectReference Include="..\Doerly.Localization\Doerly.Localization.csproj" />
-        <ProjectReference Include="..\Doerly.Module.Authorization\Doerly.Module.Authorization.Api\Doerly.Module.Authorization.Api.csproj"/>
-        <ProjectReference Include="..\Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj" />
-    </ItemGroup>
-
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>annotations</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>3851f2fa-89ab-4e93-9dbc-ca006ba5eaf5</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="SendGrid" Version="9.29.3" />
+		<PackageReference Include="SendGrid.Extensions.DependencyInjection" Version="1.0.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Doerly.Domain\Doerly.Domain.csproj" />
+		<ProjectReference Include="..\Doerly.Localization\Doerly.Localization.csproj" />
+		<ProjectReference Include="..\Doerly.Module.Authorization\Doerly.Module.Authorization.Api\Doerly.Module.Authorization.Api.csproj" />
+		<ProjectReference Include="..\Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj" />
+	</ItemGroup>
 </Project>
