@@ -8,7 +8,6 @@ using Doerly.Domain.Models;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Domain.Dtos.Requests.ExecutionProposal;
 using Doerly.Module.Order.Domain.Dtos.Responses.ExecutionProposal;
-using Doerly.Module.Order.Localization;
 
 using Microsoft.EntityFrameworkCore;
 

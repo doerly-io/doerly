@@ -4,10 +4,10 @@ using Doerly.Module.Order.DataAccess.Enums;
 using Doerly.Module.Order.DataAccess.Models;
 using Doerly.Module.Order.Domain.Dtos.Requests.ExecutionProposal;
 using Doerly.Module.Order.Domain.Dtos.Responses.ExecutionProposal;
-using Doerly.Module.Order.Localization;
 using ExecutionProposalEntity = Doerly.Module.Order.DataAccess.Models.ExecutionProposal;
 
 using Microsoft.EntityFrameworkCore;
+using Doerly.Localization;
 
 namespace Doerly.Module.Order.Domain.Handlers.ExecutionProposal;
 public class SendExecutionProposalHandler : BaseOrderHandler

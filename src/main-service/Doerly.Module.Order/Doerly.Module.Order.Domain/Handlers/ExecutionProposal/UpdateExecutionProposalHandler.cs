@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Doerly.Domain.Models;
+using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Domain.Dtos.Requests.ExecutionProposal;
-using Doerly.Module.Order.Localization;
 
 namespace Doerly.Module.Order.Domain.Handlers.ExecutionProposal;
 public class UpdateExecutionProposalHandler : BaseOrderHandler

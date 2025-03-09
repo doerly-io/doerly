@@ -1,8 +1,8 @@
 ﻿using Doerly.Domain.Models;
+using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Enums;
 using Doerly.Module.Order.Domain.Dtos.Requests.ExecutionProposal;
-using Doerly.Module.Order.Localization;
 
 using Microsoft.EntityFrameworkCore;
 
