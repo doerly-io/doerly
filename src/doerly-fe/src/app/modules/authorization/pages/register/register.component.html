@@ -9,8 +9,16 @@
             <h3 class="c-primary text-center mb-3">{{ 'auth.register' | translate }}</h3>
           </div>
           <div class="row mb-3 mx-0 px-0">
-            <label for="email">{{ 'auth.email' | translate }}</label>
-            <input pInputText formControlName="email" class="w-100" id="email" placeholder="example@mail.com"/>
+            <div>
+              <label for="email">{{ 'auth.email' | translate }}</label>
+              <input pInputText formControlName="email" class="w-100" id="email"
+                     placeholder="example@mail.com"/>
+              <small *ngIf="isInvalid(registerForm,'email')" class="input-validation-item">
+                {{ getError(registerForm, 'email', 'required', 'auth.field_required' | translate) }}
+                {{ getError(registerForm, 'email', 'email', 'auth.email_not_valid' | translate) }}
+                {{ getServersideError(registerForm, 'email') }}
+              </small>
+            </div>
           </div>
           <div class="row mb-3 mx-0 px-0">
             <doerly-password-input
@@ -19,7 +27,8 @@
             </doerly-password-input>
           </div>
           <div class="row mx-0 px-0 mt-3">
-            <button pButton pRipple label="{{'auth.register' | translate }}" icon="pi pi-user-plus" class="w-100" [disabled]="!registerForm.valid"
+            <button pButton pRipple label="{{'auth.register' | translate }}" icon="pi pi-user-plus" class="w-100"
+                    [disabled]="!registerForm.valid"
                     (click)="register()"></button>
           </div>
         </form>
