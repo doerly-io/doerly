@@ -11,20 +11,23 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {RegisterRequest} from '../../models/requests/register-request';
 import {Divider} from 'primeng/divider';
 import {PasswordInputComponent} from '../../../../@components/password/password-input.component';
+import {NgIf} from "@angular/common";
+import {getError, getServersideError, isInvalid} from '../../../../@core/helpers/input-validation-helpers';
 
 @Component({
   selector: 'app-register',
-  imports: [
-    ButtonDirective,
-    Card,
-    InputText,
-    ReactiveFormsModule,
-    Ripple,
-    RouterLink,
-    TranslatePipe,
-    Divider,
-    PasswordInputComponent
-  ],
+    imports: [
+        ButtonDirective,
+        Card,
+        InputText,
+        ReactiveFormsModule,
+        Ripple,
+        RouterLink,
+        TranslatePipe,
+        Divider,
+        PasswordInputComponent,
+        NgIf
+    ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -65,4 +68,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  protected readonly getServersideError = getServersideError;
+  protected readonly isInvalid = isInvalid;
+  protected readonly getError = getError;
 }
