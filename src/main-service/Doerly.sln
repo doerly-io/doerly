@@ -31,6 +31,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Localization", "Doer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Authorization.Enums", "Doerly.Module.Authorization\Doerly.Module.Authorization.Enums\Doerly.Module.Authorization.Enums.csproj", "{B6E52E36-7123-4F69-B5A5-22086B0B7521}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Payments", "Payments", "{5DDC2655-CEF0-4CBD-BD6B-61DD86AFFABA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Payments.Api", "Doerly.Module.Payments\Doerly.Module.Payments.Api\Doerly.Module.Payments.Api.csproj", "{31D85A1C-CE1E-4426-B2BE-2525D065EB10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Payments.Domain", "Doerly.Module.Payments\Doerly.Module.Payments.Domain\Doerly.Module.Payments.Domain.csproj", "{555461A6-48B4-4020-881E-89B8160AE541}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Payments.DataAccess", "Doerly.Module.Payments\Doerly.Module.Payments.DataAccess\Doerly.Module.Payments.DataAccess.csproj", "{8EE26BA3-1A93-41B2-AAF8-C2AEEEF794D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +89,18 @@ Global
 		{B6E52E36-7123-4F69-B5A5-22086B0B7521}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6E52E36-7123-4F69-B5A5-22086B0B7521}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6E52E36-7123-4F69-B5A5-22086B0B7521}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31D85A1C-CE1E-4426-B2BE-2525D065EB10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31D85A1C-CE1E-4426-B2BE-2525D065EB10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31D85A1C-CE1E-4426-B2BE-2525D065EB10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31D85A1C-CE1E-4426-B2BE-2525D065EB10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{555461A6-48B4-4020-881E-89B8160AE541}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{555461A6-48B4-4020-881E-89B8160AE541}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{555461A6-48B4-4020-881E-89B8160AE541}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{555461A6-48B4-4020-881E-89B8160AE541}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EE26BA3-1A93-41B2-AAF8-C2AEEEF794D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EE26BA3-1A93-41B2-AAF8-C2AEEEF794D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EE26BA3-1A93-41B2-AAF8-C2AEEEF794D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EE26BA3-1A93-41B2-AAF8-C2AEEEF794D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,5 +112,9 @@ Global
 		{2BFD3D11-A6DD-4954-8EBD-02612E8B7B8D} = {E416C0D8-CEEC-432E-82F1-8C91C1D4F1C7}
 		{0AD326C6-1AA0-4102-94B1-E5D874F60930} = {00F83D99-820C-470A-8F4F-73883B7E8F2D}
 		{B6E52E36-7123-4F69-B5A5-22086B0B7521} = {E416C0D8-CEEC-432E-82F1-8C91C1D4F1C7}
+		{5DDC2655-CEF0-4CBD-BD6B-61DD86AFFABA} = {93EDAABD-78C3-42EC-8530-7AB0331B5F89}
+		{31D85A1C-CE1E-4426-B2BE-2525D065EB10} = {5DDC2655-CEF0-4CBD-BD6B-61DD86AFFABA}
+		{555461A6-48B4-4020-881E-89B8160AE541} = {5DDC2655-CEF0-4CBD-BD6B-61DD86AFFABA}
+		{8EE26BA3-1A93-41B2-AAF8-C2AEEEF794D1} = {5DDC2655-CEF0-4CBD-BD6B-61DD86AFFABA}
 	EndGlobalSection
 EndGlobal

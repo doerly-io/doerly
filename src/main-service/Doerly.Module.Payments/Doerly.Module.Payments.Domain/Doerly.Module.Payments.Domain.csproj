@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Payments.DataAccess\Doerly.Module.Payments.DataAccess.csproj" />
+    </ItemGroup>
+
+</Project>
