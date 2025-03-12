@@ -24,5 +24,6 @@
     <ProjectReference Include="..\Doerly.FileRepository\Doerly.FileRepository.csproj" />
     <ProjectReference Include="..\Doerly.Localization\Doerly.Localization.csproj" />
     <ProjectReference Include="..\Doerly.Module.Authorization\Doerly.Module.Authorization.Api\Doerly.Module.Authorization.Api.csproj" />
+    <ProjectReference Include="..\Doerly.Module.Profile\Doerly.Module.Profile.Api\Doerly.Module.Profile.Api.csproj" />
   </ItemGroup>
 </Project>

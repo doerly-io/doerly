@@ -11,24 +11,17 @@ namespace Doerly.Module.Profile.Api;
 
 public class ModuleInitializer : IModuleInitializer
 {
-    public void ConfigureServices(IHostApplicationBuilder builder, IMvcBuilder mvcBuilder)
+    public void ConfigureServices(IHostApplicationBuilder builder)
     {
-        // TODO: investigate why messages is not being localized
         builder.Services.AddDbContext<ProfileDbContext>();
         builder.Services.RegisterHandlers(typeof(Domain.IAssemblyMarker).Assembly);
         builder.Services.AddLocalization(x => x.ResourcesPath = "Doerly.Module.Profile.Localization");
-        mvcBuilder.AddDataAnnotationsLocalization(options =>
-        {
-            options.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(Localization.Resources));
-        });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        using (var scope = app.ApplicationServices.CreateScope())
-        {
-            var dbContext = scope.ServiceProvider.GetRequiredService<ProfileDbContext>();
-            dbContext.Database.Migrate();
-        }
+        using var scope = app.ApplicationServices.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ProfileDbContext>();
+        dbContext.Database.Migrate();
     }
 }

@@ -52,4 +52,40 @@ Doerly</value>
     <data name="ResetPasswordEmailSubject" xml:space="preserve">
         <value>Reset password</value>
     </data>
+    <data name="InvalidFirstNameInput" xml:space="preserve">
+        <value>Invalid first name format</value>
+    </data>
+    <data name="InvalidLastNameInput" xml:space="preserve">
+        <value>Invalid last name format</value>
+    </data>
+    <data name="InvalidPatronymicInput" xml:space="preserve">
+        <value>Invalid patronymic format</value>
+    </data>
+    <data name="InvalidDateOfBirthInput" xml:space="preserve">
+        <value>Invalid date of birth format</value>
+    </data>
+    <data name="InvalidSexInput" xml:space="preserve">
+        <value>Invalid sex format</value>
+    </data>
+    <data name="InvalidBioInput" xml:space="preserve">
+        <value>Invalid bio format</value>
+    </data>
+    <data name="ProfileNotFound" xml:space="preserve">
+        <value>Profile not found</value>
+    </data>
+    <data name="FirstNameTooLong" xml:space="preserve">
+        <value>First name too long</value>
+    </data>
+    <data name="FirstNameTooShort" xml:space="preserve">
+        <value>First name too short</value>
+    </data>
+    <data name="LastNameTooLong" xml:space="preserve">
+        <value>Last name too long</value>
+    </data>
+    <data name="LastNameTooShort" xml:space="preserve">
+        <value>Last name too short</value>
+    </data>
+    <data name="BioTooLong" xml:space="preserve">
+        <value>Bio too long</value>
+    </data>
 </root>

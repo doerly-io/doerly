@@ -12,7 +12,6 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
         profile.FirstName = dto.FirstName;
         profile.LastName = dto.LastName;
         profile.UserId = dto.UserId;
-        profile.Patronymic = dto.Patronymic;
         profile.DateOfBirth = dto.DateOfBirth;
         profile.Sex = dto.Sex;
         profile.Bio = dto.Bio;

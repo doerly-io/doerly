@@ -8,16 +8,15 @@ public class ProfileSaveDto
     [Required]
     public int UserId { get; set; }
     
-    [Required]
     [DataType(DataType.Text, ErrorMessage = "InvalidFirstNameInput")]
+    [MaxLength(50, ErrorMessage = "FirstNameTooLong")]
+    [MinLength(1, ErrorMessage = "FirstNameTooShort")]
     public string FirstName { get; set; }
     
-    [Required]
     [DataType(DataType.Text, ErrorMessage = "InvalidLastNameInput")]
+    [MaxLength(50, ErrorMessage = "LastNameTooLong")]
+    [MinLength(1, ErrorMessage = "LastNameTooShort")]
     public string LastName { get; set; }
-    
-    [DataType(DataType.Text, ErrorMessage = "InvalidPatronymicInput")]
-    public string? Patronymic { get; set; }
     
     [DataType(DataType.Date, ErrorMessage = "InvalidDateOfBirthInput")]
     public DateOnly? DateOfBirth { get; set; }
@@ -26,5 +25,6 @@ public class ProfileSaveDto
     public Sex? Sex { get; set; }
     
     [DataType(DataType.MultilineText, ErrorMessage = "InvalidBioInput")]
+    [MaxLength(500, ErrorMessage = "BioTooLong")]
     public string? Bio { get; set; }
 }

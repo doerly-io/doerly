@@ -11,7 +11,6 @@ public class ProfileConfiguration : IEntityTypeConfiguration<ProfileModel>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.FirstName).IsRequired();
         builder.Property(x => x.LastName).IsRequired();
-        builder.Property(x => x.Patronymic);
         builder.Property(x => x.DateOfBirth);
         builder.Property(x => x.Sex);
         builder.Property(x => x.Bio);

@@ -10,7 +10,6 @@ public class Profile : BaseEntity
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public string? Patronymic { get; set; }
     // public int? AddressId { get; set; }
     // public virtual Address? Address { get; set; }
     public DateOnly? DateOfBirth { get; set; }

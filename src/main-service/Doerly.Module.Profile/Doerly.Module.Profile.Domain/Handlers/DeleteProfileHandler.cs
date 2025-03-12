@@ -1,6 +1,6 @@
 ﻿using Doerly.Domain.Models;
+using Doerly.Localization;
 using Doerly.Module.Profile.DataAccess;
-using Doerly.Module.Profile.Localization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;

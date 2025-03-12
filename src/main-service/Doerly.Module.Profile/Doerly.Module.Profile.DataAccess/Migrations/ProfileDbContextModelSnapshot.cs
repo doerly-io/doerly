@@ -57,10 +57,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                         .HasColumnType("text")
                         .HasColumnName("last_name");
 
-                    b.Property<string>("Patronymic")
-                        .HasColumnType("text")
-                        .HasColumnName("patronymic");
-
                     b.Property<int?>("Sex")
                         .HasColumnType("integer")
                         .HasColumnName("sex");

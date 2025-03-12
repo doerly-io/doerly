@@ -1,7 +1,7 @@
 ﻿using Doerly.Domain.Models;
+using Doerly.Localization;
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Module.Profile.Domain.Dtos;
-using Doerly.Module.Profile.Localization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
@@ -18,7 +18,6 @@ public class GetProfileHandler(ProfileDbContext dbContext) : BaseProfileHandler(
                 x.Id,
                 x.FirstName,
                 x.LastName,
-                x.Patronymic,
                 x.DateOfBirth,
                 x.Sex,
                 x.Bio,
@@ -35,7 +34,6 @@ public class GetProfileHandler(ProfileDbContext dbContext) : BaseProfileHandler(
             Id = profile.Id,
             FirstName = profile.FirstName,
             LastName = profile.LastName,
-            Patronymic = profile.Patronymic,
             DateOfBirth = profile.DateOfBirth,
             Sex = profile.Sex,
             Bio = profile.Bio,
