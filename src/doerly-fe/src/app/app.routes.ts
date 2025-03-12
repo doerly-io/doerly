@@ -12,6 +12,11 @@ export const routes: Routes = [
     loadChildren: () => import('./modules/authorization/authorization.routes').then(m => m.routes)
   },
   {
+    path: 'profile',
+    loadChildren: () => import('./modules/profile/profile.routes').then(m => m.routes),
+    canActivate: [authGuard]
+  },
+  {
     path: '**',
     redirectTo: ''//ToDo: 404 page
   }

@@ -10,9 +10,9 @@ import {AuthService} from '../../domain/auth.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {RegisterRequest} from '../../models/requests/register-request';
 import {Divider} from 'primeng/divider';
-import {PasswordInputComponent} from '../../../../@components/password/password-input.component';
 import {NgIf} from "@angular/common";
-import {getError, getServersideError, isInvalid} from '../../../../@core/helpers/input-validation-helpers';
+import {getError, getServersideError, isInvalid} from 'app/@core/helpers/input-validation-helpers';
+import {PasswordInputComponent} from 'app/@components/password/password-input.component';
 
 @Component({
   selector: 'app-register',

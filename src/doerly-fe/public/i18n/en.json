@@ -21,5 +21,58 @@
     "password_mismatch": "Entered passwords do not match.",
     "field_required": "This field is required.",
     "email_not_valid": "Enter a valid email address."
+  },
+  "profile": {
+    "title": "Personal info",
+    "subtitle": "Info about you and your preferences across Doerly services",
+    "basic": {
+      "bio": {
+        "title": "Bio",
+        "placeholder": "Tell us about yourself"
+      },
+      "birthday": {
+        "title": "Birthday",
+        "placeholder": "Select your birthday"
+      },
+      "image": {
+        "alt": "User avatar",
+        "title": "Profile picture",
+        "subtitle": "Profile picture will help you be recognized in the service"
+      },
+      "name": {
+        "title": "Name",
+        "placeholder": {
+          "first": "First name",
+          "last": "Last name"
+        }
+      },
+      "sex": {
+        "title": "Sex",
+        "options": {
+          "male": "Male",
+          "female": "Female"
+        },
+        "placeholder": "Select your sex"
+      },
+      "title": "Basic information"
+    },
+    "message": {
+      "save": {
+        "success": "Profile has been saved successfully.",
+        "error": "An error occurred while saving the profile. Message: {{message}}"
+      },
+      "load": {
+        "error": "An error occurred while loading the profile. Message: {{message}}"
+      }
+    }
+  },
+  "common": {
+    "error": "Error",
+    "success": "Success"
+  },
+  "pages": {
+    "profile": {
+      "title": "Profile"
+    }
   }
 }
