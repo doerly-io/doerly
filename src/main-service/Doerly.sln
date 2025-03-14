@@ -39,6 +39,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Payments.Doma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Payments.DataAccess", "Doerly.Module.Payments\Doerly.Module.Payments.DataAccess\Doerly.Module.Payments.DataAccess.csproj", "{8EE26BA3-1A93-41B2-AAF8-C2AEEEF794D1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FileRepository", "FileRepository", "{F863DD1F-2EA9-4AEC-909C-04DADBB381D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.FileRepository", "Doerly.FileRepository\Doerly.FileRepository.csproj", "{0D536B23-5CD0-44F8-A3D2-B92C076E1A8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +105,10 @@ Global
 		{8EE26BA3-1A93-41B2-AAF8-C2AEEEF794D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EE26BA3-1A93-41B2-AAF8-C2AEEEF794D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EE26BA3-1A93-41B2-AAF8-C2AEEEF794D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D536B23-5CD0-44F8-A3D2-B92C076E1A8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D536B23-5CD0-44F8-A3D2-B92C076E1A8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D536B23-5CD0-44F8-A3D2-B92C076E1A8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D536B23-5CD0-44F8-A3D2-B92C076E1A8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,5 +124,6 @@ Global
 		{31D85A1C-CE1E-4426-B2BE-2525D065EB10} = {5DDC2655-CEF0-4CBD-BD6B-61DD86AFFABA}
 		{555461A6-48B4-4020-881E-89B8160AE541} = {5DDC2655-CEF0-4CBD-BD6B-61DD86AFFABA}
 		{8EE26BA3-1A93-41B2-AAF8-C2AEEEF794D1} = {5DDC2655-CEF0-4CBD-BD6B-61DD86AFFABA}
+		{0D536B23-5CD0-44F8-A3D2-B92C076E1A8F} = {F863DD1F-2EA9-4AEC-909C-04DADBB381D9}
 	EndGlobalSection
 EndGlobal
