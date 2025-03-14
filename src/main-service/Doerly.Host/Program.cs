@@ -6,11 +6,13 @@ using System.Text;
 using Doerly.Domain.Factories;
 using Doerly.Common;
 using Doerly.Api.Infrastructure;
+using Doerly.FileRepository;
 using Doerly.Localization;
 using Doerly.Notification.EmailSender;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
+using Microsoft.Extensions.Azure;
 using Microsoft.IdentityModel.Tokens;
 using SendGrid.Extensions.DependencyInjection;
 
@@ -78,15 +80,20 @@ builder.Services.AddScoped<IHandlerFactory, HandlerFactory>();
 
 var frontendSettingsCfg = configuration.GetSection(FrontendSettings.FrontendSettingsName);
 var frontendSettings = frontendSettingsCfg.Get<FrontendSettings>();
-builder.Services.Configure<FrontendSettings>(configuration.GetSection(FrontendSettings.FrontendSettingsName));
+builder.Services.Configure<FrontendSettings>(frontendSettingsCfg);
 
 var sendGridSettingsCfg = configuration.GetSection(SendGridSettings.SendGridSettingsName);
 var sendGridSettings = sendGridSettingsCfg.Get<SendGridSettings>();
-builder.Services.Configure<SendGridSettings>(configuration.GetSection(SendGridSettings.SendGridSettingsName));
+builder.Services.Configure<SendGridSettings>(sendGridSettingsCfg);
 
 var authSettingsConfiguration = configuration.GetSection(AuthSettings.AuthSettingsName);
 var authSettings = authSettingsConfiguration.Get<AuthSettings>();
-builder.Services.Configure<AuthSettings>(configuration.GetSection(AuthSettings.AuthSettingsName));
+builder.Services.Configure<AuthSettings>(authSettingsConfiguration);
+
+var azureStorageSettingsConfiguration = configuration.GetSection(AzureStorageSettings.AzureStorageSettingName);
+var azureStorageSettings = azureStorageSettingsConfiguration.Get<AzureStorageSettings>();
+builder.Services.Configure<AzureStorageSettings>(azureStorageSettingsConfiguration);
+
 
 #endregion
 
@@ -112,6 +119,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSendGrid(opt => { opt.ApiKey = sendGridSettings.ApiKey; });
+
+builder.Services.AddAzureClients(factoryBuilder =>
+{
+    factoryBuilder.AddBlobServiceClient(azureStorageSettings.ConnectionString);
+});
+
+builder.Services.AddTransient<IFileRepository, FileRepository>();
 
 
 var app = builder.Build();
