@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Doerly.Module.Profile.DataAccess.Dicts;
+using Doerly.Module.Profile.Enums;
 
 namespace Doerly.Module.Profile.Domain.Dtos;
 
@@ -21,8 +21,8 @@ public class ProfileSaveDto
     [DataType(DataType.Date, ErrorMessage = "InvalidDateOfBirthInput")]
     public DateOnly? DateOfBirth { get; set; }
     
-    [EnumDataType(typeof(Sex), ErrorMessage = "InvalidSexInput")]
-    public Sex? Sex { get; set; }
+    [EnumDataType(typeof(ESex), ErrorMessage = "InvalidSexInput")]
+    public ESex Sex { get; set; }
     
     [DataType(DataType.MultilineText, ErrorMessage = "InvalidBioInput")]
     [MaxLength(500, ErrorMessage = "BioTooLong")]

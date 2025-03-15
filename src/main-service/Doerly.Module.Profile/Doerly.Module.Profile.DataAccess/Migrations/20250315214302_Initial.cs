@@ -25,7 +25,7 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: false),
                     date_of_birth = table.Column<DateOnly>(type: "date", nullable: true),
-                    sex = table.Column<int>(type: "integer", nullable: true),
+                    sex = table.Column<int>(type: "integer", nullable: false),
                     bio = table.Column<string>(type: "text", nullable: true),
                     user_id = table.Column<int>(type: "integer", nullable: false),
                     date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -35,6 +35,13 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 {
                     table.PrimaryKey("pk_profile", x => x.id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_profile_user_id",
+                schema: "profile",
+                table: "profile",
+                column: "user_id",
+                unique: true);
         }
 
         /// <inheritdoc />

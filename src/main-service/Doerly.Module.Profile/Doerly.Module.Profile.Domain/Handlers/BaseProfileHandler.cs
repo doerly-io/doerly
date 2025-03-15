@@ -7,7 +7,7 @@ namespace Doerly.Module.Profile.Domain.Handlers;
 
 public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<ProfileDbContext>(dbContext)
 {
-    protected void CopyToProfileFromDto(ProfileModel profile, ProfileSaveDto dto)
+    protected void CopyFromDto(ProfileModel profile, ProfileSaveDto dto)
     {
         profile.FirstName = dto.FirstName;
         profile.LastName = dto.LastName;

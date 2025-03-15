@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Doerly.DataAccess.Models;
 using Doerly.Module.Profile.DataAccess.Constants;
-using Doerly.Module.Profile.DataAccess.Dicts;
+using Doerly.Module.Profile.Enums;
 
 namespace Doerly.Module.Profile.DataAccess.Models;
 
@@ -13,7 +13,7 @@ public class Profile : BaseEntity
     // public int? AddressId { get; set; }
     // public virtual Address? Address { get; set; }
     public DateOnly? DateOfBirth { get; set; }
-    public Sex? Sex { get; set; }
+    public ESex Sex { get; set; }
     public string? Bio { get; set; }
     public int UserId { get; set; }
 }   

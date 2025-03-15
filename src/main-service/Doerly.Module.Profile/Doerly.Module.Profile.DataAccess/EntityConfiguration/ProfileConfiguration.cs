@@ -14,6 +14,7 @@ public class ProfileConfiguration : IEntityTypeConfiguration<ProfileModel>
         builder.Property(x => x.DateOfBirth);
         builder.Property(x => x.Sex);
         builder.Property(x => x.Bio);
-        
+        builder.Property(x => x.UserId);
+        builder.HasIndex(x => x.UserId).IsUnique();
     }
 }

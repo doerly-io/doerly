@@ -16,7 +16,7 @@ public class UpdateProfileHandler(ProfileDbContext dbContext) : BaseProfileHandl
         if (profile == null)
             return HandlerResult.Failure(Resources.Get("ProfileNotFound"));
 
-        CopyToProfileFromDto(profile, dto);
+        CopyFromDto(profile, dto);
         await DbContext.SaveChangesAsync();
         
         return HandlerResult.Success();

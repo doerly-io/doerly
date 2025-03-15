@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Doerly.Module.Profile.DataAccess.Migrations
 {
     [DbContext(typeof(ProfileDbContext))]
-    [Migration("20250202180936_Initial")]
+    [Migration("20250315214302_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -60,7 +60,7 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                         .HasColumnType("text")
                         .HasColumnName("last_name");
 
-                    b.Property<int?>("Sex")
+                    b.Property<int>("Sex")
                         .HasColumnType("integer")
                         .HasColumnName("sex");
 
@@ -70,6 +70,10 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_profile");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_profile_user_id");
 
                     b.ToTable("profile", "profile");
                 });

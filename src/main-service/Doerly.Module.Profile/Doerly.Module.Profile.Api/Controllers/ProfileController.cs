@@ -33,7 +33,7 @@ public class ProfileController : BaseApiController
         if (!result.IsSuccess)
             return Conflict(result);
         
-        return Created($"/api/profile/{result.Value}", result);
+        return Created();
     }
     
     [HttpPut]
@@ -50,13 +50,9 @@ public class ProfileController : BaseApiController
     
     [HttpDelete("{userId:int}")]
     [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteProfile(int userId)
     {
         var result = await ResolveHandler<DeleteProfileHandler>().HandleAsync(userId);
-        if (!result.IsSuccess)
-            return NotFound(result);
-        
         return Ok(result);
     }
 
