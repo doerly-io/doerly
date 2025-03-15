@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Doerly.Module.Order.Domain.Dtos.Requests.ExecutionProposal;
+namespace Doerly.Module.Order.Domain.Dtos.Requests;
 public class UpdateExecutionProposalRequest
 {
     public int Id { get; set; }

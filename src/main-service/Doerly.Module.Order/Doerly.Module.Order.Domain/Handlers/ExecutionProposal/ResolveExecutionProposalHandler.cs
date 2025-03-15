@@ -2,11 +2,11 @@
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Enums;
-using Doerly.Module.Order.Domain.Dtos.Requests.ExecutionProposal;
+using Doerly.Module.Order.Domain.Dtos.Requests;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Doerly.Module.Order.Domain.Handlers.ExecutionProposal;
+namespace Doerly.Module.Order.Domain.Handlers;
 public class ResolveExecutionProposalHandler : BaseOrderHandler
 {
     public ResolveExecutionProposalHandler(OrderDbContext dbContext) : base(dbContext)

@@ -1,7 +1,7 @@
 ﻿using Doerly.Module.Order.DataAccess.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace Doerly.Module.Order.Domain.Dtos.Requests.Order;
+namespace Doerly.Module.Order.Domain.Dtos.Requests;
 
 public class CreateOrderRequest
 {

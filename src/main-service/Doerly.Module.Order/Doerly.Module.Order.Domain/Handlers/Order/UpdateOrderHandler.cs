@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.Domain.Dtos.Requests.Order;
-using Doerly.Module.Order.Domain.Dtos.Responses.Order;
+using Doerly.Module.Order.Domain.Dtos.Requests;
+using Doerly.Module.Order.Domain.Dtos.Responses;
 
-namespace Doerly.Module.Order.Domain.Handlers.Order;
+namespace Doerly.Module.Order.Domain.Handlers;
 public class UpdateOrderHandler : BaseOrderHandler
 {
     public UpdateOrderHandler(OrderDbContext dbContext) : base(dbContext)

@@ -12,6 +12,10 @@ export const routes: Routes = [
     loadChildren: () => import('./modules/authorization/authorization.routes').then(m => m.routes)
   },
   {
+    path: 'ordering',
+    loadChildren: () => import('./modules/order/order.routes').then(m => m.routes)
+  },
+  {
     path: '**',
     redirectTo: ''//ToDo: 404 page
   }

@@ -1,7 +1,7 @@
 ﻿using Doerly.Api.Infrastructure;
 using Doerly.Domain.Models;
-using Doerly.Module.Order.Domain.Dtos.Requests.Order;
-using Doerly.Module.Order.Domain.Handlers.Order;
+using Doerly.Module.Order.Domain.Dtos.Requests;
+using Doerly.Module.Order.Domain.Handlers;
 
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Http;
@@ -19,28 +19,38 @@ public class OrderController : BaseApiController
     {
         var result = await ResolveHandler<CreateOrderHandler>().HandleAsync(dto);
 
-        return Ok(result.Value);
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> CreateOrder(int id)
+    public async Task<IActionResult> GetOrder(int id)
     {
         var result = await ResolveHandler<GetOrderByIdHandler>().HandleAsync(id);
         if (result.IsSuccess)
-            return Ok(result.Value);
+            return Ok(result);
 
         return BadRequest(result);
     }
 
-    [HttpGet("history")]
-    public async Task<IActionResult> GetOrderHistory([FromQuery] GetOrderHistoryRequest dto)
+    [HttpGet("orders")]
+    public async Task<IActionResult> GetOrdersWithPagination([FromQuery] GetOrdersWithPaginationRequest dto)
     {
-        var result = await ResolveHandler<GetOrderHistoryHandler>().HandleAsync(dto);
+        var result = await ResolveHandler<GetOrdersWithPaginationHandler>().HandleAsync(dto);
         if (result.IsSuccess)
-            return Ok(result.Value);
+            return Ok(result);
 
         return BadRequest(result);
     }
+
+    /*[HttpGet("orders")]
+    public async Task<IActionResult> GetOrderHistory([FromQuery] GetItemsWithPaginationByPredicatesRequest dto)
+    {
+        var result = await ResolveHandler<GetOrdersHandler>().HandleAsync(dto);
+        if (result.IsSuccess)
+            return Ok(result);
+
+        return BadRequest(result);
+    }*/
 
     [HttpPut("update")]
     public async Task<IActionResult> UpdateOrder(UpdateOrderRequest dto)

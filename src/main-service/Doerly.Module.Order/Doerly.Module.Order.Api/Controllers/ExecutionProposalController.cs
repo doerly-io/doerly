@@ -1,6 +1,6 @@
 ﻿using Doerly.Api.Infrastructure;
-using Doerly.Module.Order.Domain.Dtos.Requests.ExecutionProposal;
-using Doerly.Module.Order.Domain.Handlers.ExecutionProposal;
+using Doerly.Module.Order.Domain.Dtos.Requests;
+using Doerly.Module.Order.Domain.Handlers;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +16,7 @@ public class ExecutionProposalController : BaseApiController
     {
         var result = await ResolveHandler<SendExecutionProposalHandler>().HandleAsync(dto);
         if (result.IsSuccess)
-            return Ok(result.Value);
+            return Ok(result);
 
         return BadRequest(result);
     }
@@ -36,7 +36,7 @@ public class ExecutionProposalController : BaseApiController
     {
         var result = await ResolveHandler<GetExecutionProposalByIdHandler>().HandleAsync(id);
         if (result.IsSuccess)
-            return Ok(result.Value);
+            return Ok(result);
 
         return BadRequest(result);
     }
@@ -52,11 +52,11 @@ public class ExecutionProposalController : BaseApiController
     }
 
     [HttpPost("list")]
-    public async Task<IActionResult> GetExecutionProposalsByPredicates(GetExecutionProposalsByPredicateRequest dto)
+    public async Task<IActionResult> GetExecutionProposalsByPredicates(GetExecutionProposalsWithPaginationRequest dto)
     {
-        var result = await ResolveHandler<GetExecutionProposalsByPredicatesHandler>().HandleAsync(dto);
+        var result = await ResolveHandler<GetExecutionProposalsWithPaginationHandler>().HandleAsync(dto);
         if (result.IsSuccess)
-            return Ok(result.Value);
+            return Ok(result);
 
         return BadRequest(result);
     }

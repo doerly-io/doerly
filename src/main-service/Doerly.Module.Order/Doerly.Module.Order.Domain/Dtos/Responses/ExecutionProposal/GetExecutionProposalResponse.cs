@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Doerly.Module.Order.DataAccess.Enums;
 
-namespace Doerly.Module.Order.Domain.Dtos.Responses.ExecutionProposal;
+namespace Doerly.Module.Order.Domain.Dtos.Responses;
 public class GetExecutionProposalResponse
 {
     public int Id { get; set; }

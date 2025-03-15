@@ -1,12 +1,12 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Enums;
-using Doerly.Module.Order.Domain.Dtos.Requests.Order;
-using Doerly.Module.Order.Domain.Dtos.Responses.Order;
+using Doerly.Module.Order.Domain.Dtos.Requests;
+using Doerly.Module.Order.Domain.Dtos.Responses;
 
 using OrderEntity = Doerly.Module.Order.DataAccess.Models.Order;
 
-namespace Doerly.Module.Order.Domain.Handlers.Order;
+namespace Doerly.Module.Order.Domain.Handlers;
 
 public class CreateOrderHandler : BaseOrderHandler
 {

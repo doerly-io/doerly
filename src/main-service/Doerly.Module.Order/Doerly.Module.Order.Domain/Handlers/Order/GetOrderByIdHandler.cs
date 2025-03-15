@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.Domain.Dtos.Responses.Order;
+using Doerly.Module.Order.Domain.Dtos.Responses;
 
-namespace Doerly.Module.Order.Domain.Handlers.Order;
+namespace Doerly.Module.Order.Domain.Handlers;
 public class GetOrderByIdHandler : BaseOrderHandler
 {
     public GetOrderByIdHandler(OrderDbContext dbContext) : base(dbContext)

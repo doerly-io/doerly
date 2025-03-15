@@ -6,5 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Doerly.DataAccess\Doerly.DataAccess.csproj" />
+    <ProjectReference Include="..\Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj" />
+    <ProjectReference Include="..\Doerly.Extensions\Doerly.Extensions.csproj" />
   </ItemGroup>
 </Project>

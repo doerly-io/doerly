@@ -1,0 +1,51 @@
+<section class="row justify-content-center mt-5">
+  <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
+    <div class="row justify-content-center">
+      <div class="col-sm-12 col-md-10">
+        <div *ngIf="loading" class="text-center">Loading...</div>
+        <div *ngIf="!loading && order" class="order-details">
+          <h3 class="c-primary text-center mb-3">Order Details</h3>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="order-detail-item mb-3">
+                <p><strong>Order ID:</strong> {{ order.id }}</p>
+              </div>
+              <div class="order-detail-item mb-3">
+                <p><strong>Name:</strong> {{ order.name }}</p>
+              </div>
+              <div class="order-detail-item mb-3">
+                <p><strong>Description:</strong> {{ order.description }}</p>
+              </div>
+              <div class="order-detail-item mb-3">
+                <p><strong>Price:</strong> {{ '$' + order.price }}</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="order-detail-item mb-3">
+                <p><strong>Payment Kind:</strong> {{ getPaymentKindString(order.paymentKind) }}</p>
+              </div>
+              <div class="order-detail-item mb-3">
+                <p><strong>Due Date:</strong> {{ order.dueDate | date }}</p>
+              </div>
+              <div class="order-detail-item mb-3">
+                <p><strong>Status:</strong> {{ getOrderStatusString(order.status) }}</p>
+              </div>
+              <div class="order-detail-item mb-3">
+                <p><strong>Customer ID:</strong> {{ order.customerId }}</p>
+              </div>
+              <div class="order-detail-item mb-3" *ngIf="order.executorId">
+                <p><strong>Executor ID:</strong> {{ order.executorId }}</p>
+              </div>
+              <div class="order-detail-item mb-3" *ngIf="order.executionDate">
+                <p><strong>Execution Date:</strong> {{ order.executionDate | date }}</p>
+              </div>
+              <div class="order-detail-item mb-3" *ngIf="order.billId">
+                <p><strong>Bill ID:</strong> {{ order.billId }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-card>
+</section>

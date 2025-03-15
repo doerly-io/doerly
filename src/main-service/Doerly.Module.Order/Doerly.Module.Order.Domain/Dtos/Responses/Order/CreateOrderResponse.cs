@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Doerly.Module.Order.Domain.Dtos.Responses.Order;
+namespace Doerly.Module.Order.Domain.Dtos.Responses;
 
 public class CreateOrderResponse
 {

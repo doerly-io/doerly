@@ -1,0 +1,28 @@
+<section class="row justify-content-center mt-5">
+    <p-dataview [value]="proposals" [paginator]="true" [rows]="10" 
+        [rowsPerPageOptions]="[10, 20, 50, 100]" [totalRecords]="totalRecords" 
+        [lazy]="true" (onLazyLoad)="loadProposals($event)" [loading]="loading">
+        <ng-template #list>
+            <div *ngFor="let item of proposals; let first = first">
+                <div class="execution-proposal-item" (click)="navigateToProposalDetails(item.id)">
+                    <div class="execution-proposal-header">
+                        <div>
+                            <div class="text-lg font-medium text-surface-900 dark:text-surface-0">{{ item.comment }}</div>
+                        </div>
+                        <div>
+                            <span class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{ item.orderId }}</span>
+                        </div>
+                    </div>
+                    <div class="execution-proposal-footer">
+                        <div>
+                            <span class="font-medium text-secondary text-sm">{{ item.senderId }}</span>
+                        </div>
+                        <div>
+                            <p-tag [value]="getProposalStatusString(item.status)" styleClass="dark:!bg-surface-900"></p-tag>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-dataview>
+</section>

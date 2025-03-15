@@ -9,7 +9,7 @@ using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Enums;
 
-namespace Doerly.Module.Order.Domain.Handlers.Order;
+namespace Doerly.Module.Order.Domain.Handlers;
 public class DeleteOrderHandler : BaseOrderHandler
 {
     public DeleteOrderHandler(OrderDbContext dbContext) : base(dbContext)

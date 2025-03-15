@@ -2,14 +2,13 @@
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Enums;
 using Doerly.Module.Order.DataAccess.Models;
-using Doerly.Module.Order.Domain.Dtos.Requests.ExecutionProposal;
-using Doerly.Module.Order.Domain.Dtos.Responses.ExecutionProposal;
-using ExecutionProposalEntity = Doerly.Module.Order.DataAccess.Models.ExecutionProposal;
+using Doerly.Module.Order.Domain.Dtos.Requests;
+using Doerly.Module.Order.Domain.Dtos.Responses;
 
 using Microsoft.EntityFrameworkCore;
 using Doerly.Localization;
 
-namespace Doerly.Module.Order.Domain.Handlers.ExecutionProposal;
+namespace Doerly.Module.Order.Domain.Handlers;
 public class SendExecutionProposalHandler : BaseOrderHandler
 {
     public SendExecutionProposalHandler(OrderDbContext dbContext) : base(dbContext)
@@ -27,7 +26,7 @@ public class SendExecutionProposalHandler : BaseOrderHandler
         if (existingExecutionProposal != null)
             return HandlerResult.Failure<SendExecutionProposalResponse>(Resources.Get("EXECUTION_PROPOSAL_ALREADY_SENT"));
 
-        var executionProposal = new ExecutionProposalEntity()
+        var executionProposal = new ExecutionProposal()
         {
             OrderId = dto.OrderId,
             Comment = dto.Comment,

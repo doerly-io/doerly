@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Doerly.Module.Order.DataAccess.Enums;
 
-namespace Doerly.Module.Order.Domain.Dtos.Responses.Order;
+namespace Doerly.Module.Order.Domain.Dtos.Responses;
 public class GetOrderResponse
 {
     public int Id { get; set; }

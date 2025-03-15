@@ -1,4 +1,4 @@
-﻿namespace Doerly.Module.Order.Domain.Dtos.Requests.ExecutionProposal;
+﻿namespace Doerly.Module.Order.Domain.Dtos.Requests;
 
 public class SendExecutionProposalRequest
 {
