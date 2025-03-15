@@ -1,0 +1,213 @@
+<section class="justify-content-center mt-5">
+
+  <!-- Title -->
+  <div class="d-flex flex-column align-items-center m-4">
+    <h3 class="c-primary">
+      {{ 'profile.title' | translate }}
+    </h3>
+    <p>
+      {{ 'profile.subtitle' | translate }}
+    </p>
+  </div>
+
+  <!-- Basic profile info -->
+  <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
+    <div class="d-flex flex-column gap-3 m-3">
+
+      <!-- Basic section title -->
+      <div class="d-flex align-items-center gap-2 mb-4">
+        <div class="mt-1">
+          <h4 class="c-primary">
+            {{ 'profile.basic.title' | translate }}
+          </h4>
+        </div>
+
+        <div *ngIf="!isEdit">
+          <button pButton type="button" class="p-button-rounded p-button-text"
+                  (click)="toggleEdit()">
+            <i pButtonIcon class="pi pi-pencil"></i>
+          </button>
+        </div>
+        <div *ngIf="isEdit">
+          <button pButton type="button" class="p-button-rounded p-button-text"
+                  (click)="toggleEdit()">
+            <i pButtonIcon class="pi pi-times"></i>
+          </button>
+        </div>
+        <div *ngIf="isEdit">
+          <button pButton type="button" class="p-button-rounded p-button-text"
+                  (click)="saveProfile()">
+            <i pButtonIcon class="pi pi-save"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Basic section content -->
+      <form [formGroup]="profileForm">
+        <div class="d-flex flex-column">
+
+          <!-- Profile picture -->
+          <div class="d-flex justify-content-between align-items-center gap-lg-5 gap-md-4 gap-sm-3">
+            <!-- Profile picture title -->
+            <div class="d-flex align-items-center gap-lg-5 gap-md-4 gap-sm-3">
+              <div class="content-title">
+                <p class="fw-normal fs-7">
+                  {{ 'profile.basic.image.title' | translate }}
+                </p>
+              </div>
+              <!-- Profile picture subtitle -->
+              <div class="d-none d-sm-block">
+                <p class="fw-light">
+                  {{ 'profile.basic.image.subtitle' | translate }}
+                </p>
+              </div>
+            </div>
+<!--            TODO: develop image upload feature when backend is ready-->
+            <img
+              src="https://primefaces.org/cdn/primeng/images/demo/avatar/walter.jpg"
+              alt="{{ 'profile.basic.image.alt' | translate }}"
+              class="avatar"
+            />
+          </div>
+          <p-divider [layout]="'horizontal'"/>
+
+          <!-- Name -->
+          <div class="d-flex align-items-center gap-lg-5 gap-md-4 gap-sm-3">
+            <!-- Label -->
+            <div class="content-title d-flex align-items-center">
+              <p class="fw-normal fs-7">
+                {{ 'profile.basic.name.title' | translate }}
+              </p>
+            </div>
+            <!-- Value -->
+            <div>
+              <span *ngIf="!isEdit" class="c-primary fw-semibold row-text">
+                {{ profileForm.get('firstName')?.value }} {{ profileForm.get('lastName')?.value }}
+              </span>
+              <div *ngIf="isEdit" class="d-flex gap-3">
+                <input
+                  id="firstName"
+                  type="text"
+                  pInputText
+                  class="w-50"
+                  maxlength="50"
+                  formControlName="firstName"
+                  placeholder="{{ 'profile.basic.name.placeholder.first' | translate }}"
+                />
+                <input
+                  id="lastName"
+                  type="text"
+                  pInputText
+                  class="w-50"
+                  maxlength="50"
+                  formControlName="lastName"
+                  placeholder="{{ 'profile.basic.name.placeholder.last' | translate }}"
+                />
+              </div>
+            </div>
+          </div>
+          <p-divider [layout]="'horizontal'"/>
+
+          <!-- Date of birth -->
+          <div class="d-flex justify-content-between gap-5">
+            <div class="d-flex gap-lg-5 gap-md-4 gap-sm-3">
+              <div class="content-title">
+                <p class="fw-normal fs-7">
+                  {{ 'profile.basic.birthday.title' | translate }}
+                </p>
+              </div>
+              <div>
+                <span *ngIf="!isEdit" class="c-primary fw-semibold row-text">
+                  {{ profileForm.get('dateOfBirth')?.value | date: 'longDate' }}
+                </span>
+                <div *ngIf="isEdit">
+                  <p-date-picker
+                    id="dateOfBirth"
+                    formControlName="dateOfBirth"
+                    [showOnFocus]="false"
+                    [showIcon]="true"
+                    [dateFormat]="'yy-mm-dd'"
+                    [dataType]="'string'"
+                    placeholder="{{ 'profile.basic.birthday.placeholder' | translate }}"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <p-divider [layout]="'horizontal'"/>
+
+          <!-- Sex -->
+          <div class="d-flex justify-content-between gap-5">
+            <div class="d-flex gap-lg-5 gap-md-4 gap-sm-3">
+              <div class="content-title">
+                <p class="fw-normal fs-7">
+                  {{ 'profile.basic.sex.title' | translate }}
+                </p>
+              </div>
+              <div>
+                <span *ngIf="!isEdit" class="c-primary fw-semibold row-text">
+                  {{
+                    (profileForm.get('sex')?.value === 1
+                      ? 'profile.basic.sex.options.male'
+                      : 'profile.basic.sex.options.female')
+                      | translate
+                  }}
+                </span>
+                <div *ngIf="isEdit">
+                  <p-select
+                    [options]="sexOptions"
+                    formControlName="sex"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="{{ 'profile.basic.sex.placeholder' | translate }}"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      <span>{{ option.label | translate }}</span>
+                    </ng-template>
+                    <ng-template let-option pTemplate="selectedItem">
+                      <span>{{ option.label | translate }}</span>
+                    </ng-template>
+                  </p-select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p-divider [layout]="'horizontal'"/>
+
+          <!-- Bio -->
+          <div class="d-flex justify-content-between gap-5">
+            <div class="d-flex gap-lg-5 gap-md-4 gap-sm-3">
+              <div class="content-title">
+                <p class="fw-normal fs-7">
+                  {{ 'profile.basic.bio.title' | translate }}
+                </p>
+              </div>
+              <div>
+                <span *ngIf="!isEdit" class="c-primary fw-semibold row-text">
+                  {{ profileForm.get('bio')?.value }}
+                </span>
+                <div *ngIf="isEdit">
+                  <textarea
+                    id="bio"
+                    pTextarea
+                    formControlName="bio"
+                    cols="55"
+                    rows="1"
+                    maxlength="500"
+                    placeholder="{{ 'profile.basic.bio.placeholder' | translate }}"
+                    style="width: 100%;"
+                    autoResize
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p-divider [layout]="'horizontal'"/>
+
+        </div>
+      </form>
+
+    </div>
+  </p-card>
+
+</section>

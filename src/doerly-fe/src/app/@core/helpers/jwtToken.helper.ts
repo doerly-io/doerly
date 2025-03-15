@@ -3,6 +3,16 @@ import { BehaviorSubject } from 'rxjs';
 
 const ACCESS_TOKEN = 'access_token';
 
+const PAYLOAD_ID_KEY = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier';
+const PAYLOAD_EMAIL_KEY = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress';
+const PAYLOAD_ROLE_KEY = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
+
+interface UserInfo {
+  id: number;
+  email: string;
+  role: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class JwtTokenHelper {
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
@@ -20,6 +30,19 @@ export class JwtTokenHelper {
     }
     const payload = this.getPayload(token);
     return payload.exp < Date.now() / 1000;
+  }
+
+  getUserInfo(): UserInfo | null {
+    const token = this.getToken();
+    if (!token) {
+      return null;
+    }
+    const payload = this.getPayload(token);
+    return {
+      id: payload[PAYLOAD_ID_KEY],
+      email: payload[PAYLOAD_EMAIL_KEY],
+      role: payload[PAYLOAD_ROLE_KEY],
+    } as UserInfo;
   }
 
   getPayload(token: string): any {

@@ -7,7 +7,7 @@ import {ButtonDirective} from 'primeng/button';
 import {Ripple} from 'primeng/ripple';
 import {Card} from 'primeng/card';
 import {NgIf} from '@angular/common';
-import {getError, getServersideError, isInvalid} from '../../../../@core/helpers/input-validation-helpers';
+import {getError, getServersideError, isInvalid} from 'app/@core/helpers/input-validation-helpers';
 
 
 @Component({
