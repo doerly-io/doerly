@@ -43,7 +43,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FileRepository", "FileRepos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.FileRepository", "Doerly.FileRepository\Doerly.FileRepository.csproj", "{0D536B23-5CD0-44F8-A3D2-B92C076E1A8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Profile.Enums", "Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj", "{F0B56C3E-A824-4E47-997C-A8F8AC59C190}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Profile.Enums", "Doerly.Module.Profile\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj", "{22C3B386-E4CD-456B-BE77-7CE5E7B0C83C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,10 +123,10 @@ Global
 		{0D536B23-5CD0-44F8-A3D2-B92C076E1A8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D536B23-5CD0-44F8-A3D2-B92C076E1A8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D536B23-5CD0-44F8-A3D2-B92C076E1A8F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F0B56C3E-A824-4E47-997C-A8F8AC59C190}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F0B56C3E-A824-4E47-997C-A8F8AC59C190}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F0B56C3E-A824-4E47-997C-A8F8AC59C190}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F0B56C3E-A824-4E47-997C-A8F8AC59C190}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22C3B386-E4CD-456B-BE77-7CE5E7B0C83C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22C3B386-E4CD-456B-BE77-7CE5E7B0C83C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22C3B386-E4CD-456B-BE77-7CE5E7B0C83C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22C3B386-E4CD-456B-BE77-7CE5E7B0C83C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -144,6 +144,6 @@ Global
 		{130C7AAC-325D-40DE-9562-B03C26B74B0F} = {245B6B27-1DD6-4B32-AE9D-EA17C24B3EFE}
 		{E0396268-3B43-4D0A-8372-953691D0103A} = {245B6B27-1DD6-4B32-AE9D-EA17C24B3EFE}
 		{0D536B23-5CD0-44F8-A3D2-B92C076E1A8F} = {F863DD1F-2EA9-4AEC-909C-04DADBB381D9}
-		{F0B56C3E-A824-4E47-997C-A8F8AC59C190} = {245B6B27-1DD6-4B32-AE9D-EA17C24B3EFE}
+		{22C3B386-E4CD-456B-BE77-7CE5E7B0C83C} = {245B6B27-1DD6-4B32-AE9D-EA17C24B3EFE}
 	EndGlobalSection
 EndGlobal
