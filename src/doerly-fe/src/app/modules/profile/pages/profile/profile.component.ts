@@ -22,8 +22,6 @@ import * as sexVariants from '../../constants/sex';
 import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
-import { ProfileRequest } from '../../models/requests/ProfileRequest';
-import { dateTimeToDateString } from 'utils/dateUtils';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
 
 @Component({
@@ -96,8 +94,11 @@ export class ProfileComponent implements OnInit {
   }
 
   saveProfile(): void {
-    const request = this.prepareRequest();
-    this.profileService.save(request).subscribe({
+    const formValue = this.profileForm.value;
+    this.profileService.update({
+      userId: formValue.id,
+      ...formValue
+    }).subscribe({
       next: () => {
         this.toggleEdit();
         this.loadProfile();
@@ -109,21 +110,6 @@ export class ProfileComponent implements OnInit {
         }
       }
     });
-  }
-
-  private prepareRequest = () => {
-    const profileFormData = this.profileForm.value;
-    const formattedDate = dateTimeToDateString(profileFormData.dateOfBirth);
-    const profileRequest: ProfileRequest = {
-      userId: profileFormData.id,
-      firstName: profileFormData.firstName,
-      lastName: profileFormData.lastName,
-      patronymic: profileFormData.patronymic,
-      dateOfBirth: formattedDate?.toString() || '',
-      sex: profileFormData.sex,
-      bio: profileFormData.bio
-    };
-    return profileRequest;
   }
 
   toggleEdit(): void {

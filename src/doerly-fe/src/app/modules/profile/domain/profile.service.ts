@@ -29,7 +29,7 @@ export class ProfileService {
       )
   }
 
-  save(model: ProfileRequest): Observable<BaseApiResponse<ProfileResponse>> {
+  update(model: ProfileRequest): Observable<BaseApiResponse<ProfileResponse>> {
     return this
       .httpClient
       .put<BaseApiResponse<ProfileResponse>>(
