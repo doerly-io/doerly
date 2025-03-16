@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { OrderService } from '../../domain/order.service';
 import { GetOrderResponse } from '../../models/responses/get-order-response';
 import { OrderStatus } from '../../domain/enums/order-status';
 import { PaymentKind } from '../../domain/enums/payment-kind';
 import { CommonModule } from '@angular/common';
 import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-order-details',
@@ -13,12 +15,16 @@ import { Card } from 'primeng/card';
   styleUrls: ['./order-details.component.scss'],
   imports: [
     CommonModule,
-    Card
+    Card,
+    Button,
+    RouterLink,
+    TranslatePipe
   ]
 })
 export class OrderDetailsComponent implements OnInit {
   order: GetOrderResponse | null = null;
   loading: boolean = true;
+  profileId: number = 1;
 
   constructor(
     private route: ActivatedRoute,

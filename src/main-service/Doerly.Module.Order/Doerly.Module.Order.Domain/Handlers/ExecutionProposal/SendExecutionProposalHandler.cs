@@ -21,7 +21,9 @@ public class SendExecutionProposalHandler : BaseOrderHandler
             return HandlerResult.Failure<SendExecutionProposalResponse>(Resources.Get("ORDER_NOT_FOUND"));
 
         var existingExecutionProposal = await DbContext.ExecutionProposals
-            .FirstOrDefaultAsync(x => x.OrderId == dto.OrderId && x.ReceiverId == dto.ReceiverId);
+            .FirstOrDefaultAsync(x => x.OrderId == dto.OrderId && 
+                ((x.SenderId == order.CustomerId && x.ReceiverId == dto.ReceiverId) ||
+                (x.SenderId != order.CustomerId && x.SenderId == dto.SenderId)));
 
         if (existingExecutionProposal != null)
             return HandlerResult.Failure<SendExecutionProposalResponse>(Resources.Get("EXECUTION_PROPOSAL_ALREADY_SENT"));

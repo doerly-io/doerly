@@ -1,0 +1,79 @@
+<section class="row justify-content-center mt-5">
+  <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
+    <div class="row justify-content-center">
+      <div class="col-sm-12 col-md-10">
+        <form [formGroup]="createOrderForm" class="row card create-order-form mx-0 px-0">
+          <div class="row px-0 mx-0">
+            <h3 class="c-primary text-center mb-3">{{ 'ordering.order' | translate }}</h3>
+          </div>
+          <div class="row mb-3 mx-0 px-0">
+            <div>
+              <label for="categoryId">{{ 'ordering.category_id' | translate }}</label>
+              <input pInputText formControlName="categoryId" class="w-100" id="categoryId" />
+              <small *ngIf="isInvalid(createOrderForm, 'categoryId')" class="input-validation-item">
+                {{ getError(createOrderForm, 'categoryId', 'required', 'ordering.field_required' | translate) }}
+                {{ getServersideError(createOrderForm, 'categoryId') }}
+              </small>
+            </div>
+          </div>
+          <div class="row mb-3 mx-0 px-0">
+            <div>
+              <label for="name">{{ 'ordering.name' | translate }}</label>
+              <input pInputText formControlName="name" class="w-100" id="name" />
+              <small *ngIf="isInvalid(createOrderForm, 'name')" class="input-validation-item">
+                {{ getError(createOrderForm, 'name', 'required', 'ordering.field_required' | translate) }}
+                {{ getServersideError(createOrderForm, 'name') }}
+              </small>
+            </div>
+          </div>
+          <div class="row mb-3 mx-0 px-0">
+            <div>
+              <label for="description">{{ 'ordering.description' | translate }}</label>
+              <textarea pTextarea formControlName="description" rows="5" cols="30" class="w-100" id="description"></textarea>
+              <small *ngIf="isInvalid(createOrderForm, 'description')" class="input-validation-item">
+                {{ getError(createOrderForm, 'description', 'required', 'ordering.field_required' | translate) }}
+                {{ getServersideError(createOrderForm, 'description') }}
+              </small>
+            </div>
+          </div>
+          <div class="row mb-3 mx-0 px-0">
+            <div>
+              <label for="price">{{ 'ordering.price' | translate }}</label>
+              <input pInputText formControlName="price" class="w-100" id="price" type="number" step="0.01" min />
+              <small *ngIf="isInvalid(createOrderForm, 'price')" class="input-validation-item">
+                {{ getError(createOrderForm, 'price', 'required', 'ordering.field_required' | translate) }}
+                {{ getError(createOrderForm, 'price', 'min', 'ordering.price_min' | translate) }}
+                {{ getServersideError(createOrderForm, 'price') }}
+              </small>
+            </div>
+          </div>
+          <div class="row mb-3 mx-0 px-0">
+            <div class="col-sm-12 col-md-6">
+              <label for="paymentKind">{{ 'ordering.payment_kind' | translate }}</label>
+              <p-select [options]="paymentKinds" formControlName="paymentKind" class="w-100" id="paymentKind"></p-select>
+              <small *ngIf="isInvalid(createOrderForm, 'paymentKind')" class="input-validation-item">
+                {{ getError(createOrderForm, 'paymentKind', 'required', 'ordering.field_required' | translate) }}
+                {{ getServersideError(createOrderForm, 'paymentKind') }}
+              </small>
+            </div>
+            <div class="col-sm-12 col-md-6">
+              <label for="dueDate">{{ 'ordering.due_date' | translate }}</label>
+              <p-datepicker formControlName="dueDate" class="w-100" id="dueDate" [showTime]="true" [hourFormat]="'24'" [showIcon]="true"></p-datepicker>
+              <small *ngIf="isInvalid(createOrderForm, 'dueDate')" class="input-validation-item">
+                {{ getError(createOrderForm, 'dueDate', 'required', 'ordering.field_required' | translate) }}
+                {{ getError(createOrderForm, 'dueDate', 'invalidDate', 'ordering.invalid_date' | translate) }}
+                {{ getServersideError(createOrderForm, 'dueDate') }}
+              </small>
+            </div>
+          </div>
+          <div class="row mx-0 px-0 mt-3">
+            <button pButton pRipple [type]="'submit'" label="{{'ordering.create_order' | translate }}"
+                    icon="pi pi-check"
+                    class="w-100" [disabled]="!createOrderForm.valid"
+                    (click)="createOrder()"></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </p-card>
+</section>

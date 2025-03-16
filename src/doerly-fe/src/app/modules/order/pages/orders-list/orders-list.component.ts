@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { OrderService } from '../../domain/order.service';
 import { FormBuilder } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { DataView } from 'primeng/dataview';
 import { Tag } from 'primeng/tag';
 import { CommonModule } from '@angular/common';
@@ -9,6 +9,8 @@ import { GetOrdersWithPaginationByPredicatesRequest } from '../../models/request
 import { GetOrderResponse } from '../../models/responses/get-order-response';
 import { PaginatorModule } from 'primeng/paginator';
 import { OrderStatus } from '../../domain/enums/order-status';
+import { Button } from 'primeng/button';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-orders-list',
@@ -16,7 +18,10 @@ import { OrderStatus } from '../../domain/enums/order-status';
     DataView,
     Tag,
     PaginatorModule,
-    CommonModule
+    CommonModule,
+    Button,
+    TranslatePipe,
+    RouterLink
   ],
   templateUrl: './orders-list.component.html',
   styleUrl: './orders-list.component.scss'
@@ -25,6 +30,7 @@ export class OrdersListComponent implements OnInit {
 
   @Input() customerId?: number | null;
   @Input() executorId?: number | null;
+  @Input() canCreateOrder: boolean = false;
 
   orders: GetOrderResponse[] = [];
   totalRecords: number = 0;

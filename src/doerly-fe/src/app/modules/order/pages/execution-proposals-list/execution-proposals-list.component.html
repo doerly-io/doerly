@@ -1,4 +1,4 @@
-<section class="row justify-content-center mt-5">
+<section class="row justify-content-center">
     <p-dataview [value]="proposals" [paginator]="true" [rows]="10" 
         [rowsPerPageOptions]="[10, 20, 50, 100]" [totalRecords]="totalRecords" 
         [lazy]="true" (onLazyLoad)="loadProposals($event)" [loading]="loading">

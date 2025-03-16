@@ -25,4 +25,8 @@ export class ExecutionProposalService {
 
     return this.httpClient.post<BaseApiResponse<GetExecutionProposalsResponse>>(`${this.baseUrl}/list`, model);
   }
+
+  sendExecutionProposal(model: any): Observable<BaseApiResponse<number>> {
+    return this.httpClient.post<BaseApiResponse<number>>(`${this.baseUrl}/send`, model);
+  }
 }

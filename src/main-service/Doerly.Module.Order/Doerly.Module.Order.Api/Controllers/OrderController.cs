@@ -42,16 +42,6 @@ public class OrderController : BaseApiController
         return BadRequest(result);
     }
 
-    /*[HttpGet("orders")]
-    public async Task<IActionResult> GetOrderHistory([FromQuery] GetItemsWithPaginationByPredicatesRequest dto)
-    {
-        var result = await ResolveHandler<GetOrdersHandler>().HandleAsync(dto);
-        if (result.IsSuccess)
-            return Ok(result);
-
-        return BadRequest(result);
-    }*/
-
     [HttpPut("update")]
     public async Task<IActionResult> UpdateOrder(UpdateOrderRequest dto)
     {

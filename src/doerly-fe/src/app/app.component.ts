@@ -11,15 +11,27 @@ import {JwtTokenHelper} from './@core/helpers/jwtToken.helper';
 import {NgIf} from '@angular/common';
 import {Popover} from 'primeng/popover';
 import {AuthService} from './modules/authorization/domain/auth.service';
+import {Toast} from 'primeng/toast';
 
 const THEME = 'theme';
 
 @Component({
   selector: 'app-root',
-  imports: [Button, RouterOutlet, SharedModule, Divider, StyleClass, RouterLink, TranslatePipe, NgIf, Popover],
+  imports: [
+    Button,
+    RouterOutlet,
+    SharedModule,
+    Divider,
+    StyleClass,
+    RouterLink,
+    TranslatePipe,
+    NgIf,
+    Popover,
+    Toast
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  providers: [MessageService, MessageModule,],
+  providers: [MessageModule],
 })
 export class AppComponent implements OnInit {
 

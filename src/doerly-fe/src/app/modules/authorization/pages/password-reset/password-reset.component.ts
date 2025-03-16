@@ -6,7 +6,7 @@ import {ButtonDirective} from 'primeng/button';
 import {Card} from 'primeng/card';
 import {Ripple} from 'primeng/ripple';
 import {TranslatePipe} from '@ngx-translate/core';
-import {PasswordInputComponent} from '../../../../@components/password/password-input.component';
+import {PasswordInputComponent} from 'app/@components/password/password-input.component';
 import {NgIf} from '@angular/common';
 import {PasswordResetRequest} from '../../models/requests/password-reset-request';
 import {InputText} from 'primeng/inputtext';

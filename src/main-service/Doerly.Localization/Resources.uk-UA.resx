@@ -49,13 +49,49 @@ Doerly</value>
   <data name="ResetPasswordEmailSubject" xml:space="preserve">
         <value>Скидання паролю</value>
     </data>
-  <data name="ORDER_NOT_FOUND" xml:space="preserve">
-    <value>Замовлення не знайдено</value>
-  </data>
-  <data name="EXECUTION_PROPOSAL_NOT_FOUND" xml:space="preserve">
-    <value>Пропозиція виконання роботи не знайдена</value>
-  </data>
-  <data name="EXECUTION_PROPOSAL_ALREADY_SENT" xml:space="preserve">
-    <value>Пропозиція виконання роботи вже надіслана цьому користувачу</value>
-  </data>
+    <data name="InvalidFirstNameInput" xml:space="preserve">
+        <value>Неправильний формат ім'я</value>
+    </data>
+    <data name="InvalidLastNameInput" xml:space="preserve">
+        <value>Неправильний формат призвіща</value>
+    </data>
+    <data name="InvalidPatronymicInput" xml:space="preserve">
+        <value>Неправильний формат імені по батькові</value>
+    </data>
+    <data name="InvalidDateOfBirthInput" xml:space="preserve">
+        <value>Неправильний формат дати народження</value>
+    </data>
+    <data name="InvalidSexInput" xml:space="preserve">
+        <value>Неправильний формат статі</value>
+    </data>
+    <data name="InvalidBioInput" xml:space="preserve">
+        <value>Неправильний формат інформації про себе</value>
+    </data>
+    <data name="ProfileNotFound" xml:space="preserve">
+        <value>Профіль не знайдено</value>
+    </data>
+    <data name="FirstNameTooLong" xml:space="preserve">
+        <value>Ім'я занадто довге</value>
+    </data>
+    <data name="FirstNameTooShort" xml:space="preserve">
+        <value>Ім'я занадто коротке</value>
+    </data>
+    <data name="LastNameTooLong" xml:space="preserve">
+        <value>Призвіще занадто довге</value>
+    </data>
+    <data name="LastNameTooShort" xml:space="preserve">
+        <value>Призвіще занадто коротке</value>
+    </data>
+    <data name="BioTooLong" xml:space="preserve">
+        <value>Інформація про себе занадто довга</value>
+    </data>
+    <data name="ORDER_NOT_FOUND" xml:space="preserve">
+        <value>Замовлення не знайдено</value>
+    </data>
+    <data name="EXECUTION_PROPOSAL_NOT_FOUND" xml:space="preserve">
+        <value>Пропозиція виконання роботи не знайдена</value>
+    </data>
+    <data name="EXECUTION_PROPOSAL_ALREADY_SENT" xml:space="preserve">
+        <value>Пропозиція виконання роботи вже надіслана цьому користувачу</value>
+    </data>
 </root>

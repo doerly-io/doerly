@@ -7,6 +7,7 @@ import { Observable } from "rxjs";
 import { GetOrdersResponse } from "../models/responses/get-orders-response";
 import { GetOrderResponse } from "../models/responses/get-order-response";
 import { setPaginationParams } from "../../../@core/helpers/pagination.helper";
+import { CreateOrderRequest } from "../models/requests/create-order-request";
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +25,9 @@ export class OrderService {
 
   getOrder(id: number): Observable<BaseApiResponse<GetOrderResponse>> {
     return this.httpClient.get<BaseApiResponse<GetOrderResponse>>(`${this.baseUrl}/${id}`);
+  }
+
+  createOrder(model: CreateOrderRequest): Observable<BaseApiResponse<number>> {
+    return this.httpClient.post<BaseApiResponse<number>>(`${this.baseUrl}/create`, model);
   }
 }

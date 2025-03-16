@@ -1,4 +1,4 @@
-import {AbstractControl, FormGroup} from '@angular/forms';
+import {FormGroup} from '@angular/forms';
 
 export function setServerErrors(form: FormGroup, errors: { [key: string]: string[] }) {
   Object.keys(errors).forEach(field => {
