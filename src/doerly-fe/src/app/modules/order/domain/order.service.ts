@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment.development";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { GetItemsWithPaginationRequest } from "../models/requests/get-items-with-pagination-request";
+import { GetOrdersWithPaginationByPredicatesRequest } from "../models/requests/get-orders-request";
 import { BaseApiResponse } from "../../../@core/models/base-api-response";
 import { Observable } from "rxjs";
 import { GetOrdersResponse } from "../models/responses/get-orders-response";
@@ -16,10 +16,10 @@ export class OrderService {
 
   constructor(private readonly httpClient: HttpClient) {}
 
-  getOrdersWithPagination(model: GetItemsWithPaginationRequest): Observable<BaseApiResponse<GetOrdersResponse>> {
-    const params = setPaginationParams(model.pageInfo);
+  getOrdersWithPagination(model: GetOrdersWithPaginationByPredicatesRequest): Observable<BaseApiResponse<GetOrdersResponse>> {
+    // const params = setPaginationParams(model.pageInfo);
 
-    return this.httpClient.get<BaseApiResponse<GetOrdersResponse>>(`${this.baseUrl}/orders`, { params });
+    return this.httpClient.post<BaseApiResponse<GetOrdersResponse>>(`${this.baseUrl}/list`, model);
   }
 
   getOrder(id: number): Observable<BaseApiResponse<GetOrderResponse>> {

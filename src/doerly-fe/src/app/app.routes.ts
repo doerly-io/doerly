@@ -13,7 +13,8 @@ export const routes: Routes = [
   },
   {
     path: 'ordering',
-    loadChildren: () => import('./modules/order/order.routes').then(m => m.routes)
+    loadChildren: () => import('./modules/order/ordering.routes').then(m => m.routes),
+    canActivate: [authGuard]
   },
   {
     path: '**',

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ExecutionProposalService } from '../../domain/execution-proposal.service';
 import { FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { GetExecutionProposalResponse } from '../../models/responses/get-execution-proposal-response';
 import { PaginatorModule } from 'primeng/paginator';
 import { ExecutionProposalStatus } from '../../domain/enums/execution-proposal-status';
-import { GetExecutionProposalsRequest } from '../../models/requests/get-execution-proposals-request';
+import { GetExecutionProposalsWithPaginationByPredicatesRequest } from '../../models/requests/get-execution-proposals-request';
 
 @Component({
   selector: 'app-execution-proposals-list',
@@ -22,6 +22,9 @@ import { GetExecutionProposalsRequest } from '../../models/requests/get-executio
   styleUrl: './execution-proposals-list.component.scss'
 })
 export class ExecutionProposalsListComponent implements OnInit {
+
+  @Input() senderId?: number | null;
+  @Input() receiverId?: number | null;
 
   proposals: GetExecutionProposalResponse[] = [];
   totalRecords: number = 0;
@@ -38,20 +41,19 @@ export class ExecutionProposalsListComponent implements OnInit {
 
   loadProposals(event: any) {
     this.loading = true;
-    const request: GetExecutionProposalsRequest = {
+    const request: GetExecutionProposalsWithPaginationByPredicatesRequest = {
       pageInfo: {
         number: event.first / event.rows + 1,
         size: event.rows
       },
-      receiverId: null,
-      senderId: null
+      senderId: this.senderId,
+      receiverId: this.receiverId,
     };
     this.executionProposalService.getExecutionProposalsWithPagination(request).subscribe({
       next: (response) => {
         this.proposals = response.value?.executionProposals || [];
         this.totalRecords = response.value?.total || 0;
         this.loading = false;
-        console.log(this.proposals);
       },
       error: (error) => {
         console.log(error);

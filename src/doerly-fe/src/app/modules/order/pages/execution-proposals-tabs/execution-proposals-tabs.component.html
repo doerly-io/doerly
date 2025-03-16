@@ -1,0 +1,14 @@
+<p-tabs value="0">
+    <p-tablist>
+        <p-tab value="0">Sent to Me</p-tab>
+        <p-tab value="1">Sent by Me</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+        <p-tabpanel value="0" header="Sent to Me">
+            <app-execution-proposals-list [receiverId]="myUserId"></app-execution-proposals-list>
+        </p-tabpanel>
+        <p-tabpanel value="1" header="Sent by Me">
+            <app-execution-proposals-list [senderId]="myUserId"></app-execution-proposals-list>
+        </p-tabpanel>
+    </p-tabpanels>
+</p-tabs>

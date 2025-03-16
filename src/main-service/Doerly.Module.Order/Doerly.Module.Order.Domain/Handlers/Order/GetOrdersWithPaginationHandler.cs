@@ -4,6 +4,8 @@ using Doerly.Module.Order.Domain.Dtos.Responses;
 using Microsoft.EntityFrameworkCore;
 using Doerly.Module.Order.Domain.Dtos.Requests;
 using Doerly.Extensions;
+using OrderEntity = Doerly.Module.Order.DataAccess.Models.Order;
+using System.Linq.Expressions;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetOrdersWithPaginationHandler : BaseOrderHandler
@@ -13,9 +15,16 @@ public class GetOrdersWithPaginationHandler : BaseOrderHandler
 
     public async Task<HandlerResult<GetOrdersWithPaginationResponse>> HandleAsync(GetOrdersWithPaginationRequest dto)
     {
+        var predicates = new List<Expression<Func<OrderEntity, bool>>>();
+
+        if (dto.CustomerId.HasValue)
+            predicates.Add(order => order.CustomerId == dto.CustomerId);
+        if (dto.ExecutorId.HasValue)
+            predicates.Add(order => order.ExecutorId == dto.ExecutorId);
+
         var (entities, totalCount) = await DbContext.Orders
             .AsNoTracking()
-            .GetEntitiesWithPaginationAsync(dto.PageInfo);
+            .GetEntitiesWithPaginationAsync(dto.PageInfo, predicates);
 
         var orders = entities
             .Select(o => new GetOrderResponse

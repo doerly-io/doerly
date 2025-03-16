@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { OrderService } from '../../domain/order.service';
 import { FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataView } from 'primeng/dataview';
 import { Tag } from 'primeng/tag';
 import { CommonModule } from '@angular/common';
-import { GetItemsWithPaginationRequest } from '../../models/requests/get-items-with-pagination-request';
+import { GetOrdersWithPaginationByPredicatesRequest } from '../../models/requests/get-orders-request';
 import { GetOrderResponse } from '../../models/responses/get-order-response';
 import { PaginatorModule } from 'primeng/paginator';
 import { OrderStatus } from '../../domain/enums/order-status';
 
 @Component({
-  selector: 'app-list',
+  selector: 'app-orders-list',
   imports: [
     DataView,
     Tag,
@@ -22,6 +22,9 @@ import { OrderStatus } from '../../domain/enums/order-status';
   styleUrl: './orders-list.component.scss'
 })
 export class OrdersListComponent implements OnInit {
+
+  @Input() customerId?: number | null;
+  @Input() executorId?: number | null;
 
   orders: GetOrderResponse[] = [];
   totalRecords: number = 0;
@@ -38,18 +41,19 @@ export class OrdersListComponent implements OnInit {
 
   loadOrders(event: any) {
     this.loading = true;
-    const request: GetItemsWithPaginationRequest = {
+    const request: GetOrdersWithPaginationByPredicatesRequest = {
       pageInfo: {
         number: event.first / event.rows + 1,
         size: event.rows
-      }
+      },
+      customerId: this.customerId,
+      executorId: this.executorId
     };
     this.orderService.getOrdersWithPagination(request).subscribe({
       next: (response) => {
         this.orders = response.value?.orders || [];
         this.totalRecords = response.value?.total || 0;
         this.loading = false;
-        console.log(this.orders);
       },
       error: (error) => {
         console.log(error);

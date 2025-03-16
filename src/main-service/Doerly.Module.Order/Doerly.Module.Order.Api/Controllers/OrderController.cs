@@ -32,8 +32,8 @@ public class OrderController : BaseApiController
         return BadRequest(result);
     }
 
-    [HttpGet("orders")]
-    public async Task<IActionResult> GetOrdersWithPagination([FromQuery] GetOrdersWithPaginationRequest dto)
+    [HttpPost("list")]
+    public async Task<IActionResult> GetOrdersWithPagination(GetOrdersWithPaginationRequest dto)
     {
         var result = await ResolveHandler<GetOrdersWithPaginationHandler>().HandleAsync(dto);
         if (result.IsSuccess)

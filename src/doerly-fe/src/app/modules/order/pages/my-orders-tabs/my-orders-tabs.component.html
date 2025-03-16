@@ -1,0 +1,14 @@
+<p-tabs value="0">
+    <p-tablist>
+        <p-tab value="0">Created by Me</p-tab>
+        <p-tab value="1">Executed by Me</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+        <p-tabpanel value="0" header="Created by Me">
+            <app-orders-list [customerId]="myUserId"></app-orders-list>
+        </p-tabpanel>
+        <p-tabpanel value="1" header="Executed by Me">
+            <app-orders-list [executorId]="myUserId"></app-orders-list>
+        </p-tabpanel>
+    </p-tabpanels>
+</p-tabs>
