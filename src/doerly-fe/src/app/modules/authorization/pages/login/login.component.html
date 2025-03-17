@@ -14,7 +14,7 @@
               <input pInputText formControlName="email" class="w-100" id="email"
                      placeholder="example@mail.com"/>
               <small *ngIf="isInvalid(loginForm,'email')" class="input-validation-item">
-                {{ getError(loginForm, 'email', 'required', 'auth.field_required' | translate) }}
+                {{ getError(loginForm, 'email', 'required', 'common.field_required' | translate) }}
                 {{ getError(loginForm, 'email', 'email', 'auth.email_not_valid' | translate) }}
                 {{ getServersideError(loginForm, 'email') }}
               </small>

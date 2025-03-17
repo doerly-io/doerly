@@ -6,7 +6,7 @@ using Doerly.Module.Profile.Enums;
 namespace Doerly.Module.Profile.DataAccess.Models;
 
 [Table(DbConstants.Tables.Profile, Schema = DbConstants.ProfileSchema)]
-public class Profile : BaseEntity
+public class ProfileEntity : BaseEntity
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

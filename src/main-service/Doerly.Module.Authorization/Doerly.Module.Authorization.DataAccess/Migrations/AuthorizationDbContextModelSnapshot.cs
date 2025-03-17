@@ -17,12 +17,13 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasDefaultSchema("auth")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.Role", b =>
+            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Entities.RoleEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,7 +51,7 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                     b.ToTable("role", "auth");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.Token", b =>
+            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Entities.TokenEntity", b =>
                 {
                     b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
@@ -90,7 +91,7 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                     b.ToTable("token", "auth");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.User", b =>
+            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Entities.UserEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -107,6 +108,10 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("email");
+
+                    b.Property<bool>("IsEmailVerified")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_email_verified");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone")
@@ -139,10 +144,10 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                     b.ToTable("user", "auth");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.Token", b =>
+            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Entities.TokenEntity", b =>
                 {
-                    b.HasOne("Doerly.Module.Authorization.DataAccess.Models.User", "User")
-                        .WithMany("ResetTokens")
+                    b.HasOne("Doerly.Module.Authorization.DataAccess.Entities.UserEntity", "User")
+                        .WithMany("Tokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -151,9 +156,9 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.User", b =>
+            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Entities.UserEntity", b =>
                 {
-                    b.HasOne("Doerly.Module.Authorization.DataAccess.Models.Role", "Role")
+                    b.HasOne("Doerly.Module.Authorization.DataAccess.Entities.RoleEntity", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .HasConstraintName("fk_user_role_role_id");
@@ -161,14 +166,14 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.Role", b =>
+            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Entities.RoleEntity", b =>
                 {
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Models.User", b =>
+            modelBuilder.Entity("Doerly.Module.Authorization.DataAccess.Entities.UserEntity", b =>
                 {
-                    b.Navigation("ResetTokens");
+                    b.Navigation("Tokens");
                 });
 #pragma warning restore 612, 618
         }

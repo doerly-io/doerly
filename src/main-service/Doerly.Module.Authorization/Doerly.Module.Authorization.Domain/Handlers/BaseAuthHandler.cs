@@ -4,7 +4,7 @@ using System.Text;
 using Doerly.Domain.Handlers;
 using Doerly.Common;
 using Doerly.Module.Authorization.DataAccess;
-using Doerly.Module.Authorization.DataAccess.Models;
+using Doerly.Module.Authorization.DataAccess.Entities;
 using Doerly.Module.Authorization.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -53,12 +53,13 @@ public class BaseAuthHandler : BaseHandler<AuthorizationDbContext>
     {
         await DbContext.Tokens.Where(x => x.UserId == userId && x.TokenKind == ETokenKind.RefreshToken).ExecuteDeleteAsync();
 
-        var refreshToken = new Token
+        var refreshToken = new TokenEntity
         {
             UserId = userId,
-            Guid = Guid.NewGuid(),
+            Guid = Guid.CreateVersion7(),
             Value = tokenValue,
-            TokenKind = ETokenKind.RefreshToken
+            TokenKind = ETokenKind.RefreshToken,
+            DateCreated = DateTime.UtcNow,
         };
 
         DbContext.Tokens.Add(refreshToken);

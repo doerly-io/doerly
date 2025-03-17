@@ -1,5 +1,6 @@
 using Doerly.DataAccess;
-using Doerly.Module.Authorization.DataAccess.Models;
+using Doerly.Module.Authorization.DataAccess.Constants;
+using Doerly.Module.Authorization.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -11,20 +12,21 @@ public class AuthorizationDbContext : BaseDbContext
     {
     }
 
-    public DbSet<User> Users { get; set; }
+    public DbSet<UserEntity> Users { get; set; }
     
-    public DbSet<Role> Roles { get; set; }
-    public DbSet<Token> Tokens { get; set; }
+    public DbSet<RoleEntity> Roles { get; set; }
+    public DbSet<TokenEntity> Tokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AuthorizationDbContext).Assembly);
+        modelBuilder.HasDefaultSchema(DbConstants.AuthSchema);
     }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(Configuration["ConnectionStrings:AuthorizationConnection"]);
-
+        
         base.OnConfiguring(optionsBuilder);
     }
 }

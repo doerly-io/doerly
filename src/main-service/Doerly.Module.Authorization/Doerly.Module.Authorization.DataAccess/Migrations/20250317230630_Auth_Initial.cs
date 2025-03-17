@@ -41,6 +41,7 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                     email = table.Column<string>(type: "text", nullable: false),
                     password_hash = table.Column<string>(type: "text", nullable: false),
                     password_salt = table.Column<string>(type: "text", nullable: false),
+                    is_email_verified = table.Column<bool>(type: "boolean", nullable: false),
                     role_id = table.Column<int>(type: "integer", nullable: true),
                     date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)

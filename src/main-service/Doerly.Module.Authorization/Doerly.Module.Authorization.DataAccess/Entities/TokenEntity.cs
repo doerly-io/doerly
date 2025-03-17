@@ -2,10 +2,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Doerly.Module.Authorization.DataAccess.Constants;
 using Doerly.Module.Authorization.Enums;
 
-namespace Doerly.Module.Authorization.DataAccess.Models;
+namespace Doerly.Module.Authorization.DataAccess.Entities;
 
 [Table(DbConstants.Tables.Token, Schema = DbConstants.AuthSchema)]
-public class Token
+public class TokenEntity
 {
     public Guid Guid { get; set; }
 
@@ -15,7 +15,7 @@ public class Token
 
     public int UserId { get; set; }
 
-    public virtual User User { get; set; }
+    public virtual UserEntity User { get; set; }
 
     public ETokenKind TokenKind { get; set; }
 }

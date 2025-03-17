@@ -1,13 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Doerly.Module.Authorization.Domain.Dtos;
+namespace Doerly.Module.Authorization.Contracts.Dtos;
 
-public class LoginDto
+public class ResetPasswordRequestDto
 {
+    
     [Required(ErrorMessage = "InvalidEmailFormatInput")]
     [EmailAddress(ErrorMessage = "InvalidEmailFormatInput")]
     public string Email { get; set; }
     
-    [Required(ErrorMessage = "PasswordRequired")]
+    [Required]
+    public string Token { get; set; }
+    
+    [Required(ErrorMessage = "InvalidPasswordInput")]
     public string Password { get; set; }
 }
