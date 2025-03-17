@@ -67,6 +67,6 @@ export class ExecutionProposalsListComponent implements OnInit {
   }
 
   navigateToProposalDetails(proposalId: number): void {
-    this.router.navigate(['/execution-proposal', proposalId]);
+    this.router.navigate(['/ordering/execution-proposal', proposalId]);
   }
 }

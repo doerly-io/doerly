@@ -20,7 +20,7 @@ public class ResolveExecutionProposalHandler : BaseOrderHandler
         if (executionProposal == null)
             return HandlerResult.Failure(Resources.Get("EXECUTION_PROPOSAL_NOT_FOUND"));
 
-        executionProposal.Status = dto.ExecutionProposalStatus;
+        executionProposal.Status = dto.Status;
         if (executionProposal.Status == ExecutionProposalStatus.Accepted)
         {
             var order = await DbContext.Orders.FindAsync(executionProposal.OrderId);

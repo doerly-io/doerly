@@ -16,5 +16,5 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class ExecutionProposalsTabsComponent {
   @Input() tab: number = 0;
 
-  profileId: number = 1;
+  profileId: number = 0;
 }

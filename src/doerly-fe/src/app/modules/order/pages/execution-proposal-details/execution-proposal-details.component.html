@@ -1,0 +1,41 @@
+<section class="row justify-content-center mt-5">
+    <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
+      <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-10">
+          <div *ngIf="loading" class="text-center">Loading...</div>
+          <div *ngIf="!loading && proposal" class="execution-proposal-details">
+            <h3 class="c-primary text-center mb-3">Execution Proposal Details</h3>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="execution-proposal-detail-item mb-3">
+                  <p><strong>Proposal ID:</strong> {{ proposal.id }}</p>
+                </div>
+                <div class="execution-proposal-detail-item mb-3">
+                  <p><strong>Order ID:</strong> {{ proposal.orderId }}</p>
+                </div>
+                <div class="execution-proposal-detail-item mb-3">
+                  <p><strong>Comment:</strong> {{ proposal.comment }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="execution-proposal-detail-item mb-3">
+                  <p><strong>Sender ID:</strong> {{ proposal.senderId }}</p>
+                </div>
+                <div class="execution-proposal-detail-item mb-3">
+                  <p><strong>Receiver ID:</strong> {{ proposal.receiverId }}</p>
+                </div>
+                <div class="execution-proposal-detail-item mb-3">
+                  <p><strong>Status:</strong> {{ getProposalStatusString(proposal.status) }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center mb-3 gap-5" *ngIf="proposal.status == 0">
+              <p-button label="Accept" icon="pi pi-check" severity="success" (click)="resolveProposal(1)" *ngIf="proposal.receiverId == profileId"></p-button>
+              <p-button label="Reject" icon="pi pi-times" severity="danger" (click)="resolveProposal(2)" *ngIf="proposal.receiverId == profileId"></p-button>
+              <p-button label="Revoke" icon="pi pi-times" severity="danger" (click)="resolveProposal(3)" *ngIf="proposal.senderId == profileId"></p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-card>
+  </section>

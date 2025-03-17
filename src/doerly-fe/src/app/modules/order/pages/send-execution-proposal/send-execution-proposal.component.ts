@@ -8,6 +8,7 @@ import { ExecutionProposalService } from '../../domain/execution-proposal.servic
 import { HttpErrorResponse } from '@angular/common/http';
 import { setServerErrors } from 'app/@core/helpers/input-validation-helpers';
 import { ButtonDirective } from 'primeng/button';
+import { ToastHelper } from 'app/@core/helpers/toast.helper';
 
 @Component({
   selector: 'app-send-execution-proposal',
@@ -28,7 +29,9 @@ export class SendExecutionProposalComponent {
   constructor(private formBuilder: FormBuilder,
     private executionProposalService: ExecutionProposalService,
     private router: Router,
-    private route: ActivatedRoute) {}
+    private route: ActivatedRoute,
+    private toastHelper: ToastHelper
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -56,8 +59,7 @@ export class SendExecutionProposalComponent {
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
-            const errors = error.error.errors;
-            setServerErrors(this.sendExecutionProposalForm, errors);
+            this.toastHelper.showError('common.error', error.error.errorMessage);
           }
         }
       });

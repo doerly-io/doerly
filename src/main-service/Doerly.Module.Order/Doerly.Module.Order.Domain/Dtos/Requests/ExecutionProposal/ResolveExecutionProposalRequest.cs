@@ -4,5 +4,5 @@ namespace Doerly.Module.Order.Domain.Dtos.Requests;
 public class ResolveExecutionProposalRequest
 {
     public int Id { get; set; }
-    public ExecutionProposalStatus ExecutionProposalStatus { get; set; }
+    public ExecutionProposalStatus Status { get; set; }
 }

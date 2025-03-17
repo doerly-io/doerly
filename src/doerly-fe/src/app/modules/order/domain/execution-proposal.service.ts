@@ -7,6 +7,9 @@ import { GetOrdersResponse } from "../models/responses/get-orders-response";
 import { setPaginationParams } from "../../../@core/helpers/pagination.helper";
 import { GetExecutionProposalsWithPaginationByPredicatesRequest } from "../models/requests/get-execution-proposals-request";
 import { GetExecutionProposalsResponse } from "../models/responses/get-execution-proposals-response";
+import { GetExecutionProposalResponse } from "../models/responses/get-execution-proposal-response";
+import { ResolveExecutionProposalRequest } from "../models/requests/resolve-execution-proposal-request";
+import { SendExecutionProposalRequest } from "../models/requests/send-execution-proposal-request";
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +29,15 @@ export class ExecutionProposalService {
     return this.httpClient.post<BaseApiResponse<GetExecutionProposalsResponse>>(`${this.baseUrl}/list`, model);
   }
 
-  sendExecutionProposal(model: any): Observable<BaseApiResponse<number>> {
+  sendExecutionProposal(model: SendExecutionProposalRequest): Observable<BaseApiResponse<number>> {
     return this.httpClient.post<BaseApiResponse<number>>(`${this.baseUrl}/send`, model);
+  }
+
+  resolveExecutionProposal(model: ResolveExecutionProposalRequest): Observable<BaseApiResponse<number>> {
+    return this.httpClient.post<BaseApiResponse<number>>(`${this.baseUrl}/resolve`, model);
+  }
+
+  getExecutionProposal(id: number): Observable<BaseApiResponse<GetExecutionProposalResponse>> {
+    return this.httpClient.get<BaseApiResponse<GetExecutionProposalResponse>>(`${this.baseUrl}/${id}`);
   }
 }
