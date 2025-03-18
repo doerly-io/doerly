@@ -1,6 +1,7 @@
 using System.Reflection;
 using Azure.Storage.Blobs;
 using Doerly.Domain.Handlers;
+using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Doerly.Domain.Extensions;
@@ -22,4 +23,9 @@ public static class ServiceCollectionExtensions
         var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
         containerClient.CreateIfNotExists();
     } 
+
+    public static void RegisterEventConsumers(this IServiceCollection services, Assembly assembly)
+    {
+        services.AddMassTransit(x => { x.AddConsumers(assembly); });
+    }
 }

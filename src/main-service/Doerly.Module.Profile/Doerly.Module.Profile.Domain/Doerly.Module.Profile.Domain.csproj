@@ -10,8 +10,13 @@
       <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
       <ProjectReference Include="..\..\Doerly.FileRepository\Doerly.FileRepository.csproj" />
       <ProjectReference Include="..\..\Doerly.Localization\Doerly.Localization.csproj" />
+      <ProjectReference Include="..\..\Doerly.Module.Authorization\Doerly.Module.Authorization.Contracts\Doerly.Module.Authorization.Contracts.csproj" />
       <ProjectReference Include="..\Doerly.Module.Profile.DataAccess\Doerly.Module.Profile.DataAccess.csproj" />
       <ProjectReference Include="..\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MassTransit.Abstractions" Version="8.3.7" />
     </ItemGroup>
 
 </Project>

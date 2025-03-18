@@ -3,8 +3,8 @@ using System.Text;
 using Doerly.Common;
 using Doerly.Domain.Models;
 using Doerly.Module.Authorization.DataAccess;
-using Doerly.Module.Authorization.Domain.Dtos;
 using Doerly.Localization;
+using Doerly.Module.Authorization.Contracts.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -16,12 +16,12 @@ public class LoginHandler : BaseAuthHandler
     {
     }
 
-    public async Task<HandlerResult<(LoginResultDto resultDto, string refreshToken)>> HandleAsync(LoginDto dto)
+    public async Task<HandlerResult<(LoginResponseDto resultDto, string refreshToken)>> HandleAsync(LoginRequestDto requestDto)
     {
         var user = await DbContext.Users
             .AsNoTracking()
             .Include(user => user.Role)
-            .Where(x => x.Email == dto.Email)
+            .Where(x => x.Email == requestDto.Email && x.IsEmailVerified)
             .Select(x => new
             {
                 x.Id,
@@ -33,16 +33,16 @@ public class LoginHandler : BaseAuthHandler
             .FirstOrDefaultAsync();
 
         if (user == null)
-            return HandlerResult.Failure<(LoginResultDto, string)>(Resources.Get("UserNotFound"));
+            return HandlerResult.Failure<(LoginResponseDto, string)>(Resources.Get("UserNotFound"));
 
-        if (!VerifyPasswordHash(dto.Password, user.PasswordHash, user.PasswordSalt))
-            return HandlerResult.Failure<(LoginResultDto, string)>(Resources.Get("InvalidPassword"));
+        if (!VerifyPasswordHash(requestDto.Password, user.PasswordHash, user.PasswordSalt))
+            return HandlerResult.Failure<(LoginResponseDto, string)>(Resources.Get("InvalidPassword"));
 
         var accessToken = CreateAccessToken(user.Id, user.Email, user.RoleName);
         var refreshTokenValue = GetResetToken();
         await CreateRefreshTokenAsync(refreshTokenValue.hashedToken, user.Id);
 
-        var loginResultDto = new LoginResultDto
+        var loginResultDto = new LoginResponseDto
         {
             AccessToken = accessToken,
             UserEmail = user.Email

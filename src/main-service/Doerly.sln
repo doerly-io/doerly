@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.FileRepository", "Do
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Profile.Enums", "Doerly.Module.Profile\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj", "{22C3B386-E4CD-456B-BE77-7CE5E7B0C83C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Authorization.Contracts", "Doerly.Module.Authorization\Doerly.Module.Authorization.Contracts\Doerly.Module.Authorization.Contracts.csproj", "{A5FCBA55-8AA2-46AF-9A36-AD8ACFD09C07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,10 @@ Global
 		{22C3B386-E4CD-456B-BE77-7CE5E7B0C83C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22C3B386-E4CD-456B-BE77-7CE5E7B0C83C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22C3B386-E4CD-456B-BE77-7CE5E7B0C83C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5FCBA55-8AA2-46AF-9A36-AD8ACFD09C07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5FCBA55-8AA2-46AF-9A36-AD8ACFD09C07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5FCBA55-8AA2-46AF-9A36-AD8ACFD09C07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5FCBA55-8AA2-46AF-9A36-AD8ACFD09C07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -145,5 +151,6 @@ Global
 		{E0396268-3B43-4D0A-8372-953691D0103A} = {245B6B27-1DD6-4B32-AE9D-EA17C24B3EFE}
 		{0D536B23-5CD0-44F8-A3D2-B92C076E1A8F} = {F863DD1F-2EA9-4AEC-909C-04DADBB381D9}
 		{22C3B386-E4CD-456B-BE77-7CE5E7B0C83C} = {245B6B27-1DD6-4B32-AE9D-EA17C24B3EFE}
+		{A5FCBA55-8AA2-46AF-9A36-AD8ACFD09C07} = {E416C0D8-CEEC-432E-82F1-8C91C1D4F1C7}
 	EndGlobalSection
 EndGlobal
