@@ -22,8 +22,8 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    first_name = table.Column<string>(type: "text", nullable: false),
-                    last_name = table.Column<string>(type: "text", nullable: false),
+                    first_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    last_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     date_of_birth = table.Column<DateOnly>(type: "date", nullable: true),
                     sex = table.Column<int>(type: "integer", nullable: false),
                     bio = table.Column<string>(type: "text", nullable: true),

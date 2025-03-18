@@ -46,7 +46,7 @@ To reset your password, please click the link below:</value>
     <data name="ResetPasswordEmailBestRegardsText" xml:space="preserve">
         <value>If you have any questions, please contact our support team.
 
-Best regards,
+Best regards, &lt;/br&gt;
 Doerly</value>
     </data>
     <data name="ResetPasswordEmailSubject" xml:space="preserve">
@@ -87,5 +87,8 @@ Doerly</value>
     </data>
     <data name="BioTooLong" xml:space="preserve">
         <value>Bio too long</value>
+    </data>
+    <data name="EmailVerificationText" xml:space="preserve">
+        <value>Thank you for signing up with DOERLY! To complete your registration, please verify your email address by clicking the link below:</value>
     </data>
 </root>

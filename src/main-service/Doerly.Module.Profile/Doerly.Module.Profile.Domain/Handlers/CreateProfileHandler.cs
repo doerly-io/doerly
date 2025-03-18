@@ -1,7 +1,7 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Profile.DataAccess;
-using ProfileModel = Doerly.Module.Profile.DataAccess.Models.Profile;
+using Doerly.Module.Profile.DataAccess.Models;
 using Doerly.Module.Profile.Domain.Dtos;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +19,7 @@ public class CreateProfileHandler(ProfileDbContext dbContext) : BaseProfileHandl
         if (isProfileExists)
             return HandlerResult.Failure(Resources.Get("ProfileAlreadyExist"));
         
-        var profile = new ProfileModel();
+        var profile = new ProfileEntity();
         CopyFromDto(profile, dto);
         DbContext.Profiles.Add(profile);
         await DbContext.SaveChangesAsync();

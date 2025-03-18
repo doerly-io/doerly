@@ -12,4 +12,8 @@
       <ProjectReference Include="..\Doerly.Module.Profile.Domain\Doerly.Module.Profile.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MassTransit" Version="8.3.7" />
+    </ItemGroup>
+
 </Project>

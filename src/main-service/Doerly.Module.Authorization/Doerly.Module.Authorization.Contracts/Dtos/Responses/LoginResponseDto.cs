@@ -1,6 +1,6 @@
-namespace Doerly.Module.Authorization.Domain.Dtos;
+namespace Doerly.Module.Authorization.Contracts.Dtos;
 
-public record LoginResultDto
+public record LoginResponseDto
 {
     public string AccessToken { get; init; }
 

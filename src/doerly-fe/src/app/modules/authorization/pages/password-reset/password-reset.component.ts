@@ -29,6 +29,7 @@ export class PasswordResetComponent implements OnInit {
 
   passwordResetForm!: FormGroup;
   token!: string;
+  email!: string;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -40,6 +41,7 @@ export class PasswordResetComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.token = params['token'];
+      this.email = params['email'];
       this.passwordResetForm = this.formBuilder.group({
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', [Validators.required, Validators.minLength(6)]]

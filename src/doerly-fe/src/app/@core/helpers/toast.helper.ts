@@ -29,8 +29,7 @@ export class ToastHelper {
   }
 
   showApiError(error: HttpErrorResponse, detailKey: string): void {
-    const errors = error.error.errors;
-    const errorMessage = Object.keys(errors).map(key => errors[key]).join(', ');
+    const errorMessage = error.error.errorMessage;
     this.showError(
       'common.error',
       detailKey,
