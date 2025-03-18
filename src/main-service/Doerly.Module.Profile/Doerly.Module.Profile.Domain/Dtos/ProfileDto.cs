@@ -12,4 +12,5 @@ public class ProfileDto
     public string? Bio { get; set; }
     public DateTime DateCreated { get; set; }
     public DateTime LastModifiedDate { get; set; }
+    public string? ImageUrl { get; set; }
 }

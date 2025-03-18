@@ -7,4 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Doerly.DataAccess\Doerly.DataAccess.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.24.0" />
+  </ItemGroup>
 </Project>

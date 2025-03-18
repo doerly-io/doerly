@@ -20,5 +20,6 @@ public class ModuleInitializer : IModuleInitializer
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         app.ApplicationServices.MigrateDatabase<ProfileDbContext>();
+        app.ApplicationServices.AddStorageContainer("images");
     }
 }

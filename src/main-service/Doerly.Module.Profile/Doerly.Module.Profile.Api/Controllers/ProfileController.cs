@@ -56,4 +56,12 @@ public class ProfileController : BaseApiController
         return Ok(result);
     }
 
+    [HttpPost("{userId:int}/image")]
+    [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> UploadProfileImage(int userId, UploadProfileImageDto dto)
+    {
+        var result = await ResolveHandler<UploadProfileImageHandler>().HandleAsync(userId, dto);
+        return Ok(result);
+    }
+
 }

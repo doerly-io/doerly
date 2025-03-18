@@ -37,7 +37,14 @@
       "image": {
         "alt": "User avatar",
         "title": "Profile picture",
-        "subtitle": "Profile picture will help you be recognized in the service"
+        "subtitle": "Profile picture will help you be recognized in the service",
+        "upload": {
+          "button": {
+            "text": "Upload"
+          },
+          "select": "Select picture",
+          "title": "Upload picture"
+        }
       },
       "name": {
         "title": "Name",

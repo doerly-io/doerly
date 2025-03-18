@@ -1,4 +1,5 @@
 using Azure.Storage.Blobs;
+using Azure.Storage.Sas;
 
 namespace Doerly.FileRepository;
 
@@ -59,5 +60,32 @@ public class FileRepository : IFileRepository
         var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
         var blobClient = containerClient.GetBlobClient(fileName);
         await blobClient.DeleteIfExistsAsync();
+    }
+    
+    public async Task<string?> GetSasUrlAsync(string containerName, string fileName, TimeSpan? expiry = null)
+    {
+        var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+        var blobClient = containerClient.GetBlobClient(fileName);
+
+        if (!await blobClient.ExistsAsync())
+        {
+            return null;
+        }
+
+        expiry ??= TimeSpan.FromHours(1);
+
+        var sasBuilder = new BlobSasBuilder
+        {
+            BlobContainerName = containerName,
+            BlobName = fileName,
+            Resource = "b",
+            ExpiresOn = DateTimeOffset.UtcNow.Add(expiry.Value)
+        };
+
+        sasBuilder.SetPermissions(BlobSasPermissions.Read);
+
+        var sasUri = blobClient.GenerateSasUri(sasBuilder);
+
+        return sasUri.ToString();
     }
 }

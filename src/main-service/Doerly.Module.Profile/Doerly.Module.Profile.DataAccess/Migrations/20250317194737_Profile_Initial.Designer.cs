@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Doerly.Module.Profile.DataAccess.Migrations
 {
     [DbContext(typeof(ProfileDbContext))]
-    [Migration("20250315225517_Profile_Initial")]
+    [Migration("20250317194737_Profile_Initial")]
     partial class Profile_Initial
     {
         /// <inheritdoc />
@@ -50,6 +50,10 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("first_name");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("text")
+                        .HasColumnName("image_path");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone")

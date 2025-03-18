@@ -16,4 +16,5 @@ public class Profile : BaseEntity
     public ESex Sex { get; set; }
     public string? Bio { get; set; }
     public int UserId { get; set; }
+    public string? ImagePath { get; set; }
 }   

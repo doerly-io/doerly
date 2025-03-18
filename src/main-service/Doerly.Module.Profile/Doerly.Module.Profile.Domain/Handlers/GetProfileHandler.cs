@@ -1,4 +1,5 @@
 ﻿using Doerly.Domain.Models;
+using Doerly.FileRepository;
 using Doerly.Localization;
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Module.Profile.Domain.Dtos;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
 
-public class GetProfileHandler(ProfileDbContext dbContext) : BaseProfileHandler(dbContext)
+public class GetProfileHandler(ProfileDbContext dbContext, IFileRepository fileRepository) : BaseProfileHandler(dbContext)
 {
     public async Task<HandlerResult<ProfileDto>> HandleAsync(int userId)
     {
@@ -22,13 +23,20 @@ public class GetProfileHandler(ProfileDbContext dbContext) : BaseProfileHandler(
                 x.Sex,
                 x.Bio,
                 x.DateCreated,
-                x.LastModifiedDate
+                x.LastModifiedDate,
+                x.ImagePath
             })
             .FirstOrDefaultAsync();
 
         if (profile == null)
             return HandlerResult.Failure<ProfileDto>(Resources.Get("ProfileNotFound"));
 
+        string imageUrl = null;
+        if (!string.IsNullOrEmpty(profile.ImagePath))
+        {
+            imageUrl = await fileRepository.GetSasUrlAsync("images", profile.ImagePath);
+        }
+        
         var profileDto = new ProfileDto
         {
             Id = profile.Id,
@@ -38,7 +46,8 @@ public class GetProfileHandler(ProfileDbContext dbContext) : BaseProfileHandler(
             Sex = profile.Sex,
             Bio = profile.Bio,
             DateCreated = profile.DateCreated,
-            LastModifiedDate = profile.LastModifiedDate
+            LastModifiedDate = profile.LastModifiedDate,
+            ImageUrl = imageUrl
         };
 
         return HandlerResult.Success(profileDto);

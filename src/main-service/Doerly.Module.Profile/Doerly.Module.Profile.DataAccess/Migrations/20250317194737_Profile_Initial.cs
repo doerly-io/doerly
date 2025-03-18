@@ -28,6 +28,7 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     sex = table.Column<int>(type: "integer", nullable: false),
                     bio = table.Column<string>(type: "text", nullable: true),
                     user_id = table.Column<int>(type: "integer", nullable: false),
+                    image_path = table.Column<string>(type: "text", nullable: true),
                     date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },

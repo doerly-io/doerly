@@ -3,6 +3,7 @@ using Doerly.Host;
 using System.Reflection;
 using System.Resources;
 using System.Text;
+using Azure.Identity;
 using Doerly.Domain.Factories;
 using Doerly.Common;
 using Doerly.Api.Infrastructure;
@@ -123,6 +124,7 @@ builder.Services.AddSendGrid(opt => { opt.ApiKey = sendGridSettings.ApiKey; });
 builder.Services.AddAzureClients(factoryBuilder =>
 {
     factoryBuilder.AddBlobServiceClient(azureStorageSettings.ConnectionString);
+    factoryBuilder.UseCredential(new DefaultAzureCredential());
 });
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
