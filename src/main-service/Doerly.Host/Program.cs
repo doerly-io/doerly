@@ -124,7 +124,6 @@ builder.Services.AddSendGrid(opt => { opt.ApiKey = sendGridSettings.ApiKey; });
 builder.Services.AddAzureClients(factoryBuilder =>
 {
     factoryBuilder.AddBlobServiceClient(azureStorageSettings.ConnectionString);
-    factoryBuilder.UseCredential(new DefaultAzureCredential());
 });
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
