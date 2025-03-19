@@ -10,6 +10,7 @@ using Doerly.Api.Infrastructure;
 using Doerly.FileRepository;
 using Doerly.Localization;
 using Doerly.Notification.EmailSender;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
@@ -23,10 +24,7 @@ var configuration = builder.Configuration;
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-builder.Services.AddControllers(options =>
-    {
-        options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider());
-    })
+builder.Services.AddControllers(options => { options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider()); })
     .AddDataAnnotationsLocalization(options =>
     {
         options.DataAnnotationLocalizerProvider = (type, factory) =>
@@ -35,10 +33,7 @@ builder.Services.AddControllers(options =>
             return new DataAnnotationsStringLocalizer(resourceManager);
         };
     })
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
-    });
+    .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase; });
 
 #region Configure Modules
 
@@ -95,7 +90,6 @@ var azureStorageSettingsConfiguration = configuration.GetSection(AzureStorageSet
 var azureStorageSettings = azureStorageSettingsConfiguration.Get<AzureStorageSettings>();
 builder.Services.Configure<AzureStorageSettings>(azureStorageSettingsConfiguration);
 
-
 #endregion
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -127,6 +121,23 @@ builder.Services.AddAzureClients(factoryBuilder =>
 });
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
+
+builder.Services.AddMassTransit(cfg =>
+{
+    cfg.SetEndpointNameFormatter(new DefaultEndpointNameFormatter(includeNamespace: true));
+    cfg.UsingInMemory((context, factoryConfigurator) => { factoryConfigurator.ConfigureEndpoints(context); });
+
+    cfg.AddConfigureEndpointsCallback((name, configurator) =>
+    {
+        configurator.UseMessageRetry(r => r.Exponential(
+                5,
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(300),
+                TimeSpan.FromSeconds(10)
+            )
+        );
+    });
+});
 
 
 var app = builder.Build();

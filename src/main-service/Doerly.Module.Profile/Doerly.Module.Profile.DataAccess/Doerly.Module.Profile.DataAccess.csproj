@@ -11,4 +11,8 @@
       <ProjectReference Include="..\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Migrations\ProfileDbContextModelSnapshot.cs" />
+    </ItemGroup>
+
 </Project>

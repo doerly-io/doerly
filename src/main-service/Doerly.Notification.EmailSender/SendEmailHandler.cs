@@ -1,6 +1,8 @@
 using System.Net;
 using Doerly.Common;
+using Doerly.Domain.Exceptions;
 using Doerly.Domain.Handlers;
+using Doerly.Domain.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SendGrid;
@@ -24,7 +26,7 @@ public class SendEmailHandler : BaseHandler
         _logger = logger;
     }
 
-    public async Task HandleAsync(string email, string subject, string body)
+    public async Task<HandlerResult> HandleAsync(string email, string subject, string body)
     {
         var emailFromAddress = new EmailAddress(_options.Value.SenderEmail);
         var emailToAddress = new EmailAddress(email);
@@ -34,7 +36,10 @@ public class SendEmailHandler : BaseHandler
         _logger.LogInformation("Sending email to {email}.", email);
 
         var result = await _sendGridClient.SendEmailAsync(message);
+        
         if (result.StatusCode != HttpStatusCode.Accepted)
-            _logger.LogWarning("Failed to send email to {email}. Status code: {statusCode}.", email, result.StatusCode);
+            return HandlerResult.Failure($"Failed to send email. Status code: {result.StatusCode}.");
+        
+        return HandlerResult.Success();
     }
 }

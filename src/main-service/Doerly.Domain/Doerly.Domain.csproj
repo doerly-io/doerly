@@ -10,4 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.24.0" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.3.7" />
+  </ItemGroup>
 </Project>

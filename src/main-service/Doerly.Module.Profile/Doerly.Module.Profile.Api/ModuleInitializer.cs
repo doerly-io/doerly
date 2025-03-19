@@ -2,6 +2,8 @@
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Api.Infrastructure;
 using Doerly.DataAccess.Utils;
+using Doerly.Module.Profile.Domain;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +17,7 @@ public class ModuleInitializer : IModuleInitializer
     {
         builder.Services.AddDbContext<ProfileDbContext>();
         builder.Services.RegisterHandlers(typeof(Domain.IAssemblyMarker).Assembly);
+        builder.Services.RegisterEventConsumers(typeof(IAssemblyMarker).Assembly);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
