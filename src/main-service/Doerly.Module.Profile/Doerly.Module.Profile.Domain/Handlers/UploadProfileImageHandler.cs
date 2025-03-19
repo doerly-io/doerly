@@ -2,51 +2,41 @@ using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Localization;
 using Doerly.Module.Profile.DataAccess;
-using Doerly.Module.Profile.Domain.Dtos;
+using Doerly.Module.Profile.Domain.Constants;
+using Doerly.Module.Profile.Domain.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
 
-public class UploadProfileImageHandler(ProfileDbContext dbContext, IFileRepository fileRepository) : BaseProfileHandler(dbContext)
+public class UploadProfileImageHandler : BaseProfileHandler
 {
-    
-    public async Task<HandlerResult> HandleAsync(int userId, UploadProfileImageDto dto)
+    private readonly IFileRepository _fileRepository;
+
+    public UploadProfileImageHandler(ProfileDbContext dbContext, IFileRepository fileRepository) : base(dbContext)
+    {
+        _fileRepository = fileRepository;
+    }
+
+    public async Task<HandlerResult> HandleAsync(int userId, byte[] fileBytes)
     {
         var profile = await DbContext.Profiles.FirstOrDefaultAsync(x => x.UserId == userId);
         if (profile == null)
             return HandlerResult.Failure(Resources.Get("ProfileNotFound"));
-        
-        // Define blob storage path
-        var containerName = "images";
-        var imageFolderName = "ProfileImages";
-        
-        // TODO: Temp chatgpt suggestion. Rewrite extension check and logic to use the file extension from the uploaded file
-        string fileExtension = Path.GetExtension(dto.Image.FileName).ToLowerInvariant();
-        if (string.IsNullOrEmpty(fileExtension) || !new[] { ".jpg", ".jpeg", ".png" }.Contains(fileExtension))
-        {
-            fileExtension = ".jpg";
-        }
-        
-        var imageName = $"{Guid.NewGuid():N}{fileExtension}";
-        var imagePath = $"{imageFolderName}/{imageName}";
-        
-        using (var imageStream = new MemoryStream())
-        {
-            await dto.Image.CopyToAsync(imageStream);
-            var fileContent = imageStream.ToArray();
-            await fileRepository.UploadFileAsync(containerName, imagePath, fileContent);
-        }
+
+        if (ImageValidationHelper.IsValidImage(fileBytes, out var fileExtension))
+            return HandlerResult.Failure(Resources.Get("InvalidImage"));
+
+        var imageName = $"{Guid.NewGuid()}{fileExtension}";
+        var imagePath = $"{AzureStorageConstants.FolderNames.ProfileImages}/{imageName}";
+        await _fileRepository.UploadFileAsync(AzureStorageConstants.ImagesContainerName, imagePath, fileBytes);
         
         var oldImagePath = profile.ImagePath;
         if (!string.IsNullOrEmpty(oldImagePath))
-        {
-            await fileRepository.DeleteFileIfExistsAsync(containerName, oldImagePath);
-        }
-        
+            await _fileRepository.DeleteFileIfExistsAsync(AzureStorageConstants.ImagesContainerName, oldImagePath);
+
         profile.ImagePath = imagePath;
         await DbContext.SaveChangesAsync();
-        
+
         return HandlerResult.Success();
     }
-    
 }

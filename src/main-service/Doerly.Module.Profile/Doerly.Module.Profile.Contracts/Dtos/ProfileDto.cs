@@ -1,6 +1,6 @@
 ﻿using Doerly.Module.Profile.Enums;
 
-namespace Doerly.Module.Profile.Domain.Dtos;
+namespace Doerly.Module.Profile.Contracts.Dtos;
 
 public class ProfileDto
 {

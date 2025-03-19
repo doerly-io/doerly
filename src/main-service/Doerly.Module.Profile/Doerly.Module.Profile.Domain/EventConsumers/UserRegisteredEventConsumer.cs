@@ -1,6 +1,6 @@
 using Doerly.Domain.Factories;
 using Doerly.Module.Authorization.Contracts.Messages;
-using Doerly.Module.Profile.Domain.Dtos;
+using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.Domain.Handlers;
 using MassTransit;
 using Microsoft.Extensions.Logging;
