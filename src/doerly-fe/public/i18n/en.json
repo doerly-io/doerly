@@ -23,7 +23,7 @@
     "incorrect_credentials": "Incorrect email or password.",
     "email_exists": "User with this email already exists.",
     "register_success": "Registration was successful.",
-    "check_email": "Check your email and follow the verification link.",
+    "check_email": "Check your email and follow the verification link."
   },
   "profile": {
     "title": "Personal info",

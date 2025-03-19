@@ -12,12 +12,12 @@ public class FileRepository : IFileRepository
     {
         _blobServiceClient = blobServiceClient;
     }
-    
+
     public async Task UploadFileAsync(string containerName, string fileName, byte[] fileBytes, Dictionary<string, string> blobTags)
     {
         using (var memoryStream = new MemoryStream(fileBytes))
         {
-            await UploadFileAsync(fileName, containerName, memoryStream, blobTags);
+            await UploadFileAsync(containerName, fileName, memoryStream, blobTags);
         }
     }
 
@@ -25,7 +25,7 @@ public class FileRepository : IFileRepository
     {
         using (var memoryStream = new MemoryStream(fileBytes))
         {
-            await UploadFileAsync(fileName, containerName, memoryStream);
+            await UploadFileAsync(containerName, fileName, memoryStream);
         }
     }
 
@@ -61,7 +61,7 @@ public class FileRepository : IFileRepository
         var blobClient = containerClient.GetBlobClient(fileName);
         await blobClient.DeleteIfExistsAsync();
     }
-    
+
     public async Task<string?> GetSasUrlAsync(string containerName, string fileName, TimeSpan? expiry = null)
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);

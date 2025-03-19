@@ -23,10 +23,10 @@ public class UploadProfileImageHandler : BaseProfileHandler
         if (profile == null)
             return HandlerResult.Failure(Resources.Get("ProfileNotFound"));
 
-        if (ImageValidationHelper.IsValidImage(fileBytes, out var fileExtension))
+        if (!ImageValidationHelper.IsValidImage(fileBytes, out var fileExtension))
             return HandlerResult.Failure(Resources.Get("InvalidImage"));
 
-        var imageName = $"{Guid.NewGuid()}{fileExtension}";
+        var imageName = Guid.NewGuid().ToString();
         var imagePath = $"{AzureStorageConstants.FolderNames.ProfileImages}/{imageName}";
         await _fileRepository.UploadFileAsync(AzureStorageConstants.ImagesContainerName, imagePath, fileBytes);
         

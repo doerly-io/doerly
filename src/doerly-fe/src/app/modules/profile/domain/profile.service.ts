@@ -42,7 +42,7 @@ export class ProfileService {
   uploadImage(image: File): Observable<BaseApiResponse<any>> {
     const formData = new FormData();
     const userId = this.jwtTokenHelper.getUserInfo()?.id;
-    formData.append('Image', image);
+    formData.append('imageFile', image);
     return this
       .httpClient
       .post<BaseApiResponse<any>>(
