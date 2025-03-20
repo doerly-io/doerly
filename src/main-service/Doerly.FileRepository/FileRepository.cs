@@ -6,6 +6,7 @@ namespace Doerly.FileRepository;
 /// <inheritdoc />
 public class FileRepository : IFileRepository
 {
+    private readonly TimeSpan _defaultExpiry = TimeSpan.FromHours(1);
     private readonly BlobServiceClient _blobServiceClient;
 
     public FileRepository(BlobServiceClient blobServiceClient)
@@ -62,30 +63,28 @@ public class FileRepository : IFileRepository
         await blobClient.DeleteIfExistsAsync();
     }
 
-    public async Task<string?> GetSasUrlAsync(string containerName, string fileName, TimeSpan? expiry = null)
+    public async Task<string> GetSasUrlAsync(string containerName, string fileName)
+    {
+        return await GetSasUrlAsync(containerName, fileName, _defaultExpiry);
+    }
+
+    public async Task<string> GetSasUrlAsync(string containerName, string fileName, TimeSpan expiry)
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
         var blobClient = containerClient.GetBlobClient(fileName);
 
         if (!await blobClient.ExistsAsync())
-        {
-            return null;
-        }
-
-        expiry ??= TimeSpan.FromHours(1);
+            return string.Empty;
 
         var sasBuilder = new BlobSasBuilder
         {
             BlobContainerName = containerName,
             BlobName = fileName,
             Resource = "b",
-            ExpiresOn = DateTimeOffset.UtcNow.Add(expiry.Value)
+            ExpiresOn = DateTimeOffset.UtcNow.Add(expiry),
         };
-
         sasBuilder.SetPermissions(BlobSasPermissions.Read);
-
         var sasUri = blobClient.GenerateSasUri(sasBuilder);
-
         return sasUri.ToString();
     }
 }
