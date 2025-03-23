@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Doerly.Module.Communication.DataAccess.Migrations
 {
     [DbContext(typeof(CommunicationDbContext))]
-    [Migration("20250323105405_Communication_Initial")]
+    [Migration("20250323115833_Communication_Initial")]
     partial class Communication_Initial
     {
         /// <inheritdoc />
@@ -64,15 +64,6 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("pk_conversation");
 
-                    b.HasIndex("InitiatorId")
-                        .HasDatabaseName("ix_conversation_initiator_id");
-
-                    b.HasIndex("LastMessageId")
-                        .HasDatabaseName("ix_conversation_last_message_id");
-
-                    b.HasIndex("RecipientId")
-                        .HasDatabaseName("ix_conversation_recipient_id");
-
                     b.ToTable("conversation", "communication");
                 });
 
@@ -102,8 +93,9 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
                         .HasColumnType("text")
                         .HasColumnName("message_content");
 
-                    b.Property<int>("MessageType")
-                        .HasColumnType("integer")
+                    b.Property<string>("MessageType")
+                        .IsRequired()
+                        .HasColumnType("text")
                         .HasColumnName("message_type");
 
                     b.Property<int>("SenderId")
@@ -114,8 +106,9 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("sent_at");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer")
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text")
                         .HasColumnName("status");
 
                     b.HasKey("Id")
@@ -124,91 +117,7 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
                     b.HasIndex("ConversationId")
                         .HasDatabaseName("ix_message_conversation_id");
 
-                    b.HasIndex("SenderId")
-                        .HasDatabaseName("ix_message_sender_id");
-
                     b.ToTable("message", "communication");
-                });
-
-            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.ProfileEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Bio")
-                        .HasColumnType("text")
-                        .HasColumnName("bio");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_created");
-
-                    b.Property<DateOnly?>("DateOfBirth")
-                        .HasColumnType("date")
-                        .HasColumnName("date_of_birth");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("first_name");
-
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("text")
-                        .HasColumnName("image_path");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_date");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("last_name");
-
-                    b.Property<int>("Sex")
-                        .HasColumnType("integer")
-                        .HasColumnName("sex");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_profile");
-
-                    b.ToTable("profile", "profile");
-                });
-
-            modelBuilder.Entity("Doerly.Module.Communication.DataAccess.Entities.ConversationEntity", b =>
-                {
-                    b.HasOne("Doerly.Module.Profile.DataAccess.Models.ProfileEntity", "Initiator")
-                        .WithMany()
-                        .HasForeignKey("InitiatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_conversation_profile_initiator_id");
-
-                    b.HasOne("Doerly.Module.Communication.DataAccess.Entities.MessageEntity", "LastMessage")
-                        .WithMany()
-                        .HasForeignKey("LastMessageId")
-                        .HasConstraintName("fk_conversation_messages_last_message_id");
-
-                    b.HasOne("Doerly.Module.Profile.DataAccess.Models.ProfileEntity", "Recipient")
-                        .WithMany()
-                        .HasForeignKey("RecipientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_conversation_profile_recipient_id");
-
-                    b.Navigation("Initiator");
-
-                    b.Navigation("LastMessage");
-
-                    b.Navigation("Recipient");
                 });
 
             modelBuilder.Entity("Doerly.Module.Communication.DataAccess.Entities.MessageEntity", b =>
@@ -216,20 +125,11 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
                     b.HasOne("Doerly.Module.Communication.DataAccess.Entities.ConversationEntity", "Conversation")
                         .WithMany("Messages")
                         .HasForeignKey("ConversationId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_message_conversation_conversation_id");
 
-                    b.HasOne("Doerly.Module.Profile.DataAccess.Models.ProfileEntity", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_message_profile_sender_id");
-
                     b.Navigation("Conversation");
-
-                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("Doerly.Module.Communication.DataAccess.Entities.ConversationEntity", b =>

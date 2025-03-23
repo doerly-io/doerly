@@ -13,14 +13,13 @@ public class MessageConfiguration : IEntityTypeConfiguration<MessageEntity>
         builder.HasKey(x => x.Id);
         
         builder.Property(x => x.SenderId).IsRequired();
-        builder.HasOne(x => x.Sender).WithMany().HasForeignKey(x => x.SenderId);
         
-        builder.Property(x => x.ConversationId);
+        builder.Property(x => x.ConversationId).IsRequired();
         builder.HasOne(x => x.Conversation).WithMany(x => x.Messages).HasForeignKey(x => x.ConversationId);
         
-        builder.Property(x => x.MessageType).IsRequired();
+        builder.Property(x => x.MessageType).IsRequired().HasConversion<string>();
         builder.Property(x => x.MessageContent).IsRequired();
         builder.Property(x => x.SentAt);
-        builder.Property(x => x.Status);
+        builder.Property(x => x.Status).HasConversion<string>();
     }
 }

@@ -14,13 +14,10 @@ public class ConversationConfiguration : IEntityTypeConfiguration<ConversationEn
         
         builder.Property(x => x.ConversationName).HasMaxLength(255);
 
-        builder.Property(x => x.InitiatorId);
-        builder.HasOne(x => x.Initiator).WithMany().HasForeignKey(x => x.InitiatorId);
+        builder.Property(x => x.InitiatorId).IsRequired();
         
-        builder.Property(x => x.RecipientId);
-        builder.HasOne(x => x.Recipient).WithMany().HasForeignKey(x => x.RecipientId);
+        builder.Property(x => x.RecipientId).IsRequired();
         
         builder.Property(x => x.LastMessageId);
-        builder.HasMany(x => x.Messages).WithOne(x => x.Conversation).HasForeignKey(x => x.ConversationId).OnDelete(DeleteBehavior.SetNull);
     }
 }
