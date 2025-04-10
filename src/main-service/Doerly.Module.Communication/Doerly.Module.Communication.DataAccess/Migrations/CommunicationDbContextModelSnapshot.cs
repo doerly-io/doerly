@@ -33,7 +33,6 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ConversationName")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("conversation_name");
@@ -60,6 +59,10 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_conversation");
+
+                    b.HasIndex("InitiatorId", "RecipientId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_conversation_initiator_id_recipient_id");
 
                     b.ToTable("conversation", "communication");
                 });

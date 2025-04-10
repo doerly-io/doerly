@@ -22,7 +22,7 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    conversation_name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    conversation_name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     initiator_id = table.Column<int>(type: "integer", nullable: false),
                     recipient_id = table.Column<int>(type: "integer", nullable: false),
                     last_message_id = table.Column<int>(type: "integer", nullable: true),
@@ -61,6 +61,13 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_conversation_initiator_id_recipient_id",
+                schema: "communication",
+                table: "conversation",
+                columns: new[] { "initiator_id", "recipient_id" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_message_conversation_id",

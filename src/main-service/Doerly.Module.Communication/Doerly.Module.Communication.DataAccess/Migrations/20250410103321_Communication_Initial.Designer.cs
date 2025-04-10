@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Doerly.Module.Communication.DataAccess.Migrations
 {
     [DbContext(typeof(CommunicationDbContext))]
-    [Migration("20250323115833_Communication_Initial")]
+    [Migration("20250410103321_Communication_Initial")]
     partial class Communication_Initial
     {
         /// <inheritdoc />
@@ -36,7 +36,6 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ConversationName")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("conversation_name");
@@ -63,6 +62,10 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_conversation");
+
+                    b.HasIndex("InitiatorId", "RecipientId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_conversation_initiator_id_recipient_id");
 
                     b.ToTable("conversation", "communication");
                 });

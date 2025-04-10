@@ -15,11 +15,14 @@ public class MessageConfiguration : IEntityTypeConfiguration<MessageEntity>
         builder.Property(x => x.SenderId).IsRequired();
         
         builder.Property(x => x.ConversationId).IsRequired();
-        builder.HasOne(x => x.Conversation).WithMany(x => x.Messages).HasForeignKey(x => x.ConversationId);
+        builder.HasOne(x => x.Conversation)
+            .WithMany(x => x.Messages)
+            .HasForeignKey(x => x.ConversationId)
+            .OnDelete(DeleteBehavior.Cascade);
         
         builder.Property(x => x.MessageType).IsRequired().HasConversion<string>();
         builder.Property(x => x.MessageContent).IsRequired();
-        builder.Property(x => x.SentAt);
+        builder.Property(x => x.SentAt).IsRequired();
         builder.Property(x => x.Status).HasConversion<string>();
     }
 }
