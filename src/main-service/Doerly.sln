@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Communication
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Communication.Enums", "Doerly.Module.Communication\Doerly.Module.Communication.Enums\Doerly.Module.Communication.Enums.csproj", "{87FC90EC-46E1-4E17-95EC-8BAC8A2B94E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Communication.Contracts", "Doerly.Module.Communication\Doerly.Module.Communication.Contracts\Doerly.Module.Communication.Contracts.csproj", "{A3668244-C89E-40EC-81D9-7027246C1989}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -165,6 +167,10 @@ Global
 		{87FC90EC-46E1-4E17-95EC-8BAC8A2B94E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87FC90EC-46E1-4E17-95EC-8BAC8A2B94E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87FC90EC-46E1-4E17-95EC-8BAC8A2B94E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3668244-C89E-40EC-81D9-7027246C1989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3668244-C89E-40EC-81D9-7027246C1989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3668244-C89E-40EC-81D9-7027246C1989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3668244-C89E-40EC-81D9-7027246C1989}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -190,5 +196,6 @@ Global
 		{3FA3F2AE-CBF6-42EA-BD13-365835593199} = {274F47F1-A243-4074-B3C8-D7F92594708C}
 		{609661DD-70A8-4177-8AC3-C3587F677B4A} = {274F47F1-A243-4074-B3C8-D7F92594708C}
 		{87FC90EC-46E1-4E17-95EC-8BAC8A2B94E4} = {274F47F1-A243-4074-B3C8-D7F92594708C}
+		{A3668244-C89E-40EC-81D9-7027246C1989} = {274F47F1-A243-4074-B3C8-D7F92594708C}
 	EndGlobalSection
 EndGlobal

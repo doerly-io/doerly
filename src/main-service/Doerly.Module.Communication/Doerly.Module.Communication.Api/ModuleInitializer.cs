@@ -15,7 +15,7 @@ public class ModuleInitializer : IModuleInitializer
     public void ConfigureServices(IHostApplicationBuilder builder)
     {
         builder.Services.AddDbContext<CommunicationDbContext>();
-        builder.Services.RegisterHandlers(typeof(Domain.IAssemblyMarker).Assembly);
+        builder.Services.RegisterHandlers(typeof(IAssemblyMarker).Assembly);
         builder.Services.RegisterEventConsumers(typeof(IAssemblyMarker).Assembly);
     }
 
