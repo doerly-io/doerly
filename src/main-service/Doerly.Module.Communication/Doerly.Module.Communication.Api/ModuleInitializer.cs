@@ -3,6 +3,7 @@ using Doerly.DataAccess.Utils;
 using Doerly.Domain;
 using Doerly.Domain.Extensions;
 using Doerly.Module.Communication.DataAccess;
+using Doerly.Module.Communication.Domain.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,10 +18,15 @@ public class ModuleInitializer : IModuleInitializer
         builder.Services.AddDbContext<CommunicationDbContext>();
         builder.Services.RegisterHandlers(typeof(IAssemblyMarker).Assembly);
         builder.Services.RegisterEventConsumers(typeof(IAssemblyMarker).Assembly);
+        builder.Services.RegisterSignalR();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         app.ApplicationServices.MigrateDatabase<CommunicationDbContext>();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapHub<ChatHub>("/chat");
+        });
     }
 }

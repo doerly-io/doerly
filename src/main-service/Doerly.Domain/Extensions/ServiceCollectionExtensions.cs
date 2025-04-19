@@ -28,4 +28,9 @@ public static class ServiceCollectionExtensions
     {
         services.AddMassTransit(x => { x.AddConsumers(assembly); });
     }
+
+    public static void RegisterSignalR(this IServiceCollection services)
+    {
+        services.AddSignalR();
+    }
 }
