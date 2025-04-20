@@ -1,4 +1,4 @@
-namespace Doerly.Common;
+namespace Doerly.Common.Settings;
 
 public class AzureStorageSettings
 {

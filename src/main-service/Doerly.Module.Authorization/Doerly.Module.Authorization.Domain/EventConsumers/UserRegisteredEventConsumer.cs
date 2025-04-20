@@ -1,23 +1,32 @@
 using Doerly.Domain.Factories;
+using Doerly.Messaging;
 using Doerly.Module.Authorization.Domain.Handlers;
 using Doerly.Module.Authorization.Contracts.Messages;
 using MassTransit;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Doerly.Module.Authorization.Domain.EventConsumers;
 
-public class UserRegisteredEventConsumer : IConsumer<UserRegisteredMessage>
+public class UserRegisteredEventConsumer : BaseConsumer<UserRegisteredMessage>
 {
     private readonly IHandlerFactory _handlerFactory;
+    private readonly IHostEnvironment _hostEnvironment;
 
-    public UserRegisteredEventConsumer(IHandlerFactory handlerFactory)
+    public UserRegisteredEventConsumer(
+        ILogger<UserRegisteredEventConsumer> logger,
+        IHandlerFactory handlerFactory,
+        IHostEnvironment hostEnvironment
+        ) : base(logger)
     {
         _handlerFactory = handlerFactory;
+        _hostEnvironment = hostEnvironment;
     }
 
-    public async Task Consume(ConsumeContext<UserRegisteredMessage> context)
+    protected override async Task Handle(ConsumeContext<UserRegisteredMessage> context)
     {
         // do not send email in development environment due to cost saving reasons
-        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+        if (_hostEnvironment.IsDevelopment())
             return;
 
         await _handlerFactory.Get<RequestEmailVerificationHandler>().HandleAsync(context.Message);

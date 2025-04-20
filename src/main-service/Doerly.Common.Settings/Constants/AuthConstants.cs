@@ -1,4 +1,4 @@
-namespace Doerly.Common.Constants;
+namespace Doerly.Common.Settings.Constants;
 
 public struct AuthConstants
 {

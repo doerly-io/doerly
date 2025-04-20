@@ -22,10 +22,5 @@ public static class ServiceCollectionExtensions
         var blobServiceClient = services.GetRequiredService<BlobServiceClient>();
         var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
         containerClient.CreateIfNotExists();
-    } 
-
-    public static void RegisterEventConsumers(this IServiceCollection services, Assembly assembly)
-    {
-        services.AddMassTransit(x => { x.AddConsumers(assembly); });
     }
 }

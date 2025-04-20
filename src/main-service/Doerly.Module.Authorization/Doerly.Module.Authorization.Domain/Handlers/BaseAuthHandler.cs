@@ -2,7 +2,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Doerly.Domain.Handlers;
-using Doerly.Common;
+using Doerly.Common.Settings;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Module.Authorization.DataAccess.Entities;
 using Doerly.Module.Authorization.Enums;

@@ -1,5 +1,5 @@
 using System.Net;
-using Doerly.Common;
+using Doerly.Common.Settings;
 using Doerly.Domain.Exceptions;
 using Doerly.Domain.Handlers;
 using Doerly.Domain.Models;

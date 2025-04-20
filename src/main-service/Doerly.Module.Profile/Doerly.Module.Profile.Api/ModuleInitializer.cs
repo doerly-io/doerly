@@ -2,6 +2,7 @@
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Api.Infrastructure;
 using Doerly.DataAccess.Utils;
+using Doerly.Messaging;
 using Doerly.Module.Profile.Domain;
 using Doerly.Module.Profile.Domain.Constants;
 using Microsoft.AspNetCore.Builder;
