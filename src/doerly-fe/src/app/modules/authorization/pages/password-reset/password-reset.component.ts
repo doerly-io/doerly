@@ -67,12 +67,13 @@ export class PasswordResetComponent implements OnInit {
     const password = this.passwordResetForm.get('password')!.value;
     const request : PasswordResetRequest = {
       password: password,
-      token: this.token
+      token: this.token,
+      email: this.email
     };
     this.authorizationService.resetPassword(request).subscribe({
       next: (value) => {
 
-        this.router.navigate(['/login']);
+        this.router.navigate(['/login'], {relativeTo: this.route});
       },
       error: (error) => {
         console.error(error);
