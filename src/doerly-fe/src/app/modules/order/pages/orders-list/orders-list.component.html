@@ -6,7 +6,7 @@
     </div>
     <p-dataview [value]="orders" [paginator]="true" [rows]="10" 
         [rowsPerPageOptions]="[10, 20, 50, 100]" [totalRecords]="totalRecords" 
-        [lazy]="true" (onLazyLoad)="loadOrders($event)" [loading]="loading">
+        [lazy]="true" (onLazyLoad)="loadOrders($event)" [loading]="loading" emptyMessage="{{ 'ordering.no_orders' | translate }}">
         <ng-template #list>
             <div *ngFor="let item of orders; let first = first">
                 <div class="order-item" (click)="navigateToOrderDetails(item.id)">
@@ -23,7 +23,7 @@
                             <span class="font-medium text-secondary text-sm">{{ item.customerId }}</span>
                         </div>
                         <div>
-                            <p-tag [value]="getOrderStatusString(item.status)" styleClass="dark:!bg-surface-900"></p-tag>
+                            <p-tag [value]="getOrderStatusString(item.status)" [severity]="getOrderStatusSeverity(item.status)"></p-tag>
                         </div>
                     </div>
                 </div>

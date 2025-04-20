@@ -18,7 +18,7 @@
           </div>
           <div class="row mb-3 mx-0 px-0">
             <div>
-              <label for="name">{{ 'ordering.name' | translate }}</label>
+              <label for="name">{{ 'ordering.title' | translate }}</label>
               <input pInputText formControlName="name" class="w-100" id="name" />
               <small *ngIf="isInvalid(createOrderForm, 'name')" class="input-validation-item">
                 {{ getError(createOrderForm, 'name', 'required', 'ordering.field_required' | translate) }}

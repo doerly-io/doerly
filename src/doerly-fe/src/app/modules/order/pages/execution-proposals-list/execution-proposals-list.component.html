@@ -1,7 +1,7 @@
 <section class="row justify-content-center">
     <p-dataview [value]="proposals" [paginator]="true" [rows]="10" 
         [rowsPerPageOptions]="[10, 20, 50, 100]" [totalRecords]="totalRecords" 
-        [lazy]="true" (onLazyLoad)="loadProposals($event)" [loading]="loading">
+        [lazy]="true" (onLazyLoad)="loadProposals($event)" [loading]="loading" emptyMessage="{{ 'ordering.no_execution_proposals' | translate }}">
         <ng-template #list>
             <div *ngFor="let item of proposals; let first = first">
                 <div class="execution-proposal-item" (click)="navigateToProposalDetails(item.id)">
@@ -18,7 +18,7 @@
                             <span class="font-medium text-secondary text-sm">{{ item.senderId }}</span>
                         </div>
                         <div>
-                            <p-tag [value]="getProposalStatusString(item.status)" styleClass="dark:!bg-surface-900"></p-tag>
+                            <p-tag [value]="getProposalStatusString(item.status)" [severity]="getProposalStatusSeverity(item.status)"></p-tag>
                         </div>
                     </div>
                 </div>

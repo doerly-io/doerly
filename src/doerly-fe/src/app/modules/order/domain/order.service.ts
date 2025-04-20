@@ -30,4 +30,8 @@ export class OrderService {
   createOrder(model: CreateOrderRequest): Observable<BaseApiResponse<number>> {
     return this.httpClient.post<BaseApiResponse<number>>(`${this.baseUrl}/create`, model);
   }
+
+  cancelOrder(id: number): Observable<BaseApiResponse<void>> {
+    return this.httpClient.delete<BaseApiResponse<void>>(`${this.baseUrl}/${id}`);
+  }
 }

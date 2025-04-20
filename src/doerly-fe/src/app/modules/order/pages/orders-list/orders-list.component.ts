@@ -72,6 +72,21 @@ export class OrdersListComponent implements OnInit {
       return OrderStatus[status];
   }
 
+  getOrderStatusSeverity(status: OrderStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
+      switch (status) {
+        case OrderStatus.Placed:
+          return 'info';
+        case OrderStatus.InProgress:
+          return 'warn';
+        case OrderStatus.Completed:
+          return 'success';
+        case OrderStatus.Canceled:
+          return 'danger';
+        default:
+          return 'secondary';
+      }
+    }
+
   navigateToOrderDetails(orderId: number): void {
     this.router.navigate(['/ordering/order', orderId]);
   }

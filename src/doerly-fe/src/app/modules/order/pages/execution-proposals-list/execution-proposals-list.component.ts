@@ -9,6 +9,7 @@ import { GetExecutionProposalResponse } from '../../models/responses/get-executi
 import { PaginatorModule } from 'primeng/paginator';
 import { ExecutionProposalStatus } from '../../domain/enums/execution-proposal-status';
 import { GetExecutionProposalsWithPaginationByPredicatesRequest } from '../../models/requests/get-execution-proposals-request';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-execution-proposals-list',
@@ -16,7 +17,8 @@ import { GetExecutionProposalsWithPaginationByPredicatesRequest } from '../../mo
     DataView,
     Tag,
     PaginatorModule,
-    CommonModule
+    CommonModule,
+    TranslatePipe
   ],
   templateUrl: './execution-proposals-list.component.html',
   styleUrl: './execution-proposals-list.component.scss'
@@ -64,6 +66,21 @@ export class ExecutionProposalsListComponent implements OnInit {
 
   getProposalStatusString(status: ExecutionProposalStatus): string {
       return ExecutionProposalStatus[status];
+  }
+
+  getProposalStatusSeverity(status: ExecutionProposalStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
+    switch (status) {
+      case ExecutionProposalStatus.WaitingForApproval:
+        return 'info';
+      case ExecutionProposalStatus.Accepted:
+        return 'success';
+      case ExecutionProposalStatus.Rejected:
+        return 'danger';
+      case ExecutionProposalStatus.Revoked:
+        return 'warn';
+      default:
+        return 'info';
+    }
   }
 
   navigateToProposalDetails(proposalId: number): void {

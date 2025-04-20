@@ -80,18 +80,56 @@
     "execution_proposal": "Пропозиція виконання",
     "id": "ID",
     "category_id": "ID категорії",
-    "name": "Назва",
+    "title": "Назва",
     "description": "Опис",
     "price": "Ціна",
-    "payment_kind": "Вид оплати",
     "due_date": "Дата виконання",
     "customer_id": "ID замовника",
+    "executor_id": "ID виконавця",
+    "execution_date": "Дата виконання",
+    "bill_id": "ID рахунку",
     "field_required": "Це поле обов'язкове для заповнення",
     "price_min": "Ціна повинна бути більше або дорівнювати 0",
     "invalid_date": "Дата некоректна",
     "send_execution_proposal": "Відправити пропозицію виконання",
     "comment": "Коментар",
-    "send": "Надіслати"
+    "loading": "Завантаження...",
+    "no_data": "Дані відсутні",
+    "no_orders": "Замовлення відсутні",
+    "no_execution_proposals": "Пропозиції виконання відсутні",
+    "send": "Надіслати",
+    "resolved_successfully": "Вирішено успішно",
+    "execution_proposal_details": "Деталі пропозиції виконання",
+    "execution_proposal_id": "ID пропозиції виконання",
+    "sender_id": "ID відправника",
+    "receiver_id": "ID отримувача",
+    "order_id": "ID замовлення",
+    "proposal_id": "ID пропозиції",
+    "cancel": "Скасувати",
+    "status": "Статус",
+    "order_status": "Статус замовлення",
+    "order_statuses": {
+      "new": "Нове",
+      "in_progress": "В процесі",
+      "completed": "Завершене",
+      "canceled": "Скасоване"
+    },
+    "proposal_status": "Статус пропозиції",
+    "proposal_statuses": {
+      "new": "Нова",
+      "accepted": "Прийнята",
+      "rejected": "Відхилена"
+    },
+    "payment_kind": "Вид оплати",
+    "payment_kinds": {
+      "post": "Післяплата",
+      "pre": "Попередня оплата"
+    },
+    "proposal_options": {
+      "accept": "Прийняти",
+      "reject": "Відхилити",
+      "revoke": "Відкликати"
+    }
   },
   "common": {
     "error": "Помилка",

@@ -79,18 +79,57 @@
     "order_details": "Order details",
     "execution_proposal": "Execution proposal",
     "category_id": "Category ID",
-    "name": "Name",
+    "title": "Title",
     "description": "Description",
     "price": "Price",
-    "payment_kind": "Payment Kind",
     "due_date": "Due Date",
     "customer_id": "Customer ID",
+    "executor_id": "Executor ID",
+    "execution_date": "Execution Date",
+    "bill_id": "Bill ID",  
     "field_required": "This field is required",
     "price_min": "Price must be greater than or equal to 0",
     "invalid_date": "The date is incorrect",
     "send_execution_proposal": "Send execution proposal",
     "comment": "Comment",
-    "send": "Send"
+    "loading": "Loading...",
+    "no_data": "No data",
+    "no_orders": "No orders",
+    "no_execution_proposals": "No execution proposals",
+    "send": "Send",
+    "resolved_successfully": "Resolved successfully",
+    "id": "ID",
+    "sender_id": "Sender ID",
+    "receiver_id": "Receiver ID",
+    "execution_proposal_details": "Execution proposal details",
+    "execution_proposal_id": "Execution proposal ID",
+    "order_id": "Order ID",
+    "proposal_id": "Proposal ID",
+    "cancel": "Cancel",
+    "status": "Status",
+    "order_status": "Order status",
+    "order_statuses": {
+      "new": "New",
+      "in_progress": "In progress",
+      "completed": "Completed",
+      "canceled": "Canceled"
+    },
+    "proposal_status": "Proposal status",
+    "proposal_statuses": {
+      "new": "New",
+      "accepted": "Accepted",
+      "rejected": "Rejected"
+    },
+    "payment_kind": "Payment kind",
+    "payment_kinds": {
+      "post": "Post",
+      "pre": "Pre"
+    },
+    "proposal_options": {
+      "accept": "Accept",
+      "reject": "Reject",
+      "revoke": "Revoke"
+    }
   },
   "common": {
     "error": "Error",

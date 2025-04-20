@@ -77,7 +77,7 @@ export class CreateOrderComponent implements OnInit {
 
   createOrder(): void {
     const request = this.createOrderForm.value as CreateOrderRequest;
-    request.customerId = 1;
+    request.customerId = 2;
 
     this.orderService.createOrder(request).subscribe({
       next: (value) => {

@@ -9,6 +9,7 @@ import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-execution-proposal-details',
@@ -64,12 +65,16 @@ export class ExecutionProposalDetailsComponent implements OnInit {
 
     this.executionProposalService.resolveExecutionProposal(request).subscribe({
       next: () => {
-        this.toastHelper.showSuccess('common.success', 'execution-proposal.resolved-successfully');
+        this.toastHelper.showSuccess('common.success', 'ordering.resolved-successfully');
         this.router.navigate(['/ordering'], { queryParams: { tab: 0, subTab: 0 } });
       },
-      error: (error) => {
-        this.toastHelper.showError('common.error', 'execution-proposal.resolve-error');
-        console.error(error);
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.toastHelper.showError('common.error', error.error.errorMessage);
+        }
+        else {
+          this.toastHelper.showError('common.error', 'common.error-occurred');
+        }
       }
     });
   }

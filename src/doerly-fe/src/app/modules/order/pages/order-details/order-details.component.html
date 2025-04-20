@@ -2,49 +2,52 @@
   <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
     <div class="row justify-content-center">
       <div class="col-sm-12 col-md-10">
-        <div *ngIf="loading" class="text-center">Loading...</div>
+        <div *ngIf="loading" class="text-center">{{ 'ordering.loading' | translate }}</div>
         <div *ngIf="!loading && order" class="order-details">
-          <h3 class="c-primary text-center mb-3">Order Details</h3>
+          <h3 class="c-primary text-center mb-3">{{ 'ordering.order_details' | translate }}</h3>
           <div class="row">
             <div class="col-md-6">
               <div class="order-detail-item mb-3">
-                <p><strong>Order ID:</strong> {{ order.id }}</p>
+                <p><strong>{{ 'ordering.order_id' | translate }}</strong> {{ order.id }}</p>
               </div>
               <div class="order-detail-item mb-3">
-                <p><strong>Name:</strong> {{ order.name }}</p>
+                <p><strong>{{ 'ordering.title' | translate }}</strong> {{ order.name }}</p>
               </div>
               <div class="order-detail-item mb-3">
-                <p><strong>Description:</strong> {{ order.description }}</p>
+                <p><strong>{{ 'ordering.description' | translate }}</strong> {{ order.description }}</p>
               </div>
               <div class="order-detail-item mb-3">
-                <p><strong>Price:</strong> {{ '$' + order.price }}</p>
+                <p><strong>{{ 'ordering.price' | translate }}</strong> {{ '$' + order.price }}</p>
               </div>
             </div>
             <div class="col-md-6">
               <div class="order-detail-item mb-3">
-                <p><strong>Payment Kind:</strong> {{ getPaymentKindString(order.paymentKind) }}</p>
+                <p><strong>{{ 'ordering.payment_kind' | translate }}</strong> {{ getPaymentKindString(order.paymentKind) }}</p>
               </div>
               <div class="order-detail-item mb-3">
-                <p><strong>Due Date:</strong> {{ order.dueDate | date }}</p>
+                <p><strong>{{ 'ordering.due_date' | translate }}</strong> {{ order.dueDate | date }}</p>
               </div>
               <div class="order-detail-item mb-3">
-                <p><strong>Status:</strong> {{ getOrderStatusString(order.status) }}</p>
+                <p><strong>{{ 'ordering.status' | translate }}</strong> {{ getOrderStatusString(order.status) }}</p>
               </div>
               <div class="order-detail-item mb-3">
-                <p><strong>Customer ID:</strong> {{ order.customerId }}</p>
+                <p><strong>{{ 'ordering.customer_id' | translate }}</strong> {{ order.customerId }}</p>
               </div>
               <div class="order-detail-item mb-3" *ngIf="order.executorId">
-                <p><strong>Executor ID:</strong> {{ order.executorId }}</p>
+                <p><strong>{{ 'ordering.executor_id' | translate }}</strong> {{ order.executorId }}</p>
               </div>
               <div class="order-detail-item mb-3" *ngIf="order.executionDate">
-                <p><strong>Execution Date:</strong> {{ order.executionDate | date }}</p>
+                <p><strong>{{ 'ordering.execution_date' | translate }}</strong> {{ order.executionDate | date }}</p>
               </div>
               <div class="order-detail-item mb-3" *ngIf="order.billId">
-                <p><strong>Bill ID:</strong> {{ order.billId }}</p>
+                <p><strong>{{ 'ordering.bill_id' | translate }}</strong> {{ order.billId }}</p>
               </div>
             </div>
           </div>
           <div class="d-flex justify-content-center mb-3">
+            <p-button label="{{ 'ordering.cancel' | translate }}" 
+                      icon="pi pi-times" severity="danger" (click)="cancelOrder()" 
+                      *ngIf="order.customerId == profileId"></p-button>
             <p-button [routerLink]="'/ordering/send-execution-proposal'" 
                       [queryParams]="{ orderId: order.id, receiverId: order.customerId }"  
                       label="{{ 'ordering.send_execution_proposal' | translate }}"
