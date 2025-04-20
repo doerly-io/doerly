@@ -5,21 +5,17 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {AuthService} from '../../domain/auth.service';
 import {LoginRequest} from '../../models/requests/login-request';
 import {HttpErrorResponse} from '@angular/common/http';
-import {JwtTokenHelper} from '../../../../@core/helpers/jwtToken.helper';
+import {JwtTokenHelper} from 'app/@core/helpers/jwtToken.helper';
 import {TranslatePipe} from '@ngx-translate/core';
 import {Checkbox} from 'primeng/checkbox';
 import {Ripple} from 'primeng/ripple';
 import {Card} from 'primeng/card';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Divider} from 'primeng/divider';
-import {PasswordInputComponent} from '../../../../@components/password/password-input.component';
+import {PasswordInputComponent} from 'app/@components/password/password-input.component';
 import {NgIf} from "@angular/common";
-import {
-  getError,
-  getServersideError,
-  isInvalid,
-  setServerErrors
-} from "../../../../@core/helpers/input-validation-helpers";
+import {getError, getServersideError, isInvalid, setServerErrors} from "app/@core/helpers/input-validation-helpers";
+import {ToastHelper} from 'app/@core/helpers/toast.helper';
 
 @Component({
   selector: 'app-login',
@@ -49,7 +45,8 @@ export class LoginComponent implements OnInit {
               private authService: AuthService,
               private router: Router,
               private route: ActivatedRoute,
-              private tokenHelper: JwtTokenHelper
+              private tokenHelper: JwtTokenHelper,
+              private toastHelper: ToastHelper,
   ) {
   }
 
@@ -76,7 +73,9 @@ export class LoginComponent implements OnInit {
         this.router.navigate([this.returnUrl]);
       },
       error: (error: HttpErrorResponse) => {
-        if (error.status === 400) {
+        if (error.status === 401) {
+          this.toastHelper.showApiError(error, 'auth.incorrect_credentials');
+        } else if (error.status === 400) {
           const errors = error.error.errors;
           setServerErrors(this.loginForm, errors);
         }

@@ -39,6 +39,7 @@ label {
 
 p {
   color: var(--p-surface-600);
+  margin-bottom: 0;
 }
 
 a {
@@ -72,6 +73,9 @@ a:hover {
   }
 }
 
+.fs-7 {
+  font-size: 0.9rem;
+}
 
 .input-validation-item {
   color: var(--p-red-500);

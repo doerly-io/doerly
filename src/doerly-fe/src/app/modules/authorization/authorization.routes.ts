@@ -1,8 +1,9 @@
 import {Routes} from '@angular/router';
-import {LoginComponent} from './pages/login/login.component';
-import {RegisterComponent} from './pages/register/register.component';
-import {RequestPasswordResetComponent} from './pages/request-password-reset/request-password-reset.component';
-import {PasswordResetComponent} from './pages/password-reset/password-reset.component';
+import {LoginComponent} from 'app/modules/authorization/pages/login/login.component';
+import {RegisterComponent} from 'app/modules/authorization/pages/register/register.component';
+import {RequestPasswordResetComponent} from 'app/modules/authorization/pages/request-password-reset/request-password-reset.component';
+import {PasswordResetComponent} from 'app/modules/authorization/pages/password-reset/password-reset.component';
+import {EmailVerificationComponent} from 'app/modules/authorization/pages/email-verification/email-verification.component';
 
 export const routes: Routes = [
   {
@@ -20,5 +21,10 @@ export const routes: Routes = [
   {
     path: 'password-reset',
     component: PasswordResetComponent
+  },
+  {
+    //token and email are query params
+    path: 'email-verification',
+    component: EmailVerificationComponent
   }
 ]

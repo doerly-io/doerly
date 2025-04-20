@@ -1,0 +1,34 @@
+.avatar {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  max-width: 100%;
+}
+.content-title {
+  min-width: 150px;
+  display: flex;
+  align-items: center;
+}
+.row-text {
+  display: block;
+  padding: 9px 0;
+}
+.preview-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+.preview-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+

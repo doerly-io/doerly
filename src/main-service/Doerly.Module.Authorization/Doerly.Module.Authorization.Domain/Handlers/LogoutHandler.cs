@@ -1,5 +1,5 @@
 using System.Text;
-using Doerly.Common;
+using Doerly.Common.Settings;
 using Doerly.Domain.Models;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Localization;

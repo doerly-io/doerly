@@ -6,12 +6,14 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
-    <ProjectReference Include="..\..\Doerly.Common\Doerly.Common.csproj" />
+    <ProjectReference Include="..\..\Doerly.Common.Settings\Doerly.Common.Settings.csproj" />
     <ProjectReference Include="..\..\Doerly.Localization\Doerly.Localization.csproj" />
+    <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
     <ProjectReference Include="..\..\Doerly.Notification.EmailSender\Doerly.Notification.EmailSender.csproj" />
     <ProjectReference Include="..\Doerly.Module.Authorization.DataAccess\Doerly.Module.Authorization.DataAccess.csproj" />
+    <ProjectReference Include="..\Doerly.Module.Authorization.Contracts\Doerly.Module.Authorization.Contracts.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.6.1" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.8.0" />
   </ItemGroup>
 </Project>

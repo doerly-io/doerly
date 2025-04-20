@@ -6,7 +6,7 @@ import {ButtonDirective} from 'primeng/button';
 import {Card} from 'primeng/card';
 import {Ripple} from 'primeng/ripple';
 import {TranslatePipe} from '@ngx-translate/core';
-import {PasswordInputComponent} from '../../../../@components/password/password-input.component';
+import {PasswordInputComponent} from 'app/@components/password/password-input.component';
 import {NgIf} from '@angular/common';
 import {PasswordResetRequest} from '../../models/requests/password-reset-request';
 import {InputText} from 'primeng/inputtext';
@@ -29,6 +29,7 @@ export class PasswordResetComponent implements OnInit {
 
   passwordResetForm!: FormGroup;
   token!: string;
+  email!: string;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -40,6 +41,7 @@ export class PasswordResetComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.token = params['token'];
+      this.email = params['email'];
       this.passwordResetForm = this.formBuilder.group({
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
@@ -65,12 +67,13 @@ export class PasswordResetComponent implements OnInit {
     const password = this.passwordResetForm.get('password')!.value;
     const request : PasswordResetRequest = {
       password: password,
-      token: this.token
+      token: this.token,
+      email: this.email
     };
     this.authorizationService.resetPassword(request).subscribe({
       next: (value) => {
 
-        this.router.navigate(['/login']);
+        this.router.navigate(['/login'], {relativeTo: this.route});
       },
       error: (error) => {
         console.error(error);

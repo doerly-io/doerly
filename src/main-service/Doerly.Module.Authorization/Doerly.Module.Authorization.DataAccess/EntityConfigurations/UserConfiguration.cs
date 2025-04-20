@@ -1,12 +1,12 @@
-using Doerly.Module.Authorization.DataAccess.Models;
+using Doerly.Module.Authorization.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Doerly.Module.Authorization.DataAccess.EntityConfigurations;
 
-public class UserConfiguration : IEntityTypeConfiguration<User>
+public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<UserEntity> builder)
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Email).IsRequired();

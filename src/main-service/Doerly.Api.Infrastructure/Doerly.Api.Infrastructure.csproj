@@ -8,7 +8,7 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Doerly.Common\Doerly.Common.csproj" />
+    <ProjectReference Include="..\Doerly.Common.Settings\Doerly.Common.Settings.csproj" />
     <ProjectReference Include="..\Doerly.Domain\Doerly.Domain.csproj" />
   </ItemGroup>
 </Project>

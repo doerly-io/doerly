@@ -9,6 +9,7 @@ import {provideTranslateService} from '@ngx-translate/core';
 import {provideHttpClient, withFetch, withInterceptors} from '@angular/common/http';
 import {bearerTokenInterceptor} from './@core/interceptors/bearer.token.interceptor';
 import {i18nInterceptor} from './@core/interceptors/i18n.interceptor';
+import {MessageService} from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,6 +32,7 @@ export const appConfig: ApplicationConfig = {
           cssLayer: false
         }
       }
-    })
+    }),
+    MessageService
   ]
 };
