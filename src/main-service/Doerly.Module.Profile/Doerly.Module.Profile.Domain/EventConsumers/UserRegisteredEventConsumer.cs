@@ -1,4 +1,5 @@
 using Doerly.Domain.Factories;
+using Doerly.Messaging;
 using Doerly.Module.Authorization.Contracts.Messages;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.Domain.Handlers;
@@ -7,18 +8,16 @@ using Microsoft.Extensions.Logging;
 
 namespace Doerly.Module.Profile.Domain.EventConsumers;
 
-public class UserRegisteredEventConsumer : IConsumer<UserRegisteredMessage>
+public class UserRegisteredEventConsumer : BaseConsumer<UserRegisteredMessage>
 {
-    private readonly ILogger<UserRegisteredEventConsumer> _logger;
     private readonly IHandlerFactory _handlerFactory;
 
-    public UserRegisteredEventConsumer(ILogger<UserRegisteredEventConsumer> logger, IHandlerFactory handlerFactory)
+    public UserRegisteredEventConsumer(ILogger<UserRegisteredEventConsumer> logger, IHandlerFactory handlerFactory) : base(logger)
     {
-        _logger = logger;
         _handlerFactory = handlerFactory;
     }
 
-    public async Task Consume(ConsumeContext<UserRegisteredMessage> context)
+    protected override async Task Handle(ConsumeContext<UserRegisteredMessage> context)
     {
         var profileSaveDto = new ProfileSaveDto
         {

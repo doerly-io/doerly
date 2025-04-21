@@ -4,6 +4,7 @@ using Doerly.Domain.Extensions;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Communication.Domain;
 using Doerly.Module.Communication.Domain.Hubs;
+using Doerly.Messaging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;

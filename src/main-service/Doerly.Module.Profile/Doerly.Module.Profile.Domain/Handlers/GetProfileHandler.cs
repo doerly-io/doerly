@@ -3,6 +3,7 @@ using Doerly.FileRepository;
 using Doerly.Localization;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
+using Doerly.Module.Profile.Domain.Constants;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
@@ -33,10 +34,8 @@ public class GetProfileHandler(ProfileDbContext dbContext, IFileRepository fileR
 
         string imageUrl = null;
         if (!string.IsNullOrEmpty(profile.ImagePath))
-        {
-            imageUrl = await fileRepository.GetSasUrlAsync("images", profile.ImagePath);
-        }
-        
+            imageUrl = await fileRepository.GetSasUrlAsync(AzureStorageConstants.ImagesContainerName, profile.ImagePath);
+
         var profileDto = new ProfileDto
         {
             Id = profile.Id,

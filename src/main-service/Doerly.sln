@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Domain", "Doerly.Dom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Api.Infrastructure", "Doerly.Api.Infrastructure\Doerly.Api.Infrastructure.csproj", "{C5ADA8B7-B327-4200-9E46-2174C69A4946}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Common", "Doerly.Common\Doerly.Common.csproj", "{AE80C043-1A56-44DE-81AA-E8839153CB74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Common.Settings", "Doerly.Common.Settings\Doerly.Common.Settings.csproj", "{AE80C043-1A56-44DE-81AA-E8839153CB74}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notifications", "Notifications", "{00F83D99-820C-470A-8F4F-73883B7E8F2D}"
 EndProject
@@ -60,6 +60,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Communication.Enums", "Doerly.Module.Communication\Doerly.Module.Communication.Enums\Doerly.Module.Communication.Enums.csproj", "{87FC90EC-46E1-4E17-95EC-8BAC8A2B94E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Communication.Contracts", "Doerly.Module.Communication\Doerly.Module.Communication.Contracts\Doerly.Module.Communication.Contracts.csproj", "{A3668244-C89E-40EC-81D9-7027246C1989}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Messaging", "Doerly.Messaging\Doerly.Messaging.csproj", "{87867EFF-2047-4B5E-A8FE-78638888E48A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{96457558-2E9B-484E-B18E-388753B29918}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,6 +155,10 @@ Global
 		{9BFB627E-47CA-4FB2-8C87-C723ABF9E309}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BFB627E-47CA-4FB2-8C87-C723ABF9E309}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BFB627E-47CA-4FB2-8C87-C723ABF9E309}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87867EFF-2047-4B5E-A8FE-78638888E48A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87867EFF-2047-4B5E-A8FE-78638888E48A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87867EFF-2047-4B5E-A8FE-78638888E48A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87867EFF-2047-4B5E-A8FE-78638888E48A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6E137D2-970F-4880-A66A-25A3CF2C39DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A6E137D2-970F-4880-A66A-25A3CF2C39DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6E137D2-970F-4880-A66A-25A3CF2C39DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -191,6 +199,7 @@ Global
 		{22C3B386-E4CD-456B-BE77-7CE5E7B0C83C} = {245B6B27-1DD6-4B32-AE9D-EA17C24B3EFE}
 		{A5FCBA55-8AA2-46AF-9A36-AD8ACFD09C07} = {E416C0D8-CEEC-432E-82F1-8C91C1D4F1C7}
 		{9BFB627E-47CA-4FB2-8C87-C723ABF9E309} = {245B6B27-1DD6-4B32-AE9D-EA17C24B3EFE}
+		{AE80C043-1A56-44DE-81AA-E8839153CB74} = {96457558-2E9B-484E-B18E-388753B29918}
 		{274F47F1-A243-4074-B3C8-D7F92594708C} = {93EDAABD-78C3-42EC-8530-7AB0331B5F89}
 		{A6E137D2-970F-4880-A66A-25A3CF2C39DC} = {274F47F1-A243-4074-B3C8-D7F92594708C}
 		{3FA3F2AE-CBF6-42EA-BD13-365835593199} = {274F47F1-A243-4074-B3C8-D7F92594708C}

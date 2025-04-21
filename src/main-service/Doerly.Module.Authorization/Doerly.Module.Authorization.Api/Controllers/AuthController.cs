@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Web;
 using Doerly.Api.Infrastructure;
 using Doerly.Domain.Models;
+using Doerly.Messaging;
 using Doerly.Module.Authorization.Api.Constants;
 using Doerly.Module.Authorization.Contracts.Dtos;
 using Doerly.Module.Authorization.Contracts.Messages;
@@ -15,10 +16,8 @@ namespace Doerly.Module.Authorization.Api.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController(IPublishEndpoint publishEndpoint) : BaseApiController
+public class AuthController(IMessagePublisher messagePublisher) : BaseApiController
 {
-    private readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
-
     [HttpPost("login")]
     [ProducesResponseType<HandlerResult<LoginResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<HandlerResult<LoginResponseDto>>(StatusCodes.Status401Unauthorized)]
@@ -88,7 +87,7 @@ public class AuthController(IPublishEndpoint publishEndpoint) : BaseApiControlle
     [ProducesResponseType<HandlerResult>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RequestPasswordReset([EmailAddress(ErrorMessage = "InvalidEmailFormatInput")] string email)
     {
-        await _publishEndpoint.Publish(new PasswordResetRequestMessage(email));
+        await messagePublisher.Publish(new PasswordResetRequestMessage(email));
         return Ok();
     }
 

@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Doerly.Api.Infrastructure\Doerly.Api.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
       <ProjectReference Include="..\Doerly.Module.Communication.Contracts\Doerly.Module.Communication.Contracts.csproj" />
       <ProjectReference Include="..\Doerly.Module.Communication.DataAccess\Doerly.Module.Communication.DataAccess.csproj" />
       <ProjectReference Include="..\Doerly.Module.Communication.Domain\Doerly.Module.Communication.Domain.csproj" />

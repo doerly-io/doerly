@@ -8,13 +8,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Doerly.Api.Infrastructure\Doerly.Api.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
       <ProjectReference Include="..\Doerly.Module.Profile.Contracts\Doerly.Module.Profile.Contracts.csproj" />
       <ProjectReference Include="..\Doerly.Module.Profile.DataAccess\Doerly.Module.Profile.DataAccess.csproj" />
       <ProjectReference Include="..\Doerly.Module.Profile.Domain\Doerly.Module.Profile.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="MassTransit" Version="8.3.7" />
     </ItemGroup>
 
 </Project>

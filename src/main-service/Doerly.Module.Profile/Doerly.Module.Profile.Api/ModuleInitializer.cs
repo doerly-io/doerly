@@ -2,8 +2,9 @@
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Api.Infrastructure;
 using Doerly.DataAccess.Utils;
+using Doerly.Messaging;
 using Doerly.Module.Profile.Domain;
-using MassTransit;
+using Doerly.Module.Profile.Domain.Constants;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,6 @@ public class ModuleInitializer : IModuleInitializer
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         app.ApplicationServices.MigrateDatabase<ProfileDbContext>();
-        app.ApplicationServices.AddStorageContainer("images");
+        app.ApplicationServices.AddStorageContainer(AzureStorageConstants.ImagesContainerName);
     }
 }

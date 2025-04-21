@@ -1,5 +1,5 @@
 using System.Web;
-using Doerly.Common;
+using Doerly.Common.Settings;
 using Doerly.Domain.Exceptions;
 using Doerly.Domain.Factories;
 using Doerly.Domain.Models;

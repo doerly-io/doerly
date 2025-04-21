@@ -1,7 +1,8 @@
-using Doerly.Common;
+using Doerly.Common.Settings;
 using Doerly.Domain.Models;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Localization;
+using Doerly.Messaging;
 using Doerly.Module.Authorization.Contracts.Dtos;
 using Doerly.Module.Authorization.DataAccess.Entities;
 using Doerly.Module.Authorization.Contracts.Messages;
@@ -13,15 +14,15 @@ namespace Doerly.Module.Authorization.Domain.Handlers;
 
 public class RegistrationHandler : BaseAuthHandler
 {
-    private readonly IPublishEndpoint _publishEndpoint;
+    private readonly IMessagePublisher _messagePublisher;
 
     public RegistrationHandler(
         AuthorizationDbContext dbContext,
         IOptions<AuthSettings> authOptions,
-        IPublishEndpoint publishEndpoint
+        IMessagePublisher messagePublisher
     ) : base(dbContext, authOptions)
     {
-        _publishEndpoint = publishEndpoint;
+        _messagePublisher = messagePublisher;
     }
 
     public async Task<HandlerResult> HandleAsync(RegisterRequestDto requestDto)
@@ -50,6 +51,6 @@ public class RegistrationHandler : BaseAuthHandler
     private async Task PublishUserRegisteredEventAsync(int userId, string email, string firstName, string lastName)
     {
         var message = new UserRegisteredMessage(userId, email, firstName, lastName);
-        await _publishEndpoint.Publish(message);
+        await _messagePublisher.Publish(message);
     }
 }

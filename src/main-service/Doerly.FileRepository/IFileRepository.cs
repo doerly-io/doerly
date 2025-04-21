@@ -49,8 +49,13 @@ public interface IFileRepository
     Task DeleteFileIfExistsAsync(string containerName, string fileName);
 
     /// <summary>
+    /// Gets a SAS URL for the specified file in the specified container with the default expiry time of 1 hour
+    /// </summary>
+    Task<string?> GetSasUrlAsync(string containerName, string fileName);
+        
+    /// <summary>
     /// Gets a SAS URL for the specified file in the specified container with the specified expiry time
     /// </summary>
-    Task<string?> GetSasUrlAsync(string containerName, string fileName, TimeSpan? expiry = null);
+    Task<string> GetSasUrlAsync(string containerName, string fileName, TimeSpan expiry);
 
 }

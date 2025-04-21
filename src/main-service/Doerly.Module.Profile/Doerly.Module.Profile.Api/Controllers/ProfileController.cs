@@ -58,10 +58,10 @@ public class ProfileController : BaseApiController
 
     [HttpPost("{userId:int}/image")]
     [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
-    public async Task<IActionResult> UploadProfileImage(int userId, [FromForm] IFormFile formFile)
+    public async Task<IActionResult> UploadProfileImage([FromRoute] int userId, [FromForm] IFormFile imageFile)
     {
         using var stream = new MemoryStream();
-        await formFile.CopyToAsync(stream);
+        await imageFile.CopyToAsync(stream);
         var fileBytes = stream.ToArray();
 
         var result = await ResolveHandler<UploadProfileImageHandler>().HandleAsync(userId, fileBytes);
