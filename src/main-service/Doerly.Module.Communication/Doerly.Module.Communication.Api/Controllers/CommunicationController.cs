@@ -2,17 +2,19 @@
 using Doerly.Domain.Models;
 using Doerly.Module.Communication.Contracts.Dtos.Requests;
 using Doerly.Module.Communication.Domain.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Doerly.Module.Communication.Api.Controllers;
 
+[Authorize]
 [ApiController]
-[Area("profile")]
+[Area("communication")]
 [Route("api/[area]")]
 public class CommunicationController : BaseApiController
 {
-    [HttpPost("messages/send")]
+    [HttpPost("send")]
     [ProducesResponseType<HandlerResult<SendMessageDto>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateConversation(SendMessageDto requestDto)
     {

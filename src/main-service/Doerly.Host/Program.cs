@@ -95,6 +95,7 @@ builder.Services.Configure<AzureStorageSettings>(azureStorageSettingsConfigurati
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.IncludeErrorDetails = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -185,7 +186,6 @@ app.UseCors(policy => policy
     .AllowAnyMethod());
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllers();

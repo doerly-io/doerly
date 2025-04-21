@@ -1,3 +1,3 @@
-﻿namespace Doerly.Module.Profile.Domain;
+﻿namespace Doerly.Module.Communication.Domain;
 
 public interface IAssemblyMarker;
