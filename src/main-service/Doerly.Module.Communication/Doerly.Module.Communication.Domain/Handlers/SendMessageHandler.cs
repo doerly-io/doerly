@@ -2,12 +2,14 @@ using Doerly.Domain.Models;
 using Doerly.Module.Communication.Contracts.Dtos.Requests;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Communication.DataAccess.Entities;
+using Doerly.Module.Communication.Domain.Hubs;
 using Doerly.Module.Communication.Enums;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Communication.Domain.Handlers;
 
-public class SendMessageHandler(CommunicationDbContext dbContext) : BaseCommunicationHandler(dbContext)
+public class SendMessageHandler(CommunicationDbContext dbContext, IHubContext<ChatHub, IChatHub> hubContext) : BaseCommunicationHandler(dbContext)
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
@@ -20,7 +22,7 @@ public class SendMessageHandler(CommunicationDbContext dbContext) : BaseCommunic
             //TODO: Add profiles validation sending requests to ProfileModule
             conversation = new ConversationEntity
             {
-                InitiatorId = dto.InitiatorId,
+                InitiatorId = dto.InitiatorId, //TODO: Change with profileId
                 RecipientId = dto.RecipientId,
             };
     
@@ -39,6 +41,8 @@ public class SendMessageHandler(CommunicationDbContext dbContext) : BaseCommunic
     
         _dbContext.Messages.Add(message);
         await _dbContext.SaveChangesAsync();
+        
+        await hubContext.Clients.Group(conversation.Id.ToString()).SendMessage(message.SenderId.ToString(), message.MessageContent);
         
         return HandlerResult.Success();
     }

@@ -27,7 +27,7 @@ public class ModuleInitializer : IModuleInitializer
         app.ApplicationServices.MigrateDatabase<CommunicationDbContext>();
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapHub<ChatHub>("/chat").RequireAuthorization();
+            endpoints.MapHub<ChatHub>("/conversation").RequireAuthorization();
         });
     }
 }

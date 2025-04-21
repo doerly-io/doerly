@@ -12,7 +12,7 @@ public class GetMessageHandler(CommunicationDbContext dbContext) : BaseCommunica
 
     public async Task<HandlerResult<MessageDto>> HandleAsync(int messageId)
     {
-        var message = await DbContext.Messages
+        var message = await _dbContext.Messages
             .AsNoTracking()
             .Where(x => x.Id == messageId)
             .FirstOrDefaultAsync();
@@ -26,6 +26,7 @@ public class GetMessageHandler(CommunicationDbContext dbContext) : BaseCommunica
             Id = message.Id,
             SenderId = message.SenderId,
             ConversationId = message.ConversationId,
+            //TODO: Conversation = message.Conversation,
             MessageContent = message.MessageContent,
             SentAt = message.SentAt,
             Status = message.Status
