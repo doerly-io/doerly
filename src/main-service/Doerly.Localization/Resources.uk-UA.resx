@@ -36,6 +36,12 @@
     <data name="ValidTokenNotFound" xml:space="preserve">
         <value>Не знайдено валідний токен</value>
     </data>
+    <data name="Communication.ConversationNotFound" xml:space="preserve">
+        <value>Бесіду не знайдено</value>
+    </data>
+    <data name="Communication.MessageNotFound" xml:space="preserve">
+        <value>Повідомлення не знайдено</value>
+    </data>
     <data name="ResetPasswordEmailVerificationText" xml:space="preserve">
         <value>Вітаємо,
 

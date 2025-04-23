@@ -1,14 +1,14 @@
 using Doerly.Module.Communication.Enums;
 
-namespace Doerly.Module.Communication.Contracts.Dtos.Requests;
+namespace Doerly.Module.Communication.Contracts.Dtos.Responses;
 
-public class MessageDto
+public class MessageResponseDto
 {
     public int Id { get; set; }
     
     public int ConversationId { get; set; }
     
-    public virtual ConversationDto Conversation { get; set; }
+    public ConversationHeaderResponseDto Conversation { get; set; }
     
     public MessageType MessageType { get; set; }
     

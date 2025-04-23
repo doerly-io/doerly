@@ -7,15 +7,15 @@ namespace Doerly.Module.Communication.Domain.Hubs;
 [Authorize]
 public class ChatHub : Hub<IChatHub>
 {
+    public async Task SendMessage(string conversationId, string senderId, string messageContent)
+    {
+        await Clients.Group(conversationId).SendMessage(senderId, messageContent);
+    }
+    
     public async Task JoinChat(string conversationId)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, conversationId);
         await Clients.Group(conversationId).JoinConversation(conversationId);
-    }
-
-    public async Task SendMessage(string conversationId, string senderId, string messageContent)
-    {
-        await Clients.Group(conversationId).SendMessage(senderId, messageContent);
     }
 
     public async Task LeaveChat(string conversationId)

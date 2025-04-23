@@ -36,6 +36,12 @@
     <data name="ValidTokenNotFound" xml:space="preserve">
         <value>Valid token not found</value>
     </data>
+    <data name="Communication.ConversationNotFound" xml:space="preserve">
+        <value>Conversation not found</value>
+    </data>
+    <data name="Communication.MessageNotFound" xml:space="preserve">
+        <value>Message not found</value>
+    </data>
     <data name="ResetPasswordEmailVerificationText" xml:space="preserve">
         <value>Hello,
 

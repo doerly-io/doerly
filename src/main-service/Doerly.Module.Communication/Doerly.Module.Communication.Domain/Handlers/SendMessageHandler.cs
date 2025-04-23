@@ -13,16 +13,15 @@ public class SendMessageHandler(CommunicationDbContext dbContext, IHubContext<Ch
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
-    public async Task<HandlerResult> HandleAsync(SendMessageDto dto)
+    public async Task<HandlerResult> HandleAsync(SendMessageRequestDto dto)
     {
         var conversation = await _dbContext.Conversations.FirstOrDefaultAsync(c => c.Id == dto.ConversationId);
     
         if (conversation == null)
         {
-            //TODO: Add profiles validation sending requests to ProfileModule
             conversation = new ConversationEntity
             {
-                InitiatorId = dto.InitiatorId, //TODO: Change with profileId
+                InitiatorId = dto.InitiatorId,
                 RecipientId = dto.RecipientId,
             };
     
