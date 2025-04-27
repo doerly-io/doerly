@@ -8,7 +8,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Payments.Contracts\Doerly.Module.Payments.Contracts.csproj" />
       <ProjectReference Include="..\Doerly.Module.Payments.DataAccess\Doerly.Module.Payments.DataAccess.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Payments.Client.LiqPay\Doerly.Module.Payments.Client.LiqPay.csproj" />
     </ItemGroup>
 
 </Project>

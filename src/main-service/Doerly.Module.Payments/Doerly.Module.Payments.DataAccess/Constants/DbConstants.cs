@@ -2,7 +2,7 @@ namespace Doerly.Module.Payments.DataAccess.Constants;
 
 internal class DbConstants
 {
-    internal const string AuthSchema = "payment";
+    internal const string PaymentSchema = "payment";
 
     internal class Tables
     {

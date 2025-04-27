@@ -17,16 +17,26 @@ public class HandlerResult
     public static HandlerResult<T> Success<T>(T value) => new HandlerResult<T>(true, value, string.Empty);
 
     public static HandlerResult<T> Failure<T>(string errorMessage) => new HandlerResult<T>(false, default, errorMessage);
+
+    public static HandlerResult<T> Failure<T>(T value) => new HandlerResult<T>(false, value);
 }
 
 public class HandlerResult<T> : HandlerResult
 {
     public T Value { get; init; }
 
+    public HandlerResult(bool isSuccess, string errorMessage) : base(isSuccess, errorMessage)
+    {
+        Value = default;
+    }
+
+    public HandlerResult(bool isSuccess, T value) : base(isSuccess, string.Empty)
+    {
+        Value = default;
+    }
+
     public HandlerResult(bool isSuccess, T value, string errorMessage) : base(isSuccess, errorMessage)
     {
         Value = value;
     }
-    
-    
 }

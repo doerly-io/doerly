@@ -3,16 +3,14 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+        <Nullable>annotations</Nullable>
     </PropertyGroup>
-
-    <ItemGroup>
-      <Folder Include="Controllers\" />
-    </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\Doerly.Api.Infrastructure\Doerly.Api.Infrastructure.csproj" />
       <ProjectReference Include="..\Doerly.Module.Payments.DataAccess\Doerly.Module.Payments.DataAccess.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Payments.Domain\Doerly.Module.Payments.Domain.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Payments.Client.LiqPay\Doerly.Module.Payments.Client.LiqPay.csproj" />
     </ItemGroup>
 
 </Project>
