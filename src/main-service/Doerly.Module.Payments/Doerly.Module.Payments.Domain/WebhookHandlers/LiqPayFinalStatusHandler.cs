@@ -3,11 +3,11 @@ using Doerly.Module.Payments.Client.LiqPay;
 
 namespace Doerly.Module.Payments.Domain.WebhookHandlers;
 
-public class LiqPayFinalStatus : BaseHandler
+public class LiqPayFinalStatusHandler : BaseHandler
 {
     private readonly ILiqPayClient _liqPayClient;
 
-    public LiqPayFinalStatus(ILiqPayClient liqPayClient)
+    public LiqPayFinalStatusHandler(ILiqPayClient liqPayClient)
     {
         _liqPayClient = liqPayClient;
     }

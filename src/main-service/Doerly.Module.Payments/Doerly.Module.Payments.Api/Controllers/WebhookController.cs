@@ -1,4 +1,5 @@
 using Doerly.Api.Infrastructure;
+using Doerly.Module.Payments.Domain.WebhookHandlers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Doerly.Module.Payments.Api.Controllers;
@@ -10,8 +11,8 @@ public class WebhookController : BaseApiController
     [HttpPost("liqpay/final-status")]
     public async Task<IActionResult> FinalStatus([FromQuery] string data, [FromQuery] string signature)
     {
-        var result = await ResolveHandler<LiqPayFinalStatus>().HandleAsync(data, signature);
+        await ResolveHandler<LiqPayFinalStatusHandler>().HandleAsync(data, signature);
 
-    } 
-    
+        return Ok();
+    }
 }
