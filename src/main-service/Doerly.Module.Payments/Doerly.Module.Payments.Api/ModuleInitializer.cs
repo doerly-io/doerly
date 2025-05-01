@@ -1,5 +1,6 @@
 using Doerly.Api.Infrastructure;
 using Doerly.Domain.Extensions;
+using Doerly.Module.Payments.Api.Builders;
 using Doerly.Module.Payments.Client.LiqPay;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,7 +23,6 @@ public class ModuleInitializer : IModuleInitializer
 
         var paymentSettings = paymentSettingsConfig.Get<PaymentSettings>();
 
-
         builder.Services.RegisterHandlers(typeof(Domain.IAssemblyMarker).Assembly);
        
         builder.Services.AddLiqPayClient(options =>
@@ -32,6 +32,9 @@ public class ModuleInitializer : IModuleInitializer
             options.PublicKey = liqPaySettings.PublicKey;
             options.PrivateKey = liqPaySettings.PrivateKey;
         });
+        
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddSingleton<WebhookUrlBuilder>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

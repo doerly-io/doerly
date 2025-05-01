@@ -16,6 +16,5 @@ public class LiqPayFinalStatusHandler : BaseHandler
     {
         var result = _liqPayClient.ValidateSignature(data, signature);
         
-        
     }
 }

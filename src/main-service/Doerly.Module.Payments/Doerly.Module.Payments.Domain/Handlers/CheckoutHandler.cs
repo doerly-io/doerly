@@ -3,7 +3,6 @@ using Doerly.Module.Payments.Client.LiqPay;
 using Doerly.Module.Payments.Contracts.Requests;
 using Doerly.Module.Payments.DataAccess;
 using Doerly.Module.Payments.DataAccess.Models;
-using Doerly.Module.Payments.Client.LiqPay.Client;
 
 namespace Doerly.Module.Payments.Domain.Handlers;
 
@@ -16,7 +15,7 @@ public class CheckoutHandler : BasePaymentHandler
         _liqPayClient = liqPayClient;
     }
 
-    public async Task<HandlerResult> HandlePaymentAsync(CreateInvoiceRequest createInvoiceRequest)
+    public async Task<HandlerResult<LiqPayRequest>> HandlePaymentAsync(CreateInvoiceRequest createInvoiceRequest, Uri webhookUri)
     {
         var invoice = new Invoice
         {
@@ -25,7 +24,18 @@ public class CheckoutHandler : BasePaymentHandler
         
         DbContext.Invoices.Add(invoice);
         await DbContext.SaveChangesAsync();
-        
-        
+
+        var liqPayRequest = _liqPayClient.BuildCheckoutData(new LiqPayCheckout
+        {
+            Amount = createInvoiceRequest.AmountTotal,
+            Currency = LiqPayConstants.CurrenciesConstants.UAH,
+            Description = createInvoiceRequest.Description,
+            OrderId = createInvoiceRequest.OrderGuid.ToString(),
+            PaymentAction = LiqPayConstants.PaymentActionConstants.Pay,
+            ResultUrl = createInvoiceRequest.ReturnUrl,
+            ServerUrl = webhookUri.ToString(),
+        });
+
+        return HandlerResult.Success(liqPayRequest);
     }
 }

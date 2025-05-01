@@ -16,5 +16,10 @@ public class CreateInvoiceRequest
     [MinLength(5)]
     [MaxLength(50)]
     public string Description { get; set; }
+
+    /// <summary>
+    /// Frontend url on which user will be returned from payment page
+    /// </summary>
+    public string ReturnUrl { get; set; }
     
 }

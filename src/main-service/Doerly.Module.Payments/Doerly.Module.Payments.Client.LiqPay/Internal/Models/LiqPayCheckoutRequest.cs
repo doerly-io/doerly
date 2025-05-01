@@ -1,10 +1,9 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace Doerly.Module.Payments.Client.LiqPay;
+namespace Doerly.Module.Payments.Client.LiqPay.Internal.Models;
 
-public class CheckoutRequest
+internal class LiqPayCheckoutRequest
 {
-    
     [JsonPropertyName("version")]
     public required string ApiVersion { get; set; } = Config.DefaultLiqPayApiVersion;
     

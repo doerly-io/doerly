@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using Doerly.Module.Payments.Client.LiqPay;
+using Doerly.Module.Payments.Client.LiqPay.Internal;
 
 namespace Doerly.Module.Payments.Client.LiqPay;
 
@@ -19,9 +20,10 @@ public class LiqPayClient : ILiqPayClient
         ArgumentException.ThrowIfNullOrEmpty(privateKey);
     }
 
-    public LiqPayRequest Checkout(CheckoutRequest checkoutRequest)
+    public LiqPayRequest BuildCheckoutData(LiqPayCheckout liqPayCheckout)
     {
-        var serializedRequest = JsonSerializer.Serialize(checkoutRequest);
+        var dto = liqPayCheckout.ToDto(_publicKey);
+        var serializedRequest = JsonSerializer.Serialize(dto);
         var base64Request = Convert.ToBase64String(Encoding.UTF8.GetBytes(serializedRequest));
         var signature = GenerateSignature(base64Request);
         var request = new LiqPayRequest
