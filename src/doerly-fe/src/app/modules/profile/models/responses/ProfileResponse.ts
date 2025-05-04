@@ -6,4 +6,5 @@ export interface ProfileResponse {
   dateOfBirth: string
   sex: number;
   bio: string;
+  imageUrl: string;
 }

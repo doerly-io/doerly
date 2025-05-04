@@ -29,7 +29,7 @@
           <div class="row mb-3 mx-0 px-0">
             <div>
               <label for="description">{{ 'ordering.description' | translate }}</label>
-              <textarea pTextarea formControlName="description" rows="5" cols="30" class="w-100" id="description"></textarea>
+              <textarea pTextarea formControlName="description" rows="5" cols="30" class="w-100 p-2" id="description"></textarea>
               <small *ngIf="isInvalid(createOrderForm, 'description')" class="input-validation-item">
                 {{ getError(createOrderForm, 'description', 'required', 'ordering.field_required' | translate) }}
                 {{ getServersideError(createOrderForm, 'description') }}

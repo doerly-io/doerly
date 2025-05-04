@@ -38,8 +38,17 @@ export class AuthService {
     return this.httpClient.get<BaseApiResponse>(`${this.baseUrl}/password-reset/${email}`)
   }
 
-  resetPassword(request: PasswordResetRequest) : Observable<BaseApiResponse> {
+  resetPassword(request: PasswordResetRequest): Observable<BaseApiResponse> {
     return this.httpClient.post<BaseApiResponse>(`${this.baseUrl}/password-reset`, request)
+  }
+
+  verifyEmail(token: string, email: string): Observable<BaseApiResponse> {
+    return this.httpClient.get<BaseApiResponse>(`${this.baseUrl}/email-verification?`, {
+      params: {
+        token,
+        email
+      }
+    });
   }
 
 }

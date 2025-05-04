@@ -19,8 +19,11 @@
     "login_now": "Login now!",
     "reset_link_sent": "A password reset link has been sent to your email address.",
     "password_mismatch": "Entered passwords do not match.",
-    "field_required": "This field is required.",
-    "email_not_valid": "Enter a valid email address."
+    "email_not_valid": "Enter a valid email address.",
+    "incorrect_credentials": "Incorrect email or password.",
+    "email_exists": "User with this email already exists.",
+    "register_success": "Registration was successful.",
+    "check_email": "Check your email and follow the verification link."
   },
   "profile": {
     "title": "Personal info",
@@ -37,14 +40,22 @@
       "image": {
         "alt": "User avatar",
         "title": "Profile picture",
-        "subtitle": "Profile picture will help you be recognized in the service"
-      },
-      "name": {
-        "title": "Name",
-        "placeholder": {
-          "first": "First name",
-          "last": "Last name"
+        "subtitle": "Profile picture will help you be recognized in the service",
+        "upload": {
+          "button": {
+            "text": "Upload"
+          },
+          "select": "Select picture",
+          "title": "Upload picture"
         }
+      },
+      "firstName": {
+        "title": "Name",
+        "placeholder": "Enter your name"
+      },
+      "lastName": {
+        "title": "Last name",
+        "placeholder": "Enter your last name"
       },
       "sex": {
         "title": "Sex",
@@ -133,7 +144,14 @@
   },
   "common": {
     "error": "Error",
-    "success": "Success"
+    "success": "Success",
+    "max_length": "Max length is {{length}} characters",
+    "min_length": "Min length is {{length}} characters",
+    "field_required": "This field is required",
+    "page_not_found": "Page not found",
+    "control": {
+      "unset": "Unset"
+    }
   },
   "pages": {
     "profile": {

@@ -1,6 +1,6 @@
 ﻿using Doerly.Api.Infrastructure;
 using Doerly.Domain.Models;
-using Doerly.Module.Profile.Domain.Dtos;
+using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.Domain.Handlers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +23,7 @@ public class ProfileController : BaseApiController
 
         return Ok(result.Value);
     }
-    
+
     [HttpPost]
     [ProducesResponseType<HandlerResult<int>>(StatusCodes.Status201Created)]
     [ProducesResponseType<HandlerResult<ProfileDto>>(StatusCodes.Status409Conflict)]
@@ -32,10 +32,10 @@ public class ProfileController : BaseApiController
         var result = await ResolveHandler<CreateProfileHandler>().HandleAsync(dto);
         if (!result.IsSuccess)
             return Conflict(result);
-        
+
         return Created();
     }
-    
+
     [HttpPut]
     [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
     [ProducesResponseType<HandlerResult>(StatusCodes.Status404NotFound)]
@@ -44,10 +44,10 @@ public class ProfileController : BaseApiController
         var result = await ResolveHandler<UpdateProfileHandler>().HandleAsync(dto);
         if (!result.IsSuccess)
             return NotFound(result);
-        
+
         return Ok(result);
     }
-    
+
     [HttpDelete("{userId:int}")]
     [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteProfile(int userId)
@@ -56,4 +56,15 @@ public class ProfileController : BaseApiController
         return Ok(result);
     }
 
+    [HttpPost("{userId:int}/image")]
+    [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> UploadProfileImage([FromRoute] int userId, [FromForm] IFormFile imageFile)
+    {
+        using var stream = new MemoryStream();
+        await imageFile.CopyToAsync(stream);
+        var fileBytes = stream.ToArray();
+
+        var result = await ResolveHandler<UploadProfileImageHandler>().HandleAsync(userId, fileBytes);
+        return Ok(result);
+    }
 }

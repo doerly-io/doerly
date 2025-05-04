@@ -7,10 +7,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
-      <ProjectReference Include="..\..\Doerly.Localization\Doerly.Localization.csproj" />
-      <ProjectReference Include="..\Doerly.Module.Profile.DataAccess\Doerly.Module.Profile.DataAccess.csproj" />
-      <ProjectReference Include="..\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj" />
+        <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj"/>
+        <ProjectReference Include="..\..\Doerly.FileRepository\Doerly.FileRepository.csproj"/>
+        <ProjectReference Include="..\..\Doerly.Localization\Doerly.Localization.csproj"/>
+        <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj"/>
+        <ProjectReference Include="..\..\Doerly.Module.Authorization\Doerly.Module.Authorization.Contracts\Doerly.Module.Authorization.Contracts.csproj"/>
+        <ProjectReference Include="..\Doerly.Module.Profile.Contracts\Doerly.Module.Profile.Contracts.csproj"/>
+        <ProjectReference Include="..\Doerly.Module.Profile.DataAccess\Doerly.Module.Profile.DataAccess.csproj"/>
+        <ProjectReference Include="..\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17"/>
     </ItemGroup>
 
 </Project>

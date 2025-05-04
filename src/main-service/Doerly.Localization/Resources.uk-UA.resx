@@ -43,7 +43,7 @@
   <data name="ResetPasswordEmailBestRegardsText" xml:space="preserve">
         <value>Якщо у вас виникли запитання, зверніться до нашої служби підтримки.
 
-З повагою,
+З повагою,&lt;/br&gt;
 Doerly</value>
     </data>
   <data name="ResetPasswordEmailSubject" xml:space="preserve">
@@ -93,5 +93,8 @@ Doerly</value>
     </data>
     <data name="EXECUTION_PROPOSAL_ALREADY_SENT" xml:space="preserve">
         <value>Пропозиція виконання роботи вже надіслана цьому користувачу</value>
+    </data>
+    <data name="EmailVerificationText" xml:space="preserve">
+        <value>Дякуємо за реєстрацію в DOERLY! Щоб завершити процес, підтвердьте вашу електронну адресу, натиснувши на посилання нижче:</value>
     </data>
 </root>

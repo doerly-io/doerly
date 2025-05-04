@@ -64,9 +64,10 @@
             </div>
 <!--            TODO: develop image upload feature when backend is ready-->
             <img
-              src="https://primefaces.org/cdn/primeng/images/demo/avatar/walter.jpg"
+              ngSrc="{{profileForm.get('imageUrl')?.value}}"
               alt="{{ 'profile.basic.image.alt' | translate }}"
               class="avatar"
+              (click)="openUploadDialog()"
             />
           </div>
           <p-divider [layout]="'horizontal'"/>
@@ -210,4 +211,27 @@
     </div>
   </p-card>
 
+  <!-- Image upload dialog -->
+  <p-dialog
+    [(visible)]="isUploadDialogVisible"
+    [modal]="true"
+    [header]="'profile.basic.image.upload.title' | translate"
+    [style]="{ width: '16rem' }"
+  >
+    <div class="d-flex flex-column align-items-center gap-3">
+      <label for="fileInput" class="upload-label">
+        <div class="preview-container">
+          <img *ngIf="previewImage" [src]="previewImage" class="preview-avatar" />
+          <span *ngIf="!previewImage">{{ 'profile.basic.image.upload.select' | translate }}</span>
+        </div>
+      </label>
+      <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*" hidden />
+
+      <button pButton type="button" class="p-button-primary" (click)="processUpload()">
+        {{ 'profile.basic.image.upload.button.text' | translate }}
+      </button>
+    </div>
+  </p-dialog>
+
 </section>
+

@@ -1,7 +1,7 @@
-using Doerly.Common;
+using Doerly.Common.Settings;
 using Doerly.Domain.Models;
+using Doerly.Module.Authorization.Contracts.Dtos;
 using Doerly.Module.Authorization.DataAccess;
-using Doerly.Module.Authorization.Domain.Dtos;
 using Doerly.Module.Authorization.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -14,7 +14,7 @@ public class RefreshTokenHandler : BaseAuthHandler
     {
     }
 
-    public async Task<HandlerResult<(LoginResultDto resultDto, string refreshToken)>> HandleAsync(string refreshToken, string accessToken)
+    public async Task<HandlerResult<(LoginResponseDto resultDto, string refreshToken)>> HandleAsync(string refreshToken, string accessToken)
     {
         var userId = GetUserIdFromJwtToken(accessToken);
         var refreshTokenBytes = Convert.FromBase64String(refreshToken);
@@ -30,10 +30,10 @@ public class RefreshTokenHandler : BaseAuthHandler
             .FirstOrDefaultAsync();
 
         if (token == null || token.DateCreated.AddMinutes(AuthOptions.Value.RefreshTokenLifetime) < DateTime.UtcNow)
-            return HandlerResult.Failure<(LoginResultDto resultDto, string refreshToken)>("Unauthorized");
-
+            return HandlerResult.Failure<(LoginResponseDto resultDto, string refreshToken)>("Unauthorized");
+        
         var accessTokenNew = CreateAccessToken(token.UserId, token.Email, token.Role);
-        var loginResultDto = new LoginResultDto
+        var loginResultDto = new LoginResponseDto
         {
             UserEmail = token.Email,
             AccessToken = accessTokenNew

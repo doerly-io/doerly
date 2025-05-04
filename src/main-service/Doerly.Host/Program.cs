@@ -4,11 +4,13 @@ using System.Reflection;
 using System.Resources;
 using System.Text;
 using Doerly.Domain.Factories;
-using Doerly.Common;
 using Doerly.Api.Infrastructure;
+using Doerly.Common.Settings;
 using Doerly.FileRepository;
 using Doerly.Localization;
+using Doerly.Messaging;
 using Doerly.Notification.EmailSender;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
@@ -22,10 +24,7 @@ var configuration = builder.Configuration;
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-builder.Services.AddControllers(options =>
-    {
-        options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider());
-    })
+builder.Services.AddControllers(options => { options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider()); })
     .AddDataAnnotationsLocalization(options =>
     {
         options.DataAnnotationLocalizerProvider = (type, factory) =>
@@ -34,10 +33,7 @@ builder.Services.AddControllers(options =>
             return new DataAnnotationsStringLocalizer(resourceManager);
         };
     })
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
-    });
+    .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase; });
 
 #region Configure Modules
 
@@ -66,8 +62,11 @@ foreach (var moduleAssembly in loadedAssemblies)
         continue;
 
     var moduleInitializer = (IModuleInitializer)Activator.CreateInstance(moduleInitializerType);
-    builder.Services.AddSingleton(moduleInitializer);
-    moduleInitializer.ConfigureServices(builder);
+    if (moduleInitializer != null)
+    {
+        builder.Services.AddSingleton(moduleInitializer);
+        moduleInitializer.ConfigureServices(builder);
+    }
 }
 
 #endregion
@@ -76,26 +75,44 @@ builder.Services.AddScoped<SendEmailHandler>();
 
 builder.Services.AddScoped<IHandlerFactory, HandlerFactory>();
 
+builder.Services.AddScoped<IMessagePublisher, MessagePublisher>();
+
 #region Configure Settings
 
 var frontendSettingsCfg = configuration.GetSection(FrontendSettings.FrontendSettingsName);
+builder.Services.AddOptions<FrontendSettings>()
+    .Bind(frontendSettingsCfg)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
 var frontendSettings = frontendSettingsCfg.Get<FrontendSettings>();
-builder.Services.Configure<FrontendSettings>(frontendSettingsCfg);
 
 var sendGridSettingsCfg = configuration.GetSection(SendGridSettings.SendGridSettingsName);
+builder.Services.AddOptions<SendGridSettings>()
+    .Bind(sendGridSettingsCfg)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 var sendGridSettings = sendGridSettingsCfg.Get<SendGridSettings>();
-builder.Services.Configure<SendGridSettings>(sendGridSettingsCfg);
+
 
 var authSettingsConfiguration = configuration.GetSection(AuthSettings.AuthSettingsName);
+builder.Services.AddOptions<AuthSettings>()
+    .Bind(authSettingsConfiguration)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
 var authSettings = authSettingsConfiguration.Get<AuthSettings>();
-builder.Services.Configure<AuthSettings>(authSettingsConfiguration);
 
 var azureStorageSettingsConfiguration = configuration.GetSection(AzureStorageSettings.AzureStorageSettingName);
-var azureStorageSettings = azureStorageSettingsConfiguration.Get<AzureStorageSettings>();
-builder.Services.Configure<AzureStorageSettings>(azureStorageSettingsConfiguration);
+builder.Services.AddOptions<AzureStorageSettings>()
+    .Bind(azureStorageSettingsConfiguration)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 
+var azureStorageSettings = azureStorageSettingsConfiguration.Get<AzureStorageSettings>();
 
 #endregion
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -120,12 +137,20 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSendGrid(opt => { opt.ApiKey = sendGridSettings.ApiKey; });
 
-builder.Services.AddAzureClients(factoryBuilder =>
-{
-    factoryBuilder.AddBlobServiceClient(azureStorageSettings.ConnectionString);
-});
+builder.Services.AddAzureClients(factoryBuilder => { factoryBuilder.AddBlobServiceClient(azureStorageSettings.ConnectionString); });
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
+
+builder.Services.AddMassTransit(cfg =>
+{
+    cfg.SetEndpointNameFormatter(new DefaultEndpointNameFormatter(includeNamespace: true));
+    cfg.UsingInMemory((context, factoryConfigurator) => { factoryConfigurator.ConfigureEndpoints(context); });
+
+    cfg.AddConfigureEndpointsCallback((name, configurator) =>
+    {
+        configurator.UseMessageRetry(r => r.Intervals(2_000, 20_000, 60_000, 300_000, 600_000));
+    });
+});
 
 
 var app = builder.Build();
@@ -141,25 +166,26 @@ app.UseRequestLocalization(options =>
 {
     var supportedCultures = new List<CultureInfo>
     {
-        new(HostConstants.EnUsCulture)
+        new(LocalizationConstants.EnUsCulture)
         {
             DateTimeFormat =
             {
-                LongTimePattern = "MM/DD/YYYY",
-                ShortTimePattern = "MM/DD/YYYY"
+                LongTimePattern = LocalizationConstants.EnUsCultureDateTimeFormat,
+                ShortTimePattern = LocalizationConstants.EnUsCultureDateTimeFormat
             }
         },
-        new(HostConstants.UkUaCulture)
+        new(LocalizationConstants.UkUaCulture)
         {
             DateTimeFormat =
             {
-                LongTimePattern = "DD/MM/YYYY",
-                ShortTimePattern = "DD/MM/YYYY"
+                LongTimePattern = LocalizationConstants.UkUaCultureDateTimeFormat,
+                ShortTimePattern = LocalizationConstants.UkUaCultureDateTimeFormat
             }
         }
     };
 
-    options.DefaultRequestCulture = new RequestCulture(culture: HostConstants.EnUsCulture, uiCulture: HostConstants.EnUsCulture);
+    options.DefaultRequestCulture =
+        new RequestCulture(culture: LocalizationConstants.EnUsCulture, uiCulture: LocalizationConstants.EnUsCulture);
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
 });

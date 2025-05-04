@@ -1,5 +1,6 @@
 import {Routes} from '@angular/router';
 import {authGuard} from './@core/guards/auth.guard';
+import {NotFoundPageComponent} from 'app/shared-pages/not-found-page/not-found-page.component';
 
 export const routes: Routes = [
   {
@@ -17,12 +18,16 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: '404-page',
+    component: NotFoundPageComponent
+  },
+  {
     path: 'ordering',
     loadChildren: () => import('./modules/order/ordering.routes').then(m => m.routes),
     canActivate: [authGuard]
   },
   {
     path: '**',
-    redirectTo: ''//ToDo: 404 page
+    redirectTo: '/404-page'
   }
 ];
