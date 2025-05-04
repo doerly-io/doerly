@@ -13,6 +13,7 @@ services:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
     depends_on:
       - db
+      - azurite
     #volumes:
       #- ./src/main-service/Doerly.WebHost/appsettings.${ASPNETCORE_ENVIRONMENT}.json:/app/appsettings.json   
 
@@ -41,6 +42,18 @@ services:
     volumes:
       - doerly-db-admin-data:/var/lib/pgadmin
 
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: azurite
+    ports:
+      - "10000:10000"  # Blob
+      - "10001:10001"  # Queue
+      - "10002:10002"  # Table
+    volumes:
+      - doerly-azurite-data:/data
+    command: "azurite --location /data --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0"
+
 volumes:
   doerly-db-data:
   doerly-db-admin-data:
+  doerly-azurite-data:
