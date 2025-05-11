@@ -20,6 +20,9 @@
     <p-button class="ms-1" size="small" text="true" [raised]="false" [outlined]="true"
               routerLink="/auth/login" label="{{ 'auth.login' | translate }}"
               [severity]="'success'" *ngIf="!isLoggedIn"/>
+    <p-button class="ms-1" size="small" icon="pi pi-comments" text="true" [raised]="false" [outlined]="false"
+              routerLink="/communication"
+              [severity]="'success'"/>
     <p-button class="ms-2" size="small" icon="pi pi-user" [rounded]="true" [text]="true" [raised]="false"
               severity="success" *ngIf="isLoggedIn" (click)="op.toggle($event)"
               [outlined]="true"/>

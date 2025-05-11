@@ -91,6 +91,9 @@
   "pages": {
     "profile": {
       "title": "Profile"
+    },
+    "communication": {
+      "title": "Conversation"
     }
   }
 }

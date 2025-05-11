@@ -97,6 +97,9 @@
   "pages": {
     "profile": {
       "title": "Профіль"
+    },
+    "communication": {
+      "title": "Листування"
     }
   }
 }
