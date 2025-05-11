@@ -1,0 +1,20 @@
+<section class="row justify-content-center">
+    <p-tabs lazy="true" [value]="`${tab}`">
+        <p-tablist class="custom-tablist">
+            <p-tab value="0" class="">{{ 'ordering.execution_proposals' | translate }}</p-tab>
+            <p-tab value="1">{{ 'ordering.orders' | translate }}</p-tab>
+            <p-tab value="2">{{ 'ordering.my_orders' | translate }}</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="0">
+                <app-execution-proposals-tabs [tab]="subTab"></app-execution-proposals-tabs>
+            </p-tabpanel>
+            <p-tabpanel value="1">
+                <app-orders-list [canCreateOrder]="true"></app-orders-list>
+            </p-tabpanel>
+            <p-tabpanel value="2">
+                <app-my-orders-tabs [tab]="subTab"></app-my-orders-tabs>
+            </p-tabpanel>
+        </p-tabpanels> 
+    </p-tabs>
+</section>
