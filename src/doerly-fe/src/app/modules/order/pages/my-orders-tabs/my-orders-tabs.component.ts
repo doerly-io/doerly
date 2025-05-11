@@ -15,5 +15,5 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class MyOrdersTabsComponent {
   @Input() tab: number = 0;
-  profileId: number = 1;
+  profileId: number = 2; //for testing purposes
 }

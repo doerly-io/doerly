@@ -14,9 +14,9 @@ public class GetOrderResponse
     public string Name { get; set; }
     public string Description { get; set; }
     public decimal Price { get; set; }
-    public PaymentKind PaymentKind { get; set; }
+    public EPaymentKind PaymentKind { get; set; }
     public DateTime DueDate { get; set; }
-    public OrderStatus Status { get; set; }
+    public EOrderStatus Status { get; set; }
     public int CustomerId { get; set; }
     public int? ExecutorId { get; set; }
     public DateTime? ExecutionDate { get; set; }

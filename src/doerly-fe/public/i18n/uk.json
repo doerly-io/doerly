@@ -95,7 +95,7 @@
     "create_order": "Створити замовлення",
     "order_details": "Деталі замовлення",
     "execution_proposal": "Пропозиція виконання",
-    "id": "ID",
+    "id": "Id",
     "category_id": "ID категорії",
     "title": "Назва",
     "description": "Опис",
@@ -146,7 +146,8 @@
       "accept": "Прийняти",
       "reject": "Відхилити",
       "revoke": "Відкликати"
-    }
+    },
+    "cancelled-successfully": "Успішно скасовано"
   },
   "common": {
     "error": "Помилка",

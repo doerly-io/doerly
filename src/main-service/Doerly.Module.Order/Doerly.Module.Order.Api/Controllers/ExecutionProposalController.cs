@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace Doerly.Module.Order.Api.Controllers;
 
 [ApiController]
-[Area("execution-proposal")]
-[Route("api/[area]")]
+[Area("order")]
+[Route("api/[area]/[controller]")]
 public class ExecutionProposalController : BaseApiController
 {
-    [HttpPost("send")]
+    [HttpPost]
     public async Task<IActionResult> SendExecutionProposal(SendExecutionProposalRequest dto)
     {
         var result = await ResolveHandler<SendExecutionProposalHandler>().HandleAsync(dto);
@@ -41,10 +41,10 @@ public class ExecutionProposalController : BaseApiController
         return BadRequest(result);
     }
 
-    [HttpPut("update")]
-    public async Task<IActionResult> UpdateExecutionProposal(UpdateExecutionProposalRequest dto)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateExecutionProposal(int id, UpdateExecutionProposalRequest dto)
     {
-        var result = await ResolveHandler<UpdateExecutionProposalHandler>().HandleAsync(dto);
+        var result = await ResolveHandler<UpdateExecutionProposalHandler>().HandleAsync(id, dto);
         if (result.IsSuccess)
             return Ok(result);
 

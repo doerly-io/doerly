@@ -9,11 +9,10 @@ using Doerly.Module.Order.DataAccess.Enums;
 namespace Doerly.Module.Order.Domain.Dtos.Requests;
 public class UpdateOrderRequest
 {
-    public int Id { get; set; }
     public int CategoryId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public decimal Price { get; set; }
-    public PaymentKind PaymentKind { get; set; }
+    public EPaymentKind PaymentKind { get; set; }
     public DateTime DueDate { get; set; }
 }

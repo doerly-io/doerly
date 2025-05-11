@@ -21,23 +21,23 @@ public class ResolveExecutionProposalHandler : BaseOrderHandler
             return HandlerResult.Failure(Resources.Get("EXECUTION_PROPOSAL_NOT_FOUND"));
 
         executionProposal.Status = dto.Status;
-        if (executionProposal.Status == ExecutionProposalStatus.Accepted)
+        if (executionProposal.Status == EExecutionProposalStatus.Accepted)
         {
             var order = await DbContext.Orders.FindAsync(executionProposal.OrderId);
             if (order == null)
                 return HandlerResult.Failure(Resources.Get("ORDER_NOT_FOUND"));
 
-            order.Status = OrderStatus.InProgress;
+            order.Status = EOrderStatus.InProgress;
             if (order.CustomerId == executionProposal.ReceiverId)
                 order.ExecutorId = executionProposal.SenderId;
             else
                 order.ExecutorId = executionProposal.ReceiverId;
 
             await DbContext.ExecutionProposals
-                .Where(x => x.OrderId == order.Id && x.Id != executionProposal.Id && x.Status == ExecutionProposalStatus.WaitingForApproval)
+                .Where(x => x.OrderId == order.Id && x.Id != executionProposal.Id && x.Status == EExecutionProposalStatus.WaitingForApproval)
                 .ForEachAsync(executionProposal =>
                 {
-                    executionProposal.Status = ExecutionProposalStatus.Revoked;
+                    executionProposal.Status = EExecutionProposalStatus.Revoked;
                 });
         }
 

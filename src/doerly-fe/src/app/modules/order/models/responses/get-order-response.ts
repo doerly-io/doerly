@@ -1,5 +1,5 @@
-import { OrderStatus } from "../../domain/enums/order-status";
-import { PaymentKind } from "../../domain/enums/payment-kind";
+import { EOrderStatus } from "../../domain/enums/order-status";
+import { EPaymentKind } from "../../domain/enums/payment-kind";
 
 export interface GetOrderResponse { 
     id: number;
@@ -7,9 +7,9 @@ export interface GetOrderResponse {
     name: string;
     description: string;
     price: number;
-    paymentKind: PaymentKind;
+    paymentKind: EPaymentKind;
     dueDate: Date;
-    status: OrderStatus;
+    status: EOrderStatus;
     customerId: number;
     executorId?: number;
     executionDate?: Date;

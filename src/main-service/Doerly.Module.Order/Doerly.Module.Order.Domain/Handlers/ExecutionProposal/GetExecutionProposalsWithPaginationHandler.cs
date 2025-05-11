@@ -37,8 +37,6 @@ public class GetExecutionProposalsWithPaginationHandler : BaseOrderHandler
             .Select(x => new GetExecutionProposalResponse
             {
                 Id = x.Id,
-                OrderId = x.OrderId,
-                Comment = x.Comment,
                 SenderId = x.SenderId,
                 ReceiverId = x.ReceiverId,
                 Status = x.Status

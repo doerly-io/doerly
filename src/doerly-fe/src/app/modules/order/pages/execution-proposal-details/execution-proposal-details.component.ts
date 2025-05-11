@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExecutionProposalService } from '../../domain/execution-proposal.service';
 import { GetExecutionProposalResponse } from '../../models/responses/get-execution-proposal-response';
-import { ExecutionProposalStatus } from '../../domain/enums/execution-proposal-status';
+import { EExecutionProposalStatus } from '../../domain/enums/execution-proposal-status';
 import { ResolveExecutionProposalRequest } from '../../models/requests/resolve-execution-proposal-request';
 import { CommonModule } from '@angular/common';
 import { Card } from 'primeng/card';
@@ -26,7 +26,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ExecutionProposalDetailsComponent implements OnInit {
   proposal: GetExecutionProposalResponse | null = null;
   loading: boolean = true;
-  profileId: number = 2;
+  profileId: number = 2; //for testing purposes
 
   constructor(
     private route: ActivatedRoute,
@@ -52,7 +52,7 @@ export class ExecutionProposalDetailsComponent implements OnInit {
     }
   }
 
-  resolveProposal(status: ExecutionProposalStatus): void {
+  resolveProposal(status: EExecutionProposalStatus): void {
     console.log('resolveProposal', status);
     if (!this.proposal) return;
 
@@ -79,7 +79,7 @@ export class ExecutionProposalDetailsComponent implements OnInit {
     });
   }
 
-  getProposalStatusString(status: ExecutionProposalStatus): string {
-    return ExecutionProposalStatus[status];
+  getProposalStatusString(status: EExecutionProposalStatus): string {
+    return EExecutionProposalStatus[status];
   }
 }

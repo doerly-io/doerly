@@ -43,7 +43,7 @@ export class SendExecutionProposalComponent {
 
   initForm(): void {
     this.sendExecutionProposalForm = this.formBuilder.group({
-      comment: ['']
+      comment: ['', Validators.maxLength(1000)],
     });
   }
 

@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { GetOrdersWithPaginationByPredicatesRequest } from '../../models/requests/get-orders-request';
 import { GetOrderResponse } from '../../models/responses/get-order-response';
 import { PaginatorModule } from 'primeng/paginator';
-import { OrderStatus } from '../../domain/enums/order-status';
+import { EOrderStatus } from '../../domain/enums/order-status';
 import { Button } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -68,19 +68,19 @@ export class OrdersListComponent implements OnInit {
     });
   }
 
-  getOrderStatusString(status: OrderStatus): string {
-      return OrderStatus[status];
+  getOrderStatusString(status: EOrderStatus): string {
+      return EOrderStatus[status];
   }
 
-  getOrderStatusSeverity(status: OrderStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
+  getOrderStatusSeverity(status: EOrderStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
       switch (status) {
-        case OrderStatus.Placed:
+        case EOrderStatus.Placed:
           return 'info';
-        case OrderStatus.InProgress:
+        case EOrderStatus.InProgress:
           return 'warn';
-        case OrderStatus.Completed:
+        case EOrderStatus.Completed:
           return 'success';
-        case OrderStatus.Canceled:
+        case EOrderStatus.Canceled:
           return 'danger';
         default:
           return 'secondary';

@@ -11,10 +11,10 @@ namespace Doerly.Module.Order.Api.Controllers;
 
 [ApiController]
 [Area("order")]
-[Route("api/[area]")]
+[Route("api/[area]/[controller]")]
 public class OrderController : BaseApiController
 {
-    [HttpPost("create")]
+    [HttpPost]
     public async Task<IActionResult> CreateOrder(CreateOrderRequest dto)
     {
         var result = await ResolveHandler<CreateOrderHandler>().HandleAsync(dto);
@@ -42,10 +42,10 @@ public class OrderController : BaseApiController
         return BadRequest(result);
     }
 
-    [HttpPut("update")]
-    public async Task<IActionResult> UpdateOrder(UpdateOrderRequest dto)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateOrder(int id, UpdateOrderRequest dto)
     {
-        var result = await ResolveHandler<UpdateOrderHandler>().HandleAsync(dto);
+        var result = await ResolveHandler<UpdateOrderHandler>().HandleAsync(id, dto);
         if (result.IsSuccess)
             return Ok(result);
 
@@ -53,9 +53,9 @@ public class OrderController : BaseApiController
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteOrder(int id)
+    public async Task<IActionResult> CancelOrder(int id)
     {
-        var result = await ResolveHandler<DeleteOrderHandler>().HandleAsync(id);
+        var result = await ResolveHandler<CancelOrderHandler>().HandleAsync(id);
         if (result.IsSuccess)
             return Ok(result);
 

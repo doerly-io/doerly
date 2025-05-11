@@ -109,7 +109,7 @@
     "no_execution_proposals": "No execution proposals",
     "send": "Send",
     "resolved_successfully": "Resolved successfully",
-    "id": "ID",
+    "id": "Id",
     "sender_id": "Sender ID",
     "receiver_id": "Receiver ID",
     "execution_proposal_details": "Execution proposal details",
@@ -140,7 +140,8 @@
       "accept": "Accept",
       "reject": "Reject",
       "revoke": "Revoke"
-    }
+    },
+    "cancelled-successfully": "Cancelled successfully"
   },
   "common": {
     "error": "Error",

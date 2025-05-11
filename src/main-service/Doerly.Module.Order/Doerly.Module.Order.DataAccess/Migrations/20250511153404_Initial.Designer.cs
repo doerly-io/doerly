@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Doerly.Module.Order.DataAccess.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    [Migration("20250202182812_Initial")]
+    [Migration("20250511153404_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Doerly.Module.Order.DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -35,7 +35,9 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comment")
-                        .HasColumnType("text")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
                         .HasColumnName("comment");
 
                     b.Property<DateTime>("DateCreated")
@@ -58,8 +60,8 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("sender_id");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer")
+                    b.Property<byte>("Status")
+                        .HasColumnType("smallint")
                         .HasColumnName("status");
 
                     b.HasKey("Id")
@@ -67,6 +69,12 @@ namespace Doerly.Module.Order.DataAccess.Migrations
 
                     b.HasIndex("OrderId")
                         .HasDatabaseName("ix_execution_proposal_order_id");
+
+                    b.HasIndex("ReceiverId")
+                        .HasDatabaseName("ix_execution_proposal_receiver_id");
+
+                    b.HasIndex("SenderId")
+                        .HasDatabaseName("ix_execution_proposal_sender_id");
 
                     b.ToTable("execution_proposal", "order");
                 });
@@ -98,7 +106,8 @@ namespace Doerly.Module.Order.DataAccess.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)")
                         .HasColumnName("description");
 
                     b.Property<DateTime>("DueDate")
@@ -119,19 +128,21 @@ namespace Doerly.Module.Order.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
-                    b.Property<int>("PaymentKind")
-                        .HasColumnType("integer")
+                    b.Property<byte>("PaymentKind")
+                        .HasColumnType("smallint")
                         .HasColumnName("payment_kind");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("numeric")
+                        .HasPrecision(15, 2)
+                        .HasColumnType("numeric(15,2)")
                         .HasColumnName("price");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer")
+                    b.Property<byte>("Status")
+                        .HasColumnType("smallint")
                         .HasColumnName("status");
 
                     b.HasKey("Id")
@@ -147,7 +158,7 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_execution_proposal_order_order_id");
+                        .HasConstraintName("fk_execution_proposal_orders_order_id");
 
                     b.Navigation("Order");
                 });

@@ -18,7 +18,7 @@ public class CreateOrderRequest
     public decimal Price { get; set; }
 
     [Required]
-    public PaymentKind PaymentKind { get; set; }
+    public EPaymentKind PaymentKind { get; set; }
 
     [Required]
     public DateTime DueDate { get; set; }

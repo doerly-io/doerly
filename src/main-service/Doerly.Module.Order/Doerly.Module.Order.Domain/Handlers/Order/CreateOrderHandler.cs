@@ -24,7 +24,7 @@ public class CreateOrderHandler : BaseOrderHandler
             Price = dto.Price,
             PaymentKind = dto.PaymentKind,
             DueDate = dto.DueDate,
-            Status = OrderStatus.Placed,
+            Status = EOrderStatus.Placed,
             CustomerId = dto.CustomerId,
         };
 

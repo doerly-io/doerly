@@ -1,11 +1,14 @@
 ﻿using Doerly.DataAccess.Models;
 using Doerly.Module.Order.DataAccess.Constants;
 using Doerly.Module.Order.DataAccess.Enums;
+
+using Microsoft.EntityFrameworkCore;
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Doerly.Module.Order.DataAccess.Models;
 
-[Table(DbConstants.Tables.Order, Schema = DbConstants.OrderSchema)]
 public class Order : BaseEntity
 {
     public int CategoryId { get; set; }
@@ -16,11 +19,11 @@ public class Order : BaseEntity
 
     public decimal Price { get; set; }
 
-    public PaymentKind PaymentKind { get; set; }
+    public EPaymentKind PaymentKind { get; set; }
 
     public DateTime DueDate { get; set; }
 
-    public OrderStatus Status { get; set; }
+    public EOrderStatus Status { get; set; }
 
     public int CustomerId { get; set; }
     

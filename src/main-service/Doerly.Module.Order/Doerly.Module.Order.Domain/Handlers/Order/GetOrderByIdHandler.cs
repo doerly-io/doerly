@@ -23,8 +23,8 @@ public class GetOrderByIdHandler : BaseOrderHandler
 
         var orderDto = new GetOrderResponse
         {
-            CategoryId = order.CategoryId,
             Id = order.Id,
+            CategoryId = order.CategoryId,
             Name = order.Name,
             Description = order.Description,
             Price = order.Price,

@@ -13,7 +13,7 @@ import { getError, isInvalid, setServerErrors, getServersideError } from 'app/@c
 import { SelectItem } from 'primeng/api';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
-import { PaymentKind, getPaymentKindString } from '../../domain/enums/payment-kind';
+import { EPaymentKind, getPaymentKindString } from '../../domain/enums/payment-kind';
 
 @Component({
   selector: 'app-create-order',
@@ -48,10 +48,10 @@ export class CreateOrderComponent implements OnInit {
   initForm(): void {
     this.createOrderForm = this.formBuilder.group({
       categoryId: ['', Validators.required],
-      name: ['', Validators.required],
-      description: ['', Validators.required],
+      name: ['', [Validators.required, Validators.maxLength(100)]],
+      description: ['', [Validators.required, Validators.maxLength(4000)]],
       price: ['', [Validators.required, Validators.min(0)]],
-      paymentKind: [0, Validators.required],
+      paymentKind: [1, Validators.required],
       dueDate: ['', [Validators.required, this.dateValidator]]
     });
   }
@@ -67,17 +67,17 @@ export class CreateOrderComponent implements OnInit {
   }
 
   initPaymentKinds(): void {
-    this.paymentKinds = Object.keys(PaymentKind)
+    this.paymentKinds = Object.keys(EPaymentKind)
       .filter(key => isNaN(Number(key)))
       .map(key => ({
-        label: getPaymentKindString(PaymentKind[key as keyof typeof PaymentKind]),
-        value: PaymentKind[key as keyof typeof PaymentKind]
+        label: getPaymentKindString(EPaymentKind[key as keyof typeof EPaymentKind]),
+        value: EPaymentKind[key as keyof typeof EPaymentKind]
       }));
   }
 
   createOrder(): void {
     const request = this.createOrderForm.value as CreateOrderRequest;
-    request.customerId = 2;
+    request.customerId = 1; // for testing purposes
 
     this.orderService.createOrder(request).subscribe({
       next: (value) => {

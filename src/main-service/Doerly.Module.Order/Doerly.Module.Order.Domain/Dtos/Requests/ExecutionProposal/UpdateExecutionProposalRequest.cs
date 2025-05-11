@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace Doerly.Module.Order.Domain.Dtos.Requests;
 public class UpdateExecutionProposalRequest
 {
-    public int Id { get; set; }
     public string? Comment { get; set; }
     public int SenderId { get; set; }
     public int ReceiverId { get; set; }

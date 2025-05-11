@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { OrderService } from '../../domain/order.service';
 import { GetOrderResponse } from '../../models/responses/get-order-response';
-import { OrderStatus } from '../../domain/enums/order-status';
-import { PaymentKind } from '../../domain/enums/payment-kind';
+import { EOrderStatus } from '../../domain/enums/order-status';
+import { EPaymentKind } from '../../domain/enums/payment-kind';
 import { CommonModule } from '@angular/common';
 import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
@@ -26,7 +26,7 @@ import { ToastHelper } from 'app/@core/helpers/toast.helper';
 export class OrderDetailsComponent implements OnInit {
   order: GetOrderResponse | null = null;
   loading: boolean = true;
-  profileId: number = 1;
+  profileId: number = 1; //for testing purposes
 
   constructor(
     private route: ActivatedRoute,
@@ -71,11 +71,11 @@ export class OrderDetailsComponent implements OnInit {
     });
   }
 
-  getOrderStatusString(status: OrderStatus): string {
-    return OrderStatus[status];
+  getOrderStatusString(status: EOrderStatus): string {
+    return EOrderStatus[status];
   }
 
-  getPaymentKindString(paymentKind: PaymentKind): string {
-    return PaymentKind[paymentKind];
+  getPaymentKindString(paymentKind: EPaymentKind): string {
+    return EPaymentKind[paymentKind];
   }
 }

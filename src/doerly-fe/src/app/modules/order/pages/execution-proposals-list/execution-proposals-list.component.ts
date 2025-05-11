@@ -7,7 +7,7 @@ import { Tag } from 'primeng/tag';
 import { CommonModule } from '@angular/common';
 import { GetExecutionProposalResponse } from '../../models/responses/get-execution-proposal-response';
 import { PaginatorModule } from 'primeng/paginator';
-import { ExecutionProposalStatus } from '../../domain/enums/execution-proposal-status';
+import { EExecutionProposalStatus } from '../../domain/enums/execution-proposal-status';
 import { GetExecutionProposalsWithPaginationByPredicatesRequest } from '../../models/requests/get-execution-proposals-request';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -64,19 +64,19 @@ export class ExecutionProposalsListComponent implements OnInit {
     });
   }
 
-  getProposalStatusString(status: ExecutionProposalStatus): string {
-      return ExecutionProposalStatus[status];
+  getProposalStatusString(status: EExecutionProposalStatus): string {
+      return EExecutionProposalStatus[status];
   }
 
-  getProposalStatusSeverity(status: ExecutionProposalStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
+  getProposalStatusSeverity(status: EExecutionProposalStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
     switch (status) {
-      case ExecutionProposalStatus.WaitingForApproval:
+      case EExecutionProposalStatus.WaitingForApproval:
         return 'info';
-      case ExecutionProposalStatus.Accepted:
+      case EExecutionProposalStatus.Accepted:
         return 'success';
-      case ExecutionProposalStatus.Rejected:
+      case EExecutionProposalStatus.Rejected:
         return 'danger';
-      case ExecutionProposalStatus.Revoked:
+      case EExecutionProposalStatus.Revoked:
         return 'warn';
       default:
         return 'info';

@@ -23,12 +23,12 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     category_id = table.Column<int>(type: "integer", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false),
-                    price = table.Column<decimal>(type: "numeric", nullable: false),
-                    payment_kind = table.Column<int>(type: "integer", nullable: false),
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    description = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
+                    price = table.Column<decimal>(type: "numeric(15,2)", precision: 15, scale: 2, nullable: false),
+                    payment_kind = table.Column<byte>(type: "smallint", nullable: false),
                     due_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    status = table.Column<int>(type: "integer", nullable: false),
+                    status = table.Column<byte>(type: "smallint", nullable: false),
                     customer_id = table.Column<int>(type: "integer", nullable: false),
                     executor_id = table.Column<int>(type: "integer", nullable: true),
                     execution_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -49,10 +49,10 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     order_id = table.Column<int>(type: "integer", nullable: false),
-                    comment = table.Column<string>(type: "text", nullable: true),
+                    comment = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     sender_id = table.Column<int>(type: "integer", nullable: false),
                     receiver_id = table.Column<int>(type: "integer", nullable: false),
-                    status = table.Column<int>(type: "integer", nullable: false),
+                    status = table.Column<byte>(type: "smallint", nullable: false),
                     date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -60,7 +60,7 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                 {
                     table.PrimaryKey("pk_execution_proposal", x => x.id);
                     table.ForeignKey(
-                        name: "fk_execution_proposal_order_order_id",
+                        name: "fk_execution_proposal_orders_order_id",
                         column: x => x.order_id,
                         principalSchema: "order",
                         principalTable: "order",
@@ -73,6 +73,18 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                 schema: "order",
                 table: "execution_proposal",
                 column: "order_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_execution_proposal_receiver_id",
+                schema: "order",
+                table: "execution_proposal",
+                column: "receiver_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_execution_proposal_sender_id",
+                schema: "order",
+                table: "execution_proposal",
+                column: "sender_id");
         }
 
         /// <inheritdoc />
