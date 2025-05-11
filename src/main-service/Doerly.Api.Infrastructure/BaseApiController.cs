@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Security.Claims;
 using Doerly.Common.Settings.Constants;
 using Doerly.Domain.Factories;
 using Doerly.Domain.Handlers;
@@ -32,5 +33,19 @@ public class BaseApiController : ControllerBase
     {
         var authorizationHeader = Request.Headers[AuthConstants.AuthorizationHeaderName].ToString();
         return authorizationHeader.Replace("Bearer ", "");
+    }
+    
+    [NonAction]
+    protected int GetUserId()
+    {
+        var identity = HttpContext.User.Identity as ClaimsIdentity;
+        var userIdClaim = identity?.FindFirst(ClaimTypes.NameIdentifier);
+
+        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
+        {
+            throw new UnauthorizedAccessException();
+        }
+
+        return userId;
     }
 }

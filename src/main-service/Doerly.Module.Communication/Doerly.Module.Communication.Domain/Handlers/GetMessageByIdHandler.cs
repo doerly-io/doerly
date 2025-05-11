@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Communication.Domain.Handlers;
 
-public class GetMessageHandler(CommunicationDbContext dbContext) : BaseCommunicationHandler(dbContext)
+public class GetMessageByIdHandler(CommunicationDbContext dbContext) : BaseCommunicationHandler(dbContext)
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
