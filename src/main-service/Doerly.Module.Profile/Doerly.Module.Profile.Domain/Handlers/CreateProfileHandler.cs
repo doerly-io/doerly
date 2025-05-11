@@ -10,7 +10,7 @@ namespace Doerly.Module.Profile.Domain.Handlers;
 
 public class CreateProfileHandler(ProfileDbContext dbContext) : BaseProfileHandler(dbContext)
 {
-    public async Task<HandlerResult> HandleAsync(ProfileSaveDto dto)
+    public async Task<HandlerResult> HandleAsync(ProfileSaveDto dto, CancellationToken cancellationToken = default)
     {
         var isProfileExists = DbContext.Profiles
             .AsNoTracking()
@@ -21,9 +21,8 @@ public class CreateProfileHandler(ProfileDbContext dbContext) : BaseProfileHandl
         
         var profile = new ProfileEntity();
         CopyFromDto(profile, dto);
-        DbContext.Profiles.Add(profile);
-        await DbContext.SaveChangesAsync();
-        
+        await DbContext.Profiles.AddAsync(profile, cancellationToken);
+        await DbContext.SaveChangesAsync(cancellationToken);
         return HandlerResult.Success();
     }
 }

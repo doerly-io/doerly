@@ -1,7 +1,7 @@
-<section class="justify-content-center mt-5">
+<section class="d-flex flex-column justify-content-center mt-5 gap-5">
 
   <!-- Title -->
-  <div class="d-flex flex-column align-items-center m-4">
+  <div class="d-flex flex-column align-items-center">
     <h3 class="c-primary">
       {{ 'profile.title' | translate }}
     </h3>
@@ -24,26 +24,32 @@
 
         <div *ngIf="!isEdit">
           <button pButton type="button" class="p-button-rounded p-button-text"
-                  (click)="toggleEdit()">
+                  (click)="onEditProfile()"
+                  pTooltip="{{ 'profile.basic.actions.edit' | translate }}"
+                  tooltipPosition="top">
             <i pButtonIcon class="pi pi-pencil"></i>
           </button>
         </div>
         <div *ngIf="isEdit">
           <button pButton type="button" class="p-button-rounded p-button-text"
-                  (click)="toggleEdit()">
+                  (click)="onEditProfile()"
+                  pTooltip="{{ 'profile.basic.actions.cancel' | translate }}"
+                  tooltipPosition="top">
             <i pButtonIcon class="pi pi-times"></i>
           </button>
         </div>
         <div *ngIf="isEdit">
           <button pButton type="button" class="p-button-rounded p-button-text"
-                  (click)="saveProfile()">
+                  (click)="onSaveProfile()"
+                  pTooltip="{{ 'profile.basic.actions.save' | translate }}"
+                  tooltipPosition="top">
             <i pButtonIcon class="pi pi-save"></i>
           </button>
         </div>
       </div>
 
       <!-- Basic section content -->
-      <form [formGroup]="profileForm">
+      <form [formGroup]="formProfile">
         <div class="d-flex flex-column">
 
           <!-- Profile picture -->
@@ -62,13 +68,26 @@
                 </p>
               </div>
             </div>
-<!--            TODO: develop image upload feature when backend is ready-->
-            <img
-              ngSrc="{{profileForm.get('imageUrl')?.value}}"
-              alt="{{ 'profile.basic.image.alt' | translate }}"
-              class="avatar"
-              (click)="openUploadDialog()"
-            />
+            <div
+              class="avatar-container"
+              pTooltip="{{ 'profile.basic.image.upload.title' | translate }}"
+              tooltipPosition="top"
+            >
+              <img
+                *ngIf="isImageAvailable"
+                ngSrc="{{formProfile.get('imageUrl')?.value}}"
+                alt="{{ 'profile.basic.image.alt' | translate }}"
+                class="avatar"
+                (click)="onOpenImageUploadDialog()"
+                width="120"
+                height="120"
+              />
+              <i
+                *ngIf="!isImageAvailable"
+                class="pi pi-user user-icon"
+                (click)="onOpenImageUploadDialog()"
+              ></i>
+            </div>
           </div>
           <p-divider [layout]="'horizontal'"/>
 
@@ -77,13 +96,13 @@
             <!-- Label -->
             <div class="content-title d-flex align-items-center">
               <p class="fw-normal fs-7">
-                {{ 'profile.basic.name.title' | translate }}
+                {{ 'profile.basic.firstName.title' | translate }}
               </p>
             </div>
             <!-- Value -->
             <div>
               <span *ngIf="!isEdit" class="c-primary fw-semibold row-text">
-                {{ profileForm.get('firstName')?.value }} {{ profileForm.get('lastName')?.value }}
+                {{ formProfile.get('firstName')?.value }} {{ formProfile.get('lastName')?.value }}
               </span>
               <div *ngIf="isEdit" class="d-flex gap-3">
                 <input
@@ -93,7 +112,7 @@
                   class="w-50"
                   maxlength="50"
                   formControlName="firstName"
-                  placeholder="{{ 'profile.basic.name.placeholder.first' | translate }}"
+                  placeholder="{{ 'profile.basic.firstName.placeholder' | translate }}"
                 />
                 <input
                   id="lastName"
@@ -102,7 +121,7 @@
                   class="w-50"
                   maxlength="50"
                   formControlName="lastName"
-                  placeholder="{{ 'profile.basic.name.placeholder.last' | translate }}"
+                  placeholder="{{ 'profile.basic.lastName.placeholder' | translate }}"
                 />
               </div>
             </div>
@@ -119,7 +138,7 @@
               </div>
               <div>
                 <span *ngIf="!isEdit" class="c-primary fw-semibold row-text">
-                  {{ profileForm.get('dateOfBirth')?.value | date: 'longDate' }}
+                  {{ formProfile.get('dateOfBirth')?.value | date: 'longDate' }}
                 </span>
                 <div *ngIf="isEdit">
                   <p-date-picker
@@ -148,7 +167,7 @@
               <div>
                 <span *ngIf="!isEdit" class="c-primary fw-semibold row-text">
                   {{
-                    (profileForm.get('sex')?.value === 1
+                    (formProfile.get('sex')?.value === 1
                       ? 'profile.basic.sex.options.male'
                       : 'profile.basic.sex.options.female')
                       | translate
@@ -185,7 +204,7 @@
               </div>
               <div>
                 <span *ngIf="!isEdit" class="c-primary fw-semibold row-text">
-                  {{ profileForm.get('bio')?.value }}
+                  {{ formProfile.get('bio')?.value }}
                 </span>
                 <div *ngIf="isEdit">
                   <textarea
@@ -211,27 +230,247 @@
     </div>
   </p-card>
 
+  <!-- Professional profile info -->
+  <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
+
+    <div class="d-flex flex-column gap-3 m-3">
+
+      <!-- Professional section title -->
+      <div class="d-flex align-items-center gap-2 mb-4">
+        <div class="mt-1">
+          <h4 class="c-primary">
+            {{ 'profile.professional.title' | translate }}
+          </h4>
+        </div>
+      </div>
+
+      <!-- CV section -->
+      <div class="d-flex flex-column gap-3">
+        <div class="d-flex justify-content-between align-items-center gap-5">
+
+          <!-- CV title and subtitle -->
+          <div class="d-flex gap-lg-5 gap-md-4 gap-sm-3">
+            <div class="content-title">
+              <p class="fw-normal fs-7">
+                {{ 'profile.professional.cv.title' | translate }}
+              </p>
+            </div>
+
+            <div class="d-none d-sm-block">
+              <p class="fw-light">
+                {{
+                  (isCVAvailable
+                    ? 'profile.professional.cv.subtitle.available'
+                    : 'profile.professional.cv.subtitle.none') | translate
+                }}
+              </p>
+            </div>
+          </div>
+
+          <!-- CV actions -->
+          <div class="d-flex gap-2">
+            <button
+              *ngIf="isCVAvailable"
+              pButton type="button"
+              class="p-button-rounded p-button-text"
+              (click)="onPreviewCV()"
+              pTooltip="{{ 'profile.professional.cv.preview.title' | translate }}"
+              tooltipPosition="top"
+            >
+              <i pButtonIcon class="pi pi-eye cv-action-icon"></i>
+            </button>
+            <button
+              *ngIf="isCVAvailable"
+              pButton type="button"
+              class="p-button-rounded p-button-text"
+              (click)="onDownloadCV()"
+              pTooltip="{{ 'profile.professional.cv.download.title' | translate }}"
+              tooltipPosition="top"
+            >
+              <i pButtonIcon class="pi pi-download cv-action-icon"></i>
+            </button>
+            <button
+              *ngIf="!isCVAvailable"
+              pButton type="button"
+              class="p-button-rounded p-button-text"
+              (click)="onOpenUploadCVDialog()"
+              pTooltip="{{ 'profile.professional.cv.upload.title' | translate }}"
+              tooltipPosition="top"
+            >
+              <i pButtonIcon class="pi pi-upload cv-action-icon"></i>
+            </button>
+          </div>
+        </div>
+        <p-divider [layout]="'horizontal'"/>
+      </div>
+
+    </div>
+  </p-card>
+
   <!-- Image upload dialog -->
   <p-dialog
-    [(visible)]="isUploadDialogVisible"
+    [(visible)]="isImageUploadDialogVisible"
     [modal]="true"
-    [header]="'profile.basic.image.upload.title' | translate"
+    [header]="(isImageAvailable
+        ? 'profile.basic.image.renew.title'
+        : 'profile.basic.image.upload.title') | translate"
     [style]="{ width: '16rem' }"
   >
     <div class="d-flex flex-column align-items-center gap-3">
       <label for="fileInput" class="upload-label">
-        <div class="preview-container">
-          <img *ngIf="previewImage" [src]="previewImage" class="preview-avatar" />
-          <span *ngIf="!previewImage">{{ 'profile.basic.image.upload.select' | translate }}</span>
+        <div class="preview-container border-radius-50">
+          <img
+            *ngIf="previewImage"
+            [src]="previewImage"
+            class="preview-avatar"
+          />
+          <img
+            *ngIf="!previewImage && isImageAvailable"
+            [src]="formProfile.get('imageUrl')?.value"
+            class="preview-avatar"
+          />
+          <div
+            *ngIf="!previewImage && !isImageAvailable"
+            class="d-flex flex-column align-items-center"
+          >
+            <i class="pi pi-image" style="font-size: 2rem"></i>
+            <div>
+            <span *ngIf="!isImageAvailable" class="fw-bold">
+              {{ 'profile.basic.image.upload.select' | translate }}
+            </span>
+            </div>
+          </div>
         </div>
       </label>
-      <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*" hidden />
 
-      <button pButton type="button" class="p-button-primary" (click)="processUpload()">
-        {{ 'profile.basic.image.upload.button.text' | translate }}
-      </button>
+      <input type="file" id="fileInput" (change)="onImageFileSelected($event)" accept="image/*" hidden/>
+
+      <div class="d-flex justify-content-between align-items-center gap-3 mt-3">
+        <button
+          pButton
+          type="button"
+          class="p-button-primary"
+          (click)="onImageUpload()"
+          [pTooltip]="'profile.basic.image.upload.button.tooltip' | translate"
+          tooltipPosition="bottom"
+        >
+          <i class="pi pi-upload"></i>
+          {{ 'profile.basic.image.upload.button.text' | translate }}
+        </button>
+        <button
+          pButton
+          type="button"
+          class="p-button-secondary p-button-rounded p-button-text"
+          (click)="onImageDelete()"
+          [pTooltip]="'profile.basic.image.delete.tooltip' | translate"
+          tooltipPosition="bottom"
+        >
+          <i class="pi pi-trash"></i>
+        </button>
+      </div>
     </div>
   </p-dialog>
 
-</section>
+  <!-- CV upload dialog -->
+  <p-dialog
+    [(visible)]="isCVUploadDialogVisible"
+    [modal]="true"
+    [header]="(isImageAvailable
+        ? 'profile.professional.cv.renew.title'
+        : 'profile.professional.cv.upload.title') | translate"
+    [style]="{ width: '16rem' }"
+  >
+    <div class="d-flex flex-column align-items-center gap-3">
+      <label for="cvFileInput" class="upload-label">
+        <div class="preview-container border-radius-10">
+          <i *ngIf="!previewCV" class="pi pi-file-pdf" style="font-size: 2rem"></i>
+          <span *ngIf="!previewCV">{{ 'profile.professional.cv.upload.select' | translate }}</span>
+          <span *ngIf="previewCV">{{ previewCV.name }}</span>
+        </div>
+      </label>
+      <input type="file" id="cvFileInput" (change)="onCVFileSelected($event)"  hidden/>
+    </div>
+    <ng-template
+      pTemplate="footer"
+    >
+      <div class="cv-upload-dialog-footer">
+        <button
+          pButton type="button"
+          class="p-button-primary"
+          (click)="onUploadCV()"
+        >
+          <i class="pi pi-upload"></i>
+          {{ 'profile.professional.cv.upload.button.text' | translate }}
+        </button>
+      </div>
+    </ng-template>
+  </p-dialog>
 
+  <!-- CV preview dialog -->
+  <p-dialog
+    [(visible)]="isCVPreviewDialogVisible"
+    [modal]="true"
+    [header]="'profile.professional.cv.preview.title' | translate"
+    [style]="{ maxWidth: '1200px', height: '90vh' }"
+    [contentStyle]="{ overflow: 'hidden', padding: '0' }"
+  >
+    <div class="d-flex flex-column h-100 gap-3">
+      <div class="cv-preview-container">
+        <div #pdfContainer class="pdf-viewer"></div>
+      </div>
+    </div>
+
+    <ng-template
+      pTemplate="footer"
+    >
+      <div class="cv-preview-dialog-footer">
+        <div class="d-flex justify-content-center align-items-center gap-1 mt-3">
+          <button
+            pButton
+            type="button"
+            class="p-button-rounded p-button-text"
+            (click)="onCVPreviousPage()"
+            [disabled]="pdfService.getCurrentPage() <= 1"
+          >
+            <i class="pi pi-chevron-left"></i>
+          </button>
+          <span class="page-info">
+          {{ pdfService.getCurrentPage() }} / {{ pdfService.getPageCount() }}
+        </span>
+          <button
+            pButton
+            type="button"
+            class="p-button-rounded p-button-text"
+            (click)="onCVNextPage()"
+            [disabled]="pdfService.getCurrentPage() >= pdfService.getPageCount()"
+          >
+            <i class="pi pi-chevron-right"></i>
+          </button>
+        </div>
+        <div class="d-flex justify-content-end gap-2 mt-3">
+          <button
+            pButton type="button"
+            class="p-button-primary"
+            (click)="onOpenUploadCVDialog()"
+            pTooltip="{{ 'profile.professional.cv.renew.tooltip' | translate }}"
+            tooltipPosition="top"
+          >
+            <i class="pi pi-upload"></i>
+            {{ 'profile.professional.cv.renew.text' | translate }}
+          </button>
+          <button
+            pButton type="button"
+            class="p-button-primary"
+            (click)="onDeleteCV()"
+            pTooltip="{{ 'profile.professional.cv.delete.tooltip' | translate }}"
+            tooltipPosition="top"
+          >
+            <i class="pi pi-trash"></i>
+            {{ 'profile.professional.cv.delete.text' | translate }}
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+</section>

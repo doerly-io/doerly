@@ -17,5 +17,6 @@ public class ProfileConfiguration : IEntityTypeConfiguration<ProfileEntity>
         builder.Property(x => x.UserId);
         builder.HasIndex(x => x.UserId).IsUnique();
         builder.Property(x => x.ImagePath);
+        builder.Property(x => x.CvPath);
     }
 }

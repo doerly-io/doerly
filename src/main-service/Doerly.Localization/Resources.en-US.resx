@@ -97,4 +97,7 @@ Doerly</value>
 	<data name="EXECUTION_PROPOSAL_ALREADY_SENT" xml:space="preserve">
         <value>Execution proposal to this user has already been sent</value>
     </data>
+    <data name="InvalidDocument" xml:space="preserve">
+        <value>Invalid document, please, check file format and size</value>
+    </data>
 </root>
