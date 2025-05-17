@@ -27,6 +27,11 @@ export const routes: Routes = [
     component: NotFoundPageComponent
   },
   {
+    path: 'ordering',
+    loadChildren: () => import('./modules/order/ordering.routes').then(m => m.routes),
+    canActivate: [authGuard]
+  },
+  {
     path: '**',
     redirectTo: '/404-page'
   }

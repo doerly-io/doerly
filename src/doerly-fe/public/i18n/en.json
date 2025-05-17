@@ -29,6 +29,11 @@
     "title": "Personal info",
     "subtitle": "Info about you and your preferences across Doerly services",
     "basic": {
+      "actions": {
+        "cancel": "Cancel",
+        "edit": "Edit basic info",
+        "save": "Save basic info"
+      },
       "bio": {
         "title": "Bio",
         "placeholder": "Tell us about yourself"
@@ -47,6 +52,13 @@
           },
           "select": "Select picture",
           "title": "Upload picture"
+        },
+        "renew": {
+          "title": "Renew picture"
+        },
+        "delete": {
+          "text": "Delete",
+          "tooltip": "Delete profile picture"
         }
       },
       "firstName": {
@@ -67,6 +79,42 @@
       },
       "title": "Basic information"
     },
+    "professional": {
+      "title": "Professional information",
+      "cv": {
+        "delete": {
+          "text": "Delete",
+          "tooltip": "Delete CV"
+        },
+        "download": {
+          "title": "Download CV"
+        },
+        "preview": {
+          "title": "Preview CV"
+        },
+        "title": "CV",
+        "subtitle": {
+          "none": "Upload your CV to help employers find you",
+          "available": "Your CV is available for preview and download"
+        },
+        "upload": {
+          "title": "Upload CV",
+          "select": "Select CV file",
+          "button": {
+            "text": "Upload"
+          }
+        },
+        "renew": {
+          "text": "Renew",
+          "tooltip": "Renew CV",
+          "title": "Renew CV"
+        },
+        "error": {
+          "loading": "An error occurred while loading the CV",
+          "navigation": "An error occurred while navigating the PDF"
+        }
+      }
+    },
     "message": {
       "save": {
         "success": "Profile has been saved successfully.",
@@ -74,8 +122,97 @@
       },
       "load": {
         "error": "An error occurred while loading the profile. Message: {{message}}"
+      },
+      "upload": {
+        "success": "Profile picture has been uploaded successfully.",
+        "error": "An error occurred while uploading the profile picture. Message: {{message}}"
+      },
+      "cv": {
+        "upload": {
+          "success": "CV has been uploaded successfully.",
+          "error": "An error occurred while uploading the CV. Message: {{message}}"
+        },
+        "download": {
+          "error": "An error occurred while downloading the CV. Message: {{message}}"
+        },
+        "delete": {
+          "success": "CV has been deleted successfully.",
+          "error": "An error occurred while deleting the CV. Message: {{message}}"
+        }
+      },
+      "image": {
+        "delete": {
+          "success": "Profile picture has been deleted successfully",
+          "error": "An error occurred while deleting the profile picture. Please try again later"
+        }
       }
     }
+  },
+  "ordering": {
+    "orders": "Orders",
+    "my_orders": "My orders",
+    "order": "Order",
+    "execution_proposals":  "Execution proposals",
+    "received_proposals": "Received proposals",
+    "sent_proposals": "Sent proposals",
+    "placed_orders": "Placed orders",
+    "accepted_orders": "Accepted orders",
+    "create_order": "Create order",
+    "order_details": "Order details",
+    "execution_proposal": "Execution proposal",
+    "category_id": "Category ID",
+    "title": "Title",
+    "description": "Description",
+    "price": "Price",
+    "due_date": "Due Date",
+    "customer_id": "Customer ID",
+    "executor_id": "Executor ID",
+    "execution_date": "Execution Date",
+    "bill_id": "Bill ID",  
+    "field_required": "This field is required",
+    "price_min": "Price must be greater than or equal to 0",
+    "invalid_date": "The date is incorrect",
+    "send_execution_proposal": "Send execution proposal",
+    "comment": "Comment",
+    "loading": "Loading...",
+    "no_data": "No data",
+    "no_orders": "No orders",
+    "no_execution_proposals": "No execution proposals",
+    "send": "Send",
+    "resolved_successfully": "Resolved successfully",
+    "id": "Id",
+    "sender_id": "Sender ID",
+    "receiver_id": "Receiver ID",
+    "execution_proposal_details": "Execution proposal details",
+    "execution_proposal_id": "Execution proposal ID",
+    "order_id": "Order ID",
+    "proposal_id": "Proposal ID",
+    "cancel": "Cancel",
+    "status": "Status",
+    "order_status": "Order status",
+    "order_statuses": {
+      "new": "New",
+      "in_progress": "In progress",
+      "completed": "Completed",
+      "canceled": "Canceled"
+    },
+    "proposal_status": "Proposal status",
+    "proposal_statuses": {
+      "new": "New",
+      "accepted": "Accepted",
+      "rejected": "Rejected"
+    },
+    "payment_kind": "Payment kind",
+    "payment_kinds": {
+      "post": "Post",
+      "pre": "Pre"
+    },
+    "proposal_options": {
+      "accept": "Accept",
+      "reject": "Reject",
+      "revoke": "Revoke"
+    },
+    "cancelled-successfully": "Cancelled successfully"
   },
   "common": {
     "error": "Error",
@@ -94,6 +231,14 @@
     },
     "communication": {
       "title": "Conversation"
+    }
+  },
+  "pdf": {
+    "error": {
+      "load": "Error loading PDF document",
+      "render": "Error rendering PDF page",
+      "no-document": "No PDF document loaded",
+      "canvas-context": "Could not get canvas context"
     }
   }
 }

@@ -13,4 +13,5 @@ public class ProfileDto
     public DateTime DateCreated { get; set; }
     public DateTime LastModifiedDate { get; set; }
     public string? ImageUrl { get; set; }
+    public string? CvUrl { get; set; }
 }

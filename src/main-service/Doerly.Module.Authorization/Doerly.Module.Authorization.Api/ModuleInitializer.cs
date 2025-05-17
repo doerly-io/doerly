@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Doerly.Module.Authorization.Api;
 
-public class ModuleInitializer : IModuleInitializer
+public class ModuleInitializer : IModuleInitializer 
 {
     public void ConfigureServices(IHostApplicationBuilder builder)
     {

@@ -17,4 +17,5 @@ public class ProfileEntity : BaseEntity
     public string? Bio { get; set; }
     public int UserId { get; set; }
     public string? ImagePath { get; set; }
+    public string? CvPath { get; set; }
 }   

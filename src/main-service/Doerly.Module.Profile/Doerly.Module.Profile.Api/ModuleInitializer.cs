@@ -24,6 +24,7 @@ public class ModuleInitializer : IModuleInitializer
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         app.ApplicationServices.MigrateDatabase<ProfileDbContext>();
-        // app.ApplicationServices.AddStorageContainer(AzureStorageConstants.ImagesContainerName);
+        app.ApplicationServices.AddStorageContainer(AzureStorageConstants.ImagesContainerName);
+        app.ApplicationServices.AddStorageContainer(AzureStorageConstants.DocumentsContainerName);
     }
 }

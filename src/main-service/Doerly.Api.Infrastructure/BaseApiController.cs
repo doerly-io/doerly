@@ -36,6 +36,14 @@ public class BaseApiController : ControllerBase
     }
     
     [NonAction]
+    protected byte[] GetFormFileBytes(IFormFile file)
+    {
+        using var stream = new MemoryStream();
+        file.CopyTo(stream);
+        return stream.ToArray();
+    }
+    
+    [NonAction]
     protected int GetUserId()
     {
         var identity = HttpContext.User.Identity as ClaimsIdentity;

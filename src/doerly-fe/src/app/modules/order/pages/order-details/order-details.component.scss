@@ -1,0 +1,24 @@
+/* filepath: c:\Dan\Projects\Doerly\src\doerly-fe\src\app\modules\order\pages\order-details\order-details.component.scss */
+.order-details {
+  padding: 1rem;
+  margin-top: 1rem;
+
+  .order-detail-item {
+    margin: 0.5rem 0;
+  }
+
+  p-card {
+    padding: 1rem;
+    border: 1px solid var(--surface-200);
+    border-radius: 0.5rem;
+    background-color: var(--surface-50);
+  }
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  p {
+    margin: 0.5rem 0;
+  }
+}

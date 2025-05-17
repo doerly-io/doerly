@@ -15,4 +15,8 @@
       <Compile Remove="Migrations\ProfileDbContextModelSnapshot.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Migrations\" />
+    </ItemGroup>
+
 </Project>

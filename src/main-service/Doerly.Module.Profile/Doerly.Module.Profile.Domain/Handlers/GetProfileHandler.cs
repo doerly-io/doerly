@@ -10,7 +10,7 @@ namespace Doerly.Module.Profile.Domain.Handlers;
 
 public class GetProfileHandler(ProfileDbContext dbContext, IFileRepository fileRepository) : BaseProfileHandler(dbContext)
 {
-    public async Task<HandlerResult<ProfileDto>> HandleAsync(int userId)
+    public async Task<HandlerResult<ProfileDto>> HandleAsync(int userId, CancellationToken cancellationToken = default)
     {
         var profile = await DbContext.Profiles
             .AsNoTracking()
@@ -25,16 +25,42 @@ public class GetProfileHandler(ProfileDbContext dbContext, IFileRepository fileR
                 x.Bio,
                 x.DateCreated,
                 x.LastModifiedDate,
-                x.ImagePath
+                x.ImagePath,
+                x.CvPath
             })
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (profile == null)
             return HandlerResult.Failure<ProfileDto>(Resources.Get("ProfileNotFound"));
 
+        var urlTasks = new List<Task>(2);
         string imageUrl = null;
+        string cvUrl = null;
+    
         if (!string.IsNullOrEmpty(profile.ImagePath))
-            imageUrl = await fileRepository.GetSasUrlAsync(AzureStorageConstants.ImagesContainerName, profile.ImagePath);
+        {
+            urlTasks.Add(Task.Run(async () => 
+            {
+                imageUrl = await fileRepository.GetSasUrlAsync(
+                    AzureStorageConstants.ImagesContainerName, 
+                    profile.ImagePath);
+            }));
+        }
+    
+        if (!string.IsNullOrEmpty(profile.CvPath))
+        {
+            urlTasks.Add(Task.Run(async () => 
+            {
+                cvUrl = await fileRepository.GetSasUrlAsync(
+                    AzureStorageConstants.DocumentsContainerName, 
+                    profile.CvPath);
+            }));
+        }
+    
+        if (urlTasks.Count > 0)
+        {
+            await Task.WhenAll(urlTasks);
+        }
 
         var profileDto = new ProfileDto
         {
@@ -46,7 +72,8 @@ public class GetProfileHandler(ProfileDbContext dbContext, IFileRepository fileR
             Bio = profile.Bio,
             DateCreated = profile.DateCreated,
             LastModifiedDate = profile.LastModifiedDate,
-            ImageUrl = imageUrl
+            ImageUrl = imageUrl,
+            CvUrl = cvUrl
         };
 
         return HandlerResult.Success(profileDto);

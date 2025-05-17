@@ -17,26 +17,44 @@ public class UploadProfileImageHandler : BaseProfileHandler
         _fileRepository = fileRepository;
     }
 
-    public async Task<HandlerResult> HandleAsync(int userId, byte[] fileBytes)
+    public async Task<HandlerResult> HandleAsync(int userId, byte[] fileBytes, CancellationToken cancellationToken = default)
     {
-        var profile = await DbContext.Profiles.FirstOrDefaultAsync(x => x.UserId == userId);
-        if (profile == null)
-            return HandlerResult.Failure(Resources.Get("ProfileNotFound"));
-
         if (!ImageValidationHelper.IsValidImage(fileBytes, out var fileExtension))
             return HandlerResult.Failure(Resources.Get("InvalidImage"));
 
-        var imageName = Guid.NewGuid().ToString();
-        var imagePath = $"{AzureStorageConstants.FolderNames.ProfileImages}/{imageName}";
-        await _fileRepository.UploadFileAsync(AzureStorageConstants.ImagesContainerName, imagePath, fileBytes);
+        var profile = await DbContext.Profiles
+            .Select(x => new { x.UserId, x.ImagePath })
+            .FirstOrDefaultAsync(x => x.UserId == userId, cancellationToken);
         
-        var oldImagePath = profile.ImagePath;
-        if (!string.IsNullOrEmpty(oldImagePath))
-            await _fileRepository.DeleteFileIfExistsAsync(AzureStorageConstants.ImagesContainerName, oldImagePath);
-
-        profile.ImagePath = imagePath;
-        await DbContext.SaveChangesAsync();
-
+        if (profile == null)
+            return HandlerResult.Failure(Resources.Get("ProfileNotFound"));
+    
+        var imageName = Guid.NewGuid().ToString();
+        var imagePath = $"{AzureStorageConstants.FolderNames.ProfileImages}/{imageName}{fileExtension}";
+    
+        var tasks = new List<Task>(2);
+    
+        tasks.Add(_fileRepository.UploadFileAsync(
+            AzureStorageConstants.ImagesContainerName, 
+            imagePath, 
+            fileBytes));
+    
+        if (!string.IsNullOrEmpty(profile.ImagePath))
+        {
+            tasks.Add(_fileRepository.DeleteFileIfExistsAsync(
+                AzureStorageConstants.ImagesContainerName, 
+                profile.ImagePath));
+        }
+    
+        await Task.WhenAll(tasks);
+    
+        await DbContext.Profiles
+            .Where(x => x.UserId == userId)
+            .ExecuteUpdateAsync(s => 
+                    s.SetProperty(b => b.ImagePath, imagePath)
+                        .SetProperty(b => b.LastModifiedDate, DateTime.UtcNow),
+                cancellationToken);
+    
         return HandlerResult.Success();
     }
 }
