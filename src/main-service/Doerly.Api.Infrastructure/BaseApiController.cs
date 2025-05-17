@@ -33,4 +33,12 @@ public class BaseApiController : ControllerBase
         var authorizationHeader = Request.Headers[AuthConstants.AuthorizationHeaderName].ToString();
         return authorizationHeader.Replace("Bearer ", "");
     }
+    
+    [NonAction]
+    protected byte[] GetFormFileBytes(IFormFile file)
+    {
+        using var stream = new MemoryStream();
+        file.CopyTo(stream);
+        return stream.ToArray();
+    }
 }

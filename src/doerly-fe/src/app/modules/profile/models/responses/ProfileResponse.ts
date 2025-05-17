@@ -7,4 +7,5 @@ export interface ProfileResponse {
   sex: number;
   bio: string;
   imageUrl: string;
+  cvUrl: string;
 }

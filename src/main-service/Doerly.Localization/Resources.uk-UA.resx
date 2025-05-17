@@ -97,4 +97,7 @@ Doerly</value>
     <data name="EmailVerificationText" xml:space="preserve">
         <value>Дякуємо за реєстрацію в DOERLY! Щоб завершити процес, підтвердьте вашу електронну адресу, натиснувши на посилання нижче:</value>
     </data>
+    <data name="InvalidDocument" xml:space="preserve">
+        <value>Невалідний документ, будь ласка, перевірте формат та розмір файлу</value>
+    </data>
 </root>
