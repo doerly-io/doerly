@@ -21,7 +21,7 @@ public class CreateProfileHandler(ProfileDbContext dbContext) : BaseProfileHandl
         
         var profile = new ProfileEntity();
         CopyFromDto(profile, dto);
-        await DbContext.Profiles.AddAsync(profile, cancellationToken);
+        DbContext.Profiles.Add(profile);
         await DbContext.SaveChangesAsync(cancellationToken);
         return HandlerResult.Success();
     }

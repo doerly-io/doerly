@@ -15,6 +15,7 @@ export class PdfService {
   private pdfDoc: PDFDocumentProxy | null = null;
   private currentPage = 1;
   private pageCount = 0;
+  private zoomLevel = 1.5; // Default zoom level
 
   constructor(
     private httpClient: HttpClient
@@ -59,7 +60,7 @@ export class PdfService {
       from(this.pdfDoc.getPage(pageNumber))
         .pipe(
           switchMap(page => {
-            const viewport = page.getViewport({ scale: 1.5 });
+            const viewport = page.getViewport({ scale: this.zoomLevel });
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
 
@@ -108,9 +109,26 @@ export class PdfService {
     return Promise.resolve();
   }
 
+  setZoomLevel(zoom: number): void {
+    this.zoomLevel = zoom;
+  }
+
+  getZoomLevel(): number {
+    return this.zoomLevel;
+  }
+
+  zoomIn(): void {
+    this.zoomLevel = Math.min(this.zoomLevel + 0.25, 3);
+  }
+
+  zoomOut(): void {
+    this.zoomLevel = Math.max(this.zoomLevel - 0.25, 0.5);
+  }
+
   reset(): void {
     this.pdfDoc = null;
     this.currentPage = 1;
     this.pageCount = 0;
+    this.zoomLevel = 1.5;
   }
 }

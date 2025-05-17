@@ -13,10 +13,10 @@ public class ProfileConfiguration : IEntityTypeConfiguration<ProfileEntity>
         builder.Property(x => x.LastName).IsRequired().HasMaxLength(50);
         builder.Property(x => x.DateOfBirth);
         builder.Property(x => x.Sex);
-        builder.Property(x => x.Bio);
+        builder.Property(x => x.Bio).HasMaxLength(1000);
         builder.Property(x => x.UserId);
         builder.HasIndex(x => x.UserId).IsUnique();
-        builder.Property(x => x.ImagePath);
-        builder.Property(x => x.CvPath);
+        builder.Property(x => x.ImagePath).HasMaxLength(300);
+        builder.Property(x => x.CvPath).HasMaxLength(300);
     }
 }

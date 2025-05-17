@@ -15,7 +15,7 @@ import { ProfileService } from '../../domain/profile.service';
 import { Card } from 'primeng/card';
 import { InputText } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
-import { DatePipe, NgIf, NgOptimizedImage } from '@angular/common';
+import { DatePipe, DecimalPipe, NgIf, NgOptimizedImage } from '@angular/common';
 import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Divider } from 'primeng/divider';
@@ -44,6 +44,7 @@ import { ProfileResponse } from '../../models/responses/ProfileResponse';
     Divider,
     ButtonIcon,
     DatePipe,
+    DecimalPipe,
     FormsModule,
     Textarea,
     Select,
@@ -298,6 +299,34 @@ export class ProfileComponent implements OnInit {
           this.toastHelper.showError('common.error', error);
         });
     }
+  }
+
+  onCVZoomIn() {
+    if (this.pdfContainer) {
+      this.pdfService.zoomIn();
+      this.pdfService.renderPage(
+        this.pdfService.getCurrentPage(),
+        this.pdfContainer.nativeElement
+      ).catch(error => {
+        this.toastHelper.showError('common.error', error);
+      });
+    }
+  }
+
+  onCVZoomOut() {
+    if (this.pdfContainer) {
+      this.pdfService.zoomOut();
+      this.pdfService.renderPage(
+        this.pdfService.getCurrentPage(),
+        this.pdfContainer.nativeElement
+      ).catch(error => {
+        this.toastHelper.showError('common.error', error);
+      });
+    }
+  }
+
+  getZoomLevel(): number {
+    return this.pdfService.getZoomLevel();
   }
   // endregion
 }
