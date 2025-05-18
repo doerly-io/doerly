@@ -12,12 +12,12 @@ namespace Doerly.Module.Payments.Domain.Handlers;
 public class CheckoutHandler : BasePaymentHandler
 {
     private readonly PaymentClientFactory _paymentClientFactory;
-    private readonly Logger<CheckoutHandler> _logger;
+    private readonly ILogger<CheckoutHandler> _logger;
 
     public CheckoutHandler(
         PaymentDbContext dbContext,
         PaymentClientFactory paymentClientFactory,
-        Logger<CheckoutHandler> logger
+        ILogger<CheckoutHandler> logger
     ) : base(dbContext)
     {
         _paymentClientFactory = paymentClientFactory;

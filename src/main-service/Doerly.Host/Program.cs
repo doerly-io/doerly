@@ -32,7 +32,7 @@ builder.Services
     {
         options.DataAnnotationLocalizerProvider = (type, factory) =>
         {
-            var resourceManager = new ResourceManager("Doerly.Localization.Resources", typeof(Resources).Assembly);
+            var resourceManager = Resources.ResourceManager;
             return new DataAnnotationsStringLocalizer(resourceManager);
         };
     })
