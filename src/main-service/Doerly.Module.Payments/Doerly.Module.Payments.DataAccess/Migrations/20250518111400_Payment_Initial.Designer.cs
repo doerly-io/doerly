@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Doerly.Module.Payments.DataAccess.Migrations
 {
     [DbContext(typeof(PaymentDbContext))]
-    [Migration("20250518073525_removed_guid")]
-    partial class removed_guid
+    [Migration("20250518111400_Payment_Initial")]
+    partial class Payment_Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,11 +35,13 @@ namespace Doerly.Module.Payments.DataAccess.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("AmountPaid")
-                        .HasColumnType("decimal(18,2)")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)")
                         .HasColumnName("amount_paid");
 
                     b.Property<decimal>("AmountTotal")
-                        .HasColumnType("decimal(18,2)")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)")
                         .HasColumnName("amount_total");
 
                     b.Property<DateTime>("DateCreated")
@@ -55,6 +57,10 @@ namespace Doerly.Module.Payments.DataAccess.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_modified_date");
+
+                    b.Property<int>("PayerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("payer_id");
 
                     b.HasKey("Id")
                         .HasName("pk_bill");

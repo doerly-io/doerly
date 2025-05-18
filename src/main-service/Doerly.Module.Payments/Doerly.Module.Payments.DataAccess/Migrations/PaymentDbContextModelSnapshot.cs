@@ -48,7 +48,6 @@ namespace Doerly.Module.Payments.DataAccess.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .IsUnicode(false)
                         .HasColumnType("character varying(200)")
                         .HasColumnName("description");
 

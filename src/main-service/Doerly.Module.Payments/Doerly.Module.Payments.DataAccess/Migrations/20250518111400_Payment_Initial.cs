@@ -22,10 +22,10 @@ namespace Doerly.Module.Payments.DataAccess.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    guid = table.Column<Guid>(type: "uuid", nullable: false),
-                    amount_total = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    amount_paid = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false),
+                    payer_id = table.Column<int>(type: "integer", nullable: false),
+                    amount_total = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    amount_paid = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -41,8 +41,8 @@ namespace Doerly.Module.Payments.DataAccess.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    amount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false),
+                    amount = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     currency = table.Column<byte>(type: "smallint", nullable: false),
                     action = table.Column<int>(type: "integer", nullable: false),
                     status = table.Column<byte>(type: "smallint", nullable: false),
@@ -61,13 +61,6 @@ namespace Doerly.Module.Payments.DataAccess.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "ix_bill_guid",
-                schema: "payment",
-                table: "bill",
-                column: "guid",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_payment_bill_id",
