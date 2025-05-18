@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using Doerly.Domain.Models;
 using Doerly.Module.Payments.BaseClient;
 using Doerly.Module.Payments.Client.LiqPay.Client;
 using Doerly.Module.Payments.Client.LiqPay.Internal;
@@ -27,22 +28,29 @@ public class LiqPayClient : IBasePaymentClient
         ArgumentException.ThrowIfNullOrEmpty(privateKey);
     }
 
-    public async Task<BaseCheckoutResponse> Checkout(CheckoutModel checkoutModel)
+    public async Task<HandlerResult<BaseCheckoutResponse>> Checkout(CheckoutModel checkoutModel)
     {
-        var dto = checkoutModel.ToDto(_publicKey);
-        var serializedRequest = JsonSerializer.Serialize(dto);
-        var base64Request = Convert.ToBase64String(Encoding.UTF8.GetBytes(serializedRequest));
-        var signature = GenerateSignature(base64Request);
-
-        var checkoutUrl = await _httpClient.CheckoutAsync(base64Request, signature);
-        var result = new BaseCheckoutResponse
+        try
         {
-            CheckoutUrl = checkoutUrl,
-            BillId = checkoutModel.BillId,
-            Aggregator = EPaymentAggregator.LiqPay
-        };
+            var dto = checkoutModel.ToDto(_publicKey);
+            var serializedRequest = JsonSerializer.Serialize(dto);
+            var base64Request = Convert.ToBase64String(Encoding.UTF8.GetBytes(serializedRequest));
+            var signature = GenerateSignature(base64Request);
 
-        return result;
+            var checkoutUrl = await _httpClient.CheckoutAsync(base64Request, signature);
+            var result = new BaseCheckoutResponse
+            {
+                CheckoutUrl = checkoutUrl,
+                BillId = checkoutModel.BillId,
+                Aggregator = EPaymentAggregator.LiqPay
+            };
+            
+            return HandlerResult.Success(result);
+        }
+        catch (Exception e)
+        {
+            return HandlerResult.Failure<BaseCheckoutResponse>(e.Message);
+        }
     }
 
     public bool ValidateSignature(string data, string signature)

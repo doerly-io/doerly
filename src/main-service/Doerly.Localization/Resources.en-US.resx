@@ -91,4 +91,7 @@ Doerly</value>
     <data name="EmailVerificationText" xml:space="preserve">
         <value>Thank you for signing up with DOERLY! To complete your registration, please verify your email address by clicking the link below:</value>
     </data>
+    <data name="FailedToCreateCheckout" xml:space="preserve">
+        <value>Failed to process payment operation</value>
+    </data>
 </root>

@@ -1,4 +1,3 @@
-using Doerly.Common.Settings;
 using Doerly.Domain.Models;
 using Doerly.Module.Payments.BaseClient;
 using Doerly.Module.Payments.Client.LiqPay;
@@ -6,20 +5,23 @@ using Doerly.Module.Payments.Contracts;
 using Doerly.Module.Payments.DataAccess;
 using Doerly.Module.Payments.DataAccess.Models;
 using Doerly.Module.Payments.Enums;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace Doerly.Module.Payments.Domain.Handlers;
 
 public class CheckoutHandler : BasePaymentHandler
 {
     private readonly PaymentClientFactory _paymentClientFactory;
+    private readonly Logger<CheckoutHandler> _logger;
 
     public CheckoutHandler(
         PaymentDbContext dbContext,
-        PaymentClientFactory paymentClientFactory
+        PaymentClientFactory paymentClientFactory,
+        Logger<CheckoutHandler> logger
     ) : base(dbContext)
     {
         _paymentClientFactory = paymentClientFactory;
+        _logger = logger;
     }
 
     public async Task<HandlerResult<BaseCheckoutResponse>> HandleAsync(CheckoutRequest checkoutRequest, Uri webhookUrl)
@@ -46,7 +48,7 @@ public class CheckoutHandler : BasePaymentHandler
         await DbContext.SaveChangesAsync();
 
         var paymentClient = _paymentClientFactory(EPaymentAggregator.LiqPay); //TODO: remove hardcode after adding other payment methods
-        var checkoutResponse = await paymentClient.Checkout(new CheckoutModel
+        var checkoutResult = await paymentClient.Checkout(new CheckoutModel
         {
             Amount = checkoutRequest.AmountTotal,
             Currency = CurrencyToStringCode(checkoutRequest.Currency),
@@ -57,10 +59,11 @@ public class CheckoutHandler : BasePaymentHandler
             CallbackUrl = webhookUrl.ToString(),
         });
 
-        if (string.IsNullOrEmpty(checkoutResponse.CheckoutUrl))
-            return HandlerResult.Failure<BaseCheckoutResponse>("Failed to create checkout URL");
+        if (checkoutResult.IsSuccess)
+            return checkoutResult;
 
-        return HandlerResult.Success(checkoutResponse);
+        _logger.LogError("Checkout request failed, CheckoutRequestError: {CheckoutRequestError}", checkoutResult.ErrorMessage);
+        return HandlerResult.Failure<BaseCheckoutResponse>("FailedToCreateCheckout");
     }
 
     private string CurrencyToStringCode(ECurrency currency) => currency switch

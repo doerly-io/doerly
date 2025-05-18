@@ -91,6 +91,11 @@ builder.Services.AddScoped<IHandlerFactory, HandlerFactory>();
 
 builder.Services.AddScoped<IMessagePublisher, MessagePublisher>();
 
+builder.Services.ConfigureHttpClientDefaults(httpClientBuilder => httpClientBuilder.AddStandardResilienceHandler(options =>
+{
+    
+}));
+
 #region Configure Settings
 
 var frontendSettingsCfg = configuration.GetSection(FrontendSettings.FrontendSettingsName);

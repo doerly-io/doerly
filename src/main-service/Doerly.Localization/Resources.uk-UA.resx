@@ -91,4 +91,7 @@ Doerly</value>
     <data name="EmailVerificationText" xml:space="preserve">
         <value>Дякуємо за реєстрацію в DOERLY! Щоб завершити процес, підтвердьте вашу електронну адресу, натиснувши на посилання нижче:</value>
     </data>
+    <data name="FailedToCreateCheckout" xml:space="preserve">
+        <value>Не вдалось виконати операцію оплати</value>
+    </data>
 </root>

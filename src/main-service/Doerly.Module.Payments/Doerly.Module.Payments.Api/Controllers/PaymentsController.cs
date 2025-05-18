@@ -24,6 +24,7 @@ public class PaymentsController : BaseApiController
     {
         var invoiceCreateRequest = new CheckoutRequest
         {
+            PayerId = 1,
             AmountTotal = 150.25M,
             Description = "Hello world",
             ReturnUrl = null,
