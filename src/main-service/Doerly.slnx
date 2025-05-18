@@ -17,6 +17,11 @@
     <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.Domain\Doerly.Module.Authorization.Domain.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.Enums\Doerly.Module.Authorization.Enums.csproj" Type="Classic C#" />
   </Folder>
+  <Folder Name="/Modules/Orders/">
+    <Project Path="Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Order\Doerly.Module.Order.DataAccess\Doerly.Module.Order.DataAccess.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Order\Doerly.Module.Order.Domain\Doerly.Module.Order.Domain.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Modules/Payments/">
     <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.Api\Doerly.Module.Payments.Api.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.Contracts\Doerly.Module.Payments.Contracts.csproj" Type="Classic C#" />
@@ -39,6 +44,7 @@
     <Project Path="Doerly.Notification.EmailSender\Doerly.Notification.EmailSender.csproj" Type="Classic C#" />
   </Folder>
   <Project Path="Doerly.DataAccess\Doerly.DataAccess.csproj" Type="Classic C#" />
+  <Project Path="Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj" Type="Classic C#" />
   <Project Path="Doerly.Domain\Doerly.Domain.csproj" Type="Classic C#" />
   <Project Path="Doerly.Extensions\Doerly.Extensions.csproj" Type="Classic C#" />
   <Project Path="Doerly.Host\Doerly.Host.csproj" Type="Classic C#" />
