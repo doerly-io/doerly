@@ -1,4 +1,4 @@
-﻿using Doerly.Api.Infrastructure;
+﻿using Doerly.Infrastructure.Api;
 using Doerly.Domain.Extensions;
 using Doerly.Module.Order.DataAccess;
 using Microsoft.AspNetCore.Builder;

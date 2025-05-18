@@ -1,10 +1,6 @@
-﻿using Doerly.Api.Infrastructure;
-using Doerly.Domain.Models;
+﻿using Doerly.Infrastructure.Api;
 using Doerly.Module.Order.Domain.Dtos.Requests;
 using Doerly.Module.Order.Domain.Handlers;
-
-using Microsoft.AspNetCore.Authentication.OAuth;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Doerly.Module.Order.Api.Controllers;

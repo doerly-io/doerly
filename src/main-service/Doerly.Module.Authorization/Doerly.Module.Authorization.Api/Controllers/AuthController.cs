@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web;
-using Doerly.Api.Infrastructure;
+using Doerly.Infrastructure.Api;
 using Doerly.Domain.Models;
 using Doerly.Messaging;
 using Doerly.Module.Authorization.Api.Constants;

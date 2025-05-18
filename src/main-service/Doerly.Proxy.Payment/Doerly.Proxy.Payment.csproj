@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>annotations</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Doerly.Domain\Doerly.Domain.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Payments\Doerly.Module.Payments.Api\Doerly.Module.Payments.Api.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Payments\Doerly.Module.Payments.Contracts\Doerly.Module.Payments.Contracts.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Payments\Doerly.Module.Payments.Domain\Doerly.Module.Payments.Domain.csproj" />
+      <ProjectReference Include="..\Doerly.Proxy.BaseProxy\Doerly.Proxy.BaseProxy.csproj" />
+    </ItemGroup>
+
+</Project>

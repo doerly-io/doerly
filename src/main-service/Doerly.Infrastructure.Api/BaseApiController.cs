@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Doerly.Api.Infrastructure;
+namespace Doerly.Infrastructure.Api;
 
 public class BaseApiController : ControllerBase
 {

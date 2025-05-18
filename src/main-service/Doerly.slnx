@@ -1,0 +1,54 @@
+﻿<Solution>
+  <Folder Name="/Common/">
+    <Project Path="Doerly.Common.Settings\Doerly.Common.Settings.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/FileRepository/">
+    <Project Path="Doerly.FileRepository\Doerly.FileRepository.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/ModuleProxies/">
+    <Project Path="Doerly.Proxy.BaseProxy\Doerly.Proxy.BaseProxy.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Proxy.Payment\Doerly.Proxy.Payment.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Modules/" />
+  <Folder Name="/Modules/Authorization/">
+    <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.Api\Doerly.Module.Authorization.Api.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.Contracts\Doerly.Module.Authorization.Contracts.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.DataAccess\Doerly.Module.Authorization.DataAccess.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.Domain\Doerly.Module.Authorization.Domain.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.Enums\Doerly.Module.Authorization.Enums.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Modules/Orders/">
+    <Project Path="Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Order\Doerly.Module.Order.DataAccess\Doerly.Module.Order.DataAccess.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Order\Doerly.Module.Order.Domain\Doerly.Module.Order.Domain.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Modules/Payments/">
+    <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.Api\Doerly.Module.Payments.Api.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.Contracts\Doerly.Module.Payments.Contracts.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.DataAccess\Doerly.Module.Payments.DataAccess.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.Domain\Doerly.Module.Payments.Domain.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.Enums\Doerly.Module.Payments.Enums.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Modules/Payments/PaymentClients/">
+    <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.BaseClient\Doerly.Module.Payments.BaseClient.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.Client.LiqPay\Doerly.Module.Payments.Client.LiqPay.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Modules/Profile/">
+    <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Api\Doerly.Module.Profile.Api.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Contracts\Doerly.Module.Profile.Contracts.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.DataAccess\Doerly.Module.Profile.DataAccess.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Domain\Doerly.Module.Profile.Domain.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Notifications/">
+    <Project Path="Doerly.Notification.EmailSender\Doerly.Notification.EmailSender.csproj" Type="Classic C#" />
+  </Folder>
+  <Project Path="Doerly.DataAccess\Doerly.DataAccess.csproj" Type="Classic C#" />
+  <Project Path="Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj" Type="Classic C#" />
+  <Project Path="Doerly.Domain\Doerly.Domain.csproj" Type="Classic C#" />
+  <Project Path="Doerly.Extensions\Doerly.Extensions.csproj" Type="Classic C#" />
+  <Project Path="Doerly.Host\Doerly.Host.csproj" Type="Classic C#" />
+  <Project Path="Doerly.Infrastructure.Api\Doerly.Infrastructure.Api.csproj" Type="Classic C#" />
+  <Project Path="Doerly.Localization\Doerly.Localization.csproj" Type="Classic C#" />
+  <Project Path="Doerly.Messaging\Doerly.Messaging.csproj" Type="Classic C#" />
+</Solution>

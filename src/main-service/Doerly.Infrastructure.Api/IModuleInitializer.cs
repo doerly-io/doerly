@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Doerly.Api.Infrastructure;
+namespace Doerly.Infrastructure.Api;
 
 public interface IModuleInitializer
 {

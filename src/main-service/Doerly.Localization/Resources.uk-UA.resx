@@ -1,52 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:element name="root" msdata:IsDataSet="true"></xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>1.3</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="UserNotFound" xml:space="preserve">
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true"></xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="UserNotFound" xml:space="preserve">
         <value>Користувача не знайдено</value>
     </data>
-  <data name="InvalidPassword" xml:space="preserve">
+    <data name="InvalidPassword" xml:space="preserve">
         <value>Неправильний пароль</value>
     </data>
-  <data name="UserAlreadyExist" xml:space="preserve">
+    <data name="UserAlreadyExist" xml:space="preserve">
         <value>Користувач з таким логіном вже існує</value>
     </data>
-  <data name="InvalidPasswordInput" xml:space="preserve">
+    <data name="InvalidPasswordInput" xml:space="preserve">
         <value>Неправильний формат паролю</value>
     </data>
-  <data name="InvalidEmailFormatInput" xml:space="preserve">
+    <data name="InvalidEmailFormatInput" xml:space="preserve">
         <value>Неправильний формат електронної пошти</value>
     </data>
-  <data name="ValidTokenNotFound" xml:space="preserve">
+    <data name="ValidTokenNotFound" xml:space="preserve">
         <value>Не знайдено валідний токен</value>
     </data>
-  <data name="ResetPasswordEmailVerificationText" xml:space="preserve">
+    <data name="ResetPasswordEmailVerificationText" xml:space="preserve">
         <value>Вітаємо,
 
 Ми отримали запит на скидання вашого пароля. Якщо ви не надсилали цей запит, просто ігноруйте це повідомлення.
 
 Щоб скинути пароль, перейдіть за посиланням нижче:</value>
     </data>
-  <data name="ResetPasswordEmailBestRegardsText" xml:space="preserve">
+    <data name="ResetPasswordEmailBestRegardsText" xml:space="preserve">
         <value>Якщо у вас виникли запитання, зверніться до нашої служби підтримки.
 
 З повагою,&lt;/br&gt;
 Doerly</value>
     </data>
-  <data name="ResetPasswordEmailSubject" xml:space="preserve">
+    <data name="ResetPasswordEmailSubject" xml:space="preserve">
         <value>Скидання паролю</value>
     </data>
     <data name="InvalidFirstNameInput" xml:space="preserve">
@@ -99,5 +103,8 @@ Doerly</value>
     </data>
     <data name="InvalidDocument" xml:space="preserve">
         <value>Невалідний документ, будь ласка, перевірте формат та розмір файлу</value>
+    </data>
+    <data name="FailedToCreateCheckout" xml:space="preserve">
+        <value>Не вдалось виконати операцію оплати</value>
     </data>
 </root>
