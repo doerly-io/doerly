@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>annotations</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
+    <ProjectReference Include="..\..\Doerly.Localization\Doerly.Localization.csproj" />
+    <ProjectReference Include="..\Doerly.Module.Order.DataAccess\Doerly.Module.Order.DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>

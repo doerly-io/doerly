@@ -25,6 +25,6 @@ public class ProfileSaveDto
     public ESex Sex { get; set; }
     
     [DataType(DataType.MultilineText, ErrorMessage = "InvalidBioInput")]
-    [MaxLength(500, ErrorMessage = "BioTooLong")]
+    [MaxLength(1000, ErrorMessage = "BioTooLong")]
     public string? Bio { get; set; }
 }

@@ -52,4 +52,36 @@ export class ProfileService {
       )
   }
 
+  deleteImage(): Observable<BaseApiResponse<any>> {
+    const userId = this.jwtTokenHelper.getUserInfo()?.id;
+    return this
+      .httpClient
+      .delete<BaseApiResponse<any>>(
+        `${this.baseUrl}/${userId}/image`,
+        {withCredentials: true}
+      )
+  }
+
+  uploadCV(cv: File): Observable<BaseApiResponse<any>> {
+    const formData = new FormData();
+    const userId = this.jwtTokenHelper.getUserInfo()?.id;
+    formData.append('cvFile', cv);
+    return this
+      .httpClient
+      .post<BaseApiResponse<any>>(
+        `${this.baseUrl}/${userId}/cv`,
+        formData,
+        {withCredentials: true}
+      )
+  }
+
+  deleteCV(): Observable<BaseApiResponse<any>> {
+    const userId = this.jwtTokenHelper.getUserInfo()?.id;
+    return this
+      .httpClient
+      .delete<BaseApiResponse<any>>(
+        `${this.baseUrl}/${userId}/cv`,
+        {withCredentials: true}
+      )
+  }
 }
