@@ -14,7 +14,11 @@ public class CheckoutRequest
 
     [MinLength(5)]
     [MaxLength(50)]
-    public required string Description { get; set; }
+    public required string BillDescription { get; set; }
+    
+    [MinLength(5)]
+    [MaxLength(50)]
+    public required string PaymentDescription { get; set; }
 
     /// <summary>
     /// Frontend url on which user will be returned from payment page
@@ -29,5 +33,11 @@ public class CheckoutRequest
     /// </summary>
     [EnumDataType(typeof(ECurrency))]
     public required ECurrency Currency { get; set; }
+
+    /// <summary>
+    /// Pay = 1,
+    /// Hold = 2
+    /// </summary>
+    public required EPaymentAction PaymentAction { get; set; }
     
 }

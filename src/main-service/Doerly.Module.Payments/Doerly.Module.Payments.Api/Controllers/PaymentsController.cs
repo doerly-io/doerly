@@ -26,9 +26,12 @@ public class PaymentsController : BaseApiController
         {
             PayerId = 1,
             AmountTotal = 150.25M,
-            Description = "Hello world",
+            BillDescription = "Hello world",
+            PaymentDescription = "Hello world",
             ReturnUrl = null,
-            Currency = ECurrency.UAH
+            Currency = ECurrency.UAH,
+            PaymentAction = EPaymentAction.Pay
+            
         };
         
         var uri = _webhookUrlBuilder.BuildWebhookUrl(nameof(WebhookController).ToControllerName(), nameof(WebhookController.FinalStatus));

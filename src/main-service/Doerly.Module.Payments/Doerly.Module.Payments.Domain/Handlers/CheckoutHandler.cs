@@ -29,17 +29,17 @@ public class CheckoutHandler : BasePaymentHandler
         var bill = new Bill
         {
             AmountTotal = checkoutRequest.AmountTotal,
-            Description = checkoutRequest.Description,
+            Description = checkoutRequest.BillDescription,
             PayerId = checkoutRequest.PayerId,
         };
 
         var payment = new Payment
         {
-            Description = checkoutRequest.Description,
+            Description = checkoutRequest.PaymentDescription,
             Currency = checkoutRequest.Currency,
             Amount = checkoutRequest.AmountTotal,
             Status = EPaymentStatus.Pending,
-            Action = EPaymentAction.Pay, //TODO: remove hardcode after adding other payment methods
+            Action = checkoutRequest.PaymentAction, //TODO: remove hardcode after adding other payment methods
             Bill = bill,
         };
 
@@ -52,9 +52,9 @@ public class CheckoutHandler : BasePaymentHandler
         {
             Amount = checkoutRequest.AmountTotal,
             Currency = CurrencyToStringCode(checkoutRequest.Currency),
-            Description = checkoutRequest.Description,
+            Description = checkoutRequest.BillDescription,
             BillId = bill.Id,
-            PaymentAction = EPaymentAction.Pay,
+            PaymentAction = checkoutRequest.PaymentAction,
             ReturnUrl = checkoutRequest.ReturnUrl,
             CallbackUrl = webhookUrl.ToString(),
         });
