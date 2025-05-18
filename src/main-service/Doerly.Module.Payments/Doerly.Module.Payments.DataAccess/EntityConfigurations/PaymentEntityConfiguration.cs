@@ -9,11 +9,12 @@ public class PaymentEntityConfiguration : IEntityTypeConfiguration<Payment>
 {
     public void Configure(EntityTypeBuilder<Payment> builder)
     {
-        builder.ToTable(DbConstants.Tables.Invoice, DbConstants.PaymentSchema);
+        builder.ToTable(DbConstants.Tables.Payment, DbConstants.PaymentSchema);
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Amount).HasColumnType("decimal(18,2)");
+        builder.Property(x => x.Amount).HasPrecision(18, 2);
+        builder.Property(x => x.Description).IsRequired().HasMaxLength(200);
         builder.Property(x => x.Currency).IsRequired().HasConversion<byte>();
-        builder.Property(x => x.PaymentMethod).IsRequired();
-        builder.HasOne(x => x.Invoice).WithMany(x => x.Payments).HasForeignKey(x => x.InvoiceId);
+        builder.Property(x => x.Status).IsRequired().HasConversion<byte>();
+        builder.HasOne(x => x.Bill).WithMany(x => x.Payments).HasForeignKey(x => x.BillId);
     }
 }

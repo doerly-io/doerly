@@ -11,7 +11,7 @@ public class PaymentDbContext : BaseDbContext
     {
     }
 
-    public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<Bill> Bills { get; set; }
 
     public DbSet<Payment> Payments { get; set; }
 

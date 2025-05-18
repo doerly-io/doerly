@@ -8,12 +8,4 @@ public class LiqPayConstants
         public const string USD = "USD";
         public const string EUR = "EUR";
     }
-
-    public class PaymentActionConstants
-    {
-        public const string Pay = "pay";
-        public const string Hold = "hold";
-        public const string Subscribe = "subscribe";
-        public const string PayDonate = "paydonate";
-    }
 }

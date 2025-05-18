@@ -7,7 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Doerly.Api.Infrastructure\Doerly.Api.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\Doerly.Infrastructure.Api\Doerly.Infrastructure.Api.csproj" />
+      <ProjectReference Include="..\..\Doerly.Extensions\Doerly.Extensions.csproj" />
+      <ProjectReference Include="..\..\Doerly.Localization\Doerly.Localization.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Payments.BaseClient\Doerly.Module.Payments.BaseClient.csproj" />
       <ProjectReference Include="..\Doerly.Module.Payments.DataAccess\Doerly.Module.Payments.DataAccess.csproj" />
       <ProjectReference Include="..\Doerly.Module.Payments.Domain\Doerly.Module.Payments.Domain.csproj" />
       <ProjectReference Include="..\Doerly.Module.Payments.Client.LiqPay\Doerly.Module.Payments.Client.LiqPay.csproj" />

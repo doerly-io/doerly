@@ -14,6 +14,6 @@
     <ProjectReference Include="..\Doerly.Module.Authorization.Contracts\Doerly.Module.Authorization.Contracts.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.8.0" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.9.0" />
   </ItemGroup>
 </Project>

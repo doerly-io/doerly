@@ -12,7 +12,6 @@ namespace Doerly.Localization
             return resourceValue ?? key;
         }
         
-        //public static string InvalidEmailFormatInput => _resourceManager.GetString(nameof(InvalidEmailFormatInput));
 
     }
 }

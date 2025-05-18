@@ -1,6 +1,6 @@
 using Doerly.Domain.Extensions;
 using Doerly.Module.Authorization.DataAccess;
-using Doerly.Api.Infrastructure;
+using Doerly.Infrastructure.Api;
 using Doerly.DataAccess.Utils;
 using Doerly.Messaging;
 using Doerly.Module.Authorization.Domain;

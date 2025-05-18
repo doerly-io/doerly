@@ -3,11 +3,12 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+        <Nullable>annotations</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\Doerly.DataAccess\Doerly.DataAccess.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Payments.Enums\Doerly.Module.Payments.Enums.csproj" />
     </ItemGroup>
 
 </Project>

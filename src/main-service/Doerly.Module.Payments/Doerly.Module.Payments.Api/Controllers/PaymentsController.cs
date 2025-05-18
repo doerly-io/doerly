@@ -1,8 +1,8 @@
-using Doerly.Api.Infrastructure;
-using Doerly.Module.Payments.Api.Builders;
-using Doerly.Module.Payments.Client.LiqPay;
-using Doerly.Module.Payments.Contracts.Requests;
+using Doerly.Infrastructure.Api;
+using Doerly.Extensions;
+using Doerly.Module.Payments.Contracts;
 using Doerly.Module.Payments.Domain.Handlers;
+using Doerly.Module.Payments.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Doerly.Module.Payments.Api.Controllers;
@@ -22,9 +22,16 @@ public class PaymentsController : BaseApiController
     [HttpGet("test")]
     public async Task<IActionResult> Test()
     {
-        var invoiceCreateRequest = new CreateInvoiceRequest();
-        var webhookUrl = _webhookUrlBuilder.BuildWebhookUrl(nameof(WebhookController) /*add ext metjod to get controller name*/, nameof(WebhookController.FinalStatus));
-        var result = await ResolveHandler<CheckoutHandler>().HandlePaymentAsync(invoiceCreateRequest, webhookUrl);
+        var invoiceCreateRequest = new CheckoutRequest
+        {
+            AmountTotal = 150.25M,
+            Description = "Hello world",
+            ReturnUrl = null,
+            Currency = ECurrency.UAH
+        };
+        
+        var uri = _webhookUrlBuilder.BuildWebhookUrl(nameof(WebhookController).ToControllerName(), nameof(WebhookController.FinalStatus));
+        var result = await ResolveHandler<CheckoutHandler>().HandleAsync(invoiceCreateRequest, uri);
         return Ok(result);
     }
 }

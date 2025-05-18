@@ -6,7 +6,7 @@ internal class DbConstants
 
     internal class Tables
     {
-        internal const string Invoice = "invoice";
+        internal const string Bill = "bill";
         internal const string Payment = "payment";
     }
 }
