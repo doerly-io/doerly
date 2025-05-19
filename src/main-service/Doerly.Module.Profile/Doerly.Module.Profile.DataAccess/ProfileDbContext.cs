@@ -8,7 +8,9 @@ namespace Doerly.Module.Profile.DataAccess;
 
 public class ProfileDbContext(IConfiguration configuration) : BaseDbContext(configuration)
 {
-    public DbSet<ProfileEntity> Profiles { get; set; }
+    public DbSet<Models.Profile> Profiles { get; set; }
+    public DbSet<Language> Languages { get; set; }
+    public DbSet<LanguageProficiency> LanguageProficiencies { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

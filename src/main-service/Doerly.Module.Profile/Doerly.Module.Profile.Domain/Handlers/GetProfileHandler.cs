@@ -15,23 +15,26 @@ public class GetProfileHandler(ProfileDbContext dbContext, IFileRepository fileR
         var profile = await DbContext.Profiles
             .AsNoTracking()
             .Where(x => x.UserId == userId)
-            .Select(x => new
-            {
-                x.Id,
-                x.FirstName,
-                x.LastName,
-                x.DateOfBirth,
-                x.Sex,
-                x.Bio,
-                x.DateCreated,
-                x.LastModifiedDate,
-                x.ImagePath,
-                x.CvPath
-            })
             .FirstOrDefaultAsync(cancellationToken);
 
         if (profile == null)
             return HandlerResult.Failure<ProfileDto>(Resources.Get("ProfileNotFound"));
+        
+        var languageProficiencies = await DbContext.LanguageProficiencies
+            .AsNoTracking()
+            .Where(lp => lp.ProfileId == profile.Id)
+            .Select(lp => new LanguageProficiencyDto
+            {
+                Id = lp.Id,
+                Language = new LanguageDto 
+                {
+                    Id = lp.Language.Id,
+                    Name = lp.Language.Name,
+                    Code = lp.Language.Code
+                },
+                Level = lp.Level
+            })
+            .ToListAsync(cancellationToken);
 
         var urlTasks = new List<Task>(2);
         string imageUrl = null;
@@ -73,7 +76,19 @@ public class GetProfileHandler(ProfileDbContext dbContext, IFileRepository fileR
             DateCreated = profile.DateCreated,
             LastModifiedDate = profile.LastModifiedDate,
             ImageUrl = imageUrl,
-            CvUrl = cvUrl
+            CvUrl = cvUrl,
+            Address = profile.Street != null ? new AddressDto
+            {
+                StreetId = profile.Street.Id,
+                StreetName = profile.Street.Name,
+                CityId = profile.Street.City.Id,
+                CityName = profile.Street.City.Name,
+                RegionId = profile.Street.City.Region.Id,
+                RegionName = profile.Street.City.Region.Name,
+                Country = profile.Street.City.Region.Country,
+                PostIndex = profile.Street.ZipCode
+            } : null,
+            LanguageProficiencies = languageProficiencies
         };
 
         return HandlerResult.Success(profileDto);

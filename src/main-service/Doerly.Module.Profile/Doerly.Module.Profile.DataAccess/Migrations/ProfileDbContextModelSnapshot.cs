@@ -23,7 +23,202 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.ProfileEntity", b =>
+            modelBuilder.Entity("Doerly.DataAccess.Models.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_created");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<int>("RegionId")
+                        .HasColumnType("integer")
+                        .HasColumnName("region_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_city");
+
+                    b.HasIndex("RegionId")
+                        .HasDatabaseName("ix_city_region_id");
+
+                    b.ToTable("city", "address");
+                });
+
+            modelBuilder.Entity("Doerly.DataAccess.Models.Region", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Country")
+                        .HasColumnType("integer")
+                        .HasColumnName("country");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_created");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_region");
+
+                    b.ToTable("region", "address");
+                });
+
+            modelBuilder.Entity("Doerly.DataAccess.Models.Street", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("integer")
+                        .HasColumnName("city_id");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_created");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<int>("RegionId")
+                        .HasColumnType("integer")
+                        .HasColumnName("region_id");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("zip_code");
+
+                    b.HasKey("Id")
+                        .HasName("pk_street");
+
+                    b.HasIndex("CityId")
+                        .HasDatabaseName("ix_street_city_id");
+
+                    b.HasIndex("RegionId")
+                        .HasDatabaseName("ix_street_region_id");
+
+                    b.ToTable("street", "address");
+                });
+
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Language", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("code");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_created");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_language");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasDatabaseName("ix_language_code");
+
+                    b.ToTable("language", "profile");
+                });
+
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.LanguageProficiency", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_created");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer")
+                        .HasColumnName("language_id");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer")
+                        .HasColumnName("level");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("integer")
+                        .HasColumnName("profile_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_language_proficiencies");
+
+                    b.HasIndex("LanguageId")
+                        .HasDatabaseName("ix_language_proficiencies_language_id");
+
+                    b.HasIndex("ProfileId", "LanguageId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_language_proficiencies_profile_id_language_id");
+
+                    b.ToTable("language_proficiencies", "profile");
+                });
+
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Profile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,11 +228,13 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Bio")
-                        .HasColumnType("text")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
                         .HasColumnName("bio");
 
                     b.Property<string>("CvPath")
-                        .HasColumnType("text")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
                         .HasColumnName("cv_path");
 
                     b.Property<DateTime>("DateCreated")
@@ -55,7 +252,8 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                         .HasColumnName("first_name");
 
                     b.Property<string>("ImagePath")
-                        .HasColumnType("text")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
                         .HasColumnName("image_path");
 
                     b.Property<DateTime>("LastModifiedDate")
@@ -72,6 +270,10 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("sex");
 
+                    b.Property<int?>("StreetId")
+                        .HasColumnType("integer")
+                        .HasColumnName("street_id");
+
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
                         .HasColumnName("user_id");
@@ -79,11 +281,89 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("pk_profile");
 
+                    b.HasIndex("StreetId")
+                        .HasDatabaseName("ix_profile_street_id");
+
                     b.HasIndex("UserId")
                         .IsUnique()
                         .HasDatabaseName("ix_profile_user_id");
 
                     b.ToTable("profile", "profile");
+                });
+
+            modelBuilder.Entity("Doerly.DataAccess.Models.City", b =>
+                {
+                    b.HasOne("Doerly.DataAccess.Models.Region", "Region")
+                        .WithMany()
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_city_region_region_id");
+
+                    b.Navigation("Region");
+                });
+
+            modelBuilder.Entity("Doerly.DataAccess.Models.Street", b =>
+                {
+                    b.HasOne("Doerly.DataAccess.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_street_city_city_id");
+
+                    b.HasOne("Doerly.DataAccess.Models.Region", "Region")
+                        .WithMany()
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_street_region_region_id");
+
+                    b.Navigation("City");
+
+                    b.Navigation("Region");
+                });
+
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.LanguageProficiency", b =>
+                {
+                    b.HasOne("Doerly.Module.Profile.DataAccess.Models.Language", "Language")
+                        .WithMany("LanguageProficiencies")
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_language_proficiencies_language_language_id");
+
+                    b.HasOne("Doerly.Module.Profile.DataAccess.Models.Profile", "Profile")
+                        .WithMany("LanguageProficiencies")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_language_proficiencies_profile_profile_id");
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Profile", b =>
+                {
+                    b.HasOne("Doerly.DataAccess.Models.Street", "Street")
+                        .WithMany()
+                        .HasForeignKey("StreetId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_profile_street_street_id");
+
+                    b.Navigation("Street");
+                });
+
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Language", b =>
+                {
+                    b.Navigation("LanguageProficiencies");
+                });
+
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Profile", b =>
+                {
+                    b.Navigation("LanguageProficiencies");
                 });
 #pragma warning restore 612, 618
         }

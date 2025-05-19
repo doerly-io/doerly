@@ -27,4 +27,6 @@ public class ProfileSaveDto
     [DataType(DataType.MultilineText, ErrorMessage = "InvalidBioInput")]
     [MaxLength(1000, ErrorMessage = "BioTooLong")]
     public string? Bio { get; set; }
+    
+    public int? StreetId { get; set; }
 }

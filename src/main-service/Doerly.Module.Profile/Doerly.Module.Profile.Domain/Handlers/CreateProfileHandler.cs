@@ -2,7 +2,6 @@
 using Doerly.Localization;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
-using Doerly.Module.Profile.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -12,17 +11,18 @@ public class CreateProfileHandler(ProfileDbContext dbContext) : BaseProfileHandl
 {
     public async Task<HandlerResult> HandleAsync(ProfileSaveDto dto, CancellationToken cancellationToken = default)
     {
-        var isProfileExists = DbContext.Profiles
-            .AsNoTracking()
-            .Any(x => x.UserId == dto.UserId);
+        var validationResult = await ValidateProfileExistsAsync(
+            dto.UserId, shouldExist: false, cancellationToken);
         
-        if (isProfileExists)
-            return HandlerResult.Failure(Resources.Get("ProfileAlreadyExist"));
+        if (!validationResult.IsSuccess)
+            return validationResult;
         
-        var profile = new ProfileEntity();
-        CopyFromDto(profile, dto);
+        var profile = new DataAccess.Models.Profile();
+        MapProfileFromDto(profile, dto);
+
         DbContext.Profiles.Add(profile);
         await DbContext.SaveChangesAsync(cancellationToken);
+        
         return HandlerResult.Success();
     }
 }
