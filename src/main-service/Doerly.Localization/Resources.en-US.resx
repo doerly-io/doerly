@@ -107,4 +107,34 @@ Doerly</value>
     <data name="FailedToCreateCheckout" xml:space="preserve">
         <value>Failed to process payment operation</value>
     </data>
+	<data name="InvalidLanguageProficiencyLevelInput" xml:space="preserve">
+		<value>Invalid language proficiency level</value>
+	</data>
+	<data name="PostIndexTooLong" xml:space="preserve">
+		<value>Post index too long</value>
+	</data>
+	<data name="LanguageNotFound" xml:space="preserve">
+		<value>Language not found</value>
+	</data>
+	<data name="LanguageProficiencyAlreadyExists" xml:space="preserve">
+		<value>Language proficiency already exist</value>
+	</data>
+	<data name="LanguageProficiencyNotFound" xml:space="preserve">
+		<value>Language proficiency not found</value>
+	</data>
+	<data name="LanguageNameTooShort" xml:space="preserve">
+		<value>Language name is too short</value>
+	</data>
+	<data name="LanguageNameTooLong" xml:space="preserve">
+		<value>Language name is too long</value>
+	</data>
+	<data name="LanguageCodeTooLong" xml:space="preserve">
+		<value>Language code is too long</value>
+	</data>
+	<data name="LanguageCodeTooShort" xml:space="preserve">
+		<value>Language code is too short</value>
+	</data>
+	<data name="LanguageAlreadyExists" xml:space="preserve">
+		<value>Language already exist</value>
+	</data>
 </root>
