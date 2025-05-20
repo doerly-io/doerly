@@ -1,1 +1,51 @@
-<p style="color: green ">conversation-list works!</p>
+<div class="conversation-list-container">
+  <!-- Індикатор завантаження -->
+  <div *ngIf="loading()" class="loading-overlay">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+
+  <!-- Список розмов -->
+  <div class="conversation-list" *ngIf="!loading() && conversations().length > 0">
+    <div
+      class="conversation-item"
+      *ngFor="let conversation of conversations(); trackBy: trackByConversationId"
+      (click)="navigateToConversation(conversation.id)"
+    >
+      <img
+        *ngIf="getRecipientImageUrl(conversation)"
+        [src]="getRecipientImageUrl(conversation)"
+        alt="Avatar"
+        class="avatar"
+      />
+      <div class="conversation-details">
+        <div class="conversation-header">
+          <h3>{{ getRecipientName(conversation) }}</h3>
+          <small *ngIf="conversation.lastMessage">{{
+              conversation.lastMessage.sentAt | date: 'shortTime'
+            }}</small>
+        </div>
+        <p *ngIf="conversation.lastMessage" class="last-message">
+          {{ conversation.lastMessage.messageContent | slice: 0:50
+          }}{{ conversation.lastMessage.messageContent.length > 50 ? '...' : '' }}
+        </p>
+        <p *ngIf="!conversation.lastMessage" class="no-message">Повідомлень ще немає</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Повідомлення, якщо розмов немає -->
+  <div class="no-conversations" *ngIf="!loading() && conversations().length === 0">
+    <p>Розмов не знайдено</p>
+  </div>
+
+  <!-- Пагінатор -->
+  <p-paginator
+    [rows]="pageSize()"
+    [totalRecords]="totalRecords()"
+    (onPageChange)="onPageChange($event)"
+    [rowsPerPageOptions]="[10, 20, 50]"
+  ></p-paginator>
+
+  <!-- Toast для сповіщень -->
+  <p-toast></p-toast>
+</div>

@@ -1,4 +1,5 @@
 using Doerly.Module.Communication.Enums;
+using Doerly.Module.Profile.Contracts.Dtos;
 
 namespace Doerly.Module.Communication.Contracts.Dtos.Responses;
 
@@ -13,6 +14,8 @@ public class MessageResponseDto
     public MessageType MessageType { get; set; }
     
     public int SenderId { get; set; }
+    
+    public ProfileDto Sender { get; set; }
     
     public string MessageContent { get; set; }
     

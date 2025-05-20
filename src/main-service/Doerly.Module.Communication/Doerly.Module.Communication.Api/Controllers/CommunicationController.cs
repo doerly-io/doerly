@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Doerly.Api.Infrastructure;
+using Doerly.DataTransferObjects.Pagination;
 using Doerly.Domain.Models;
 using Doerly.Module.Communication.Contracts.Dtos.Requests;
 using Doerly.Module.Communication.Contracts.Dtos.Responses;
@@ -19,16 +20,26 @@ public class CommunicationController : BaseApiController
     [HttpGet("conversations")]
     [ProducesResponseType<HandlerResult<ConversationResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<HandlerResult<ConversationResponseDto>>(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetConversations(int pageNumber, int pageSize)
+    public async Task<IActionResult> GetConversations([FromQuery] GetConversationsWithPaginationRequest dto)
     {
         var userId = GetUserId();
-        var result = await ResolveHandler<GetConversationsHandler>().HandleAsync(userId, pageNumber, pageSize);
+        if(userId == 0)
+            return Unauthorized();
+
+        var pagination = new GetEntitiesWithPaginationRequest()
+        {
+            PageInfo = new PageInfo()
+            {
+                Number = dto.PageNumber,
+                Size = dto.PageSize
+            }
+        };
+        var result = await ResolveHandler<GetUserConversationsWithPaginationHandler>().HandleAsync(userId, pagination);
 
         if (!result.IsSuccess)
             return BadRequest(result);
-        
 
-        return Ok(result.Value);
+        return Ok(result);
     }
     
     [HttpGet("conversations/{conversationId:int}")]
@@ -42,16 +53,16 @@ public class CommunicationController : BaseApiController
             return NotFound(result);
         
 
-        return Ok(result.Value);
+        return Ok(result);
     }
     
     [HttpPost("messages/send")]
-    [ProducesResponseType<HandlerResult<SendMessageRequestDto>>(StatusCodes.Status200OK)]
-    public async Task<IActionResult> SendMessage(SendMessageRequestDto requestRequestDto)
+    [ProducesResponseType<HandlerResult<SendMessageRequest>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> SendMessage(SendMessageRequest requestRequest)
     {
         var userId = GetUserId();
-        requestRequestDto.InitiatorId = userId;
-        var result = await ResolveHandler<SendMessageHandler>().HandleAsync(requestRequestDto);
+        requestRequest.InitiatorId = userId;
+        var result = await ResolveHandler<SendMessageHandler>().HandleAsync(requestRequest);
         
         if (!result.IsSuccess)
             return Conflict(result);
@@ -69,6 +80,6 @@ public class CommunicationController : BaseApiController
         if (!result.IsSuccess)
             return NotFound(result);
 
-        return Ok(result.Value);
+        return Ok(result);
     }
 }

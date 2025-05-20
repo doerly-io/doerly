@@ -1,6 +1,5 @@
 using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Communication.Contracts.Dtos.Requests;
 using Doerly.Module.Communication.Contracts.Dtos.Responses;
 using Doerly.Module.Communication.DataAccess;
 using Microsoft.EntityFrameworkCore;

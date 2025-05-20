@@ -13,7 +13,7 @@ public class SendMessageHandler(CommunicationDbContext dbContext, IHubContext<Ch
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
-    public async Task<HandlerResult> HandleAsync(SendMessageRequestDto dto)
+    public async Task<HandlerResult> HandleAsync(SendMessageRequest dto)
     {
         var conversation = await _dbContext.Conversations.FirstOrDefaultAsync(c => c.Id == dto.ConversationId);
     

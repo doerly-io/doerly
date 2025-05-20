@@ -1,12 +1,13 @@
 import {inject, Injectable} from '@angular/core';
 import {environment} from '../../../../environments/environment.development';
-import {MessageResponse} from '../models/responses/message-response.model';
+import {MessageResponse} from '../models/message-response.model';
 import {BaseApiResponse} from '../../../@core/models/base-api-response';
 import {HttpClient} from '@angular/common/http';
 import {JwtTokenHelper} from '../../../@core/helpers/jwtToken.helper';
 import {Observable} from 'rxjs';
-import {ProfileResponse} from '../../profile/models/responses/ProfileResponse';
-import {ConversationResponse} from '../models/responses/conversation-response.model';
+import {ConversationResponse} from '../models/conversation-response.model';
+import {GetConversationResponse} from '../models/responses/get-conversation-response.model';
+import {PageInfo} from '../../../@core/models/page-info';
 
 
 @Injectable({
@@ -26,12 +27,18 @@ export class CommunicationService {
       )
   }
 
-  getConversations(): Observable<BaseApiResponse<ConversationResponse[]>> {
-    return this
-      .httpClient
-      .get<BaseApiResponse<MessageResponse[]>>(
-        `${this.baseUrl}/conversations`,
-        {withCredentials: true}
-      )
+  getUserConversationWithPagination(pagination: PageInfo): Observable<BaseApiResponse<GetConversationResponse>> {
+    const params = {
+      pageNumber: pagination.number,
+      pageSize: pagination.size
+    };
+
+    return this.httpClient.get<BaseApiResponse<GetConversationResponse>>(
+      `${this.baseUrl}/conversations`,
+      {
+        params,
+        withCredentials: true
+      }
+    );
   }
 }

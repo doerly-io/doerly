@@ -1,15 +1,16 @@
 import {MessageTypeEnum} from './message.type.enum';
 import {MessageStatus} from './message.status.enum';
+import {ProfileResponse} from '../../profile/models/responses/ProfileResponse';
 
 
 export interface MessageResponse {
   id: number;
   conversationId: number;
-  // conversation: ConversationDto;
   messageType: MessageTypeEnum;
   senderId: number;
+  sender: ProfileResponse;
   messageContent: string;
-  sentAt: Date; // ISO string format
+  sentAt: Date;
   status: MessageStatus;
 }
 

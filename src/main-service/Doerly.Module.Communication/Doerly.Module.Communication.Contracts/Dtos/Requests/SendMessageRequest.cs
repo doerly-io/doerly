@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Doerly.Module.Communication.Contracts.Dtos.Requests;
 
-public class SendMessageRequestDto
+public class SendMessageRequest
 {
     public int? ConversationId { get; set; }
     

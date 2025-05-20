@@ -12,5 +12,7 @@ public class ConversationEntity : BaseEntity
     
     public int? LastMessageId { get; set; }
     
+    public IEnumerable<int> ParticipantIds => [InitiatorId, RecipientId];
+    
     public virtual ICollection<MessageEntity> Messages { get; set; }
 }

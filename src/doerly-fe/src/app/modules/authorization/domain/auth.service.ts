@@ -14,9 +14,7 @@ import {PasswordResetRequest} from '../models/requests/password-reset-request';
 export class AuthService {
   private baseUrl = environment.baseApiUrl + '/auth'
 
-
-  constructor(private readonly httpClient: HttpClient) {
-  }
+  constructor(private readonly httpClient: HttpClient) {}
 
   login(model: LoginRequest): Observable<BaseApiResponse<LoginResponse>> {
     return this.httpClient.post<BaseApiResponse<LoginResponse>>(`${this.baseUrl}/login`, model, {withCredentials: true})
@@ -50,5 +48,4 @@ export class AuthService {
       }
     });
   }
-
 }
