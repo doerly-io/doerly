@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Doerly.DataAccess.Migrations
 {
     [DbContext(typeof(AddressDbContext))]
-    [Migration("20250519155502_Initial")]
-    partial class Initial
+    [Migration("20250519190056_RegionCityPopulation")]
+    partial class RegionCityPopulation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,10 +71,6 @@ namespace Doerly.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Country")
-                        .HasColumnType("integer")
-                        .HasColumnName("country");
-
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("date_created");
@@ -91,9 +87,6 @@ namespace Doerly.DataAccess.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_region");
-
-                    b.HasIndex("Country")
-                        .HasDatabaseName("ix_region_country");
 
                     b.ToTable("region", "address");
                 });

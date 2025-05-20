@@ -28,5 +28,5 @@ public class ProfileSaveDto
     [MaxLength(1000, ErrorMessage = "BioTooLong")]
     public string? Bio { get; set; }
     
-    public int? StreetId { get; set; }
+    public int? CityId { get; set; }
 }

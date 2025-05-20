@@ -67,10 +67,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Country")
-                        .HasColumnType("integer")
-                        .HasColumnName("country");
-
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("date_created");
@@ -88,53 +84,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                         .HasName("pk_region");
 
                     b.ToTable("region", "address");
-                });
-
-            modelBuilder.Entity("Doerly.DataAccess.Models.Street", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("integer")
-                        .HasColumnName("city_id");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_created");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_date");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.Property<int>("RegionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("region_id");
-
-                    b.Property<string>("ZipCode")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("zip_code");
-
-                    b.HasKey("Id")
-                        .HasName("pk_street");
-
-                    b.HasIndex("CityId")
-                        .HasDatabaseName("ix_street_city_id");
-
-                    b.HasIndex("RegionId")
-                        .HasDatabaseName("ix_street_region_id");
-
-                    b.ToTable("street", "address");
                 });
 
             modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Language", b =>
@@ -232,6 +181,10 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                         .HasColumnType("character varying(1000)")
                         .HasColumnName("bio");
 
+                    b.Property<int?>("CityId")
+                        .HasColumnType("integer")
+                        .HasColumnName("city_id");
+
                     b.Property<string>("CvPath")
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)")
@@ -270,10 +223,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("sex");
 
-                    b.Property<int?>("StreetId")
-                        .HasColumnType("integer")
-                        .HasColumnName("street_id");
-
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
                         .HasColumnName("user_id");
@@ -281,8 +230,8 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("pk_profile");
 
-                    b.HasIndex("StreetId")
-                        .HasDatabaseName("ix_profile_street_id");
+                    b.HasIndex("CityId")
+                        .HasDatabaseName("ix_profile_city_id");
 
                     b.HasIndex("UserId")
                         .IsUnique()
@@ -299,27 +248,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_city_region_region_id");
-
-                    b.Navigation("Region");
-                });
-
-            modelBuilder.Entity("Doerly.DataAccess.Models.Street", b =>
-                {
-                    b.HasOne("Doerly.DataAccess.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_street_city_city_id");
-
-                    b.HasOne("Doerly.DataAccess.Models.Region", "Region")
-                        .WithMany()
-                        .HasForeignKey("RegionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_street_region_region_id");
-
-                    b.Navigation("City");
 
                     b.Navigation("Region");
                 });
@@ -347,13 +275,13 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
 
             modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Profile", b =>
                 {
-                    b.HasOne("Doerly.DataAccess.Models.Street", "Street")
+                    b.HasOne("Doerly.DataAccess.Models.City", "City")
                         .WithMany()
-                        .HasForeignKey("StreetId")
+                        .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_profile_street_street_id");
+                        .HasConstraintName("fk_profile_city_city_id");
 
-                    b.Navigation("Street");
+                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Language", b =>

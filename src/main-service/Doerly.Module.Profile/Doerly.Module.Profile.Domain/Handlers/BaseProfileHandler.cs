@@ -51,7 +51,7 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
         profile.DateOfBirth = dto.DateOfBirth;
         profile.Sex = dto.Sex;
         profile.Bio = dto.Bio;
-        profile.StreetId = dto.StreetId;
+        profile.CityId = dto.CityId;
         profile.LastModifiedDate = DateTime.UtcNow;
     }
     

@@ -77,16 +77,12 @@ public class GetProfileHandler(ProfileDbContext dbContext, IFileRepository fileR
             LastModifiedDate = profile.LastModifiedDate,
             ImageUrl = imageUrl,
             CvUrl = cvUrl,
-            Address = profile.Street != null ? new AddressDto
+            Address = profile.City != null ? new ProfileAddressDto
             {
-                StreetId = profile.Street.Id,
-                StreetName = profile.Street.Name,
-                CityId = profile.Street.City.Id,
-                CityName = profile.Street.City.Name,
-                RegionId = profile.Street.City.Region.Id,
-                RegionName = profile.Street.City.Region.Name,
-                Country = profile.Street.City.Region.Country,
-                PostIndex = profile.Street.ZipCode
+                CityId = profile.City.Id,
+                CityName = profile.City.Name,
+                RegionId = profile.City.Region.Id,
+                RegionName = profile.City.Region.Name
             } : null,
             LanguageProficiencies = languageProficiencies
         };

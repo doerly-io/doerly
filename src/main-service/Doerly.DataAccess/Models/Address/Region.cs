@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Doerly.DataAccess.Constants;
-using Doerly.DataAccess.Enums.Address;
 
 namespace Doerly.DataAccess.Models;
 
@@ -8,6 +7,4 @@ namespace Doerly.DataAccess.Models;
 public class Region : BaseEntity
 {
     public string Name { get; set; }
-    
-    public Country Country { get; set; }
 }

@@ -16,11 +16,11 @@ public class ProfileConfiguration : IEntityTypeConfiguration<Models.Profile>
         builder.Property(x => x.UserId);
         builder.Property(x => x.ImagePath).HasMaxLength(300);
         builder.Property(x => x.CvPath).HasMaxLength(300);
-        builder.Property(x => x.StreetId);
+        builder.Property(x => x.CityId);
 
-        builder.HasOne(x => x.Street)
+        builder.HasOne(x => x.City)
             .WithMany()
-            .HasForeignKey(x => x.StreetId)
+            .HasForeignKey(x => x.CityId)
             .OnDelete(DeleteBehavior.Restrict);
         
         builder.HasIndex(x => x.UserId).IsUnique();

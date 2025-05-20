@@ -23,7 +23,6 @@ namespace Doerly.DataAccess.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    country = table.Column<int>(type: "integer", nullable: false),
                     date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -94,12 +93,6 @@ namespace Doerly.DataAccess.Migrations
                 schema: "address",
                 table: "city",
                 column: "region_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_region_country",
-                schema: "address",
-                table: "region",
-                column: "country");
 
             migrationBuilder.CreateIndex(
                 name: "ix_street_city_id",

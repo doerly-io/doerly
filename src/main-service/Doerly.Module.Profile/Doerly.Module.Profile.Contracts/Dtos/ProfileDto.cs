@@ -14,6 +14,6 @@ public class ProfileDto
     public DateTime LastModifiedDate { get; set; }
     public string? ImageUrl { get; set; }
     public string? CvUrl { get; set; }
-    public AddressDto? Address { get; set; }
+    public ProfileAddressDto? Address { get; set; }
     public ICollection<LanguageProficiencyDto> LanguageProficiencies { get; set; } = new List<LanguageProficiencyDto>();
 }

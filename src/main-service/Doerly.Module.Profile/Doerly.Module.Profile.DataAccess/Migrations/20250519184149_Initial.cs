@@ -43,7 +43,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     name = table.Column<string>(type: "text", nullable: false),
-                    country = table.Column<int>(type: "integer", nullable: false),
                     date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -77,39 +76,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "street",
-                schema: "address",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    zip_code = table.Column<string>(type: "text", nullable: false),
-                    region_id = table.Column<int>(type: "integer", nullable: false),
-                    city_id = table.Column<int>(type: "integer", nullable: false),
-                    date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_street", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_street_city_city_id",
-                        column: x => x.city_id,
-                        principalSchema: "address",
-                        principalTable: "city",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_street_region_region_id",
-                        column: x => x.region_id,
-                        principalSchema: "address",
-                        principalTable: "region",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "profile",
                 schema: "profile",
                 columns: table => new
@@ -118,7 +84,7 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     first_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     last_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    street_id = table.Column<int>(type: "integer", nullable: true),
+                    city_id = table.Column<int>(type: "integer", nullable: true),
                     date_of_birth = table.Column<DateOnly>(type: "date", nullable: true),
                     sex = table.Column<int>(type: "integer", nullable: false),
                     bio = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
@@ -132,10 +98,10 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 {
                     table.PrimaryKey("pk_profile", x => x.id);
                     table.ForeignKey(
-                        name: "fk_profile_street_street_id",
-                        column: x => x.street_id,
+                        name: "fk_profile_city_city_id",
+                        column: x => x.city_id,
                         principalSchema: "address",
-                        principalTable: "street",
+                        principalTable: "city",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -199,10 +165,10 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_profile_street_id",
+                name: "ix_profile_city_id",
                 schema: "profile",
                 table: "profile",
-                column: "street_id");
+                column: "city_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_profile_user_id",
@@ -210,18 +176,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 table: "profile",
                 column: "user_id",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "ix_street_city_id",
-                schema: "address",
-                table: "street",
-                column: "city_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_street_region_id",
-                schema: "address",
-                table: "street",
-                column: "region_id");
         }
 
         /// <inheritdoc />
@@ -238,10 +192,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
             migrationBuilder.DropTable(
                 name: "profile",
                 schema: "profile");
-
-            migrationBuilder.DropTable(
-                name: "street",
-                schema: "address");
 
             migrationBuilder.DropTable(
                 name: "city",
