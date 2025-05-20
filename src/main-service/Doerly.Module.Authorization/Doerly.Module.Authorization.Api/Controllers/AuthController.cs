@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Web;
 using Doerly.Infrastructure.Api;
 using Doerly.Domain.Models;
 using Doerly.Messaging;
@@ -7,7 +6,6 @@ using Doerly.Module.Authorization.Api.Constants;
 using Doerly.Module.Authorization.Contracts.Dtos;
 using Doerly.Module.Authorization.Contracts.Messages;
 using Doerly.Module.Authorization.Domain.Handlers;
-using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -55,8 +53,7 @@ public class AuthController(IMessagePublisher messagePublisher) : BaseApiControl
         if (string.IsNullOrEmpty(refreshToken) || string.IsNullOrEmpty(accessToken))
             return Unauthorized();
 
-        var decodedToken = HttpUtility.UrlDecode(refreshToken);
-        var result = await ResolveHandler<RefreshTokenHandler>().HandleAsync(decodedToken, accessToken);
+        var result = await ResolveHandler<RefreshTokenHandler>().HandleAsync(refreshToken, accessToken);
         if (!result.IsSuccess)
             return Unauthorized(result);
 

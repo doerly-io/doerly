@@ -85,9 +85,8 @@ public class BaseAuthHandler : BaseHandler<AuthorizationDbContext>
     protected string GetResetTokenHash(byte[] tokenBytes)
     {
         var secretKey = Encoding.UTF8.GetBytes(AuthOptions.Value.SecretKey);
-        using var hmac = new HMACSHA256(secretKey);
-        var token = hmac.ComputeHash(tokenBytes);
-        return Convert.ToBase64String(token);
+        var hashedToken = HMACSHA256.HashData( secretKey, tokenBytes);
+        return Convert.ToBase64String(hashedToken);
     }
 
     protected (string hashedToken, string originalToken) GetResetToken()
