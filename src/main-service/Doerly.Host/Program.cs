@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Text;
 using Doerly.Domain.Factories;
 using Doerly.Common.Settings;
+using Doerly.DataAccess;
+using Doerly.DataAccess.Utils;
 using Doerly.FileRepository;
 using Doerly.Infrastructure.Api;
 using Doerly.Localization;
@@ -73,6 +75,8 @@ foreach (var moduleAssembly in loadedAssemblies)
 }
 
 #endregion
+
+builder.Services.AddDbContext<AddressDbContext>();
 
 #region ModuleProxies
 
@@ -233,5 +237,7 @@ foreach (var moduleInitializer in moduleInitializers)
 {
     moduleInitializer.Configure(app, app.Environment);
 }
+
+((IApplicationBuilder)app).ApplicationServices.MigrateDatabase<AddressDbContext>();
 
 app.Run();

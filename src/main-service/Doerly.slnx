@@ -1,5 +1,6 @@
 ﻿<Solution>
   <Folder Name="/Common/">
+    <Project Path="Doerly.Common.Api\Doerly.Common.Api.csproj" Type="Classic C#" />
     <Project Path="Doerly.Common.Settings\Doerly.Common.Settings.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/FileRepository/">

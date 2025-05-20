@@ -1,4 +1,5 @@
-﻿using Doerly.Domain.Models;
+﻿using Doerly.DataAccess;
+using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Localization;
 using Doerly.Module.Profile.Contracts.Dtos;
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
 
-public class GetProfileHandler(ProfileDbContext dbContext, IFileRepository fileRepository) : BaseProfileHandler(dbContext)
+public class GetProfileHandler(ProfileDbContext dbContext, AddressDbContext addressDbContext, IFileRepository fileRepository) : BaseProfileHandler(dbContext)
 {
     public async Task<HandlerResult<ProfileDto>> HandleAsync(int userId, CancellationToken cancellationToken = default)
     {
@@ -64,6 +65,18 @@ public class GetProfileHandler(ProfileDbContext dbContext, IFileRepository fileR
         {
             await Task.WhenAll(urlTasks);
         }
+        
+        var address = await addressDbContext.Cities
+            .AsNoTracking()
+            .Where(c => c.Id == profile.CityId)
+            .Select(c => new ProfileAddressDto
+            {
+                CityId = c.Id,
+                CityName = c.Name,
+                RegionId = c.Region.Id,
+                RegionName = c.Region.Name
+            })
+            .FirstOrDefaultAsync(cancellationToken);
 
         var profileDto = new ProfileDto
         {
@@ -77,13 +90,7 @@ public class GetProfileHandler(ProfileDbContext dbContext, IFileRepository fileR
             LastModifiedDate = profile.LastModifiedDate,
             ImageUrl = imageUrl,
             CvUrl = cvUrl,
-            Address = profile.City != null ? new ProfileAddressDto
-            {
-                CityId = profile.City.Id,
-                CityName = profile.City.Name,
-                RegionId = profile.City.Region.Id,
-                RegionName = profile.City.Region.Name
-            } : null,
+            Address = address,
             LanguageProficiencies = languageProficiencies
         };
 

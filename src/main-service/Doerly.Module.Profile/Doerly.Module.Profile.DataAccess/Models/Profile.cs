@@ -11,7 +11,6 @@ public class Profile : BaseEntity
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public int? CityId { get; set; }
-    public virtual City? City { get; set; }
     public DateOnly? DateOfBirth { get; set; }
     public ESex Sex { get; set; }
     public string? Bio { get; set; }

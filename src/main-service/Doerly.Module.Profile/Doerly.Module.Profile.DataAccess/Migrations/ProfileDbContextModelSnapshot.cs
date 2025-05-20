@@ -23,69 +23,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Doerly.DataAccess.Models.City", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_created");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_date");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.Property<int>("RegionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("region_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_city");
-
-                    b.HasIndex("RegionId")
-                        .HasDatabaseName("ix_city_region_id");
-
-                    b.ToTable("city", "address");
-                });
-
-            modelBuilder.Entity("Doerly.DataAccess.Models.Region", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_created");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_date");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_region");
-
-                    b.ToTable("region", "address");
-                });
-
             modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Language", b =>
                 {
                     b.Property<int>("Id")
@@ -230,26 +167,11 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("pk_profile");
 
-                    b.HasIndex("CityId")
-                        .HasDatabaseName("ix_profile_city_id");
-
                     b.HasIndex("UserId")
                         .IsUnique()
                         .HasDatabaseName("ix_profile_user_id");
 
                     b.ToTable("profile", "profile");
-                });
-
-            modelBuilder.Entity("Doerly.DataAccess.Models.City", b =>
-                {
-                    b.HasOne("Doerly.DataAccess.Models.Region", "Region")
-                        .WithMany()
-                        .HasForeignKey("RegionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_city_region_region_id");
-
-                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.LanguageProficiency", b =>
@@ -271,17 +193,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     b.Navigation("Language");
 
                     b.Navigation("Profile");
-                });
-
-            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Profile", b =>
-                {
-                    b.HasOne("Doerly.DataAccess.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_profile_city_city_id");
-
-                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Language", b =>

@@ -13,9 +13,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "address");
-
-            migrationBuilder.EnsureSchema(
                 name: "profile");
 
             migrationBuilder.CreateTable(
@@ -33,46 +30,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_language", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "region",
-                schema: "address",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_region", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "city",
-                schema: "address",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    region_id = table.Column<int>(type: "integer", nullable: false),
-                    date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_city", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_city_region_region_id",
-                        column: x => x.region_id,
-                        principalSchema: "address",
-                        principalTable: "region",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,13 +54,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_profile", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_profile_city_city_id",
-                        column: x => x.city_id,
-                        principalSchema: "address",
-                        principalTable: "city",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -139,12 +89,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_city_region_id",
-                schema: "address",
-                table: "city",
-                column: "region_id");
-
-            migrationBuilder.CreateIndex(
                 name: "ix_language_code",
                 schema: "profile",
                 table: "language",
@@ -163,12 +107,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 table: "language_proficiencies",
                 columns: new[] { "profile_id", "language_id" },
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "ix_profile_city_id",
-                schema: "profile",
-                table: "profile",
-                column: "city_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_profile_user_id",
@@ -192,14 +130,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
             migrationBuilder.DropTable(
                 name: "profile",
                 schema: "profile");
-
-            migrationBuilder.DropTable(
-                name: "city",
-                schema: "address");
-
-            migrationBuilder.DropTable(
-                name: "region",
-                schema: "address");
         }
     }
 }

@@ -29,6 +29,7 @@
         <ProjectReference Include="..\Doerly.FileRepository\Doerly.FileRepository.csproj" />
         <ProjectReference Include="..\Doerly.Localization\Doerly.Localization.csproj" />
         <ProjectReference Include="..\Doerly.Messaging\Doerly.Messaging.csproj" />
+        <ProjectReference Include="..\Doerly.Common.Api\Doerly.Common.Api.csproj" />
         <ProjectReference Include="..\Doerly.Module.Authorization\Doerly.Module.Authorization.Api\Doerly.Module.Authorization.Api.csproj" />
         <ProjectReference Include="..\Doerly.Module.Profile\Doerly.Module.Profile.Api\Doerly.Module.Profile.Api.csproj" />
         <ProjectReference Include="..\Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj" />

@@ -3,7 +3,7 @@ using Doerly.Infrastructure.Api;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Doerly.Api.Controllers;
+namespace Doerly.Common.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
