@@ -1,7 +1,6 @@
-﻿using Doerly.Domain.Extensions;
-using Doerly.Api.Infrastructure;
-using Doerly.DataAccess;
+﻿using Doerly.DataAccess;
 using Doerly.DataAccess.Utils;
+using Doerly.Infrastructure.Api;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,5 +1,5 @@
-using Doerly.Api.Infrastructure;
 using Doerly.DataAccess;
+using Doerly.Infrastructure.Api;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

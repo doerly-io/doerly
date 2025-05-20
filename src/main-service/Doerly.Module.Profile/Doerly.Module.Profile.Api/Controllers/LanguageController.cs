@@ -1,6 +1,6 @@
-using Doerly.Api.Infrastructure;
 using Doerly.DataTransferObjects.Pagination;
 using Doerly.Domain.Models;
+using Doerly.Infrastructure.Api;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.Domain.Handlers;
 using Microsoft.AspNetCore.Http;
