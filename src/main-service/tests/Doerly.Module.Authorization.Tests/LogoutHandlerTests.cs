@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Security.Cryptography;
+using System.Text;
 using Doerly.Common.Settings;
 using Doerly.Localization;
 using Doerly.Module.Authorization.DataAccess.Entities;
@@ -12,10 +13,11 @@ namespace Doerly.Module.Authorization.Tests;
 public class LogoutHandlerTests : BaseAuthTests
 {
     private readonly LogoutHandler _handler;
+    private readonly IOptions<AuthSettings> _authSettings;
 
     public LogoutHandlerTests(PostgresTestContainerFixture fixture) : base(fixture)
     {
-        var authSettings = Options.Create(new AuthSettings
+        _authSettings = Options.Create(new AuthSettings
         {
             Issuer = "test-issuer",
             Audience = "test-audience",
@@ -24,7 +26,7 @@ public class LogoutHandlerTests : BaseAuthTests
             RefreshTokenLifetime = 15
         });
 
-        _handler = new LogoutHandler(DbContext, authSettings);
+        _handler = new LogoutHandler(DbContext, _authSettings);
     }
     
     [Fact]
@@ -33,15 +35,28 @@ public class LogoutHandlerTests : BaseAuthTests
         // Arrange
         var refreshToken = "test-refresh-token";
         var tokenBytes = Encoding.UTF8.GetBytes(refreshToken);
-        using var hmac = new System.Security.Cryptography.HMACSHA512();
-        var hashedToken = Convert.ToBase64String(hmac.ComputeHash(tokenBytes));
+        var keyBytes = Encoding.UTF8.GetBytes(_authSettings.Value.SecretKey);
+        var hashedToken = Convert.ToBase64String(HMACSHA256.HashData(keyBytes, tokenBytes));
+        
+        var user = new UserEntity
+        {
+            Id = 1,
+            Email = "test@",
+            IsEmailVerified = true,
+            PasswordSalt = string.Empty,
+            PasswordHash = string.Empty,
+        };
+        
         var tokenEntity = new TokenEntity
         {
             Value = hashedToken,
             TokenKind = ETokenKind.RefreshToken,
-            Guid = Guid.CreateVersion7()
+            Guid = Guid.CreateVersion7(),
+            UserId = user.Id,
+            User = user
         };
         
+        DbContext.Users.Add(user);
         DbContext.Tokens.Add(tokenEntity);
         await DbContext.SaveChangesAsync();
 
