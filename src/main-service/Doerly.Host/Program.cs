@@ -1,7 +1,6 @@
 using System.Globalization;
 using Doerly.Host;
 using System.Reflection;
-using System.Resources;
 using System.Text;
 using Doerly.Domain.Factories;
 using Doerly.Common.Settings;
