@@ -1,4 +1,5 @@
 using Doerly.DataAccess;
+using Doerly.Domain.Models;
 using Doerly.Infrastructure.Api;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ public class AddressController : BaseApiController
         _addressDbContext = addressDbContext;
     }
 
-    [HttpGet("regions/{countryId}")]
+    [HttpGet("regions")]
     public async Task<IActionResult> GetRegions()
     {
         var regions = await _addressDbContext.Regions
@@ -27,11 +28,11 @@ public class AddressController : BaseApiController
             })
             .ToListAsync();
 
-        return Ok(regions);
+        return Ok(HandlerResult.Success(regions));
     }
-
-    [HttpGet("cities/{regionId}")]
-    public async Task<IActionResult> GetCities(int regionId)
+    
+    [HttpGet("regions/{regionId}/cities")]
+    public async Task<IActionResult> GetRegionCities(int regionId)
     {
         var cities = await _addressDbContext.Cities
             .Where(c => c.RegionId == regionId)
@@ -42,14 +43,36 @@ public class AddressController : BaseApiController
             })
             .ToListAsync();
 
-        return Ok(cities);
+        return Ok(HandlerResult.Success(cities));
+    }
+    
+    [HttpGet("regions/{regionId}/cities/{cityId}")]
+    public async Task<IActionResult> GetCity(int regionId, int cityId)
+    {
+        var city = await _addressDbContext.Cities
+            .Where(c => c.RegionId == regionId && c.Id == cityId)
+            .Select(c => new
+            {
+                c.Id,
+                c.Name,
+                c.RegionId,
+                RegionName = c.Region.Name
+            })
+            .FirstOrDefaultAsync();
+
+        if (city == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(HandlerResult.Success(city));
     }
 
-    [HttpGet("streets/{cityId}")]
-    public async Task<IActionResult> GetStreets(int cityId)
+    [HttpGet("regions/{regionId}/cities/{cityId}/streets")]
+    public async Task<IActionResult> GetStreets(int regionId, int cityId)
     {
         var streets = await _addressDbContext.Streets
-            .Where(s => s.CityId == cityId)
+            .Where(s => s.CityId == cityId && s.City.RegionId == regionId)
             .Select(s => new
             {
                 s.Id,
@@ -58,6 +81,6 @@ public class AddressController : BaseApiController
             })
             .ToListAsync();
 
-        return Ok(streets);
+        return Ok(HandlerResult.Success(streets));
     }
 } 

@@ -30,6 +30,8 @@ import { Dialog } from 'primeng/dialog';
 import { Tooltip } from 'primeng/tooltip';
 import { PdfService } from 'app/@core/services/pdf.service';
 import { ProfileResponse } from '../../models/responses/ProfileResponse';
+import { AddressSelectComponent } from 'app/@shared/components/address-select/address-select.component';
+import { ProfileRequest } from '../../models/requests/ProfileRequest';
 
 @Component({
   selector: 'app-profile',
@@ -51,7 +53,8 @@ import { ProfileResponse } from '../../models/responses/ProfileResponse';
     DatePicker,
     Dialog,
     NgOptimizedImage,
-    Tooltip
+    Tooltip,
+    AddressSelectComponent
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
@@ -98,7 +101,13 @@ export class ProfileComponent implements OnInit {
       sex: [1, Validators.required],
       bio: [''],
       imageUrl: [''],
-      cvUrl: ['']
+      cvUrl: [''],
+      address: this.formBuilder.group({
+        cityId: [null, Validators.required],
+        cityName: [''],
+        regionId: [null, Validators.required],
+        regionName: ['']
+      })
     });
   }
 
@@ -153,11 +162,18 @@ export class ProfileComponent implements OnInit {
 
   onSaveProfile(): void {
     const formValue = this.formProfile.value;
+    const request : ProfileRequest = {
+      userId: formValue.id,
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
+      patronymic: formValue.patronymic,
+      dateOfBirth: formValue.dateOfBirth,
+      sex: formValue.sex,
+      bio: formValue.bio,
+      cityId: formValue.address.cityId
+    }
     this.handleProfileOperation(
-      this.profileService.update({
-        userId: formValue.id,
-        ...formValue
-      }),
+      this.profileService.update(request),
       'profile.message.save.success',
       'profile.message.save.error',
       () => {
@@ -329,4 +345,12 @@ export class ProfileComponent implements OnInit {
     return this.pdfService.getZoomLevel();
   }
   // endregion
+
+  onAddressChange(address: { cityId: number }): void {
+    this.formProfile.patchValue({
+      address: {
+        cityId: address.cityId
+      }
+    });
+  }
 }

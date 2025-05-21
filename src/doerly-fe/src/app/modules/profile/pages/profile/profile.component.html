@@ -224,6 +224,32 @@
           </div>
           <p-divider [layout]="'horizontal'"/>
 
+          <!-- Address -->
+          <div class="d-flex align-items-center gap-lg-5 gap-md-4 gap-sm-3">
+            <div class="content-title d-flex align-items-center">
+              <p class="fw-normal fs-7">
+                {{ 'profile.basic.address.title' | translate }}
+              </p>
+            </div>
+            <div>
+                <span *ngIf="!isEdit" class="c-primary fw-semibold row-text">
+                  {{
+                    formProfile.get('address.regionName')?.value && formProfile.get('address.cityName')?.value ?
+                      formProfile.get('address.regionName')?.value + ', ' + formProfile.get('address.cityName')?.value : ''
+                  }}
+                </span>
+                <app-address-select
+                  *ngIf="isEdit"
+                  [initialRegionId]="formProfile.get('address.regionId')?.value"
+                  [initialCityId]="formProfile.get('address.cityId')?.value"
+                  [initialRegionName]="formProfile.get('address.regionName')?.value"
+                  [initialCityName]="formProfile.get('address.cityName')?.value"
+                  (addressChange)="onAddressChange($event)"
+                ></app-address-select>
+            </div>
+          </div>
+          <p-divider [layout]="'horizontal'"/>
+
         </div>
       </form>
 

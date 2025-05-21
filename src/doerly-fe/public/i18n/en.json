@@ -1,4 +1,12 @@
 {
+  "address": {
+    "region": {
+      "placeholder": "Select your region"
+    },
+    "city": {
+      "placeholder": "Select your city"
+    }
+  },
   "auth": {
     "login": "Login",
     "logout": "Logout",
@@ -34,6 +42,9 @@
         "edit": "Edit basic info",
         "save": "Save basic info"
       },
+      "address": {
+        "title": "Address"
+      },
       "bio": {
         "title": "Bio",
         "placeholder": "Tell us about yourself"
@@ -48,7 +59,8 @@
         "subtitle": "Profile picture will help you be recognized in the service",
         "upload": {
           "button": {
-            "text": "Upload"
+            "text": "Upload",
+            "tooltip": "Upload profile picture"
           },
           "select": "Select picture",
           "title": "Upload picture"
@@ -168,7 +180,7 @@
     "customer_id": "Customer ID",
     "executor_id": "Executor ID",
     "execution_date": "Execution Date",
-    "bill_id": "Bill ID",  
+    "bill_id": "Bill ID",
     "field_required": "This field is required",
     "price_min": "Price must be greater than or equal to 0",
     "invalid_date": "The date is incorrect",
