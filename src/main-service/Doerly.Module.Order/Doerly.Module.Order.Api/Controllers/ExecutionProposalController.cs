@@ -1,4 +1,4 @@
-﻿using Doerly.Api.Infrastructure;
+﻿using Doerly.Infrastructure.Api;
 using Doerly.Module.Order.Domain.Dtos.Requests;
 using Doerly.Module.Order.Domain.Handlers;
 

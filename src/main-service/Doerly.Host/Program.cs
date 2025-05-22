@@ -1,15 +1,16 @@
 using System.Globalization;
 using Doerly.Host;
 using System.Reflection;
-using System.Resources;
 using System.Text;
 using Doerly.Domain.Factories;
-using Doerly.Api.Infrastructure;
 using Doerly.Common.Settings;
 using Doerly.FileRepository;
+using Doerly.Infrastructure.Api;
 using Doerly.Localization;
 using Doerly.Messaging;
 using Doerly.Notification.EmailSender;
+using Doerly.Proxy.BaseProxy;
+using Doerly.Proxy.Payment;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
@@ -24,16 +25,18 @@ var configuration = builder.Configuration;
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-builder.Services.AddControllers(options => { options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider()); })
+builder.Services
+    .AddControllers(options => { options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider()); })
     .AddDataAnnotationsLocalization(options =>
     {
         options.DataAnnotationLocalizerProvider = (type, factory) =>
         {
-            var resourceManager = new ResourceManager("Doerly.Localization.Resources", typeof(Resources).Assembly);
+            var resourceManager = Resources.ResourceManager;
             return new DataAnnotationsStringLocalizer(resourceManager);
         };
     })
     .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase; });
+
 
 #region Configure Modules
 
@@ -71,11 +74,26 @@ foreach (var moduleAssembly in loadedAssemblies)
 
 #endregion
 
+#region ModuleProxies
+
+builder.Services.AddProxy<IPaymentModuleProxy, PaymentModuleProxy>();
+
+#endregion
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddSingleton<WebhookUrlBuilder>();
+
 builder.Services.AddScoped<SendEmailHandler>();
 
 builder.Services.AddScoped<IHandlerFactory, HandlerFactory>();
 
 builder.Services.AddScoped<IMessagePublisher, MessagePublisher>();
+
+builder.Services.ConfigureHttpClientDefaults(httpClientBuilder => httpClientBuilder.AddStandardResilienceHandler(options =>
+{
+    
+}));
 
 #region Configure Settings
 
@@ -110,6 +128,12 @@ builder.Services.AddOptions<AzureStorageSettings>()
     .ValidateOnStart();
 
 var azureStorageSettings = azureStorageSettingsConfiguration.Get<AzureStorageSettings>();
+
+var backendSettingsConfiguration = configuration.GetSection(BackendSettings.BackendSettingsName);
+builder.Services.AddOptions<BackendSettings>()
+    .Bind(backendSettingsConfiguration)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 
 #endregion
 

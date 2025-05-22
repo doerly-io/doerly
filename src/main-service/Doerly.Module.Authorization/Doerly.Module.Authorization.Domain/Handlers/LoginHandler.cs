@@ -48,7 +48,7 @@ public class LoginHandler : BaseAuthHandler
             UserEmail = user.Email
         };
 
-        return HandlerResult.Success((loginResultDto, refreshTokenValue.hashedToken));
+        return HandlerResult.Success((loginResultDto, refreshTokenValue.originalToken));
     }
 
     private bool VerifyPasswordHash(string password, string passwordHash, string passwordSalt)

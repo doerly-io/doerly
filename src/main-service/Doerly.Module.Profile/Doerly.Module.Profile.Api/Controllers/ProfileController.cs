@@ -1,4 +1,4 @@
-﻿using Doerly.Api.Infrastructure;
+﻿using Doerly.Infrastructure.Api;
 using Doerly.Domain.Models;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.Domain.Handlers;
