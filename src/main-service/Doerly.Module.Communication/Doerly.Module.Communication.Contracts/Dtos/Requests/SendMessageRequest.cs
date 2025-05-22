@@ -4,8 +4,6 @@ namespace Doerly.Module.Communication.Contracts.Dtos.Requests;
 
 public class SendMessageRequest
 {
-    public int? ConversationId { get; set; }
-    
     public required int RecipientId { get; set; }
     
     public required string MessageContent { get; set; }

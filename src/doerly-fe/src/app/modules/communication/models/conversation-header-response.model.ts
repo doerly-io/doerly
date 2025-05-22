@@ -1,9 +1,9 @@
 import {ProfileResponse} from '../../profile/models/responses/ProfileResponse';
 import {MessageResponse} from './message-response.model';
 
-export interface ConversationResponse {
+export interface ConversationHeaderResponse {
   id: number;
   initiator: ProfileResponse;
   recipient: ProfileResponse;
-  messages: MessageResponse[];
+  lastMessage: MessageResponse;
 }

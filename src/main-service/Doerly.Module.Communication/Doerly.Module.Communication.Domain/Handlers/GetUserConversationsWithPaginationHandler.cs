@@ -16,8 +16,18 @@ public class GetUserConversationsWithPaginationHandler(CommunicationDbContext db
     public async Task<HandlerResult<GetUserConversationsWithPaginationResponse>> HandleAsync(int userId, GetEntitiesWithPaginationRequest pagination)
     {
         var (conversations, totalCount) = await _dbContext.Conversations
-            .AsNoTracking()
+            .Select(c => new
+            {
+                Conversation = c,
+                LastMessageSentAt = c.Messages
+                    .OrderByDescending(m => m.SentAt)
+                    .Select(m => m.SentAt)
+                    .FirstOrDefault()
+            })
+            .OrderByDescending(c => c.LastMessageSentAt)
+            .Select(c => c.Conversation)
             .Include(c => c.Messages.OrderByDescending(m => m.SentAt).Take(1))
+            .AsNoTracking()
             .GetEntitiesWithPaginationAsync(pagination.PageInfo);
         
         var participantsIds = conversations.SelectMany(c => c.ParticipantIds).Distinct().ToList();

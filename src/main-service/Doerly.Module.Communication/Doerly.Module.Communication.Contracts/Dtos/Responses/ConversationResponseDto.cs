@@ -1,15 +1,14 @@
+using Doerly.Module.Profile.Contracts.Dtos;
+
 namespace Doerly.Module.Communication.Contracts.Dtos.Responses;
 
 public class ConversationResponseDto
 {
     public int Id { get; set; }
     
-    public int InitiatorId { get; set; }
+    public ProfileDto Initiator { get; set; }
     
-    public int RecipientId { get; set; }
-    
-    
-    public int? LastMessageId { get; set; }
+    public ProfileDto Recipient { get; set; }
     
     public List<MessageResponseDto> Messages { get; set; }
 }

@@ -5,9 +5,10 @@ import {BaseApiResponse} from '../../../@core/models/base-api-response';
 import {HttpClient} from '@angular/common/http';
 import {JwtTokenHelper} from '../../../@core/helpers/jwtToken.helper';
 import {Observable} from 'rxjs';
-import {ConversationResponse} from '../models/conversation-response.model';
+import {ConversationHeaderResponse} from '../models/conversation-header-response.model';
 import {GetConversationResponse} from '../models/responses/get-conversation-response.model';
 import {PageInfo} from '../../../@core/models/page-info';
+import {ConversationResponse} from '../models/conversation-response.model';
 
 
 @Injectable({
@@ -25,6 +26,15 @@ export class CommunicationService {
         `${this.baseUrl}/messages/${id}`,
         {withCredentials: true}
       )
+  }
+
+  getUserConversationById(id: number): Observable<BaseApiResponse<ConversationResponse>> {
+    return this.httpClient.get<BaseApiResponse<ConversationResponse>>(
+      `${this.baseUrl}/conversations/${id}`,
+      {
+        withCredentials: true
+      }
+    );
   }
 
   getUserConversationWithPagination(pagination: PageInfo): Observable<BaseApiResponse<GetConversationResponse>> {

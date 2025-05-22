@@ -9,13 +9,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Communication.Domain.Handlers;
 
-public class SendMessageHandler(CommunicationDbContext dbContext, IHubContext<ChatHub, IChatHub> hubContext) : BaseCommunicationHandler(dbContext)
+public class SendMessageHandler(CommunicationDbContext dbContext, IHubContext<CommunicationHub, ICommunicationHub> hubContext) : BaseCommunicationHandler(dbContext)
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
     public async Task<HandlerResult> HandleAsync(SendMessageRequest dto)
     {
-        var conversation = await _dbContext.Conversations.FirstOrDefaultAsync(c => c.Id == dto.ConversationId);
+        var conversation = await _dbContext.Conversations.FirstOrDefaultAsync(c => c.InitiatorId == dto.InitiatorId && c.RecipientId == dto.RecipientId);
     
         if (conversation == null)
         {

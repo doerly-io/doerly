@@ -5,20 +5,20 @@ using Microsoft.AspNetCore.SignalR;
 namespace Doerly.Module.Communication.Domain.Hubs;
 
 [Authorize]
-public class ChatHub : Hub<IChatHub>
+public class CommunicationHub : Hub<ICommunicationHub>
 {
     public async Task SendMessage(string conversationId, string senderId, string messageContent)
     {
         await Clients.Group(conversationId).SendMessage(senderId, messageContent);
     }
     
-    public async Task JoinChat(string conversationId)
+    public async Task JoinConversation(string conversationId)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, conversationId);
         await Clients.Group(conversationId).JoinConversation(conversationId);
     }
 
-    public async Task LeaveChat(string conversationId)
+    public async Task LeaveConversation(string conversationId)
     {
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, conversationId);
         await Clients.Caller.LeaveConversation(conversationId);

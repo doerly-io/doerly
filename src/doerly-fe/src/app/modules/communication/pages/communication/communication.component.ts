@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {ConversationListComponent} from '../conversation-list/conversation-list.component';
 import {ChatWindowComponent} from '../chat-window/chat-window.component';
 
@@ -12,5 +12,9 @@ import {ChatWindowComponent} from '../chat-window/chat-window.component';
   styleUrl: './communication.component.scss'
 })
 export class CommunicationComponent {
+  protected readonly selectedConversationId = signal<number | undefined>(undefined);
 
+  onConversationSelected(conversationId: number) {
+    this.selectedConversationId.set(conversationId);
+  }
 }

@@ -1,4 +1,4 @@
-import {Component, inject, signal, computed, OnInit} from '@angular/core';
+import {Component, inject, signal, computed, OnInit, output} from '@angular/core';
 import { NgIf, NgForOf, SlicePipe, DatePipe } from '@angular/common';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
@@ -7,7 +7,7 @@ import { MessageService } from 'primeng/api';
 import { CommunicationService } from '../../domain/communication.service';
 import { Router } from '@angular/router';
 import {PageInfo} from '../../../../@core/models/page-info';
-import {ConversationResponse} from '../../models/conversation-response.model';
+import {ConversationHeaderResponse} from '../../models/conversation-header-response.model';
 import {JwtTokenHelper} from '../../../../@core/helpers/jwtToken.helper';
 
 @Component({
@@ -28,15 +28,15 @@ import {JwtTokenHelper} from '../../../../@core/helpers/jwtToken.helper';
 })
 export class ConversationListComponent implements OnInit {
   private readonly communicationService = inject(CommunicationService);
-  private readonly messageService = inject(MessageService);
-  private readonly router = inject(Router);
   private readonly jwtTokenHelper = inject(JwtTokenHelper);
 
   protected readonly loading = signal(false);
   protected readonly pageSize = signal(10);
   protected readonly currentPage = signal(1);
   protected readonly totalRecords = signal(0);
-  protected readonly conversations = signal<ConversationResponse[]>([]);
+  protected readonly conversations = signal<ConversationHeaderResponse[]>([]);
+
+  selectedConversationId = output<number>()
 
   protected readonly paginationRequest = computed<PageInfo>(() => ({
     number: this.currentPage(),
@@ -71,7 +71,7 @@ export class ConversationListComponent implements OnInit {
       });
   }
 
-  protected getRecipientName(conversation: ConversationResponse): string {
+  protected getRecipientName(conversation: ConversationHeaderResponse): string {
     const userId = this.jwtTokenHelper.getUserInfo()?.id;
     const isInitiator = userId === conversation.initiator.id;
     const recipient = isInitiator ? conversation.recipient : conversation.initiator;
@@ -83,18 +83,18 @@ export class ConversationListComponent implements OnInit {
     return `${recipient.firstName} ${recipient.lastName}`;
   }
 
-  protected getRecipientImageUrl(conversation: ConversationResponse): string | null {
+  protected getRecipientImageUrl(conversation: ConversationHeaderResponse): string | null {
     const userId = this.jwtTokenHelper.getUserInfo()?.id;
     const isInitiator = userId === conversation.initiator.id;
     const recipient = isInitiator ? conversation.recipient : conversation.initiator;
     return recipient?.imageUrl ?? null;
   }
 
-  protected trackByConversationId(_: number, conversation: ConversationResponse): number {
+  protected trackByConversationId(_: number, conversation: ConversationHeaderResponse): number {
     return conversation.id;
   }
 
   protected navigateToConversation(conversationId: number): void {
-    this.router.navigate(['/conversation', conversationId]);
+    this.selectedConversationId.emit(conversationId);
   }
 }

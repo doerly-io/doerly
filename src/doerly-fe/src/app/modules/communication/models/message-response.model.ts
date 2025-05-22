@@ -1,5 +1,5 @@
-import {MessageTypeEnum} from './message.type.enum';
-import {MessageStatus} from './message.status.enum';
+import {MessageTypeEnum} from './enums/message.type.enum';
+import {MessageStatus} from './enums/message.status.enum';
 import {ProfileResponse} from '../../profile/models/responses/ProfileResponse';
 
 

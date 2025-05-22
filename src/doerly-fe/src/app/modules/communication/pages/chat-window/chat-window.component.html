@@ -1,1 +1,53 @@
-<p style="color: purple">chat-window works!</p>
+<div class="chat-window-container">
+  <!-- Індикатор завантаження -->
+  <div *ngIf="loading()" class="loading-overlay">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+
+  <!-- Повідомлення, якщо бесіда не вибрана -->
+  <div class="no-selection" *ngIf="!loading() && !conversationId()">
+    <p>Оберіть бесіду, щоб почати спілкування</p>
+    <i class="pi pi-comments" style="font-size: 1em;"></i>
+  </div>
+
+  <!-- Повідомлення, якщо бесіда не знайдена -->
+  <div class="no-conversation" *ngIf="!loading() && conversationId() && !conversation()">
+    <p>Розмову не знайдено</p>
+  </div>
+
+  <!-- Бесіда завантажена -->
+  <div *ngIf="!loading() && conversation()" class="chat-content">
+    <!-- Заголовок із ім’ям співрозмовника -->
+    <div class="chat-header">
+      <img
+        *ngIf="getRecipientImageUrl()"
+        [src]="getRecipientImageUrl()"
+        alt="Avatar"
+        class="avatar"
+      />
+      <h2>{{ getRecipientName() }}</h2>
+    </div>
+
+    <!-- Список повідомлень -->
+    <div class="chat-messages" *ngIf="conversation()?.messages?.length">
+      <div
+        class="message"
+        *ngFor="let message of conversation()!.messages; trackBy: trackByMessageId"
+        [ngClass]="{'own-message': isOwnMessage(message), 'other-message': !isOwnMessage(message)}"
+      >
+        <div class="message-content">
+          <p>{{ message.messageContent }}</p>
+          <small>{{ message.sentAt | date: 'shortTime' }}</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Повідомлення, якщо немає повідомлень -->
+    <div class="no-messages" *ngIf="conversation() && !conversation()?.messages?.length">
+      <p>Повідомлень ще немає</p>
+    </div>
+  </div>
+
+  <!-- Toast для сповіщень -->
+  <p-toast></p-toast>
+</div>

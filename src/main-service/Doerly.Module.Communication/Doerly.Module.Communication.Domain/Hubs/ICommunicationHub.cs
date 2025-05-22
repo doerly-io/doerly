@@ -1,6 +1,6 @@
 namespace Doerly.Module.Communication.Domain.Hubs;
 
-public interface IChatHub
+public interface ICommunicationHub
 {
     Task JoinConversation(string conversationId);
 
