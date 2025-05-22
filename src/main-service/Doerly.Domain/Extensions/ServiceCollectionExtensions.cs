@@ -1,7 +1,6 @@
 using System.Reflection;
 using Azure.Storage.Blobs;
 using Doerly.Domain.Handlers;
-using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Doerly.Domain.Extensions;
@@ -22,10 +21,5 @@ public static class ServiceCollectionExtensions
         var blobServiceClient = services.GetRequiredService<BlobServiceClient>();
         var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
         containerClient.CreateIfNotExists();
-    }
-
-    public static void RegisterSignalR(this IServiceCollection services)
-    {
-        services.AddSignalR();
     }
 }

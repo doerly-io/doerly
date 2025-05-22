@@ -2,6 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import {environment} from '../../../../environments/environment.development';
 import {JwtTokenHelper} from '../../../@core/helpers/jwtToken.helper';
+import {HttpTransportType} from '@microsoft/signalr';
 
 @Injectable({
   providedIn: 'root'
@@ -14,19 +15,23 @@ export class CommunicationSignalRService {
     const accessToken = this.jwtTokenHelper.getToken() ?? '';
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${environment.baseApiUrl}/communicationhub`, {
+      .withUrl(`http://localhost:5051/communicationhub`, {
         accessTokenFactory: () => accessToken,
-        skipNegotiation: true,
-        transport: signalR.HttpTransportType.WebSockets,
-        withCredentials: true})
+        transport: HttpTransportType.WebSockets,
+        skipNegotiation: true
+      })
       .withAutomaticReconnect()
       .build();
 
     this.hubConnection
       .start()
       .then(() => {
-        console.log('SignalR connection started');
-        this.joinConversation(conversationId, userId);
+        console.log('SignalR connection established');
+        if (this.hubConnection.state === signalR.HubConnectionState.Connected) {
+          this.joinConversation(conversationId, userId);
+        } else {
+          console.error('Connection not fully established');
+        }
       })
       .catch(err => console.log('Error establishing SignalR connection: ' + err));
   }
