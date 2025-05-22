@@ -7,27 +7,29 @@ using Doerly.Module.Communication.Domain.Hubs;
 using Doerly.Messaging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Doerly.Module.Communication.Api;
 
-public class ModuleInitializer : IModuleInitializer
+public class ModuleInitializer : IModuleInitializer, IEndpointRouteInitializer
 {
     public void ConfigureServices(IHostApplicationBuilder builder)
     {
         builder.Services.AddDbContext<CommunicationDbContext>();
         builder.Services.RegisterHandlers(typeof(IAssemblyMarker).Assembly);
         builder.Services.RegisterEventConsumers(typeof(IAssemblyMarker).Assembly);
-        builder.Services.RegisterSignalR();
+        builder.Services.AddSingleton<IEndpointRouteInitializer, ModuleInitializer>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         app.ApplicationServices.MigrateDatabase<CommunicationDbContext>();
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapHub<CommunicationHub>("/api/communicationhub").RequireAuthorization();
-        });
+    }
+
+    public void ConfigureEndpoints(IEndpointRouteBuilder endpoints)
+    {
+        endpoints.MapHub<CommunicationHub>("/communicationhub").RequireAuthorization();
     }
 }

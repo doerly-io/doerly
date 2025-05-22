@@ -44,7 +44,6 @@ export class ChatWindowComponent {
 
   private loadConversation(conversationId: number): void {
     this.loading.set(true);
-
     this.communicationService.getUserConversationById(conversationId).subscribe({
       next: (response) => {
         this.conversation.update(() => response.value ?? null);

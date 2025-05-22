@@ -8,6 +8,7 @@ using Doerly.FileRepository;
 using Doerly.Infrastructure.Api;
 using Doerly.Localization;
 using Doerly.Messaging;
+using Doerly.Module.Communication.Domain.Hubs;
 using Doerly.Notification.EmailSender;
 using Doerly.Proxy.BaseProxy;
 using Doerly.Proxy.Payment;
@@ -37,6 +38,7 @@ builder.Services
     })
     .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase; });
 
+builder.Services.AddSignalR();
 
 #region Configure Modules
 
@@ -153,6 +155,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.SecretKey)),
             ClockSkew = TimeSpan.FromMinutes(authSettings.AccessTokenLifetime),
         };
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) &&
+                    path.StartsWithSegments("/communicationhub"))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
+        };
     });
 
 builder.Services.AddAuthorization();
@@ -215,6 +231,7 @@ app.UseRequestLocalization(options =>
     options.SupportedUICultures = supportedCultures;
 });
 
+app.UseWebSockets();
 app.UseRouting();
 
 app.UseCors(policy => policy
@@ -232,6 +249,12 @@ var moduleInitializers = app.Services.GetServices<IModuleInitializer>();
 foreach (var moduleInitializer in moduleInitializers)
 {
     moduleInitializer.Configure(app, app.Environment);
+}
+
+var endpointInitializers = app.Services.GetServices<IEndpointRouteInitializer>();
+foreach (var initializer in endpointInitializers)
+{
+    initializer.ConfigureEndpoints(app);
 }
 
 app.Run();

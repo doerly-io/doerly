@@ -46,6 +46,6 @@ public class CommunicationHub : Hub<ICommunicationHub>
     {
         await base.OnConnectedAsync();
         var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        await Clients.All.UserStatusChanged(userId, true);
+        // await Clients.All.UserStatusChanged(userId, true);
     }
 }
