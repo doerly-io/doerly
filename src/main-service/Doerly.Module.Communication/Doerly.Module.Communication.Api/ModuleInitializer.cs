@@ -1,6 +1,6 @@
-﻿using Doerly.Api.Infrastructure;
-using Doerly.DataAccess.Utils;
+﻿using Doerly.DataAccess.Utils;
 using Doerly.Domain.Extensions;
+using Doerly.Infrastructure.Api;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Communication.Domain;
 using Doerly.Module.Communication.Domain.Hubs;

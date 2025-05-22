@@ -1,7 +1,6 @@
-﻿using System.Security.Claims;
-using Doerly.Api.Infrastructure;
-using Doerly.DataTransferObjects.Pagination;
+﻿using Doerly.DataTransferObjects.Pagination;
 using Doerly.Domain.Models;
+using Doerly.Infrastructure.Api;
 using Doerly.Module.Communication.Contracts.Dtos.Requests;
 using Doerly.Module.Communication.Contracts.Dtos.Responses;
 using Doerly.Module.Communication.Domain.Handlers;
