@@ -57,9 +57,9 @@
             <!-- Profile picture title -->
             <div class="d-flex align-items-center gap-lg-5 gap-md-4 gap-sm-3">
               <div class="content-title">
-                <p class="fw-normal fs-7">
+                <span class="fw-normal fs-6">
                   {{ 'profile.basic.image.title' | translate }}
-                </p>
+                </span>
               </div>
               <!-- Profile picture subtitle -->
               <div class="d-none d-sm-block">
@@ -95,9 +95,9 @@
           <div class="d-flex align-items-center gap-lg-5 gap-md-4 gap-sm-3">
             <!-- Label -->
             <div class="content-title d-flex align-items-center">
-              <p class="fw-normal fs-7">
+              <span class="fw-normal fs-6">
                 {{ 'profile.basic.firstName.title' | translate }}
-              </p>
+              </span>
             </div>
             <!-- Value -->
             <div>
@@ -132,9 +132,9 @@
           <div class="d-flex justify-content-between gap-5">
             <div class="d-flex gap-lg-5 gap-md-4 gap-sm-3">
               <div class="content-title">
-                <p class="fw-normal fs-7">
+                <span class="fw-normal fs-6">
                   {{ 'profile.basic.birthday.title' | translate }}
-                </p>
+                </span>
               </div>
               <div>
                 <span *ngIf="!isEdit" class="c-primary fw-semibold row-text">
@@ -160,9 +160,9 @@
           <div class="d-flex justify-content-between gap-5">
             <div class="d-flex gap-lg-5 gap-md-4 gap-sm-3">
               <div class="content-title">
-                <p class="fw-normal fs-7">
+                <span class="fw-normal fs-6">
                   {{ 'profile.basic.sex.title' | translate }}
-                </p>
+                </span>
               </div>
               <div>
                 <span *ngIf="!isEdit" class="c-primary fw-semibold row-text">
@@ -198,9 +198,9 @@
           <div class="d-flex justify-content-between gap-5">
             <div class="d-flex gap-lg-5 gap-md-4 gap-sm-3">
               <div class="content-title">
-                <p class="fw-normal fs-7">
+                <span class="fw-normal fs-6">
                   {{ 'profile.basic.bio.title' | translate }}
-                </p>
+                </span>
               </div>
               <div>
                 <span *ngIf="!isEdit" class="c-primary fw-semibold row-text">
@@ -227,9 +227,9 @@
           <!-- Address -->
           <div class="d-flex align-items-center gap-lg-5 gap-md-4 gap-sm-3">
             <div class="content-title d-flex align-items-center">
-              <p class="fw-normal fs-7">
+              <span class="fw-normal fs-6">
                 {{ 'profile.basic.address.title' | translate }}
-              </p>
+              </span>
             </div>
             <div>
                 <span *ngIf="!isEdit" class="c-primary fw-semibold row-text">
@@ -238,14 +238,14 @@
                       formProfile.get('address.regionName')?.value + ', ' + formProfile.get('address.cityName')?.value : ''
                   }}
                 </span>
-                <app-address-select
-                  *ngIf="isEdit"
-                  [initialRegionId]="formProfile.get('address.regionId')?.value"
-                  [initialCityId]="formProfile.get('address.cityId')?.value"
-                  [initialRegionName]="formProfile.get('address.regionName')?.value"
-                  [initialCityName]="formProfile.get('address.cityName')?.value"
-                  (addressChange)="onAddressChange($event)"
-                ></app-address-select>
+              <app-address-select
+                *ngIf="isEdit"
+                [initialRegionId]="formProfile.get('address.regionId')?.value"
+                [initialCityId]="formProfile.get('address.cityId')?.value"
+                [initialRegionName]="formProfile.get('address.regionName')?.value"
+                [initialCityName]="formProfile.get('address.cityName')?.value"
+                (addressChange)="onAddressChange($event)"
+              ></app-address-select>
             </div>
           </div>
           <p-divider [layout]="'horizontal'"/>
@@ -277,9 +277,9 @@
           <!-- CV title and subtitle -->
           <div class="d-flex gap-lg-5 gap-md-4 gap-sm-3">
             <div class="content-title">
-              <p class="fw-normal fs-7">
+              <span class="fw-normal fs-6">
                 {{ 'profile.professional.cv.title' | translate }}
-              </p>
+              </span>
             </div>
 
             <div class="d-none d-sm-block">
@@ -328,6 +328,84 @@
           </div>
         </div>
         <p-divider [layout]="'horizontal'"/>
+      </div>
+
+      <!-- Language Proficiency section -->
+      <div class="d-flex flex-column gap-4">
+        <div class="d-flex justify-content-between align-items-center gap-5">
+          <!-- Language Proficiency title and subtitle -->
+          <div>
+            <span class="fw-normal">
+              {{ 'profile.professional.languages.subtitle' | translate }}
+            </span>
+          </div>
+
+          <!-- Language Proficiency actions -->
+          <div class="d-flex gap-2">
+            <button
+              pButton type="button"
+              class="p-button-rounded p-button-text"
+              (click)="onAddLanguageProficiency()"
+              pTooltip="{{ 'profile.professional.languages.add.title' | translate }}"
+              tooltipPosition="top"
+            >
+              <i pButtonIcon class="pi pi-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Language Proficiency list -->
+        <div *ngIf="languageProficiencies?.length"
+          class="d-flex flex-column gap-2 border border-color-primary rounded-2 p-2">
+          <!-- Table header -->
+          <div
+            class="d-flex justify-content-between align-items-center pt-1 pb-3 border-bottom border-1 border-color-primary">
+            <div class="d-flex gap-3" style="width: 30%">
+              <p class="fw-semibold fs-7">{{ 'profile.professional.languages.language.label' | translate }}</p>
+            </div>
+            <div style="width: 50%">
+              <p class="fw-semibold fs-7">{{ 'profile.professional.languages.level.label' | translate }}</p>
+            </div>
+            <div style="width: 20%" class="d-flex justify-content-end pe-3">
+              <p class="fw-semibold fs-7">{{ 'common.actions' | translate }}</p>
+            </div>
+          </div>
+
+          <!-- Table rows -->
+          <div *ngFor="let proficiency of languageProficiencies"
+               class="d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex gap-3" style="width: 30%">
+                <p class="fw-normal fs-7">{{ proficiency.language.name }}</p>
+              </div>
+
+              <div style="width: 50%">
+                <p class="fw-normal fs-7">{{ getTranslatedLevel(proficiency.level) | translate }}</p>
+              </div>
+
+              <div style="width: 20%" class="d-flex justify-content-end gap-2">
+                <button
+                  pButton type="button"
+                  class="p-button-rounded p-button-text"
+                  (click)="onEditLanguageProficiency(proficiency)"
+                  pTooltip="{{ 'profile.professional.languages.edit.title' | translate }}"
+                  tooltipPosition="top"
+                >
+                  <i pButtonIcon class="pi pi-pencil"></i>
+                </button>
+                <button
+                  pButton type="button"
+                  class="p-button-rounded p-button-text"
+                  (click)="onDeleteLanguageProficiency(proficiency)"
+                  pTooltip="{{ 'profile.professional.languages.delete.title' | translate }}"
+                  tooltipPosition="top"
+                >
+                  <i pButtonIcon class="pi pi-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -414,7 +492,7 @@
           <span *ngIf="previewCV">{{ previewCV.name }}</span>
         </div>
       </label>
-      <input type="file" id="cvFileInput" (change)="onCVFileSelected($event)"  hidden/>
+      <input type="file" id="cvFileInput" (change)="onCVFileSelected($event)" hidden/>
     </div>
     <ng-template
       pTemplate="footer"
@@ -522,6 +600,81 @@
       </div>
     </ng-template>
 
+  </p-dialog>
+
+  <!-- Language Proficiency dialog -->
+  <p-dialog
+    [(visible)]="isLanguageProficiencyDialogVisible"
+    [modal]="true"
+    [header]="(editingProficiency ? 'profile.professional.languages.edit.title' : 'profile.professional.languages.add.title') | translate"
+    [style]="{ width: '24rem' }"
+    (close)="onCancelLanguageProficiency()"
+    (onHide)="onCancelLanguageProficiency()"
+  >
+    <form [formGroup]="languageProficiencyForm" class="d-flex flex-column gap-3">
+      <div class="d-flex flex-column gap-2">
+        <label for="language"
+               class="fw-semibold">{{ 'profile.professional.languages.language.label' | translate }}</label>
+        <p-dropdown
+          id="language"
+          [options]="availableLanguages"
+          formControlName="languageId"
+          optionLabel="name"
+          optionValue="id"
+          [placeholder]="'profile.professional.languages.language.placeholder' | translate"
+          [filter]="true"
+          [virtualScroll]="true"
+          [virtualScrollItemSize]="34"
+          [lazy]="true"
+          [showClear]="true"
+          [appendTo]="'body'"
+          [style]="{'width':'100%'}"
+          (onLazyLoad)="onLanguagePageChange($event)"
+          (onFilter)="onLanguageSearch($event)"
+        ></p-dropdown>
+      </div>
+
+      <div class="d-flex flex-column gap-2">
+        <label for="level" class="fw-semibold">{{ 'profile.professional.languages.level.label' | translate }}</label>
+        <p-dropdown
+          id="level"
+          [options]="proficiencyLevels"
+          formControlName="level"
+          optionLabel="label"
+          optionValue="value"
+          [placeholder]="'profile.professional.languages.level.placeholder' | translate"
+          [appendTo]="'body'"
+          [style]="{'width':'100%'}"
+        >
+          <ng-template let-level pTemplate="item">
+            {{ level.label | translate }}
+          </ng-template>
+          <ng-template let-level pTemplate="selectedItem">
+            {{ level.label | translate }}
+          </ng-template>
+        </p-dropdown>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <div class="d-flex justify-content-end gap-2">
+        <button
+          pButton
+          type="button"
+          class="p-button-text"
+          (click)="onCancelLanguageProficiency()"
+          [label]="'common.cancel' | translate"
+        ></button>
+        <button
+          pButton
+          type="button"
+          class="p-button-primary"
+          (click)="onSaveLanguageProficiency()"
+          [label]="'common.save' | translate"
+          [disabled]="!languageProficiencyForm.valid"
+        ></button>
+      </div>
+    </ng-template>
   </p-dialog>
 
 </section>

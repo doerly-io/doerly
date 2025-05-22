@@ -10,7 +10,7 @@ namespace Doerly.Module.Profile.Api.Controllers;
 
 [ApiController]
 [Area("profile")]
-[Route("api/[area]/language")]
+[Route("api/[area]/languages")]
 public class LanguageController : BaseApiController
 {
     [HttpPost("list")]

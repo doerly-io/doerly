@@ -125,6 +125,45 @@
           "loading": "An error occurred while loading the CV",
           "navigation": "An error occurred while navigating the PDF"
         }
+      },
+      "languages": {
+        "title": "Languages",
+        "subtitle": "Add languages you know and your proficiency level",
+        "add": {
+          "title": "Add language",
+          "success": "Language has been added successfully",
+          "error": "An error occurred while adding the language. Message: {{message}}"
+        },
+        "edit": {
+          "title": "Edit language"
+        },
+        "delete": {
+          "title": "Delete language",
+          "success": "Language has been deleted successfully",
+          "error": "An error occurred while deleting the language. Message: {{message}}"
+        },
+        "update": {
+          "success": "Language has been updated successfully",
+          "error": "An error occurred while updating the language. Message: {{message}}"
+        },
+        "load": {
+          "error": "An error occurred while loading languages. Message: {{message}}"
+        },
+        "language": {
+          "label": "Language",
+          "placeholder": "Select a language"
+        },
+        "level": {
+          "label": "Proficiency level",
+          "placeholder": "Select your proficiency level",
+          "beginner": "Beginner (A1)",
+          "elementary": "Elementary (A2)",
+          "intermediate": "Intermediate (B1)",
+          "upperIntermediate": "Upper Intermediate (B2)",
+          "advanced": "Advanced (C1)",
+          "proficient": "Proficient (C2)",
+          "native": "Native"
+        }
       }
     },
     "message": {
@@ -227,6 +266,9 @@
     "cancelled-successfully": "Cancelled successfully"
   },
   "common": {
+    "actions": "Actions",
+    "cancel": "Cancel",
+    "save": "Save",
     "error": "Error",
     "success": "Success",
     "max_length": "Max length is {{length}} characters",

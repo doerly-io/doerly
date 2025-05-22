@@ -1,3 +1,5 @@
+import { LanguageProficiencyDto } from './LanguageProficiencyDto';
+
 export interface ProfileAddress {
   cityId: number;
   cityName: string;
@@ -16,5 +18,5 @@ export interface ProfileResponse {
   imageUrl: string;
   cvUrl: string;
   address?: ProfileAddress;
-  languageProficiencies: any[];
+  languageProficiencies: LanguageProficiencyDto[];
 }
