@@ -4,7 +4,7 @@ using Doerly.Domain.Models;
 using Doerly.Extensions;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
-using Doerly.Module.Profile.DataAccess.Models;
+using Doerly.Module.Profile.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;

@@ -17,7 +17,7 @@ public class CreateProfileHandler(ProfileDbContext dbContext) : BaseProfileHandl
         if (!validationResult.IsSuccess)
             return validationResult;
         
-        var profile = new DataAccess.Models.Profile();
+        var profile = new DataAccess.Entities.Profile();
         MapProfileFromDto(profile, dto);
 
         DbContext.Profiles.Add(profile);

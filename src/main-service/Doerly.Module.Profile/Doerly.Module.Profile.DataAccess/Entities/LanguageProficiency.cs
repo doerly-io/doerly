@@ -1,7 +1,7 @@
 using Doerly.DataAccess.Models;
 using Doerly.Module.Profile.Enums;
 
-namespace Doerly.Module.Profile.DataAccess.Models;
+namespace Doerly.Module.Profile.DataAccess.Entities;
 
 public class LanguageProficiency : BaseEntity
 {

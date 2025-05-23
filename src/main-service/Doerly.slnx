@@ -44,6 +44,9 @@
     <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Domain\Doerly.Module.Profile.Domain.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj" Type="Classic C#" />
   </Folder>
+  <Folder Name="/Modules/Profile/Job/">
+    <Project Path="Jobs\ProfileRatingJob\ProfileRatingJob.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Notifications/">
     <Project Path="Doerly.Notification.EmailSender\Doerly.Notification.EmailSender.csproj" Type="Classic C#" />
   </Folder>

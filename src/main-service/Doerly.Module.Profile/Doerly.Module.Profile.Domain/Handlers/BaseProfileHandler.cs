@@ -3,7 +3,7 @@ using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Module.Profile.Contracts.Dtos;
-using Doerly.Module.Profile.DataAccess.Models;
+using Doerly.Module.Profile.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
@@ -12,7 +12,7 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
 {
     #region Profile Methods
     
-    protected async Task<(DataAccess.Models.Profile? Profile, HandlerResult Result)> GetProfileByUserIdAsync(
+    protected async Task<(DataAccess.Entities.Profile? Profile, HandlerResult Result)> GetProfileByUserIdAsync(
         int userId, 
         CancellationToken cancellationToken = default)
     {
@@ -43,7 +43,7 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
         return HandlerResult.Success();
     }
     
-    protected void MapProfileFromDto(DataAccess.Models.Profile profile, ProfileSaveDto dto)
+    protected void MapProfileFromDto(DataAccess.Entities.Profile profile, ProfileSaveDto dto)
     {
         profile.FirstName = dto.FirstName;
         profile.LastName = dto.LastName;

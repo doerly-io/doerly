@@ -3,7 +3,7 @@ using Doerly.DataAccess.Models;
 using Doerly.Module.Profile.DataAccess.Constants;
 using Doerly.Module.Profile.Enums;
 
-namespace Doerly.Module.Profile.DataAccess.Models;
+namespace Doerly.Module.Profile.DataAccess.Entities;
 
 [Table(DbConstants.Tables.Profile, Schema = DbConstants.ProfileSchema)]
 public class Profile : BaseEntity
@@ -17,5 +17,10 @@ public class Profile : BaseEntity
     public int UserId { get; set; }
     public string? ImagePath { get; set; }
     public string? CvPath { get; set; }
-    public virtual ICollection<LanguageProficiency> LanguageProficiencies { get; set; } = new List<LanguageProficiency>();
+    
+    public double? Rating { get; set; }
+    public virtual ICollection<LanguageProficiency> LanguageProficiencies { get; set; }
+    
+    public virtual ICollection<Review> ReviewsWritten { get; set; }
+    public virtual ICollection<Review> ReviewsReceived { get; set; }
 }   

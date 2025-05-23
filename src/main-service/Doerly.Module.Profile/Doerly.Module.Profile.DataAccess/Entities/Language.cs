@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Doerly.DataAccess.Models;
 using Doerly.Module.Profile.DataAccess.Constants;
 
-namespace Doerly.Module.Profile.DataAccess.Models;
+namespace Doerly.Module.Profile.DataAccess.Entities;
 
 [Table(DbConstants.Tables.Language, Schema = DbConstants.ProfileSchema)]
 public class Language : BaseEntity

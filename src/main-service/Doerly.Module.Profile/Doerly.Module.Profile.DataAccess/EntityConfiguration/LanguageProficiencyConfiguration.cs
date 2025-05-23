@@ -1,4 +1,5 @@
-using Doerly.Module.Profile.DataAccess.Models;
+using Doerly.Module.Profile.DataAccess.Constants;
+using Doerly.Module.Profile.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,6 +9,7 @@ public class LanguageProficiencyConfiguration : IEntityTypeConfiguration<Languag
 {
     public void Configure(EntityTypeBuilder<LanguageProficiency> builder)
     {
+        builder.ToTable(DbConstants.Tables.LanguageProficiency, DbConstants.ProfileSchema);
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Level).IsRequired();
         
