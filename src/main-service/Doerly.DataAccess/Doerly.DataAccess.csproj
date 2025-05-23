@@ -13,7 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <Folder Include="Models\Address\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20250519184128_Initial.cs" />
+    <Compile Remove="Migrations\20250519184128_Initial.Designer.cs" />
   </ItemGroup>
 
 </Project>

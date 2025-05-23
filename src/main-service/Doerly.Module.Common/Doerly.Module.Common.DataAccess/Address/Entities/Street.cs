@@ -1,9 +1,7 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using Doerly.DataAccess.Constants;
+using Doerly.DataAccess.Models;
 
-namespace Doerly.DataAccess.Models;
+namespace Doerly.Module.Common.DataAccess.Address.Entities;
 
-[Table(AddressDbConstants.Tables.Street, Schema = AddressDbConstants.AddressSchema)]
 public class Street : BaseEntity
 {
     public string Name { get; set; }

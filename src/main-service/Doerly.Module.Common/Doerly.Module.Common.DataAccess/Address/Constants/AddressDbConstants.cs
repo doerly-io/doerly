@@ -1,4 +1,4 @@
-namespace Doerly.DataAccess.Constants;
+namespace Doerly.Module.Common.DataAccess.Address.Constants;
 
 public class AddressDbConstants
 {

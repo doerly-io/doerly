@@ -4,10 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Doerly.DataAccess.Migrations
+namespace Doerly.Module.Common.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Common_Address_Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -47,7 +47,7 @@ namespace Doerly.DataAccess.Migrations
                 {
                     table.PrimaryKey("pk_city", x => x.id);
                     table.ForeignKey(
-                        name: "fk_city_region_region_id",
+                        name: "fk_city_regions_region_id",
                         column: x => x.region_id,
                         principalSchema: "address",
                         principalTable: "region",

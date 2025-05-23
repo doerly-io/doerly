@@ -1,10 +1,10 @@
-using Doerly.DataAccess;
 using Doerly.Domain.Models;
 using Doerly.Infrastructure.Api;
+using Doerly.Module.Common.DataAccess.Address;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Doerly.Common.Api.Controllers;
+namespace Doerly.Module.Common.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

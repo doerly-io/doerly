@@ -1,6 +1,5 @@
 ﻿<Solution>
   <Folder Name="/Common/">
-    <Project Path="Doerly.Common.Api\Doerly.Common.Api.csproj" Type="Classic C#" />
     <Project Path="Doerly.Common.Settings\Doerly.Common.Settings.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/FileRepository/">
@@ -17,6 +16,10 @@
     <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.DataAccess\Doerly.Module.Authorization.DataAccess.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.Domain\Doerly.Module.Authorization.Domain.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.Enums\Doerly.Module.Authorization.Enums.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Modules/Common/">
+    <Project Path="Doerly.Module.Common\Doerly.Module.Common.Api\Doerly.Module.Common.Api.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Common\Doerly.Module.Common.DataAccess\Doerly.Module.Common.DataAccess.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Modules/Orders/">
     <Project Path="Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj" Type="Classic C#" />

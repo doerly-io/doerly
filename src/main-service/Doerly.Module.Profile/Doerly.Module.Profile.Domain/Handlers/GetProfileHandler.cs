@@ -1,7 +1,7 @@
-﻿using Doerly.DataAccess;
-using Doerly.Domain.Models;
+﻿using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Localization;
+using Doerly.Module.Common.DataAccess.Address;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Module.Profile.Domain.Constants;

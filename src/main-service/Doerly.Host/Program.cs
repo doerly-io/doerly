@@ -1,11 +1,7 @@
 using System.Globalization;
-using Doerly.Host;
-using System.Reflection;
 using System.Text;
 using Doerly.Domain.Factories;
 using Doerly.Common.Settings;
-using Doerly.DataAccess;
-using Doerly.DataAccess.Utils;
 using Doerly.FileRepository;
 using Doerly.Infrastructure.Api;
 using Doerly.Localization;
@@ -40,43 +36,12 @@ builder.Services
     .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase; });
 
 
-#region Configure Modules
+builder.RegisterModule(new Doerly.Module.Payments.Api.ModuleInitializer());
+builder.RegisterModule(new Doerly.Module.Authorization.Api.ModuleInitializer());
+builder.RegisterModule(new Doerly.Module.Profile.Api.ModuleInitializer());
+builder.RegisterModule(new Doerly.Module.Order.Api.ModuleInitializer());
+builder.RegisterModule(new Doerly.Module.Common.Api.ModuleInitializer());
 
-var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies()
-    .Where(a => a.GetName().Name!.StartsWith(HostConstants.MODULE_PREFIX));
-
-var loadedPaths = loadedAssemblies.Select(a => a.Location).ToArray();
-
-var referencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, $"{HostConstants.MODULE_PREFIX}.*.dll");
-var toLoad = referencedPaths.Where(r => !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase));
-
-foreach (var path in toLoad)
-{
-    Assembly.LoadFrom(path);
-}
-
-loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies()
-    .Where(a => a.GetName().Name!.StartsWith(HostConstants.MODULE_PREFIX));
-
-foreach (var moduleAssembly in loadedAssemblies)
-{
-    var moduleInitializerType = moduleAssembly.GetTypes()
-        .FirstOrDefault(t => typeof(IModuleInitializer).IsAssignableFrom(t) && !t.IsAbstract);
-
-    if (moduleInitializerType == null)
-        continue;
-
-    var moduleInitializer = (IModuleInitializer)Activator.CreateInstance(moduleInitializerType);
-    if (moduleInitializer != null)
-    {
-        builder.Services.AddSingleton(moduleInitializer);
-        moduleInitializer.ConfigureServices(builder);
-    }
-}
-
-#endregion
-
-builder.Services.AddDbContext<AddressDbContext>();
 
 #region ModuleProxies
 
@@ -237,7 +202,5 @@ foreach (var moduleInitializer in moduleInitializers)
 {
     moduleInitializer.Configure(app, app.Environment);
 }
-
-((IApplicationBuilder)app).ApplicationServices.MigrateDatabase<AddressDbContext>();
 
 app.Run();

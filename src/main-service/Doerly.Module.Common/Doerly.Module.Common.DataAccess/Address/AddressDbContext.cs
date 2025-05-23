@@ -1,16 +1,23 @@
-using Doerly.DataAccess.Constants;
-using Doerly.DataAccess.Models;
+using Doerly.DataAccess;
+using Doerly.Module.Common.DataAccess.Address.Constants;
+using Doerly.Module.Common.DataAccess.Address.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace Doerly.DataAccess;
+namespace Doerly.Module.Common.DataAccess.Address;
 
-public class AddressDbContext(IConfiguration configuration) : BaseDbContext(configuration)
+public class AddressDbContext : BaseDbContext
 {
+    public AddressDbContext(IConfiguration configuration) : base(configuration)
+    {
+    }
+
     public DbSet<City> Cities { get; set; }
+
     public DbSet<Region> Regions { get; set; }
+
     public DbSet<Street> Streets { get; set; }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AddressDbContext).Assembly);
