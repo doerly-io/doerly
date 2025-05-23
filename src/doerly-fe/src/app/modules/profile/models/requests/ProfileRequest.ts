@@ -3,7 +3,8 @@ export interface ProfileRequest {
   firstName: string;
   lastName: string;
   patronymic: string;
-  dateOfBirth: string;
+  dateOfBirth?: string;
   sex: number;
-  bio: string;
+  bio?: string;
+  cityId?: number;
 }

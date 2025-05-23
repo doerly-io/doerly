@@ -12,4 +12,13 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Address\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20250519184128_Initial.cs" />
+    <Compile Remove="Migrations\20250519184128_Initial.Designer.cs" />
+  </ItemGroup>
+
 </Project>

@@ -14,8 +14,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ProfileService } from '../../domain/profile.service';
 import { Card } from 'primeng/card';
 import { InputText } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { DatePipe, DecimalPipe, NgIf, NgOptimizedImage } from '@angular/common';
+import { DropdownModule, DropdownLazyLoadEvent } from 'primeng/dropdown';
+import { DatePipe, DecimalPipe, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Divider } from 'primeng/divider';
@@ -30,6 +30,12 @@ import { Dialog } from 'primeng/dialog';
 import { Tooltip } from 'primeng/tooltip';
 import { PdfService } from 'app/@core/services/pdf.service';
 import { ProfileResponse } from '../../models/responses/ProfileResponse';
+import { AddressSelectComponent } from 'app/@shared/components/address-select/address-select.component';
+import { ProfileRequest } from '../../models/requests/ProfileRequest';
+import { LanguageProficiencyDto } from '../../models/responses/LanguageProficiencyDto';
+import { LanguageDto } from '../../models/responses/LanguageDto';
+import { ELanguageProficiencyLevel } from '../../models/enums/ELanguageProficiencyLevel';
+import { LanguagesQueryDto } from '../../domain/profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -51,13 +57,16 @@ import { ProfileResponse } from '../../models/responses/ProfileResponse';
     DatePicker,
     Dialog,
     NgOptimizedImage,
-    Tooltip
+    Tooltip,
+    AddressSelectComponent,
+    NgForOf
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent implements OnInit {
   formProfile!: FormGroup;
+  languageProficiencyForm!: FormGroup;
   initialProfile: any;
   isEdit: boolean = false;
   sexOptions: { label: string; value: number }[] = [];
@@ -71,6 +80,22 @@ export class ProfileComponent implements OnInit {
   isCVPreviewDialogVisible = false;
   isCVAvailable = false;
   @ViewChild('pdfContainer') pdfContainer!: ElementRef;
+
+  isLanguageProficiencyDialogVisible = false;
+  languageProficiencies: LanguageProficiencyDto[] = [];
+  availableLanguages: LanguageDto[] = [];
+  proficiencyLevels: { label: string; value: ELanguageProficiencyLevel }[] = [];
+  editingProficiency: LanguageProficiencyDto | null = null;
+
+  languagesQuery: LanguagesQueryDto = {
+    number: 1,
+    size: 20,
+    name: ''
+  };
+  totalLanguages: number = 0;
+
+  private searchTimeout: any;
+  private isSearching: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -86,6 +111,9 @@ export class ProfileComponent implements OnInit {
       { label: 'profile.basic.sex.options.male', value: sexVariants.MALE },
       { label: 'profile.basic.sex.options.female', value: sexVariants.FEMALE },
     ];
+    this.initLanguageProficiencyForm();
+    this.initProficiencyLevels();
+    this.loadAvailableLanguages();
   }
 
   onInitForm(): void {
@@ -98,8 +126,81 @@ export class ProfileComponent implements OnInit {
       sex: [1, Validators.required],
       bio: [''],
       imageUrl: [''],
-      cvUrl: ['']
+      cvUrl: [''],
+      address: this.formBuilder.group({
+        cityId: [null, Validators.required],
+        cityName: [''],
+        regionId: [null, Validators.required],
+        regionName: ['']
+      })
     });
+  }
+
+  private initLanguageProficiencyForm(): void {
+    this.languageProficiencyForm = this.formBuilder.group({
+      languageId: [null, Validators.required],
+      level: [null, Validators.required]
+    });
+  }
+
+  private initProficiencyLevels(): void {
+    this.proficiencyLevels = [
+      { label: 'profile.professional.languages.level.beginner', value: ELanguageProficiencyLevel.Beginner },
+      { label: 'profile.professional.languages.level.elementary', value: ELanguageProficiencyLevel.Elementary },
+      { label: 'profile.professional.languages.level.intermediate', value: ELanguageProficiencyLevel.Intermediate },
+      { label: 'profile.professional.languages.level.upperIntermediate', value: ELanguageProficiencyLevel.UpperIntermediate },
+      { label: 'profile.professional.languages.level.advanced', value: ELanguageProficiencyLevel.Advanced },
+      { label: 'profile.professional.languages.level.proficient', value: ELanguageProficiencyLevel.Proficient },
+      { label: 'profile.professional.languages.level.native', value: ELanguageProficiencyLevel.Native }
+    ];
+  }
+
+  private loadAvailableLanguages(): void {
+    this.languagesQuery.number = Math.max(1, this.languagesQuery.number);
+    this.profileService.getAvailableLanguages(this.languagesQuery).subscribe({
+      next: (response) => {
+        if (this.languagesQuery.number === 1) {
+          this.availableLanguages = response.list;
+        } else {
+          this.availableLanguages = [...this.availableLanguages, ...response.list];
+        }
+        this.totalLanguages = response.totalSize;
+        this.isSearching = false;
+      },
+      error: (error) => {
+        this.handleError(error, 'profile.professional.languages.load.error');
+        this.isSearching = false;
+      }
+    });
+  }
+
+  onLanguageSearch(event: { filter: string }): void {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+    this.searchTimeout = setTimeout(() => {
+      this.isSearching = true;
+      this.languagesQuery.name = event.filter;
+      this.languagesQuery.number = 1;
+      this.availableLanguages = [];
+      this.loadAvailableLanguages();
+    }, 300);
+  }
+
+  onLanguagePageChange(event: DropdownLazyLoadEvent): void {
+    if (this.isSearching) {
+      return;
+    }
+
+    const loadedItems = this.availableLanguages.length;
+    const totalItems = this.totalLanguages;
+    const scrollPosition = event.first;
+    const itemsToLoad = this.languagesQuery.size;
+
+    if (loadedItems < totalItems && scrollPosition + itemsToLoad >= loadedItems) {
+      this.languagesQuery.number = Math.floor(loadedItems / this.languagesQuery.size) + 1;
+      this.loadAvailableLanguages();
+    }
   }
 
   // TODO: Extract this to a basic service
@@ -149,15 +250,23 @@ export class ProfileComponent implements OnInit {
     this.formProfile.patchValue(profileValue);
     this.isImageAvailable = !!profileValue.imageUrl;
     this.isCVAvailable = !!profileValue.cvUrl;
+    this.languageProficiencies = profileValue.languageProficiencies || [];
   }
 
   onSaveProfile(): void {
     const formValue = this.formProfile.value;
+    const request : ProfileRequest = {
+      userId: formValue.id,
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
+      patronymic: formValue.patronymic,
+      dateOfBirth: formValue.dateOfBirth,
+      sex: formValue.sex,
+      bio: formValue.bio,
+      cityId: formValue.address.cityId
+    }
     this.handleProfileOperation(
-      this.profileService.update({
-        userId: formValue.id,
-        ...formValue
-      }),
+      this.profileService.update(request),
       'profile.message.save.success',
       'profile.message.save.error',
       () => {
@@ -327,6 +436,82 @@ export class ProfileComponent implements OnInit {
 
   getZoomLevel(): number {
     return this.pdfService.getZoomLevel();
+  }
+  // endregion
+
+  onAddressChange(address: { cityId: number }): void {
+    this.formProfile.patchValue({
+      address: {
+        cityId: address.cityId
+      }
+    });
+  }
+
+  // region Language Proficiency methods
+  getTranslatedLevel(level: ELanguageProficiencyLevel): string {
+    const levelConfig = this.proficiencyLevels.find(l => l.value === level);
+    return levelConfig ? levelConfig.label : '';
+  }
+
+  onAddLanguageProficiency(): void {
+    this.editingProficiency = null;
+    this.languageProficiencyForm.reset();
+    this.availableLanguages = [];
+    this.isLanguageProficiencyDialogVisible = true;
+  }
+
+  onEditLanguageProficiency(proficiency: LanguageProficiencyDto): void {
+    this.editingProficiency = proficiency;
+    this.languageProficiencyForm.patchValue({
+      languageId: proficiency.language?.id,
+      level: proficiency.level
+    });
+    if (proficiency.language && !this.availableLanguages.some(l => l.id === proficiency.language.id)) {
+      this.availableLanguages = [proficiency.language, ...this.availableLanguages];
+    }
+    this.isLanguageProficiencyDialogVisible = true;
+  }
+
+  onDeleteLanguageProficiency(proficiency: LanguageProficiencyDto): void {
+    this.handleProfileOperation(
+      this.profileService.deleteLanguageProficiency(proficiency.id),
+      'profile.professional.languages.delete.success',
+      'profile.professional.languages.delete.error',
+      () => {
+        this.languageProficiencies = this.languageProficiencies.filter(p => p.id !== proficiency.id);
+      }
+    );
+  }
+
+  onCancelLanguageProficiency(): void {
+    this.isLanguageProficiencyDialogVisible = false;
+    this.editingProficiency = null;
+    this.languageProficiencyForm.reset();
+    this.languagesQuery.name = '';
+    this.availableLanguages = [];
+  }
+
+  onSaveLanguageProficiency(): void {
+    if (this.languageProficiencyForm.invalid) return;
+
+    const formValue = this.languageProficiencyForm.value;
+    const operation = this.editingProficiency
+      ? this.profileService.updateLanguageProficiency(this.editingProficiency.id, formValue)
+      : this.profileService.addLanguageProficiency(formValue);
+
+    this.handleProfileOperation(
+      operation,
+      this.editingProficiency
+        ? 'profile.professional.languages.update.success'
+        : 'profile.professional.languages.add.success',
+      this.editingProficiency
+        ? 'profile.professional.languages.update.error'
+        : 'profile.professional.languages.add.error',
+      () => {
+        this.onCancelLanguageProficiency();
+        this.onLoadProfile();
+      }
+    );
   }
   // endregion
 }

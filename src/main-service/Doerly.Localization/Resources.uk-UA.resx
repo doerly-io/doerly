@@ -107,4 +107,34 @@ Doerly</value>
     <data name="FailedToCreateCheckout" xml:space="preserve">
         <value>Не вдалось виконати операцію оплати</value>
     </data>
+    <data name="InvalidLanguageProficiencyLevelInput" xml:space="preserve">
+        <value>Неправильне значення рівню володіння мовою</value>
+    </data>
+    <data name="PostIndexTooLong" xml:space="preserve">
+        <value>Поштовий індекс занадто довгий</value>
+    </data>
+    <data name="LanguageNotFound" xml:space="preserve">
+        <value>Мова не знайдена</value>
+    </data>
+    <data name="LanguageProficiencyAlreadyExists" xml:space="preserve">
+        <value>Такі мовні навички вже наявні</value>
+    </data>
+    <data name="LanguageProficiencyNotFound" xml:space="preserve">
+        <value>Мовні навички не знайдені</value>
+    </data>
+    <data name="LanguageCodeTooLong" xml:space="preserve">
+        <value>Мовний код надто довгий</value>
+    </data>
+    <data name="LanguageCodeTooShort" xml:space="preserve">
+        <value>Мовний код надто короткий</value>
+    </data>
+    <data name="LanguageNameTooLong" xml:space="preserve">
+        <value>Назва мови занадто довга</value>
+    </data>
+    <data name="LanguageNameTooShort" xml:space="preserve">
+        <value>Назва мови занадто коротка</value>
+    </data>
+    <data name="LanguageAlreadyExists" xml:space="preserve">
+        <value>Мова вже існує</value>
+    </data>
 </root>

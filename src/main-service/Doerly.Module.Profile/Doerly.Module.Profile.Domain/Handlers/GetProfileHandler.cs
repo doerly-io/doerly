@@ -1,6 +1,7 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Localization;
+using Doerly.Module.Common.DataAccess.Address;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Module.Profile.Domain.Constants;
@@ -8,30 +9,33 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
 
-public class GetProfileHandler(ProfileDbContext dbContext, IFileRepository fileRepository) : BaseProfileHandler(dbContext)
+public class GetProfileHandler(ProfileDbContext dbContext, AddressDbContext addressDbContext, IFileRepository fileRepository) : BaseProfileHandler(dbContext)
 {
     public async Task<HandlerResult<ProfileDto>> HandleAsync(int userId, CancellationToken cancellationToken = default)
     {
         var profile = await DbContext.Profiles
             .AsNoTracking()
             .Where(x => x.UserId == userId)
-            .Select(x => new
-            {
-                x.Id,
-                x.FirstName,
-                x.LastName,
-                x.DateOfBirth,
-                x.Sex,
-                x.Bio,
-                x.DateCreated,
-                x.LastModifiedDate,
-                x.ImagePath,
-                x.CvPath
-            })
             .FirstOrDefaultAsync(cancellationToken);
 
         if (profile == null)
             return HandlerResult.Failure<ProfileDto>(Resources.Get("ProfileNotFound"));
+        
+        var languageProficiencies = await DbContext.LanguageProficiencies
+            .AsNoTracking()
+            .Where(lp => lp.ProfileId == profile.Id)
+            .Select(lp => new LanguageProficiencyDto
+            {
+                Id = lp.Id,
+                Language = new LanguageDto 
+                {
+                    Id = lp.Language.Id,
+                    Name = lp.Language.Name,
+                    Code = lp.Language.Code
+                },
+                Level = lp.Level
+            })
+            .ToListAsync(cancellationToken);
 
         var urlTasks = new List<Task>(2);
         string imageUrl = null;
@@ -61,6 +65,18 @@ public class GetProfileHandler(ProfileDbContext dbContext, IFileRepository fileR
         {
             await Task.WhenAll(urlTasks);
         }
+        
+        var address = await addressDbContext.Cities
+            .AsNoTracking()
+            .Where(c => c.Id == profile.CityId)
+            .Select(c => new ProfileAddressDto
+            {
+                CityId = c.Id,
+                CityName = c.Name,
+                RegionId = c.Region.Id,
+                RegionName = c.Region.Name
+            })
+            .FirstOrDefaultAsync(cancellationToken);
 
         var profileDto = new ProfileDto
         {
@@ -73,7 +89,9 @@ public class GetProfileHandler(ProfileDbContext dbContext, IFileRepository fileR
             DateCreated = profile.DateCreated,
             LastModifiedDate = profile.LastModifiedDate,
             ImageUrl = imageUrl,
-            CvUrl = cvUrl
+            CvUrl = cvUrl,
+            Address = address,
+            LanguageProficiencies = languageProficiencies
         };
 
         return HandlerResult.Success(profileDto);
