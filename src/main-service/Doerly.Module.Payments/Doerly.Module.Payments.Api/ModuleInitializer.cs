@@ -38,7 +38,6 @@ public class ModuleInitializer : IModuleInitializer
             options.PrivateKey = liqPaySettings.PrivateKey;
         });
 
-        builder.Services.AddScoped<IPaymentModuleWrapper, PaymentModuleWrapper>();
         builder.Services.AddTransient<LiqPayPaymentAdapter>();
 
         builder.Services.AddScoped<PaymentClientFactory>(sp => aggregator =>

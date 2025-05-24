@@ -36,6 +36,17 @@ public class GetProfileHandler(ProfileDbContext dbContext, AddressDbContext addr
                 Level = lp.Level
             })
             .ToListAsync(cancellationToken);
+        
+        var competences = await DbContext.Competences
+            .AsNoTracking()
+            .Where(c => c.ProfileId == profile.Id)
+            .Select(c => new CompetenceDto
+            {
+                Id = c.Id,
+                CategoryId = c.CategoryId,
+                CategoryName = c.CategoryName
+            })
+            .ToListAsync(cancellationToken);
 
         var urlTasks = new List<Task>(2);
         string imageUrl = null;
@@ -91,7 +102,8 @@ public class GetProfileHandler(ProfileDbContext dbContext, AddressDbContext addr
             ImageUrl = imageUrl,
             CvUrl = cvUrl,
             Address = address,
-            LanguageProficiencies = languageProficiencies
+            LanguageProficiencies = languageProficiencies,
+            Competences = competences
         };
 
         return HandlerResult.Success(profileDto);

@@ -1,9 +1,12 @@
 ﻿using Doerly.Domain.Handlers;
 using Doerly.Domain.Models;
+using Doerly.FileRepository;
 using Doerly.Localization;
+using Doerly.Module.Common.DataAccess.Address;
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess.Models;
+using Doerly.Module.Profile.Domain.Constants;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
@@ -142,5 +145,134 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
         return HandlerResult.Success();
     }
     
+    #endregion
+
+    #region Batch Data Retrieval Methods
+
+    protected async Task<Dictionary<int, List<LanguageProficiencyDto>>> GetLanguageProficienciesBatchAsync(
+        int[] profileIds,
+        CancellationToken cancellationToken = default)
+    {
+        if (!profileIds.Any())
+            return new Dictionary<int, List<LanguageProficiencyDto>>();
+
+        var proficiencies = await DbContext.LanguageProficiencies
+            .AsNoTracking()
+            .Where(lp => profileIds.Contains(lp.ProfileId))
+            .Include(lp => lp.Language) // Ensure Language is loaded for the DTO
+            .Select(lp => new
+            {
+                lp.ProfileId,
+                Dto = new LanguageProficiencyDto
+                {
+                    Id = lp.Id,
+                    Language = new LanguageDto // Assuming LanguageDto exists and maps Language entity
+                    {
+                        Id = lp.Language.Id,
+                        Name = lp.Language.Name,
+                        Code = lp.Language.Code
+                    },
+                    Level = lp.Level
+                }
+            })
+            .ToListAsync(cancellationToken);
+
+        return proficiencies
+            .GroupBy(p => p.ProfileId)
+            .ToDictionary(g => g.Key, g => g.Select(x => x.Dto).ToList());
+    }
+
+    protected async Task<Dictionary<int, List<CompetenceDto>>> GetCompetencesBatchAsync(
+        int[] profileIds,
+        CancellationToken cancellationToken = default)
+    {
+        if (!profileIds.Any())
+            return new Dictionary<int, List<CompetenceDto>>();
+
+        var competences = await DbContext.Competences
+            .AsNoTracking()
+            .Where(c => profileIds.Contains(c.ProfileId))
+            .Select(c => new
+            {
+                c.ProfileId,
+                Dto = new CompetenceDto
+                {
+                    Id = c.Id,
+                    CategoryId = c.CategoryId,
+                    CategoryName = c.CategoryName
+                }
+            })
+            .ToListAsync(cancellationToken);
+
+        return competences
+            .GroupBy(c => c.ProfileId)
+            .ToDictionary(g => g.Key, g => g.Select(x => x.Dto).ToList());
+    }
+
+    protected async Task<Dictionary<int, ProfileAddressDto>> GetAddressesBatchAsync(
+        IEnumerable<int> cityIds,
+        AddressDbContext addressDbContext,
+        CancellationToken cancellationToken = default)
+    {
+        var distinctCityIds = cityIds.Where(id => id > 0).Distinct().ToArray();
+        if (!distinctCityIds.Any())
+            return new Dictionary<int, ProfileAddressDto>();
+
+        return await addressDbContext.Cities
+            .AsNoTracking()
+            .Where(c => distinctCityIds.Contains(c.Id))
+            .Include(c => c.Region) // Ensure Region is loaded
+            .Select(c => new ProfileAddressDto
+            {
+                CityId = c.Id,
+                CityName = c.Name,
+                RegionId = c.Region.Id,
+                RegionName = c.Region.Name
+            })
+            .ToDictionaryAsync(a => a.CityId, a => a, cancellationToken);
+    }
+
+    protected async Task<Dictionary<int, (string? ImageUrl, string? CvUrl)>> GetFileUrlsBatchAsync(
+        IEnumerable<DataAccess.Models.Profile> profiles,
+        IFileRepository fileRepository)
+    {
+        var urlTasksByProfileId = new Dictionary<int, (Task<string?> ImageTask, Task<string?> CvTask)>();
+        var allUrlTasks = new List<Task>();
+
+        foreach (var profile in profiles)
+        {
+            Task<string?> imageTask = Task.FromResult<string?>(null);
+            if (!string.IsNullOrEmpty(profile.ImagePath))
+            {
+                imageTask = fileRepository.GetSasUrlAsync(
+                    AzureStorageConstants.ImagesContainerName,
+                    profile.ImagePath);
+                allUrlTasks.Add(imageTask);
+            }
+
+            Task<string?> cvTask = Task.FromResult<string?>(null);
+            if (!string.IsNullOrEmpty(profile.CvPath))
+            {
+                cvTask = fileRepository.GetSasUrlAsync(
+                    AzureStorageConstants.DocumentsContainerName,
+                    profile.CvPath);
+                allUrlTasks.Add(cvTask);
+            }
+            urlTasksByProfileId[profile.Id] = (imageTask, cvTask);
+        }
+
+        if (allUrlTasks.Any())
+        {
+            await Task.WhenAll(allUrlTasks);
+        }
+
+        var results = new Dictionary<int, (string? ImageUrl, string? CvUrl)>();
+        foreach (var entry in urlTasksByProfileId)
+        {
+            results[entry.Key] = (await entry.Value.ImageTask, await entry.Value.CvTask);
+        }
+        return results;
+    }
+
     #endregion
 }
