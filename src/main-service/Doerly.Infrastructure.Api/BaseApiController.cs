@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Doerly.Common.Settings.Constants;
+using Doerly.Domain;
 using Doerly.Domain.Factories;
 using Doerly.Domain.Handlers;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +11,8 @@ namespace Doerly.Infrastructure.Api;
 
 public class BaseApiController : ControllerBase
 {
+    protected IDoerlyRequestContext RequestContext => HttpContext.RequestServices.GetRequiredService<IDoerlyRequestContext>();
+    
     [DebuggerStepThrough]
     protected THandler ResolveHandler<THandler>() where THandler : IHandler
     {
