@@ -137,4 +137,7 @@ Doerly</value>
 	<data name="LanguageAlreadyExists" xml:space="preserve">
 		<value>Language already exist</value>
 	</data>
+    <data name="CompetenceAlreadyExists" xml:space="preserve">
+        <value>Competence already exists in profile</value>
+    </data>
 </root>

@@ -11,6 +11,7 @@ public class ProfileDbContext(IConfiguration configuration) : BaseDbContext(conf
     public DbSet<Models.Profile> Profiles { get; set; }
     public DbSet<Language> Languages { get; set; }
     public DbSet<LanguageProficiency> LanguageProficiencies { get; set; }
+    public DbSet<Competence> Competences { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -18,4 +18,5 @@ public class Profile : BaseEntity
     public string? ImagePath { get; set; }
     public string? CvPath { get; set; }
     public virtual ICollection<LanguageProficiency> LanguageProficiencies { get; set; } = new List<LanguageProficiency>();
+    public virtual ICollection<Competence> Competences { get; set; } = new List<Competence>();
 }   
