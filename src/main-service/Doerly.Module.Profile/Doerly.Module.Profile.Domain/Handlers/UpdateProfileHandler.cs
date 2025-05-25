@@ -8,11 +8,12 @@ public class UpdateProfileHandler(ProfileDbContext dbContext) : BaseProfileHandl
 {
     public async Task<HandlerResult> HandleAsync(ProfileSaveDto dto, CancellationToken cancellationToken = default)
     {
-        var (profile, result) = await GetProfileByUserIdAsync(dto.UserId, cancellationToken);
+        var result = await GetProfileByUserIdAsync(dto.UserId, cancellationToken);
         
         if (!result.IsSuccess)
             return result;
         
+        var profile = result.Value;
         MapProfileFromDto(profile!, dto);
         await DbContext.SaveChangesAsync(cancellationToken);
         

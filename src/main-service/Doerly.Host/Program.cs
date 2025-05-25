@@ -11,6 +11,7 @@ using Doerly.Messaging;
 using Doerly.Notification.EmailSender;
 using Doerly.Proxy.BaseProxy;
 using Doerly.Proxy.Payment;
+using Doerly.Proxy.Profile;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
@@ -48,6 +49,7 @@ builder.RegisterModule(new Doerly.Module.Common.Api.ModuleInitializer());
 #region ModuleProxies
 
 builder.Services.AddProxy<IPaymentModuleProxy, PaymentModuleProxy>();
+builder.Services.AddProxy<IProfileModuleProxy, ProfileModuleProxy>();
 
 #endregion
 

@@ -19,8 +19,12 @@ public class Profile : BaseEntity
     public string? CvPath { get; set; }
     
     public double? Rating { get; set; }
+    
     public virtual ICollection<LanguageProficiency> LanguageProficiencies { get; set; }
     
+    public virtual ICollection<Competence> Competences { get; set; } = new List<Competence>();
+    
     public virtual ICollection<Review> ReviewsWritten { get; set; }
+    
     public virtual ICollection<Review> ReviewsReceived { get; set; }
 }   

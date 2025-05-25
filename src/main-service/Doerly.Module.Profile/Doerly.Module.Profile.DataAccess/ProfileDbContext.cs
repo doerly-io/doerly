@@ -1,6 +1,7 @@
 ﻿using Doerly.DataAccess;
 using Doerly.Module.Profile.DataAccess.Constants;
 using Doerly.Module.Profile.DataAccess.Entities;
+using Doerly.Module.Profile.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -11,6 +12,7 @@ public class ProfileDbContext(IConfiguration configuration) : BaseDbContext(conf
     public DbSet<Entities.Profile> Profiles { get; set; }
     public DbSet<Language> Languages { get; set; }
     public DbSet<LanguageProficiency> LanguageProficiencies { get; set; }
+    public DbSet<Competence> Competences { get; set; }
     
     public DbSet<Review> Reviews { get; set; }
 

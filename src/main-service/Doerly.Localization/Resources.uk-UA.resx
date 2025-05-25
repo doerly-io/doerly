@@ -137,4 +137,7 @@ Doerly</value>
     <data name="LanguageAlreadyExists" xml:space="preserve">
         <value>Мова вже існує</value>
     </data>
+    <data name="CompetenceAlreadyExists" xml:space="preserve">
+        <value>Категорія компетенції вже наявна в профілі</value>
+    </data>
 </root>

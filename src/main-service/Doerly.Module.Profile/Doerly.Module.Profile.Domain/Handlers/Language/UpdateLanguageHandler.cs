@@ -8,11 +8,12 @@ public class UpdateLanguageHandler(ProfileDbContext dbContext) : BaseProfileHand
 {
     public async Task<HandlerResult> HandleAsync(int id, LanguageSaveDto dto, CancellationToken cancellationToken = default)
     {
-        var (language, result) = await GetLanguageByIdAsync(id, cancellationToken);
+        var result = await GetLanguageByIdAsync(id, cancellationToken);
         
         if (!result.IsSuccess)
             return result;
         
+        var language = result.Value;
         var validationResult = await ValidateLanguageIsUniqueAsync(
             dto.Name, dto.Code, excludeId: id, cancellationToken);
         

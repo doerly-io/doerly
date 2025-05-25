@@ -8,6 +8,7 @@
   <Folder Name="/ModuleProxies/">
     <Project Path="Doerly.Proxy.BaseProxy\Doerly.Proxy.BaseProxy.csproj" Type="Classic C#" />
     <Project Path="Doerly.Proxy.Payment\Doerly.Proxy.Payment.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Proxy.Profile\Doerly.Proxy.Profile.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Modules/" />
   <Folder Name="/Modules/Authorization/">

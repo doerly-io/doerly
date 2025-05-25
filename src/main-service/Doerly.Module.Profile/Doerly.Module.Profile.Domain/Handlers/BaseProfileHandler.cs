@@ -1,9 +1,12 @@
 ﻿using Doerly.Domain.Handlers;
 using Doerly.Domain.Models;
+using Doerly.FileRepository;
 using Doerly.Localization;
+using Doerly.Module.Common.DataAccess.Address;
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess.Entities;
+using Doerly.Module.Profile.Domain.Constants;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
@@ -12,7 +15,16 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
 {
     #region Profile Methods
     
-    protected async Task<(DataAccess.Entities.Profile? Profile, HandlerResult Result)> GetProfileByUserIdAsync(
+    protected IQueryable<DataAccess.Entities.Profile> GetCompleteProfileQuery()
+    {
+        return DbContext.Profiles
+            .Include(p => p.LanguageProficiencies!)
+                .ThenInclude(lp => lp.Language)
+            .Include(p => p.Competences!)
+            .AsNoTracking();
+    }
+    
+    protected async Task<HandlerResult<DataAccess.Entities.Profile?>> GetProfileByUserIdAsync(
         int userId, 
         CancellationToken cancellationToken = default)
     {
@@ -20,9 +32,9 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
             .FirstOrDefaultAsync(p => p.UserId == userId, cancellationToken);
 
         if (profile == null)
-            return (null, HandlerResult.Failure(Resources.Get("ProfileNotFound")));
+            return HandlerResult.Failure<DataAccess.Entities.Profile?>(Resources.Get("ProfileNotFound"));
 
-        return (profile, HandlerResult.Success());
+        return HandlerResult.Success(profile);
     }
 
     protected async Task<HandlerResult> ValidateProfileExistsAsync(
@@ -72,7 +84,7 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
         return HandlerResult.Success();
     }
     
-    protected async Task<(Language? Language, HandlerResult Result)> GetLanguageByIdAsync(
+    protected async Task<HandlerResult<Language?>> GetLanguageByIdAsync(
         int languageId, 
         CancellationToken cancellationToken = default)
     {
@@ -80,9 +92,9 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
             .FirstOrDefaultAsync(l => l.Id == languageId, cancellationToken);
 
         if (language == null)
-            return (null, HandlerResult.Failure(Resources.Get("LanguageNotFound")));
+            return HandlerResult.Failure<Language?>(Resources.Get("LanguageNotFound"));
 
-        return (language, HandlerResult.Success());
+        return HandlerResult.Success(language);
     }
     
     protected async Task<HandlerResult> ValidateLanguageIsUniqueAsync(
@@ -108,7 +120,7 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
     
     #region Language Proficiency Methods
     
-    protected async Task<(LanguageProficiency? Proficiency, HandlerResult Result)> GetLanguageProficiencyAsync(
+    protected async Task<HandlerResult<LanguageProficiency?>> GetLanguageProficiencyAsync(
         int profileId, 
         int proficiencyId, 
         CancellationToken cancellationToken = default)
@@ -117,9 +129,9 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
             .FirstOrDefaultAsync(lp => lp.ProfileId == profileId && lp.Id == proficiencyId, cancellationToken);
 
         if (proficiency == null)
-            return (null, HandlerResult.Failure(Resources.Get("LanguageProficiencyNotFound")));
+            return HandlerResult.Failure<LanguageProficiency?>(Resources.Get("LanguageProficiencyNotFound"));
 
-        return (proficiency, HandlerResult.Success());
+        return HandlerResult.Success(proficiency);
     }
     
     protected async Task<HandlerResult> CheckDuplicateLanguageProficiencyAsync(
@@ -142,5 +154,74 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
         return HandlerResult.Success();
     }
     
+    #endregion
+
+    #region Batch Data Retrieval Methods (External Dependencies)
+
+    protected async Task<Dictionary<int, ProfileAddressDto>> GetAddressesBatchAsync(
+        IEnumerable<int> cityIds,
+        AddressDbContext addressDbContext,
+        CancellationToken cancellationToken = default)
+    {
+        var distinctCityIds = cityIds.Where(id => id > 0).Distinct().ToArray();
+        if (!distinctCityIds.Any())
+            return new Dictionary<int, ProfileAddressDto>();
+
+        return await addressDbContext.Cities
+            .AsNoTracking()
+            .Where(c => distinctCityIds.Contains(c.Id))
+            .Include(c => c.Region) 
+            .Select(c => new ProfileAddressDto
+            {
+                CityId = c.Id,
+                CityName = c.Name,
+                RegionId = c.Region.Id,
+                RegionName = c.Region.Name
+            })
+            .ToDictionaryAsync(a => a.CityId, a => a, cancellationToken);
+    }
+
+    protected async Task<Dictionary<int, (string? ImageUrl, string? CvUrl)>> GetFileUrlsBatchAsync(
+        IEnumerable<DataAccess.Entities.Profile> profiles,
+        IFileRepository fileRepository)
+    {
+        var urlTasksByProfileId = new Dictionary<int, (Task<string?> ImageTask, Task<string?> CvTask)>();
+        var allUrlTasks = new List<Task>();
+
+        foreach (var profile in profiles)
+        {
+            Task<string?> imageTask = Task.FromResult<string?>(null);
+            if (!string.IsNullOrEmpty(profile.ImagePath))
+            {
+                imageTask = fileRepository.GetSasUrlAsync(
+                    AzureStorageConstants.ImagesContainerName,
+                    profile.ImagePath);
+                allUrlTasks.Add(imageTask);
+            }
+
+            Task<string?> cvTask = Task.FromResult<string?>(null);
+            if (!string.IsNullOrEmpty(profile.CvPath))
+            {
+                cvTask = fileRepository.GetSasUrlAsync(
+                    AzureStorageConstants.DocumentsContainerName,
+                    profile.CvPath);
+                allUrlTasks.Add(cvTask);
+            }
+            urlTasksByProfileId[profile.Id] = (imageTask, cvTask);
+        }
+
+        if (allUrlTasks.Any())
+        {
+            await Task.WhenAll(allUrlTasks);
+        }
+
+        var results = new Dictionary<int, (string? ImageUrl, string? CvUrl)>();
+        foreach (var entry in urlTasksByProfileId)
+        {
+            results[entry.Key] = (await entry.Value.ImageTask, await entry.Value.CvTask);
+        }
+        return results;
+    }
+
     #endregion
 }

@@ -1,9 +1,7 @@
 using Doerly.Domain.Models;
-using Doerly.Localization;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Module.Profile.DataAccess.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
 
@@ -11,11 +9,12 @@ public class CreateLanguageProficiencyHandler(ProfileDbContext dbContext) : Base
 {
     public async Task<HandlerResult> HandleAsync(int userId, LanguageProficiencySaveDto dto, CancellationToken cancellationToken = default)
     {
-        var (profile, profileResult) = await GetProfileByUserIdAsync(userId, cancellationToken);
+        var profileResult = await GetProfileByUserIdAsync(userId, cancellationToken);
         
         if (!profileResult.IsSuccess)
             return profileResult;
         
+        var profile = profileResult.Value;
         var languageResult = await ValidateLanguageAsync(dto.LanguageId, cancellationToken);
         if (!languageResult.IsSuccess)
             return languageResult;
