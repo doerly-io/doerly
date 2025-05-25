@@ -13,22 +13,26 @@ public class ReviewEntityConfiguration : IEntityTypeConfiguration<Review>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Rating).IsRequired();
         builder.Property(x => x.Comment).HasMaxLength(2000);
-        builder.Property(x => x.ReviewerId).IsRequired();
-        builder.Property(x => x.RevieweeId).IsRequired();
-        builder.HasOne(x => x.Reviewer)
-            .WithMany(p => p.ReviewsWritten)
-            .HasForeignKey(x => x.ReviewerId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Restrict);
+        builder.Property(x => x.ReviewerUserId).IsRequired();
+        builder.Property(x => x.ProfileId).IsRequired();
 
-        builder.HasOne(x => x.Reviewee)
+        builder.HasOne(x => x.Profile)
             .WithMany(p => p.ReviewsReceived)
-            .HasForeignKey(x => x.RevieweeId)
+            .HasForeignKey(x => x.ProfileId)
             .IsRequired()
-            .OnDelete(DeleteBehavior.Restrict);
-        
-        builder.ToTable(t => t.HasCheckConstraint(DbConstants.Tables.ReviewTableConstraints.ReviewRatingRange, "rating >= 1 AND rating <= 5"));
-        builder.ToTable(t => t.HasCheckConstraint(DbConstants.Tables.ReviewTableConstraints.ReviewReviewerNotReviewee, "reviewer_id >= 1 AND reviewee_id <= 5"));
+            .OnDelete(DeleteBehavior.Cascade);
 
+        builder.HasOne(x => x.ReviewerProfile)
+            .WithMany(p => p.ReviewsWritten)
+            .HasForeignKey(x => x.ReviewerUserId)
+            .IsRequired()
+            .HasPrincipalKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => new { x.ProfileId, x.DateCreated, x.Id }).IsUnique();
+        builder.HasIndex(x => new { x.Id, x.ReviewerUserId });
+
+        builder.ToTable(t =>
+            t.HasCheckConstraint(DbConstants.Tables.ReviewTableConstraints.ReviewRatingRange, "rating >= 1 AND rating <= 5"));
     }
 }

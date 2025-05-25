@@ -19,6 +19,7 @@ public class ProfileConfiguration : IEntityTypeConfiguration<Entities.Profile>
         builder.Property(x => x.ImagePath).HasMaxLength(300);
         builder.Property(x => x.CvPath).HasMaxLength(300);
         builder.Property(x => x.CityId);
+        
         builder.HasIndex(x => x.UserId).IsUnique();
     }
 }

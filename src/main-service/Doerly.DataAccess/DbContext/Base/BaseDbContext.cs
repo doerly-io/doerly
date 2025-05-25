@@ -50,7 +50,7 @@ public abstract class BaseDbContext : DbContext, IDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (Configuration["Environment"] == "Development")
+        if (Configuration["Environment"] != "Production")
             optionsBuilder.EnableSensitiveDataLogging().LogTo(Console.WriteLine, LogLevel.Information);
 
         optionsBuilder.UseSnakeCaseNamingConvention(CultureInfo.InvariantCulture);

@@ -14,7 +14,6 @@ internal class DbConstants
         internal class ReviewTableConstraints
         {
             internal const string ReviewRatingRange = "ck_review_rating_range";
-            internal const string ReviewReviewerNotReviewee = "ck_review_reviewer_not_reviewee";
         }
     }
 }
