@@ -10,11 +10,12 @@ public class CreateCompetenceHandler(ProfileDbContext dbContext) : BaseProfileHa
 {
     public async Task<HandlerResult> HandleAsync(int userId, CompetenceSaveDto dto, CancellationToken cancellationToken = default)
     {
-        var (profile, profileResult) = await GetProfileByUserIdAsync(userId, cancellationToken);
+        var profileResult = await GetProfileByUserIdAsync(userId, cancellationToken);
         
         if (!profileResult.IsSuccess)
             return profileResult;
         
+        var profile = profileResult.Value;
         var isCompetenceExists = await DbContext.Competences
             .AnyAsync(c => c.ProfileId == profile.Id && c.CategoryId == dto.CategoryId, cancellationToken);
         

@@ -9,11 +9,12 @@ public class CreateLanguageProficiencyHandler(ProfileDbContext dbContext) : Base
 {
     public async Task<HandlerResult> HandleAsync(int userId, LanguageProficiencySaveDto dto, CancellationToken cancellationToken = default)
     {
-        var (profile, profileResult) = await GetProfileByUserIdAsync(userId, cancellationToken);
+        var profileResult = await GetProfileByUserIdAsync(userId, cancellationToken);
         
         if (!profileResult.IsSuccess)
             return profileResult;
         
+        var profile = profileResult.Value;
         var languageResult = await ValidateLanguageAsync(dto.LanguageId, cancellationToken);
         if (!languageResult.IsSuccess)
             return languageResult;

@@ -24,7 +24,7 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
             .AsNoTracking();
     }
     
-    protected async Task<(DataAccess.Models.Profile? Profile, HandlerResult Result)> GetProfileByUserIdAsync(
+    protected async Task<HandlerResult<DataAccess.Models.Profile?>> GetProfileByUserIdAsync(
         int userId, 
         CancellationToken cancellationToken = default)
     {
@@ -32,9 +32,9 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
             .FirstOrDefaultAsync(p => p.UserId == userId, cancellationToken);
 
         if (profile == null)
-            return (null, HandlerResult.Failure(Resources.Get("ProfileNotFound")));
+            return HandlerResult.Failure<DataAccess.Models.Profile?>(Resources.Get("ProfileNotFound"));
 
-        return (profile, HandlerResult.Success());
+        return HandlerResult.Success(profile);
     }
 
     protected async Task<HandlerResult> ValidateProfileExistsAsync(
@@ -84,7 +84,7 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
         return HandlerResult.Success();
     }
     
-    protected async Task<(Language? Language, HandlerResult Result)> GetLanguageByIdAsync(
+    protected async Task<HandlerResult<Language?>> GetLanguageByIdAsync(
         int languageId, 
         CancellationToken cancellationToken = default)
     {
@@ -92,9 +92,9 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
             .FirstOrDefaultAsync(l => l.Id == languageId, cancellationToken);
 
         if (language == null)
-            return (null, HandlerResult.Failure(Resources.Get("LanguageNotFound")));
+            return HandlerResult.Failure<Language?>(Resources.Get("LanguageNotFound"));
 
-        return (language, HandlerResult.Success());
+        return HandlerResult.Success(language);
     }
     
     protected async Task<HandlerResult> ValidateLanguageIsUniqueAsync(
@@ -120,7 +120,7 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
     
     #region Language Proficiency Methods
     
-    protected async Task<(LanguageProficiency? Proficiency, HandlerResult Result)> GetLanguageProficiencyAsync(
+    protected async Task<HandlerResult<LanguageProficiency?>> GetLanguageProficiencyAsync(
         int profileId, 
         int proficiencyId, 
         CancellationToken cancellationToken = default)
@@ -129,9 +129,9 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
             .FirstOrDefaultAsync(lp => lp.ProfileId == profileId && lp.Id == proficiencyId, cancellationToken);
 
         if (proficiency == null)
-            return (null, HandlerResult.Failure(Resources.Get("LanguageProficiencyNotFound")));
+            return HandlerResult.Failure<LanguageProficiency?>(Resources.Get("LanguageProficiencyNotFound"));
 
-        return (proficiency, HandlerResult.Success());
+        return HandlerResult.Success(proficiency);
     }
     
     protected async Task<HandlerResult> CheckDuplicateLanguageProficiencyAsync(
