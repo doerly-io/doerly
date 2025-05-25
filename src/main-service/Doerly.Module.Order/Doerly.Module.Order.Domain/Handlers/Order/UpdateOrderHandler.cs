@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Doerly.Domain.Models;
+﻿using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.Domain.Dtos.Requests;
-using Doerly.Module.Order.Domain.Dtos.Responses;
+using Doerly.Module.Order.Contracts.Dtos;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +15,7 @@ public class UpdateOrderHandler : BaseOrderHandler
     {
         var order = await DbContext.Orders.Select(x => x.Id).FirstOrDefaultAsync(x => x == id);
         if (order == 0)
-            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("ORDER_NOT_FOUND"));
+            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
 
         await DbContext.Orders.Where(x => x.Id == id).ExecuteUpdateAsync(setters => setters
             .SetProperty(order => order.CategoryId, dto.CategoryId)

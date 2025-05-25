@@ -9,6 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { setServerErrors } from 'app/@core/helpers/input-validation-helpers';
 import { ButtonDirective } from 'primeng/button';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
+import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 
 @Component({
   selector: 'app-send-execution-proposal',
@@ -30,7 +31,8 @@ export class SendExecutionProposalComponent {
     private executionProposalService: ExecutionProposalService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastHelper: ToastHelper
+    private toastHelper: ToastHelper,
+    private readonly jwtTokenHelper: JwtTokenHelper
   ) {}
 
   ngOnInit() {
@@ -49,7 +51,7 @@ export class SendExecutionProposalComponent {
 
   sendExecutionProposal(): void {
       const request = this.sendExecutionProposalForm.value as SendExecutionProposalRequest;
-      request.senderId = 2;
+      request.senderId = this.jwtTokenHelper.getUserInfo()?.id ?? 0;
       request.orderId = this.orderId;
       request.receiverId = this.receiverId;
   

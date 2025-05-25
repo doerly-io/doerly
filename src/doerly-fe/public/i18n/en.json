@@ -221,7 +221,8 @@
     "execution_date": "Execution Date",
     "bill_id": "Bill ID",
     "field_required": "This field is required",
-    "price_min": "Price must be greater than or equal to 0",
+    "price_min": "Minimum price is 1",
+    "minimum_length": "Мінімальна довжина {{length}} символів",
     "invalid_date": "The date is incorrect",
     "send_execution_proposal": "Send execution proposal",
     "comment": "Comment",
@@ -242,28 +243,37 @@
     "status": "Status",
     "order_status": "Order status",
     "order_statuses": {
-      "new": "New",
-      "in_progress": "In progress",
-      "completed": "Completed",
-      "canceled": "Canceled"
+      "Placed": "Placed",
+      "InProgress": "In progress",
+      "AwaitingPayment": "Awaiting payment",
+      "AwaitingConfirmation": "Awaiting confirmation",
+      "Completed": "Completed",
+      "Canceled": "Canceled"
     },
     "proposal_status": "Proposal status",
     "proposal_statuses": {
-      "new": "New",
-      "accepted": "Accepted",
-      "rejected": "Rejected"
+      "Pending": "Pending",
+      "Accepted": "Accepted",
+      "Rejected": "Rejected",
+      "Revoked": "Revoked"
     },
     "payment_kind": "Payment kind",
     "payment_kinds": {
-      "post": "Post",
-      "pre": "Pre"
+      "Online": "Online",
+      "Cash": "Cash"
     },
     "proposal_options": {
       "accept": "Accept",
       "reject": "Reject",
       "revoke": "Revoke"
     },
-    "cancelled-successfully": "Cancelled successfully"
+    "cancelled_successfully": "Cancelled successfully",
+    "order_status_changed": "Order status has been changed",
+    "execution_proposal_editing": "Execution proposal editing",
+    "order_editing": "Order editing",
+    "payment_redirect": "You are gonna be redirected to the payment page in a few seconds",
+    "end": "End",
+    "pay": "Pay"
   },
   "common": {
     "actions": "Actions",
@@ -271,10 +281,14 @@
     "save": "Save",
     "error": "Error",
     "success": "Success",
+    "info": "Info",
+    "warning": "Warning",
     "max_length": "Max length is {{length}} characters",
     "min_length": "Min length is {{length}} characters",
     "field_required": "This field is required",
     "page_not_found": "Page not found",
+    "edit": "Edit",
+    "delete": "Delete",
     "control": {
       "unset": "Unset"
     }

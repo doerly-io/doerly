@@ -22,6 +22,8 @@
     <Project Path="Doerly.Module.Common\Doerly.Module.Common.DataAccess\Doerly.Module.Common.DataAccess.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Modules/Orders/">
+    <Project Path="Doerly.Module.Order/Doerly.Module.Order.Contracts\Doerly.Module.Order.Contracts.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Order/Doerly.Module.Order.Enums\Doerly.Module.Order.Enums.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Order\Doerly.Module.Order.DataAccess\Doerly.Module.Order.DataAccess.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Order\Doerly.Module.Order.Domain\Doerly.Module.Order.Domain.csproj" Type="Classic C#" />

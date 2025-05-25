@@ -32,6 +32,7 @@ export class ExecutionProposalsListComponent implements OnInit {
   totalRecords: number = 0;
   loading: boolean = true;
   returnUrl!: string;
+  EExecutionProposalStatus = EExecutionProposalStatus;
 
   constructor(private executionProposalService: ExecutionProposalService,
                 private router: Router,
@@ -64,13 +65,9 @@ export class ExecutionProposalsListComponent implements OnInit {
     });
   }
 
-  getProposalStatusString(status: EExecutionProposalStatus): string {
-      return EExecutionProposalStatus[status];
-  }
-
   getProposalStatusSeverity(status: EExecutionProposalStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
     switch (status) {
-      case EExecutionProposalStatus.WaitingForApproval:
+      case EExecutionProposalStatus.Pending:
         return 'info';
       case EExecutionProposalStatus.Accepted:
         return 'success';

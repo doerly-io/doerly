@@ -1,11 +1,5 @@
 ﻿using Doerly.DataAccess.Models;
-using Doerly.Module.Order.DataAccess.Constants;
-using Doerly.Module.Order.DataAccess.Enums;
-
-using Microsoft.EntityFrameworkCore;
-
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Doerly.Module.Order.Enums;
 
 namespace Doerly.Module.Order.DataAccess.Models;
 
@@ -26,8 +20,12 @@ public class Order : BaseEntity
     public EOrderStatus Status { get; set; }
 
     public int CustomerId { get; set; }
-    
+
+    public bool CustomerCompletionConfirmed { get; set; }
+
     public int? ExecutorId { get; set; }
+
+    public bool ExecutorCompletionConfirmed { get; set; }
 
     public DateTime? ExecutionDate { get; set; }
 

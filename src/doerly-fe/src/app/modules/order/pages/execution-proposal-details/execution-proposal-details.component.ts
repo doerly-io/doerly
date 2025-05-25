@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ExecutionProposalService } from '../../domain/execution-proposal.service';
 import { GetExecutionProposalResponse } from '../../models/responses/get-execution-proposal-response';
 import { EExecutionProposalStatus } from '../../domain/enums/execution-proposal-status';
@@ -10,6 +10,7 @@ import { Button } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
 import { HttpErrorResponse } from '@angular/common/http';
+import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 
 @Component({
   selector: 'app-execution-proposal-details',
@@ -20,20 +21,25 @@ import { HttpErrorResponse } from '@angular/common/http';
     CommonModule,
     Card,
     Button,
-    TranslatePipe
+    TranslatePipe,
+    RouterLink
   ]
 })
 export class ExecutionProposalDetailsComponent implements OnInit {
   proposal: GetExecutionProposalResponse | null = null;
   loading: boolean = true;
-  profileId: number = 2; //for testing purposes
+  profileId: number;
+  EExecutionProposalStatus = EExecutionProposalStatus;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private executionProposalService: ExecutionProposalService,
-    private toastHelper: ToastHelper
-  ) {}
+    private toastHelper: ToastHelper,
+    private readonly jwtTokenHelper: JwtTokenHelper
+  ) {
+    this.profileId = this.jwtTokenHelper.getUserInfo()?.id ?? 0;
+  }
 
   ngOnInit(): void {
     const proposalId = Number(this.route.snapshot.paramMap.get('id'));
@@ -53,7 +59,6 @@ export class ExecutionProposalDetailsComponent implements OnInit {
   }
 
   resolveProposal(status: EExecutionProposalStatus): void {
-    console.log('resolveProposal', status);
     if (!this.proposal) return;
 
     const request: ResolveExecutionProposalRequest = {
@@ -65,7 +70,7 @@ export class ExecutionProposalDetailsComponent implements OnInit {
 
     this.executionProposalService.resolveExecutionProposal(request).subscribe({
       next: () => {
-        this.toastHelper.showSuccess('common.success', 'ordering.resolved-successfully');
+        this.toastHelper.showSuccess('common.success', 'ordering.resolved_successfully');
         this.router.navigate(['/ordering'], { queryParams: { tab: 0, subTab: 0 } });
       },
       error: (error: HttpErrorResponse) => {

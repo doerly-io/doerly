@@ -1,7 +1,8 @@
-﻿using Doerly.Infrastructure.Api;
-using Doerly.Module.Order.Domain.Dtos.Requests;
+﻿using Doerly.Module.Order.Contracts.Dtos;
+using Doerly.Infrastructure.Api;
 using Doerly.Module.Order.Domain.Handlers;
 using Microsoft.AspNetCore.Mvc;
+using Doerly.Module.Order.Domain.Handlers.Order;
 
 namespace Doerly.Module.Order.Api.Controllers;
 
@@ -14,6 +15,8 @@ public class OrderController : BaseApiController
     public async Task<IActionResult> CreateOrder(CreateOrderRequest dto)
     {
         var result = await ResolveHandler<CreateOrderHandler>().HandleAsync(dto);
+        if (result.IsSuccess)
+            return Ok(result);
 
         return Ok(result);
     }
@@ -48,10 +51,10 @@ public class OrderController : BaseApiController
         return BadRequest(result);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> CancelOrder(int id)
+    [HttpPut("status/{id}")]
+    public async Task<IActionResult> CancelOrder(int id, UpdateOrderStatusRequest dto)
     {
-        var result = await ResolveHandler<CancelOrderHandler>().HandleAsync(id);
+        var result = await ResolveHandler<UpdateOrderStatusHandler>().HandleAsync(id, dto);
         if (result.IsSuccess)
             return Ok(result);
 

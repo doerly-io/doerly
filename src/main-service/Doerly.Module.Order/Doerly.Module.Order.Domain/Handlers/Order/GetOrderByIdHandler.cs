@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Doerly.Domain.Models;
+﻿using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.Domain.Dtos.Responses;
+using Doerly.Module.Order.Contracts.Dtos;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetOrderByIdHandler : BaseOrderHandler
@@ -19,7 +13,7 @@ public class GetOrderByIdHandler : BaseOrderHandler
     {
         var order = await DbContext.Orders.FindAsync(id);
         if (order == null)
-            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("ORDER_NOT_FOUND"));
+            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
 
         var orderDto = new GetOrderResponse
         {
@@ -32,7 +26,9 @@ public class GetOrderByIdHandler : BaseOrderHandler
             DueDate = order.DueDate,
             Status = order.Status,
             CustomerId = order.CustomerId,
+            CustomerCompletionConfirmed = order.CustomerCompletionConfirmed,    
             ExecutorId = order.ExecutorId,
+            ExecutorCompletionConfirmed = order.ExecutorCompletionConfirmed,
             ExecutionDate = order.ExecutionDate,
             BillId = order.BillId
         };

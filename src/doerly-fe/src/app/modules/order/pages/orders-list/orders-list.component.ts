@@ -36,6 +36,7 @@ export class OrdersListComponent implements OnInit {
   totalRecords: number = 0;
   loading: boolean = true;
   returnUrl!: string;
+  EOrderStatus = EOrderStatus;
 
   constructor(private orderService: OrderService,
                 private router: Router,

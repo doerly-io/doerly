@@ -10,6 +10,10 @@ import { Button } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
+import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
+import { UpdateOrderStatusRequest } from '../../models/requests/update-order-status-request';
+import { BaseApiResponse } from 'app/@core/models/base-api-response';
+import { UpdateOrderStatusResponse } from '../../models/responses/update-order-status-response';
 
 @Component({
   selector: 'app-order-details',
@@ -26,14 +30,19 @@ import { ToastHelper } from 'app/@core/helpers/toast.helper';
 export class OrderDetailsComponent implements OnInit {
   order: GetOrderResponse | null = null;
   loading: boolean = true;
-  profileId: number = 1; //for testing purposes
+  profileId: number;
+  EOrderStatus = EOrderStatus;
+  EPaymentKind = EPaymentKind;
 
   constructor(
     private route: ActivatedRoute,
     private orderService: OrderService,
     private router: Router,
-    private toastHelper: ToastHelper
-  ) {}
+    private toastHelper: ToastHelper,
+    private readonly jwtTokenHelper: JwtTokenHelper
+        ) {
+          this.profileId = this.jwtTokenHelper.getUserInfo()?.id ?? 0;
+        }
 
   ngOnInit(): void {
     const orderId = Number(this.route.snapshot.paramMap.get('id'));
@@ -52,13 +61,29 @@ export class OrderDetailsComponent implements OnInit {
     }
   }
 
-  cancelOrder(): void {
+  updateOrderStatus(status: EOrderStatus): void {
     if (!this.order) return;
 
-    this.orderService.cancelOrder(this.order.id).subscribe({
-        next: () => {
-          this.toastHelper.showSuccess('common.success', 'ordering.cancelled-successfully');
-          this.router.navigate(['/ordering'], { queryParams: { tab: 2, subTab: 0 } });
+    const updateOrderStatusRequest: UpdateOrderStatusRequest = {
+      status: status,
+      customerId: this.order.customerId == this.profileId ? this.profileId : undefined,
+      executorId: this.order.executorId == this.profileId ? this.profileId : undefined,
+      returnUrl: `${window.location.origin}/ordering/orders/${this.order.id}`,
+    };
+
+    this.orderService.updateOrderStatus(this.order.id, updateOrderStatusRequest).subscribe({
+        next: (response: BaseApiResponse<UpdateOrderStatusResponse>) => {
+          const value = response.value;
+          if (value?.paymentUrl) {
+            this.toastHelper.showInfo('common.info', 'ordering.payment_redirect');
+            setTimeout(() => {
+              window.location.href = value.paymentUrl!;
+            }, 3000);
+          }
+          else {
+            this.toastHelper.showSuccess('common.success', 'ordering.cancelled_successfully');
+            this.router.navigate(['/ordering'], { queryParams: { tab: 2, subTab: 0 } });
+          }
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
@@ -69,13 +94,5 @@ export class OrderDetailsComponent implements OnInit {
           }
         }
     });
-  }
-
-  getOrderStatusString(status: EOrderStatus): string {
-    return EOrderStatus[status];
-  }
-
-  getPaymentKindString(paymentKind: EPaymentKind): string {
-    return EPaymentKind[paymentKind];
   }
 }

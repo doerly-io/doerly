@@ -18,7 +18,7 @@
                             <span class="font-medium text-secondary text-sm">{{ item.senderId }}</span>
                         </div>
                         <div>
-                            <p-tag [value]="getProposalStatusString(item.status)" [severity]="getProposalStatusSeverity(item.status)"></p-tag>
+                            <p-tag [value]="'ordering.proposal_statuses.' + EExecutionProposalStatus[item.status] | translate" [severity]="getProposalStatusSeverity(item.status)"></p-tag>
                         </div>
                     </div>
                 </div>

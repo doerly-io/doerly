@@ -18,13 +18,13 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
-    path: '404-page',
-    component: NotFoundPageComponent
-  },
-  {
     path: 'ordering',
     loadChildren: () => import('./modules/order/ordering.routes').then(m => m.routes),
     canActivate: [authGuard]
+  },
+  {
+    path: '404-page',
+    component: NotFoundPageComponent
   },
   {
     path: '**',

@@ -23,7 +23,7 @@
                             <span class="font-medium text-secondary text-sm">{{ item.customerId }}</span>
                         </div>
                         <div>
-                            <p-tag [value]="getOrderStatusString(item.status)" [severity]="getOrderStatusSeverity(item.status)"></p-tag>
+                            <p-tag [value]="'ordering.order_statuses.' + EOrderStatus[item.status] | translate" [severity]="getOrderStatusSeverity(item.status)"></p-tag>
                         </div>
                     </div>
                 </div>
