@@ -2,7 +2,7 @@ namespace Doerly.Domain;
 
 public class DoerlyRequestContext : IDoerlyRequestContext
 {
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
     
     public string UserEmail { get; set; }
     
