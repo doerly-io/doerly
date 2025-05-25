@@ -69,10 +69,6 @@ export class OrdersListComponent implements OnInit {
     });
   }
 
-  getOrderStatusString(status: EOrderStatus): string {
-      return EOrderStatus[status];
-  }
-
   getOrderStatusSeverity(status: EOrderStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
       switch (status) {
         case EOrderStatus.Placed:
@@ -87,8 +83,4 @@ export class OrdersListComponent implements OnInit {
           return 'secondary';
       }
     }
-
-  navigateToOrderDetails(orderId: number): void {
-    this.router.navigate(['/ordering/order', orderId]);
-  }
 }

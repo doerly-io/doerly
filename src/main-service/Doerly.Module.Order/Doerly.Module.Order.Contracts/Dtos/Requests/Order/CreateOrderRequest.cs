@@ -1,4 +1,5 @@
-﻿using Doerly.Module.Order.Enums;
+﻿using Doerly.Domain;
+using Doerly.Module.Order.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Doerly.Module.Order.Contracts.Dtos;

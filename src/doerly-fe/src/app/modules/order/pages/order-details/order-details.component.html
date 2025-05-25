@@ -25,7 +25,7 @@
                 <p><strong>{{ 'ordering.payment_kind' | translate }}</strong> {{ 'ordering.payment_kinds.' + EPaymentKind[order.paymentKind] | translate }}</p>
               </div>
               <div class="order-detail-item mb-3">
-                <p><strong>{{ 'ordering.due_date' | translate }}</strong> {{ order.dueDate | date }}</p>
+                <p><strong>{{ 'ordering.due_date' | translate }}</strong> {{ order.dueDate | date: 'dd.MM.yyyy HH:mm' }}</p>
               </div>
               <div class="order-detail-item mb-3">
                 <p><strong>{{ 'ordering.status' | translate }}</strong> {{'ordering.order_statuses.' + EOrderStatus[order.status] | translate }}</p>
@@ -37,7 +37,7 @@
                 <p><strong>{{ 'ordering.executor_id' | translate }}</strong> {{ order.executorId }}</p>
               </div>
               <div class="order-detail-item mb-3" *ngIf="order.executionDate">
-                <p><strong>{{ 'ordering.execution_date' | translate }}</strong> {{ order.executionDate | date }}</p>
+                <p><strong>{{ 'ordering.execution_date' | translate }}</strong> {{ order.executionDate | date: 'dd.MM.yyyy HH:mm' }}</p>
               </div>
               <div class="order-detail-item mb-3" *ngIf="order.billId">
                 <p><strong>{{ 'ordering.bill_id' | translate }}</strong> {{ order.billId }}</p>

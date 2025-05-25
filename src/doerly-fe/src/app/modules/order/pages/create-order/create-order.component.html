@@ -21,8 +21,8 @@
               <label for="name">{{ 'ordering.title' | translate }}</label>
               <input pInputText formControlName="name" class="w-100" id="name" maxlength="100" minlength="1"/>
               <small *ngIf="isInvalid(createOrderForm, 'name')" class="input-validation-item">
-                {{ getError(createOrderForm, 'name', 'required', 'ordering.field_required' | translate: {length: 1}) }}
-                {{ getError(createOrderForm, 'name', 'minimumLength', 'ordering.minimum_length' | translate: {length: 5}) }}
+                {{ getError(createOrderForm, 'name', 'required', 'ordering.field_required' | translate) }}
+                {{ getError(createOrderForm, 'name', 'minimumLength', 'ordering.minimum_length' | translate: {length: 1}) }}
                 {{ getServersideError(createOrderForm, 'name') }}
               </small>
             </div>
@@ -33,7 +33,7 @@
               <textarea pTextarea formControlName="description" rows="5" cols="30" class="w-100 p-2" id="description" maxlength="4000" minlength="5"></textarea>
               <small *ngIf="isInvalid(createOrderForm, 'description')" class="input-validation-item">
                 {{ getError(createOrderForm, 'description', 'required', 'ordering.field_required' | translate) }}
-                {{ getError(createOrderForm, 'description', 'minimumLength', 'ordering.minimum_length' | translate) }}
+                {{ getError(createOrderForm, 'description', 'minimumLength', 'ordering.minimum_length' | translate: {length: 5}) }}
                 {{ getServersideError(createOrderForm, 'description') }}
               </small>
             </div>

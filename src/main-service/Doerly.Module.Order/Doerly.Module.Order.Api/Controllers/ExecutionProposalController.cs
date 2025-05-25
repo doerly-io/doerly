@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Doerly.Module.Order.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Area("order")]
 [Route("api/[area]/[controller]")]

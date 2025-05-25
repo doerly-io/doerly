@@ -223,7 +223,6 @@
     "field_required": "This field is required",
     "price_min": "Minimum price is 1",
     "minimum_length": "Мінімальна довжина {{length}} символів",
-    "invalid_date": "The date is incorrect",
     "send_execution_proposal": "Send execution proposal",
     "comment": "Comment",
     "loading": "Loading...",

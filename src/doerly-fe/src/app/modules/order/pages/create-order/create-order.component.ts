@@ -94,9 +94,9 @@ export class CreateOrderComponent implements OnInit {
     request.customerId = this.jwtTokenHelper.getUserInfo()?.id ?? 0;
 
     this.orderService.createOrder(request).subscribe({
-      next: (response: BaseApiResponse<CreateOrderResponse>) => {
+      next: (response: BaseApiResponse<number>) => {
         const value = response.value;
-        this.router.navigate([`ordering/order/${value!.id}`]);
+        this.router.navigate([`ordering/order/${value}`]);
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400) {

@@ -3,24 +3,39 @@ using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Enums;
 using Doerly.Module.Order.Contracts.Dtos;
-using Doerly.Module.Payments.Api.ModuleWrapper;
 using Doerly.Module.Payments.Contracts;
 using Doerly.Module.Payments.Enums;
 using Doerly.Proxy.Payment;
+using Doerly.Domain;
 
 namespace Doerly.Module.Order.Domain.Handlers.Order;
 public class UpdateOrderStatusHandler : BaseOrderHandler
 {
     private readonly IPaymentModuleProxy _paymentModuleProxy;
-    public UpdateOrderStatusHandler(OrderDbContext dbContext, IPaymentModuleProxy paymentModuleProxy) : base(dbContext)
+    private readonly IDoerlyRequestContext _doerlyRequestContext;
+
+    public UpdateOrderStatusHandler(OrderDbContext dbContext, IPaymentModuleProxy paymentModuleProxy, IDoerlyRequestContext doerlyRequestContext) : base(dbContext)
     {
         _paymentModuleProxy = paymentModuleProxy;
+        _doerlyRequestContext = doerlyRequestContext;
     }
+
     public async Task<HandlerResult<UpdateOrderStatusResponse>> HandleAsync(int id, UpdateOrderStatusRequest dto)
     {
         var order = await DbContext.Orders.FindAsync(id);
         if (order == null)
             return HandlerResult.Failure<UpdateOrderStatusResponse>(Resources.Get("OrderNotFound"));
+
+        if (_doerlyRequestContext.UserId == order.CustomerId)
+        {
+            dto.CustomerId = _doerlyRequestContext.UserId ?? dto.CustomerId;
+            dto.ExecutorId = null;
+        }
+        else if (_doerlyRequestContext.UserId == order.ExecutorId)
+        {
+            dto.ExecutorId = _doerlyRequestContext.UserId ?? dto.ExecutorId;
+            dto.CustomerId = null;
+        }
 
         /* the logic of the order status change is as follows:
          * the customer can change order's status to canceled when it is placed

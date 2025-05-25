@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj" />
+    <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
     <ProjectReference Include="..\Doerly.Module.Order.Enums\Doerly.Module.Order.Enums.csproj" />
   </ItemGroup>
 

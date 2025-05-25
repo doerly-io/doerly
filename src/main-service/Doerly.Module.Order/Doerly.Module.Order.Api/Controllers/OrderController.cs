@@ -3,9 +3,11 @@ using Doerly.Infrastructure.Api;
 using Doerly.Module.Order.Domain.Handlers;
 using Microsoft.AspNetCore.Mvc;
 using Doerly.Module.Order.Domain.Handlers.Order;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Doerly.Module.Order.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Area("order")]
 [Route("api/[area]/[controller]")]

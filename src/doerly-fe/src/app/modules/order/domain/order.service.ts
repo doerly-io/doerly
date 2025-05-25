@@ -28,8 +28,8 @@ export class OrderService {
     return this.httpClient.get<BaseApiResponse<GetOrderResponse>>(`${this.baseUrl}/${id}`);
   }
 
-  createOrder(model: CreateOrderRequest): Observable<BaseApiResponse<CreateOrderResponse>> {
-    return this.httpClient.post<BaseApiResponse<CreateOrderResponse>>(`${this.baseUrl}`, model);
+  createOrder(model: CreateOrderRequest): Observable<BaseApiResponse<number>> {
+    return this.httpClient.post<BaseApiResponse<number>>(`${this.baseUrl}`, model);
   }
 
   updateOrder(id: number, model: UpdateOrderRequest): Observable<BaseApiResponse<void>> {
