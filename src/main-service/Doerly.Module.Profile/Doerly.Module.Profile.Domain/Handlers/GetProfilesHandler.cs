@@ -10,32 +10,26 @@ namespace Doerly.Module.Profile.Domain.Handlers;
 
 public class GetProfilesHandler(ProfileDbContext dbContext, AddressDbContext addressDbContext, IFileRepository fileRepository) : BaseProfileHandler(dbContext)
 {
-    public async Task<HandlerResult<ICollection<ProfileDto>>> HandleAsync(int[] userIds, CancellationToken cancellationToken = default)
+    public async Task<HandlerResult<IEnumerable<ProfileDto>>> HandleAsync(int[] userIds, CancellationToken cancellationToken = default)
     {
         var distinctUserIds = userIds.Distinct().ToArray();
 
-        var profiles = await DbContext.Profiles
-            .AsNoTracking()
+        var profiles = await GetCompleteProfileQuery()
             .Where(p => distinctUserIds.Contains(p.UserId))
             .ToListAsync(cancellationToken);
 
         if (profiles.Count != distinctUserIds.Length)
         {
-            return HandlerResult.Failure<ICollection<ProfileDto>>(Resources.Get("ProfileNotFound"));
+            return HandlerResult.Failure<IEnumerable<ProfileDto>>(Resources.Get("ProfileNotFound"));
         }
 
-        var profileIds = profiles.Select(p => p.Id).ToArray();
         var cityIds = profiles.Select(p => p.CityId ?? 0).Where(id => id > 0).Distinct().ToArray();
 
-        var languageProficienciesTask = GetLanguageProficienciesBatchAsync(profileIds, cancellationToken);
-        var competencesTask = GetCompetencesBatchAsync(profileIds, cancellationToken);
         var addressesTask = GetAddressesBatchAsync(cityIds, addressDbContext, cancellationToken);
         var fileUrlsTask = GetFileUrlsBatchAsync(profiles, fileRepository);
 
-        await Task.WhenAll(languageProficienciesTask, competencesTask, addressesTask, fileUrlsTask);
+        await Task.WhenAll(addressesTask, fileUrlsTask);
 
-        var languageProficienciesMap = await languageProficienciesTask;
-        var competencesMap = await competencesTask;
         var addressMap = await addressesTask;
         var fileUrlsMap = await fileUrlsTask;
 
@@ -43,8 +37,29 @@ public class GetProfilesHandler(ProfileDbContext dbContext, AddressDbContext add
 
         foreach (var profile in profiles)
         {
-            languageProficienciesMap.TryGetValue(profile.Id, out var languageProficiencies);
-            competencesMap.TryGetValue(profile.Id, out var competences);
+            var languageProficiencies = profile.LanguageProficiencies
+                .Select(lp => new LanguageProficiencyDto
+                {
+                    Id = lp.Id,
+                    Language = new LanguageDto 
+                    {
+                        Id = lp.Language.Id,
+                        Name = lp.Language.Name,
+                        Code = lp.Language.Code
+                    },
+                    Level = lp.Level
+                })
+                .ToList();
+            
+            var competences = profile.Competences
+                .Select(c => new CompetenceDto
+                {
+                    Id = c.Id,
+                    CategoryId = c.CategoryId,
+                    CategoryName = c.CategoryName
+                })
+                .ToList();
+
             addressMap.TryGetValue(profile.CityId ?? 0, out var address);
             fileUrlsMap.TryGetValue(profile.Id, out var urls);
 
@@ -61,11 +76,11 @@ public class GetProfilesHandler(ProfileDbContext dbContext, AddressDbContext add
                 ImageUrl = urls.ImageUrl,
                 CvUrl = urls.CvUrl,
                 Address = address,
-                LanguageProficiencies = languageProficiencies ?? new List<LanguageProficiencyDto>(),
-                Competences = competences ?? new List<CompetenceDto>()
+                LanguageProficiencies = languageProficiencies,
+                Competences = competences
             });
         }
 
-        return HandlerResult.Success<ICollection<ProfileDto>>(profileDtos);
+        return HandlerResult.Success<IEnumerable<ProfileDto>>(profileDtos);
     }
 }

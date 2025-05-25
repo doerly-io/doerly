@@ -23,6 +23,40 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Competence", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .IsRequired()
+                        .HasColumnType("integer")
+                        .HasColumnName("category_id");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("category_name");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("integer")
+                        .HasColumnName("profile_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_competence");
+
+                    b.HasIndex("ProfileId", "CategoryId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_competence_profile_id_category_id");
+
+                    b.ToTable("competence", "profile");
+                });
+
             modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Language", b =>
                 {
                     b.Property<int>("Id")
@@ -174,6 +208,18 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     b.ToTable("profile", "profile");
                 });
 
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Competence", b =>
+                {
+                    b.HasOne("Doerly.Module.Profile.DataAccess.Models.Profile", "Profile")
+                        .WithMany("Competences")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_competence_profile_profile_id");
+
+                    b.Navigation("Profile");
+                });
+
             modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.LanguageProficiency", b =>
                 {
                     b.HasOne("Doerly.Module.Profile.DataAccess.Models.Language", "Language")
@@ -202,6 +248,8 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
 
             modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Profile", b =>
                 {
+                    b.Navigation("Competences");
+
                     b.Navigation("LanguageProficiencies");
                 });
 #pragma warning restore 612, 618

@@ -8,7 +8,7 @@ namespace Doerly.Module.Profile.Api.ModuleWrapper;
 public interface IProfileModuleWrapper
 {
     Task<HandlerResult<ProfileDto>> GetProfileAsync(int userId);
-    Task<HandlerResult<ICollection<ProfileDto>>> GetProfilesAsync(int[] userIds);
+    Task<HandlerResult<IEnumerable<ProfileDto>>> GetProfilesAsync(int[] userIds);
 }
     
 public class ProfileModuleWrapper : IProfileModuleWrapper
@@ -26,7 +26,7 @@ public class ProfileModuleWrapper : IProfileModuleWrapper
         return profileResponse;
     }
 
-    public Task<HandlerResult<ICollection<ProfileDto>>> GetProfilesAsync(int[] userIds)
+    public Task<HandlerResult<IEnumerable<ProfileDto>>> GetProfilesAsync(int[] userIds)
     {
         var profilesResponse = _handlerFactory.Get<GetProfilesHandler>().HandleAsync(userIds);
         return profilesResponse;

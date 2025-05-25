@@ -11,7 +11,7 @@ public class CompetenceConfiguration : IEntityTypeConfiguration<Competence>
     {
         builder.ToTable(DbConstants.Tables.Competence, DbConstants.ProfileSchema);
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.CategoryId);
+        builder.Property(x => x.CategoryId).IsRequired();
         builder.Property(x => x.CategoryName).IsRequired().HasMaxLength(100);
         
         builder.HasOne(x => x.Profile)

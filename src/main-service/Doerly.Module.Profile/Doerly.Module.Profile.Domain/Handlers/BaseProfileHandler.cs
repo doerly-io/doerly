@@ -15,6 +15,15 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
 {
     #region Profile Methods
     
+    protected IQueryable<DataAccess.Models.Profile> GetCompleteProfileQuery()
+    {
+        return DbContext.Profiles
+            .Include(p => p.LanguageProficiencies!)
+                .ThenInclude(lp => lp.Language)
+            .Include(p => p.Competences!)
+            .AsNoTracking();
+    }
+    
     protected async Task<(DataAccess.Models.Profile? Profile, HandlerResult Result)> GetProfileByUserIdAsync(
         int userId, 
         CancellationToken cancellationToken = default)
@@ -147,67 +156,7 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
     
     #endregion
 
-    #region Batch Data Retrieval Methods
-
-    protected async Task<Dictionary<int, List<LanguageProficiencyDto>>> GetLanguageProficienciesBatchAsync(
-        int[] profileIds,
-        CancellationToken cancellationToken = default)
-    {
-        if (!profileIds.Any())
-            return new Dictionary<int, List<LanguageProficiencyDto>>();
-
-        var proficiencies = await DbContext.LanguageProficiencies
-            .AsNoTracking()
-            .Where(lp => profileIds.Contains(lp.ProfileId))
-            .Include(lp => lp.Language) // Ensure Language is loaded for the DTO
-            .Select(lp => new
-            {
-                lp.ProfileId,
-                Dto = new LanguageProficiencyDto
-                {
-                    Id = lp.Id,
-                    Language = new LanguageDto // Assuming LanguageDto exists and maps Language entity
-                    {
-                        Id = lp.Language.Id,
-                        Name = lp.Language.Name,
-                        Code = lp.Language.Code
-                    },
-                    Level = lp.Level
-                }
-            })
-            .ToListAsync(cancellationToken);
-
-        return proficiencies
-            .GroupBy(p => p.ProfileId)
-            .ToDictionary(g => g.Key, g => g.Select(x => x.Dto).ToList());
-    }
-
-    protected async Task<Dictionary<int, List<CompetenceDto>>> GetCompetencesBatchAsync(
-        int[] profileIds,
-        CancellationToken cancellationToken = default)
-    {
-        if (!profileIds.Any())
-            return new Dictionary<int, List<CompetenceDto>>();
-
-        var competences = await DbContext.Competences
-            .AsNoTracking()
-            .Where(c => profileIds.Contains(c.ProfileId))
-            .Select(c => new
-            {
-                c.ProfileId,
-                Dto = new CompetenceDto
-                {
-                    Id = c.Id,
-                    CategoryId = c.CategoryId,
-                    CategoryName = c.CategoryName
-                }
-            })
-            .ToListAsync(cancellationToken);
-
-        return competences
-            .GroupBy(c => c.ProfileId)
-            .ToDictionary(g => g.Key, g => g.Select(x => x.Dto).ToList());
-    }
+    #region Batch Data Retrieval Methods (External Dependencies)
 
     protected async Task<Dictionary<int, ProfileAddressDto>> GetAddressesBatchAsync(
         IEnumerable<int> cityIds,
@@ -221,7 +170,7 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
         return await addressDbContext.Cities
             .AsNoTracking()
             .Where(c => distinctCityIds.Contains(c.Id))
-            .Include(c => c.Region) // Ensure Region is loaded
+            .Include(c => c.Region) 
             .Select(c => new ProfileAddressDto
             {
                 CityId = c.Id,

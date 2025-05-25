@@ -9,7 +9,7 @@ namespace Doerly.Module.Profile.Api.Controllers;
 
 [ApiController]
 [Area("profile")]
-[Route("api/[area]/{userId:int}/competence")]
+[Route("api/[area]/{userId:int}/[controller]")]
 public class CompetenceController : BaseApiController
 {
     [HttpPost]

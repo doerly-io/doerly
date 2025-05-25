@@ -7,5 +7,5 @@ namespace Doerly.Proxy.Profile;
 public interface IProfileModuleProxy : IModuleProxy
 {
     Task<HandlerResult<ProfileDto>> GetProfileAsync(int userId);
-    Task<HandlerResult<ICollection<ProfileDto>>> GetProfilesAsync(int[] userIds);
+    Task<HandlerResult<IEnumerable<ProfileDto>>> GetProfilesAsync(int[] userIds);
 }

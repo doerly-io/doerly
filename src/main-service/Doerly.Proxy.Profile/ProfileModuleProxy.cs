@@ -19,7 +19,7 @@ public ProfileModuleProxy(IProfileModuleWrapper profileModuleWrapper)
         return profileResponse;
     }
 
-    public Task<HandlerResult<ICollection<ProfileDto>>> GetProfilesAsync(int[] userIds)
+    public Task<HandlerResult<IEnumerable<ProfileDto>>> GetProfilesAsync(int[] userIds)
     {
         var profilesResponse = _profileModuleWrapper.GetProfilesAsync(userIds);
         return profilesResponse;
