@@ -2,7 +2,9 @@ using System.Globalization;
 using System.Text;
 using Doerly.Domain.Factories;
 using Doerly.Common.Settings;
+using Doerly.Domain;
 using Doerly.FileRepository;
+using Doerly.Host.Middlewares;
 using Doerly.Infrastructure.Api;
 using Doerly.Localization;
 using Doerly.Messaging;
@@ -145,6 +147,8 @@ builder.Services.AddMassTransit(cfg =>
     });
 });
 
+builder.Services.AddScoped<IDoerlyRequestContext, DoerlyRequestContext>();
+
 
 var app = builder.Build();
 
@@ -194,6 +198,8 @@ app.UseCors(policy => policy
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseMiddleware<RequestContextMiddleware>();
 
 app.MapControllers();
 
