@@ -14,11 +14,12 @@ public class UpdateLanguageProficiencyHandler(ProfileDbContext dbContext) : Base
         LanguageProficiencySaveDto dto, 
         CancellationToken cancellationToken = default)
     {
-        var (profile, profileResult) = await GetProfileByUserIdAsync(userId, cancellationToken);
+        var profileResult = await GetProfileByUserIdAsync(userId, cancellationToken);
         
         if (!profileResult.IsSuccess)
             return profileResult;
         
+        var profile = profileResult.Value;
         var proficiency = await DbContext.LanguageProficiencies
             .FirstOrDefaultAsync(lp => lp.ProfileId == profile!.Id && lp.Id == proficiencyId, cancellationToken);
 

@@ -3,6 +3,7 @@ using Doerly.Module.Profile.DataAccess;
 using Doerly.Infrastructure.Api;
 using Doerly.DataAccess.Utils;
 using Doerly.Messaging;
+using Doerly.Module.Profile.Api.ModuleWrapper;
 using Doerly.Module.Profile.Domain;
 using Doerly.Module.Profile.Domain.Constants;
 using Microsoft.AspNetCore.Builder;
@@ -19,6 +20,7 @@ public class ModuleInitializer : IModuleInitializer
         builder.Services.AddDbContext<ProfileDbContext>();
         builder.Services.RegisterHandlers(typeof(Domain.IAssemblyMarker).Assembly);
         builder.Services.RegisterEventConsumers(typeof(IAssemblyMarker).Assembly);
+        builder.Services.AddScoped<IProfileModuleWrapper, ProfileModuleWrapper>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

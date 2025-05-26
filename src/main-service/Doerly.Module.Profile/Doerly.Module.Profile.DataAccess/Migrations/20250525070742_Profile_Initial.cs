@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Doerly.Module.Profile.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Profile_Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -57,6 +57,29 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "competence",
+                schema: "profile",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    profile_id = table.Column<int>(type: "integer", nullable: false),
+                    category_id = table.Column<int>(type: "integer", nullable: false),
+                    category_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_competence", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_competence_profile_profile_id",
+                        column: x => x.profile_id,
+                        principalSchema: "profile",
+                        principalTable: "profile",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "language_proficiencies",
                 schema: "profile",
                 columns: table => new
@@ -89,6 +112,13 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "ix_competence_profile_id_category_id",
+                schema: "profile",
+                table: "competence",
+                columns: new[] { "profile_id", "category_id" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "ix_language_code",
                 schema: "profile",
                 table: "language",
@@ -119,6 +149,10 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "competence",
+                schema: "profile");
+
             migrationBuilder.DropTable(
                 name: "language_proficiencies",
                 schema: "profile");
