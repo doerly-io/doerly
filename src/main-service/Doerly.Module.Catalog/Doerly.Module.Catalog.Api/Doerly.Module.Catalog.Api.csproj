@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Doerly.Api.Infrastructure\Doerly.Api.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
     <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
