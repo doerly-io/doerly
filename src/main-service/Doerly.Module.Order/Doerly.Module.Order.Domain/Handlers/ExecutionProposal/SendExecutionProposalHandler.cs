@@ -6,12 +6,17 @@ using Doerly.Module.Order.Contracts.Dtos;
 
 using Microsoft.EntityFrameworkCore;
 using Doerly.Localization;
+using Doerly.Domain;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class SendExecutionProposalHandler : BaseOrderHandler
 {
-    public SendExecutionProposalHandler(OrderDbContext dbContext) : base(dbContext)
-    { }
+    private readonly IDoerlyRequestContext _doerlyRequestContext;
+
+    public SendExecutionProposalHandler(OrderDbContext dbContext, IDoerlyRequestContext doerlyRequestContext) : base(dbContext)
+    {
+        _doerlyRequestContext = doerlyRequestContext;
+    }
 
     public async Task<HandlerResult<SendExecutionProposalResponse>> HandleAsync(SendExecutionProposalRequest dto)
     {
@@ -26,7 +31,7 @@ public class SendExecutionProposalHandler : BaseOrderHandler
         var existingExecutionProposal = await DbContext.ExecutionProposals
             .FirstOrDefaultAsync(x => x.OrderId == dto.OrderId && 
                 ((x.SenderId == order.CustomerId && x.ReceiverId == dto.ReceiverId) ||
-                (x.SenderId != order.CustomerId && x.SenderId == dto.SenderId)));
+                (x.SenderId != order.CustomerId && x.SenderId == _doerlyRequestContext.UserId)));
 
         if (existingExecutionProposal != null)
             return HandlerResult.Failure<SendExecutionProposalResponse>(Resources.Get("ExecutionProposalAlreadySent"));
@@ -35,7 +40,7 @@ public class SendExecutionProposalHandler : BaseOrderHandler
         {
             OrderId = dto.OrderId,
             Comment = dto.Comment.Trim(),
-            SenderId = dto.SenderId,
+            SenderId = _doerlyRequestContext.UserId ?? throw new Exception("We are fucked!"),
             ReceiverId = dto.ReceiverId,
             Status = EExecutionProposalStatus.Pending
         };

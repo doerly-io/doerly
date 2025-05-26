@@ -1,24 +1,26 @@
 <section class="row justify-content-center mt-5">
-  <p-card styleClass="col-md-8 col-lg-6 col-sm-12">
+  <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
     <div class="row justify-content-center">
-      <div class="col-12">
-        <form [formGroup]="editProposalForm" class="row card mx-0 px-0">
-          <h3 class="c-primary text-center mb-3">{{ 'ordering.execution_proposal_editing' | translate }}</h3>
+      <div class="col-sm-12 col-md-10">
+        <form [formGroup]="proposalForm" class="row card mx-0 px-0">
+          <h3 class="c-primary text-center mb-3">
+            {{ isEdit ? ('ordering.execution_proposal_editing' | translate) : ('ordering.execution_proposal' |
+            translate) }}
+          </h3>
           <div class="row mb-3 mx-0 px-0">
             <div>
               <label for="comment">{{ 'ordering.comment' | translate }}</label>
-              <textarea pTextarea formControlName="comment" maxlength="1000" rows="5" class="w-100" id="comment"></textarea>
-              <small *ngIf="isInvalid(editProposalForm, 'comment')" class="input-validation-item">
-                {{ getError(editProposalForm, 'comment', 'maxlength', 'ordering.comment_maxlength' | translate) }}
-                {{ getServersideError(editProposalForm, 'comment') }}
+              <textarea pTextarea formControlName="comment" maxlength="1000" rows="5" class="w-100 p-2"
+                id="comment"></textarea>
+              <small *ngIf="isInvalid(proposalForm, 'comment')" class="input-validation-item">
+                {{ getServersideError(proposalForm, 'comment') }}
               </small>
             </div>
           </div>
           <div class="row mx-0 px-0 mt-3">
-            <button pButton pRipple [type]="'submit'" label="{{'common.save' | translate}}"
-                    icon="pi pi-check"
-                    class="w-100" [disabled]="!editProposalForm.valid"
-                    (click)="updateProposal()"></button>
+            <button pButton pRipple type="button"
+              [label]="isEdit ? ('common.save' | translate) : ('ordering.send' | translate)" icon="pi pi-check"
+              class="w-100" [disabled]="!proposalForm.valid" (click)="submit()"></button>
           </div>
         </form>
       </div>

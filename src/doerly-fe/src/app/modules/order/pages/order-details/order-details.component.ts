@@ -53,9 +53,13 @@ export class OrderDetailsComponent implements OnInit {
           this.order = response.value || null;
           this.loading = false;
         },
-        error: (error) => {
-          console.error(error);
-          this.loading = false;
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 400) {
+            this.toastHelper.showError('common.error', error.error.errorMessage);
+          }
+          else {
+            this.toastHelper.showError('common.error', 'common.error-occurred');
+          }
         }
       });
     }
@@ -66,8 +70,6 @@ export class OrderDetailsComponent implements OnInit {
 
     const updateOrderStatusRequest: UpdateOrderStatusRequest = {
       status: status,
-      customerId: this.order.customerId == this.profileId ? this.profileId : undefined,
-      executorId: this.order.executorId == this.profileId ? this.profileId : undefined,
       returnUrl: `${window.location.origin}/ordering/orders/${this.order.id}`,
     };
 

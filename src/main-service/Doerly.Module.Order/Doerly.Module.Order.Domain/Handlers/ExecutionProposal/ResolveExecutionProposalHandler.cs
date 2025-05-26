@@ -5,17 +5,21 @@ using Doerly.Module.Order.Enums;
 using Doerly.Module.Order.Contracts.Dtos;
 
 using Microsoft.EntityFrameworkCore;
+using Doerly.Domain;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class ResolveExecutionProposalHandler : BaseOrderHandler
 {
-    public ResolveExecutionProposalHandler(OrderDbContext dbContext) : base(dbContext)
+    private readonly IDoerlyRequestContext _doerlyRequestContext;
+    public ResolveExecutionProposalHandler(OrderDbContext dbContext, IDoerlyRequestContext doerlyRequestContext) : base(dbContext)
     {
+        _doerlyRequestContext = doerlyRequestContext;
     }
 
     public async Task<HandlerResult> HandleAsync(ResolveExecutionProposalRequest dto)
     {
-        var executionProposal = await DbContext.ExecutionProposals.FindAsync(dto.Id);
+        var executionProposal = await DbContext.ExecutionProposals.FirstOrDefaultAsync(x => x.Id == dto.Id && 
+            (x.SenderId == _doerlyRequestContext.UserId || x.ReceiverId == _doerlyRequestContext.UserId));
 
         if (executionProposal == null)
             return HandlerResult.Failure(Resources.Get("ExecutionProposalNotFound"));

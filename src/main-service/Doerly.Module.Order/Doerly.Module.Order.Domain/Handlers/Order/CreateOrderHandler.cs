@@ -31,7 +31,7 @@ public class CreateOrderHandler : BaseOrderHandler
             PaymentKind = dto.PaymentKind,
             DueDate = dto.DueDate,
             Status = EOrderStatus.Placed,
-            CustomerId = _doerlyRequestContext.UserId ?? dto.CustomerId,
+            CustomerId = _doerlyRequestContext.UserId ?? throw new Exception("We are fucked!"),
         };
 
         DbContext.Orders.Add(order);

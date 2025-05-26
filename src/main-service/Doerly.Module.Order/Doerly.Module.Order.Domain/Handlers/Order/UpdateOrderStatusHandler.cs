@@ -26,17 +26,6 @@ public class UpdateOrderStatusHandler : BaseOrderHandler
         if (order == null)
             return HandlerResult.Failure<UpdateOrderStatusResponse>(Resources.Get("OrderNotFound"));
 
-        if (_doerlyRequestContext.UserId == order.CustomerId)
-        {
-            dto.CustomerId = _doerlyRequestContext.UserId ?? dto.CustomerId;
-            dto.ExecutorId = null;
-        }
-        else if (_doerlyRequestContext.UserId == order.ExecutorId)
-        {
-            dto.ExecutorId = _doerlyRequestContext.UserId ?? dto.ExecutorId;
-            dto.CustomerId = null;
-        }
-
         /* the logic of the order status change is as follows:
          * the customer can change order's status to canceled when it is placed
          * the customer can mark order's completion when it is in progress
@@ -44,7 +33,7 @@ public class UpdateOrderStatusHandler : BaseOrderHandler
          * when both customer and executor mark order's completion, the order's status changes to completed
          */
         var result = new UpdateOrderStatusResponse();
-        if (dto.CustomerId == order.CustomerId)
+        if (_doerlyRequestContext.UserId == order.CustomerId)
         {
             if (order.Status == EOrderStatus.Placed && dto.Status == EOrderStatus.Canceled)
                 order.Status = dto.Status;
@@ -75,7 +64,7 @@ public class UpdateOrderStatusHandler : BaseOrderHandler
                 }
             }
         } 
-        else if (order.ExecutorId != null && dto.ExecutorId == order.ExecutorId)
+        else if (order.ExecutorId != null && _doerlyRequestContext.UserId == order.ExecutorId)
         {
             if ((order.Status == EOrderStatus.InProgress || order.Status == EOrderStatus.AwaitingPayment 
                 || order.Status == EOrderStatus.AwaitingConfirmation)

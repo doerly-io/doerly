@@ -45,8 +45,7 @@
             </div>
           </div>
           <div *ngIf="order.status == EOrderStatus.Placed" class="action-buttons d-flex justify-content-center mb-3">
-            <p-button [routerLink]="'/ordering/send-execution-proposal'" 
-                      [queryParams]="{ orderId: order.id, receiverId: order.customerId }"  
+            <p-button [routerLink]="'/ordering/send-execution-proposal'" [queryParams]="{ orderId: order.id, receiverId: order.customerId }" 
                       label="{{ 'ordering.send_execution_proposal' | translate }}"
                       [severity]="'success'" *ngIf="order.customerId != profileId"/>
             <p-button [routerLink]="['/ordering/edit-order', order.id]" 

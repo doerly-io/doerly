@@ -13,8 +13,8 @@ public class UpdateOrderPaymentStatusHandler : BaseOrderHandler
 
     public async Task<HandlerResult> HandleAsync(int billId, bool isPaid)
     {
-        var order = await DbContext.Orders.Select(x => x.BillId).FirstOrDefaultAsync(x => x == billId);
-        if (order == 0)
+        var order = await DbContext.Orders.Select(x => x.BillId).AnyAsync(x => x == billId);
+        if (!order)
             return HandlerResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
 
         if (isPaid)

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ExecutionProposalService } from '../../domain/execution-proposal.service';
-import { FormBuilder } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { DataView } from 'primeng/dataview';
 import { Tag } from 'primeng/tag';
 import { CommonModule } from '@angular/common';
@@ -10,6 +9,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { EExecutionProposalStatus } from '../../domain/enums/execution-proposal-status';
 import { GetExecutionProposalsWithPaginationByPredicatesRequest } from '../../models/requests/get-execution-proposals-request';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ToastHelper } from 'app/@core/helpers/toast.helper';
 
 @Component({
   selector: 'app-execution-proposals-list',
@@ -18,7 +18,8 @@ import { TranslatePipe } from '@ngx-translate/core';
     Tag,
     PaginatorModule,
     CommonModule,
-    TranslatePipe
+    TranslatePipe,
+    RouterLink
   ],
   templateUrl: './execution-proposals-list.component.html',
   styleUrl: './execution-proposals-list.component.scss'
@@ -35,7 +36,7 @@ export class ExecutionProposalsListComponent implements OnInit {
   EExecutionProposalStatus = EExecutionProposalStatus;
 
   constructor(private executionProposalService: ExecutionProposalService,
-                private router: Router,
+                private toastHelper: ToastHelper,
                 private route: ActivatedRoute) {}
 
   ngOnInit() { 
@@ -59,8 +60,12 @@ export class ExecutionProposalsListComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.log(error);
-        this.loading = false;
+        if (error.status === 400) {
+          this.toastHelper.showError('common.error', error.error.errorMessage);
+        }
+        else {
+          this.toastHelper.showError('common.error', 'common.error-occurred');
+        }
       }
     });
   }
@@ -78,9 +83,5 @@ export class ExecutionProposalsListComponent implements OnInit {
       default:
         return 'info';
     }
-  }
-
-  navigateToProposalDetails(proposalId: number): void {
-    this.router.navigate(['/ordering/execution-proposal', proposalId]);
   }
 }

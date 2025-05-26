@@ -48,13 +48,13 @@ export class EditOrderComponent implements OnInit {
     private router: Router,
     private orderService: OrderService,
     private translate: TranslateService,
-    private jwtTokenHelper: JwtTokenHelper,
     private toastHelper: ToastHelper
   ) { }
 
   ngOnInit() {
     this.orderId = Number(this.route.snapshot.paramMap.get('id'));
     this.isEdit = !!this.orderId;
+
     this.initForm();
     this.initPaymentKinds();
 
@@ -77,8 +77,10 @@ export class EditOrderComponent implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
-            const errors = error.error.errors;
-            setServerErrors(this.orderForm, errors);
+            this.toastHelper.showError('common.error', error.error.errorMessage);
+          }
+          else {
+            this.toastHelper.showError('common.error', 'common.error-occurred');
           }
         }
       });
@@ -115,7 +117,9 @@ export class EditOrderComponent implements OnInit {
   }
 
   submit() {
-    if (this.orderForm.invalid) return;
+    if (this.orderForm.invalid) 
+      return;
+    
     if (this.isEdit) {
       this.orderService.updateOrder(this.orderId!, this.orderForm.value)
       .subscribe({
@@ -126,13 +130,14 @@ export class EditOrderComponent implements OnInit {
           if (error.status === 400) {
             this.toastHelper.showError('common.error', error.error.errorMessage);
           }
+          else {
+            this.toastHelper.showError('common.error', 'common.error-occurred');
+          }
         }
     });
     } else {
       const request = this.orderForm.value as CreateOrderRequest;
-      request.customerId = this.jwtTokenHelper.getUserInfo()?.id ?? 0;
-      console.log(request);
-      this.orderService.createOrder(this.orderForm.value)
+      this.orderService.createOrder(request)
       .subscribe({
         next: (response: BaseApiResponse<number>) => {
         this.router.navigate(['/ordering/order', response.value]);
@@ -140,6 +145,9 @@ export class EditOrderComponent implements OnInit {
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
             this.toastHelper.showError('common.error', error.error.errorMessage);
+          }
+          else {
+            this.toastHelper.showError('common.error', 'common.error-occurred');
           }
         }
       });

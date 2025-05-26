@@ -19,9 +19,9 @@ public class UpdateOrderHandler : BaseOrderHandler
     public async Task<HandlerResult> HandleAsync(int id, UpdateOrderRequest dto)
     {
         var order = await DbContext.Orders.Select(x => new { x.Id, x.CustomerId })
-            .FirstOrDefaultAsync(x => x.Id == id && x.CustomerId == _doerlyRequestContext.UserId);
+            .AnyAsync(x => x.Id == id && x.CustomerId == _doerlyRequestContext.UserId);
         
-        if (order == null)
+        if (!order)
             return HandlerResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
 
         await DbContext.Orders.Where(x => x.Id == id).ExecuteUpdateAsync(setters => setters
