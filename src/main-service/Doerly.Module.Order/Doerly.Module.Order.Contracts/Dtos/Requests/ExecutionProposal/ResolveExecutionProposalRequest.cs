@@ -1,8 +1,10 @@
-﻿using Doerly.Module.Order.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+
+using Doerly.Module.Order.Enums;
 
 namespace Doerly.Module.Order.Contracts.Dtos;
 public class ResolveExecutionProposalRequest
 {
-    public int Id { get; set; }
+    [Required(ErrorMessage = "FieldIsRequired")]
     public EExecutionProposalStatus Status { get; set; }
 }

@@ -92,7 +92,7 @@ export class EditOrderComponent implements OnInit {
       categoryId: ['', Validators.required],
       name: ['', [Validators.required, this.minimumLengthValidator(1), Validators.maxLength(100)]],
       description: ['', [Validators.required, this.minimumLengthValidator(5), Validators.maxLength(4000)]],
-      price: ['', [Validators.required, Validators.min(0)]],
+      price: [1, [Validators.required, Validators.min(1)]],
       paymentKind: [1, Validators.required],
       dueDate: ['', Validators.required]
     });

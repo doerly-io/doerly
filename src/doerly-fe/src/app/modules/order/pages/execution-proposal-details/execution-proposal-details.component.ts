@@ -62,13 +62,12 @@ export class ExecutionProposalDetailsComponent implements OnInit {
     if (!this.proposal) return;
 
     const request: ResolveExecutionProposalRequest = {
-      id: this.proposal.id,
       status: status
     };
 
     console.log('resolveProposal', request);
 
-    this.executionProposalService.resolveExecutionProposal(request).subscribe({
+    this.executionProposalService.resolveExecutionProposal(this.proposal.id, request).subscribe({
       next: () => {
         this.toastHelper.showSuccess('common.success', 'ordering.resolved_successfully');
         this.router.navigate(['/ordering'], { queryParams: { tab: 0, subTab: 0 } });

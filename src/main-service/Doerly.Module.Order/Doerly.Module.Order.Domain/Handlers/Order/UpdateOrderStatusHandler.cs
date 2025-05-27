@@ -66,7 +66,7 @@ public class UpdateOrderStatusHandler : BaseOrderHandler
         } 
         else if (order.ExecutorId != null && _doerlyRequestContext.UserId == order.ExecutorId)
         {
-            if ((order.Status == EOrderStatus.InProgress || order.Status == EOrderStatus.AwaitingPayment 
+            if ((order.Status == EOrderStatus.InProgress || order.Status == EOrderStatus.AwaitingPayment
                 || order.Status == EOrderStatus.AwaitingConfirmation)
                 && dto.Status == EOrderStatus.Completed && order.ExecutorCompletionConfirmed == false)
             {

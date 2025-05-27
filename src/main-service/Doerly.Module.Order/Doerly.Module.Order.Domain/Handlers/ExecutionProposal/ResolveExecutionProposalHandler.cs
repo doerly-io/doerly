@@ -16,9 +16,9 @@ public class ResolveExecutionProposalHandler : BaseOrderHandler
         _doerlyRequestContext = doerlyRequestContext;
     }
 
-    public async Task<HandlerResult> HandleAsync(ResolveExecutionProposalRequest dto)
+    public async Task<HandlerResult> HandleAsync(int id, ResolveExecutionProposalRequest dto)
     {
-        var executionProposal = await DbContext.ExecutionProposals.FirstOrDefaultAsync(x => x.Id == dto.Id && 
+        var executionProposal = await DbContext.ExecutionProposals.FirstOrDefaultAsync(x => x.Id == id && 
             (x.SenderId == _doerlyRequestContext.UserId || x.ReceiverId == _doerlyRequestContext.UserId));
 
         if (executionProposal == null)

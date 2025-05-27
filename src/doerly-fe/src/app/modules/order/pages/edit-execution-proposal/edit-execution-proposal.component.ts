@@ -87,10 +87,9 @@ export class EditExecutionProposalComponent implements OnInit {
 
     if (this.isEdit) {
       const updatedProposal: UpdateExecutionProposalRequest = {
-        id: this.proposalId!,
         comment: this.proposalForm.value.comment
       };
-      this.executionProposalService.updateExecutionProposal(updatedProposal).subscribe({
+      this.executionProposalService.updateExecutionProposal(this.proposalId!, updatedProposal).subscribe({
         next: () => {
           this.router.navigate(['/ordering/execution-proposal', this.proposalId]);
         },

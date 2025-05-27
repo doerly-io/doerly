@@ -1,3 +1,5 @@
+using Doerly.Domain.Helpers;
+
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Resources;
@@ -26,8 +28,8 @@ namespace Doerly.Localization
         {
             get
             {
-                var format = _resourceManager.GetString(name, CultureInfo.CurrentUICulture);
-                var value = string.Format(format ?? name, arguments);
+                var format = SafeExecutor.Execute(() => _resourceManager.GetString(name, CultureInfo.CurrentUICulture));
+                var value = string.Format(format.Value ?? name, arguments);
                 return new LocalizedString(name, value, resourceNotFound: format == null);
             }
         }

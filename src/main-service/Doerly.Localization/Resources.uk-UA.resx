@@ -137,10 +137,25 @@ Doerly</value>
   <data name="LanguageAlreadyExists" xml:space="preserve">
         <value>Мова вже існує</value>
     </data>
-    <data name="CompetenceAlreadyExists" xml:space="preserve">
+  <data name="CompetenceAlreadyExists" xml:space="preserve">
         <value>Категорія компетенції вже наявна в профілі</value>
     </data>
   <data name="OrderPaymentDescription" xml:space="preserve">
     <value>Оплата замовлення №{0}</value>
+  </data>
+  <data name="FieldIsRequired" xml:space="preserve">
+    <value>{0} є обов'язковим</value>
+  </data>
+  <data name="FieldIsTooLong" xml:space="preserve">
+    <value>{0} перевищує максимальну довжину в {1} символів</value>
+  </data>
+  <data name="FieldIsTooShort" xml:space="preserve">
+    <value>{0} має бути хоча б {1} символів у довжину</value>
+  </data>
+  <data name="FieldIsInRange" xml:space="preserve">
+    <value>{0} має бути по-між {1} та {2}</value>
+  </data>
+  <data name="FieldIsUrl" xml:space="preserve">
+    <value>{0} має бути {1}</value>
   </data>
 </root>

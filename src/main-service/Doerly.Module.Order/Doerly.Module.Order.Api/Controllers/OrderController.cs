@@ -54,7 +54,7 @@ public class OrderController : BaseApiController
     }
 
     [HttpPut("status/{id}")]
-    public async Task<IActionResult> CancelOrder(int id, UpdateOrderStatusRequest dto)
+    public async Task<IActionResult> UpdateOrder(int id, UpdateOrderStatusRequest dto)
     {
         var result = await ResolveHandler<UpdateOrderStatusHandler>().HandleAsync(id, dto);
         if (result.IsSuccess)

@@ -137,10 +137,25 @@ Doerly</value>
   <data name="LanguageAlreadyExists" xml:space="preserve">
 		<value>Language already exist</value>
 	</data>
-    <data name="CompetenceAlreadyExists" xml:space="preserve">
+  <data name="CompetenceAlreadyExists" xml:space="preserve">
         <value>Competence already exists in profile</value>
     </data>
   <data name="OrderPaymentDescription" xml:space="preserve">
     <value>Payment for order №{0}</value>
+  </data>
+  <data name="FieldIsRequired" xml:space="preserve">
+    <value>{0} is required</value>
+  </data>
+  <data name="FieldIsTooLong" xml:space="preserve">
+    <value>{0} exceeds maximum length in {1} symbols</value>
+  </data>
+  <data name="FieldIsTooShort" xml:space="preserve">
+    <value>{0} must be at least {1} symbols long</value>
+  </data>
+  <data name="FieldIsInRange" xml:space="preserve">
+    <value>{0} must be between {1} and {2}</value>
+  </data>
+  <data name="FieldIsUrl" xml:space="preserve">
+    <value>{0} must be {1}</value>
   </data>
 </root>
