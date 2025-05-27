@@ -166,6 +166,10 @@
         }
       }
     },
+    "feedback" : {
+      "title": "Feedback",
+      "subtitle": "Your feedback helps us improve the service"
+    },
     "message": {
       "save": {
         "success": "Profile has been saved successfully.",

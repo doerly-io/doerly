@@ -48,12 +48,14 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     user_id = table.Column<int>(type: "integer", nullable: false),
                     image_path = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
                     cv_path = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
+                    rating = table.Column<double>(type: "double precision", nullable: true),
                     date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_profile", x => x.id);
+                    table.UniqueConstraint("ak_profile_user_id", x => x.user_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,7 +82,7 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "language_proficiencies",
+                name: "language_proficiency",
                 schema: "profile",
                 columns: table => new
                 {
@@ -94,21 +96,55 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_language_proficiencies", x => x.id);
+                    table.PrimaryKey("pk_language_proficiency", x => x.id);
                     table.ForeignKey(
-                        name: "fk_language_proficiencies_language_language_id",
+                        name: "fk_language_proficiency_language_language_id",
                         column: x => x.language_id,
                         principalSchema: "profile",
                         principalTable: "language",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_language_proficiencies_profile_profile_id",
+                        name: "fk_language_proficiency_profile_profile_id",
                         column: x => x.profile_id,
                         principalSchema: "profile",
                         principalTable: "profile",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "review",
+                schema: "profile",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    rating = table.Column<int>(type: "integer", nullable: false),
+                    comment = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    reviewer_user_id = table.Column<int>(type: "integer", nullable: false),
+                    profile_id = table.Column<int>(type: "integer", nullable: false),
+                    date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_review", x => x.id);
+                    table.CheckConstraint("ck_review_rating_range", "rating >= 1 AND rating <= 5");
+                    table.ForeignKey(
+                        name: "fk_review_profile_profile_id",
+                        column: x => x.profile_id,
+                        principalSchema: "profile",
+                        principalTable: "profile",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_review_profile_reviewer_user_id",
+                        column: x => x.reviewer_user_id,
+                        principalSchema: "profile",
+                        principalTable: "profile",
+                        principalColumn: "user_id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -126,15 +162,15 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_language_proficiencies_language_id",
+                name: "ix_language_proficiency_language_id",
                 schema: "profile",
-                table: "language_proficiencies",
+                table: "language_proficiency",
                 column: "language_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_language_proficiencies_profile_id_language_id",
+                name: "ix_language_proficiency_profile_id_language_id",
                 schema: "profile",
-                table: "language_proficiencies",
+                table: "language_proficiency",
                 columns: new[] { "profile_id", "language_id" },
                 unique: true);
 
@@ -144,6 +180,25 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 table: "profile",
                 column: "user_id",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_review_id_reviewer_user_id",
+                schema: "profile",
+                table: "review",
+                columns: new[] { "id", "reviewer_user_id" });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_review_profile_id_date_created_id",
+                schema: "profile",
+                table: "review",
+                columns: new[] { "profile_id", "date_created", "id" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_review_reviewer_user_id",
+                schema: "profile",
+                table: "review",
+                column: "reviewer_user_id");
         }
 
         /// <inheritdoc />
@@ -154,7 +209,11 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                 schema: "profile");
 
             migrationBuilder.DropTable(
-                name: "language_proficiencies",
+                name: "language_proficiency",
+                schema: "profile");
+
+            migrationBuilder.DropTable(
+                name: "review",
                 schema: "profile");
 
             migrationBuilder.DropTable(

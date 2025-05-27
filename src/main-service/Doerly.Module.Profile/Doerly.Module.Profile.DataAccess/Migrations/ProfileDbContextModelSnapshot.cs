@@ -23,7 +23,7 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Competence", b =>
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Entities.Competence", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,7 +33,6 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CategoryId")
-                        .IsRequired()
                         .HasColumnType("integer")
                         .HasColumnName("category_id");
 
@@ -57,7 +56,7 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     b.ToTable("competence", "profile");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Language", b =>
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Entities.Language", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -96,7 +95,7 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     b.ToTable("language", "profile");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.LanguageProficiency", b =>
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Entities.LanguageProficiency", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -126,19 +125,19 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                         .HasColumnName("profile_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_language_proficiencies");
+                        .HasName("pk_language_proficiency");
 
                     b.HasIndex("LanguageId")
-                        .HasDatabaseName("ix_language_proficiencies_language_id");
+                        .HasDatabaseName("ix_language_proficiency_language_id");
 
                     b.HasIndex("ProfileId", "LanguageId")
                         .IsUnique()
-                        .HasDatabaseName("ix_language_proficiencies_profile_id_language_id");
+                        .HasDatabaseName("ix_language_proficiency_profile_id_language_id");
 
-                    b.ToTable("language_proficiencies", "profile");
+                    b.ToTable("language_proficiency", "profile");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Profile", b =>
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Entities.Profile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -190,6 +189,10 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("last_name");
 
+                    b.Property<double?>("Rating")
+                        .HasColumnType("double precision")
+                        .HasColumnName("rating");
+
                     b.Property<int>("Sex")
                         .HasColumnType("integer")
                         .HasColumnName("sex");
@@ -201,6 +204,9 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("pk_profile");
 
+                    b.HasAlternateKey("UserId")
+                        .HasName("ak_profile_user_id");
+
                     b.HasIndex("UserId")
                         .IsUnique()
                         .HasDatabaseName("ix_profile_user_id");
@@ -208,9 +214,63 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     b.ToTable("profile", "profile");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Competence", b =>
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Entities.Review", b =>
                 {
-                    b.HasOne("Doerly.Module.Profile.DataAccess.Models.Profile", "Profile")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("comment");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_created");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("integer")
+                        .HasColumnName("profile_id");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("integer")
+                        .HasColumnName("rating");
+
+                    b.Property<int>("ReviewerUserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("reviewer_user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_review");
+
+                    b.HasIndex("ReviewerUserId")
+                        .HasDatabaseName("ix_review_reviewer_user_id");
+
+                    b.HasIndex("Id", "ReviewerUserId")
+                        .HasDatabaseName("ix_review_id_reviewer_user_id");
+
+                    b.HasIndex("ProfileId", "DateCreated", "Id")
+                        .IsUnique()
+                        .HasDatabaseName("ix_review_profile_id_date_created_id");
+
+                    b.ToTable("review", "profile", t =>
+                        {
+                            t.HasCheckConstraint("ck_review_rating_range", "rating >= 1 AND rating <= 5");
+                        });
+                });
+
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Entities.Competence", b =>
+                {
+                    b.HasOne("Doerly.Module.Profile.DataAccess.Entities.Profile", "Profile")
                         .WithMany("Competences")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -220,37 +280,63 @@ namespace Doerly.Module.Profile.DataAccess.Migrations
                     b.Navigation("Profile");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.LanguageProficiency", b =>
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Entities.LanguageProficiency", b =>
                 {
-                    b.HasOne("Doerly.Module.Profile.DataAccess.Models.Language", "Language")
+                    b.HasOne("Doerly.Module.Profile.DataAccess.Entities.Language", "Language")
                         .WithMany("LanguageProficiencies")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_language_proficiencies_language_language_id");
+                        .HasConstraintName("fk_language_proficiency_language_language_id");
 
-                    b.HasOne("Doerly.Module.Profile.DataAccess.Models.Profile", "Profile")
+                    b.HasOne("Doerly.Module.Profile.DataAccess.Entities.Profile", "Profile")
                         .WithMany("LanguageProficiencies")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_language_proficiencies_profile_profile_id");
+                        .HasConstraintName("fk_language_proficiency_profile_profile_id");
 
                     b.Navigation("Language");
 
                     b.Navigation("Profile");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Language", b =>
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Entities.Review", b =>
+                {
+                    b.HasOne("Doerly.Module.Profile.DataAccess.Entities.Profile", "Profile")
+                        .WithMany("ReviewsReceived")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_review_profile_profile_id");
+
+                    b.HasOne("Doerly.Module.Profile.DataAccess.Entities.Profile", "ReviewerProfile")
+                        .WithMany("ReviewsWritten")
+                        .HasForeignKey("ReviewerUserId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_review_profile_reviewer_user_id");
+
+                    b.Navigation("Profile");
+
+                    b.Navigation("ReviewerProfile");
+                });
+
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Entities.Language", b =>
                 {
                     b.Navigation("LanguageProficiencies");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Models.Profile", b =>
+            modelBuilder.Entity("Doerly.Module.Profile.DataAccess.Entities.Profile", b =>
                 {
                     b.Navigation("Competences");
 
                     b.Navigation("LanguageProficiencies");
+
+                    b.Navigation("ReviewsReceived");
+
+                    b.Navigation("ReviewsWritten");
                 });
 #pragma warning restore 612, 618
         }

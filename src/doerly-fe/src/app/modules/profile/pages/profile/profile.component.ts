@@ -36,6 +36,8 @@ import { LanguageProficiencyDto } from '../../models/responses/LanguageProficien
 import { LanguageDto } from '../../models/responses/LanguageDto';
 import { ELanguageProficiencyLevel } from '../../models/enums/ELanguageProficiencyLevel';
 import { LanguagesQueryDto } from '../../domain/profile.service';
+import {Rating} from 'primeng/rating';
+import {ReviewInputComponent} from 'app/modules/profile/components/review-input/review-input.component';
 
 @Component({
   selector: 'app-profile',
@@ -59,7 +61,9 @@ import { LanguagesQueryDto } from '../../domain/profile.service';
     NgOptimizedImage,
     Tooltip,
     AddressSelectComponent,
-    NgForOf
+    NgForOf,
+    Rating,
+    ReviewInputComponent
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'

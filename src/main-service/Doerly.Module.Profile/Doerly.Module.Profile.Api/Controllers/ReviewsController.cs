@@ -35,16 +35,16 @@ public class ReviewsController : BaseApiController
         return Created();
     }
     
-    [HttpPut]
+    [HttpPut("{reviewId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateReview([FromRoute] int profileId, [FromBody] UpdateReviewDto updateReviewDto)
+    public async Task<IActionResult> UpdateReview([FromRoute] int reviewId, [FromBody] UpdateReviewDto updateReviewDto)
     {
         var userId = RequestContext.UserId;
         if (userId == null)
             return BadRequest(Resources.Get("FailedToUpdateReview"));
 
-        var result = await ResolveHandler<UpdateProfileReviewHandler>().HandleAsync(profileId, userId.Value, updateReviewDto);
+        var result = await ResolveHandler<UpdateProfileReviewHandler>().HandleAsync(userId.Value, reviewId, updateReviewDto);
         if (!result.IsSuccess)
             return NotFound(result);
 

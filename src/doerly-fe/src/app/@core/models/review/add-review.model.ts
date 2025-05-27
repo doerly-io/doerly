@@ -1,4 +1,4 @@
-export interface AddReview {
+export interface UpsertReview {
   rating: number;
   comment: string;
 }

@@ -1,0 +1,30 @@
+<p-card>
+  <div class="review-input-form">
+    <form [formGroup]="reviewForm" (ngSubmit)="addReview()" autocomplete="off">
+      <div class="row mb-3 mx-0 px-0">
+        <div>
+          <p-rating formControlName="rating" [stars]="5"></p-rating>
+          <!--        <small *ngIf="isInvalid(reviewForm,'rating')" class="input-validation-item">-->
+          <!--          {{ getError(reviewForm, 'rating', 'required', 'common.field_required' | translate) }}-->
+          <!--        </small>-->
+        </div>
+      </div>
+      <div class="row mb-3 mx-0 px-0">
+        <div>
+    <textarea
+      id="comment"
+      pTextarea
+      formControlName="comment"
+      class="form-control w-100"
+      style="min-height: 120px; resize: vertical;"
+      placeholder="Enter your review"
+    ></textarea>
+          <small *ngIf="isInvalid(reviewForm,'comment')" class="input-validation-item">
+            {{ getError(reviewForm, 'comment', 'required', 'common.field_required' | translate) }}
+          </small>
+        </div>
+      </div>
+      <button pButton type="submit" label="Submit Review" [disabled]="reviewForm.invalid"></button>
+    </form>
+  </div>
+</p-card>
