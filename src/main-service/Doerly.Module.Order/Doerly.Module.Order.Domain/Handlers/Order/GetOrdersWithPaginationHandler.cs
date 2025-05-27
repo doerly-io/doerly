@@ -1,11 +1,11 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.Domain.Dtos.Responses;
 using Microsoft.EntityFrameworkCore;
-using Doerly.Module.Order.Domain.Dtos.Requests;
+using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Extensions;
-using OrderEntity = Doerly.Module.Order.DataAccess.Models.Order;
 using System.Linq.Expressions;
+
+using OrderEntity = Doerly.Module.Order.DataAccess.Models.Order;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetOrdersWithPaginationHandler : BaseOrderHandler

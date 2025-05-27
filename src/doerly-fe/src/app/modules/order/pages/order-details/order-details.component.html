@@ -1,4 +1,4 @@
-<section class="row justify-content-center mt-5">
+<section class="order-details-container row justify-content-center mt-5">
   <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
     <div class="row justify-content-center">
       <div class="col-sm-12 col-md-10">
@@ -22,13 +22,13 @@
             </div>
             <div class="col-md-6">
               <div class="order-detail-item mb-3">
-                <p><strong>{{ 'ordering.payment_kind' | translate }}</strong> {{ getPaymentKindString(order.paymentKind) }}</p>
+                <p><strong>{{ 'ordering.payment_kind' | translate }}</strong> {{ 'ordering.payment_kinds.' + EPaymentKind[order.paymentKind] | translate }}</p>
               </div>
               <div class="order-detail-item mb-3">
-                <p><strong>{{ 'ordering.due_date' | translate }}</strong> {{ order.dueDate | date }}</p>
+                <p><strong>{{ 'ordering.due_date' | translate }}</strong> {{ order.dueDate | date: 'dd.MM.yyyy HH:mm' }}</p>
               </div>
               <div class="order-detail-item mb-3">
-                <p><strong>{{ 'ordering.status' | translate }}</strong> {{ getOrderStatusString(order.status) }}</p>
+                <p><strong>{{ 'ordering.status' | translate }}</strong> {{'ordering.order_statuses.' + EOrderStatus[order.status] | translate }}</p>
               </div>
               <div class="order-detail-item mb-3">
                 <p><strong>{{ 'ordering.customer_id' | translate }}</strong> {{ order.customerId }}</p>
@@ -37,21 +37,39 @@
                 <p><strong>{{ 'ordering.executor_id' | translate }}</strong> {{ order.executorId }}</p>
               </div>
               <div class="order-detail-item mb-3" *ngIf="order.executionDate">
-                <p><strong>{{ 'ordering.execution_date' | translate }}</strong> {{ order.executionDate | date }}</p>
+                <p><strong>{{ 'ordering.execution_date' | translate }}</strong> {{ order.executionDate | date: 'dd.MM.yyyy HH:mm' }}</p>
               </div>
               <div class="order-detail-item mb-3" *ngIf="order.billId">
                 <p><strong>{{ 'ordering.bill_id' | translate }}</strong> {{ order.billId }}</p>
               </div>
             </div>
           </div>
-          <div class="d-flex justify-content-center mb-3">
-            <p-button label="{{ 'ordering.cancel' | translate }}" 
-                      icon="pi pi-times" severity="danger" (click)="cancelOrder()" 
-                      *ngIf="order.customerId == profileId"></p-button>
-            <p-button [routerLink]="'/ordering/send-execution-proposal'" 
-                      [queryParams]="{ orderId: order.id, receiverId: order.customerId }"  
+          <div *ngIf="order.status == EOrderStatus.Placed" class="action-buttons d-flex justify-content-center mb-3">
+            <p-button [routerLink]="'/ordering/send-execution-proposal'" [queryParams]="{ orderId: order.id, receiverId: order.customerId }" 
                       label="{{ 'ordering.send_execution_proposal' | translate }}"
-                      [severity]="'success'" *ngIf="order.customerId != profileId && order.status == 1"/>
+                      [severity]="'success'" *ngIf="order.customerId != profileId"/>
+            <p-button [routerLink]="['/ordering/edit-order', order.id]" 
+                      label="{{ 'common.edit' | translate }}" 
+                      icon="pi pi-pencil" class="me-2" 
+                      *ngIf="order.customerId == profileId"></p-button>
+            <p-button label="{{ 'ordering.cancel' | translate }}" 
+                      icon="pi pi-times" severity="danger" (click)="updateOrderStatus(EOrderStatus.Canceled)" 
+                      *ngIf="order.customerId == profileId"></p-button>           
+        </div>
+        <div *ngIf="order.status == EOrderStatus.InProgress" class="action-buttons d-flex justify-content-center mb-3">
+            <p-button label="{{ 'ordering.end' | translate }}" 
+                      icon="pi pi-times" severity="success" (click)="updateOrderStatus(EOrderStatus.Completed)" 
+                      *ngIf="order.customerId == profileId || order.executorId == profileId"></p-button>            
+        </div>
+        <div *ngIf="order.status == EOrderStatus.AwaitingPayment" class="action-buttons d-flex justify-content-center mb-3">
+            <p-button label="{{ 'ordering.pay' | translate }}" icon="pi pi-money-bill" severity="success"
+              (click)="updateOrderStatus(EOrderStatus.Completed)"
+              *ngIf="order.customerId == profileId"></p-button>
+        </div>
+        <div *ngIf="order.status == EOrderStatus.InProgress || order.status == EOrderStatus.AwaitingPayment || (order.status == EOrderStatus.AwaitingConfirmation && !order.executorCompletionConfirmation)" class="action-buttons d-flex justify-content-center mb-3">
+            <p-button label="{{ 'ordering.end' | translate }}" icon="pi pi-check" severity="success"
+              (click)="updateOrderStatus(EOrderStatus.Completed)"
+              *ngIf="order.executorId == profileId"></p-button>
         </div>
         </div>
       </div>

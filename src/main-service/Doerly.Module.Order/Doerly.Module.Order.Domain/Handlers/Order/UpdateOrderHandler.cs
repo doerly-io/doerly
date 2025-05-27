@@ -1,28 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Doerly.Domain.Models;
+﻿using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.Domain.Dtos.Requests;
-using Doerly.Module.Order.Domain.Dtos.Responses;
+using Doerly.Module.Order.Contracts.Dtos;
 
 using Microsoft.EntityFrameworkCore;
+using Doerly.Domain;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class UpdateOrderHandler : BaseOrderHandler
 {
-    public UpdateOrderHandler(OrderDbContext dbContext) : base(dbContext)
+    private readonly IDoerlyRequestContext _doerlyRequestContext;
+
+    public UpdateOrderHandler(OrderDbContext dbContext, IDoerlyRequestContext doerlyRequestContext) : base(dbContext)
     {
+        _doerlyRequestContext = doerlyRequestContext;
     }
+
     public async Task<HandlerResult> HandleAsync(int id, UpdateOrderRequest dto)
     {
-        var order = await DbContext.Orders.Select(x => x.Id).FirstOrDefaultAsync(x => x == id);
-        if (order == 0)
-            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("ORDER_NOT_FOUND"));
+        var order = await DbContext.Orders.Select(x => new { x.Id, x.CustomerId })
+            .AnyAsync(x => x.Id == id && x.CustomerId == _doerlyRequestContext.UserId);
+        
+        if (!order)
+            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
 
         await DbContext.Orders.Where(x => x.Id == id).ExecuteUpdateAsync(setters => setters
             .SetProperty(order => order.CategoryId, dto.CategoryId)

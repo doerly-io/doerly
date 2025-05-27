@@ -11,7 +11,9 @@ export interface GetOrderResponse {
     dueDate: Date;
     status: EOrderStatus;
     customerId: number;
+    customerCompletionConfirmation: boolean;
     executorId?: number;
+    executorCompletionConfirmation: boolean;
     executionDate?: Date;
     billId?: number;
 }
