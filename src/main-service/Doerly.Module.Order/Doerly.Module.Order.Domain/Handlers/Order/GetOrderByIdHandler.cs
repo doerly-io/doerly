@@ -3,12 +3,16 @@ using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Contracts.Dtos;
 using Microsoft.EntityFrameworkCore;
+using Doerly.Proxy.Profile;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetOrderByIdHandler : BaseOrderHandler
 {
-    public GetOrderByIdHandler(OrderDbContext dbContext) : base(dbContext)
+    private readonly IProfileModuleProxy _profileModuleProxy;
+
+    public GetOrderByIdHandler(OrderDbContext dbContext, IProfileModuleProxy profileModuleProxy) : base(dbContext)
     {
+        _profileModuleProxy = profileModuleProxy;
     }
     public async Task<HandlerResult<GetOrderResponse>> HandleAsync(int id)
     {
@@ -32,6 +36,27 @@ public class GetOrderByIdHandler : BaseOrderHandler
 
         if (order == null)
             return HandlerResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
+
+        var customerProfile = await _profileModuleProxy.GetProfileAsync(order.CustomerId);
+        order.Customer = new ProfileInfo
+        {
+            Id = customerProfile.Value.Id,
+            FirstName = customerProfile.Value.FirstName,
+            LastName = customerProfile.Value.LastName,
+            AvatarUrl = customerProfile.Value.ImageUrl
+        };
+
+        if (order.ExecutorId.HasValue)
+        {
+            var executorProfile = await _profileModuleProxy.GetProfileAsync(order.ExecutorId.Value);
+            order.Executor = new ProfileInfo
+            {
+                Id = executorProfile.Value.Id,
+                FirstName = executorProfile.Value.FirstName,
+                LastName = executorProfile.Value.LastName,
+                AvatarUrl = executorProfile.Value.ImageUrl
+            };
+        }
 
         return HandlerResult.Success(order);
     }

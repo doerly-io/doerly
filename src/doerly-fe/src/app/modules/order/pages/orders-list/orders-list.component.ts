@@ -12,6 +12,8 @@ import { Button } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
+import { getOrderStatusSeverity } from '../../domain/enums/order-status';
+import { Avatar } from 'primeng/avatar';
 
 @Component({
   selector: 'app-orders-list',
@@ -22,7 +24,8 @@ import { ToastHelper } from 'app/@core/helpers/toast.helper';
     CommonModule,
     Button,
     TranslatePipe,
-    RouterLink
+    RouterLink,
+    Avatar
   ],
   templateUrl: './orders-list.component.html',
   styleUrl: './orders-list.component.scss'
@@ -38,6 +41,7 @@ export class OrdersListComponent implements OnInit {
   loading: boolean = true;
   returnUrl!: string;
   EOrderStatus = EOrderStatus;
+  public getOrderStatusSeverity = getOrderStatusSeverity;
 
   constructor(private orderService: OrderService,
               private toastHelper: ToastHelper,
@@ -73,19 +77,4 @@ export class OrdersListComponent implements OnInit {
       }
     });
   }
-
-  getOrderStatusSeverity(status: EOrderStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
-      switch (status) {
-        case EOrderStatus.Placed:
-          return 'info';
-        case EOrderStatus.InProgress:
-          return 'warn';
-        case EOrderStatus.Completed:
-          return 'success';
-        case EOrderStatus.Canceled:
-          return 'danger';
-        default:
-          return 'secondary';
-      }
-    }
 }

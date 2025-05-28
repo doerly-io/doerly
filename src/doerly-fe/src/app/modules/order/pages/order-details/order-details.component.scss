@@ -1,33 +1,96 @@
-/* filepath: c:\Dan\Projects\Doerly\src\doerly-fe\src\app\modules\order\pages\order-details\order-details.component.scss */
 .order-details-container {
-  padding: 1rem;
-  margin-top: 1rem;
-
-  .order-detail-item {
-    margin: 0.5rem 0;
+  .title {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
   }
 
-  p-card {
-    padding: 1rem;
-    border: 1px solid var(--surface-200);
-    border-radius: 0.5rem;
-    background-color: var(--surface-50);
+  .field-label {
+    font-weight: 700;
+    color: var(--p-primary-color);
+  }
 
-    .action-buttons {
-      gap: 0.5rem;
+  /* Адаптивність для рядків з кількома полями */
+  .row-responsive {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
 
-      button {
-        width: 100%;
-        margin: 0 0.5rem;
-      }
+  @media (max-width: 600px) {
+    .row-responsive {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 0.2rem;
+    }
+
+    .order-details-container {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
     }
   }
 
-  h2 {
-    margin-bottom: 1rem;
+  /* Дати в одному ряду, адаптивно */
+  .dates-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
   }
 
-  p {
-    margin: 0.5rem 0;
+  .date-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .date-value {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .executor-profile-container {
+    min-width: 140px;
+    max-width: 100%;
+    margin: 0 auto;
+
+    .avatar-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 0;
+    }
+
+    .executor-avatar {
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border: 2px solid var(--p-primary-color, #2196f3);
+      width: 90px !important;
+      height: 90px !important;
+      object-fit: cover;
+      background: #fff;
+    }
+
+    .executor-name {
+      margin-top: 0.25rem;
+      font-weight: 600;
+      text-align: left;
+      word-break: break-word;
+      font-size: 1rem;
+    }
+
+    .p-tag {
+      font-size: 0.95rem;
+      margin-left: 0.25rem;
+    }
+
+    .field-label {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--p-primary-color);
+    }
   }
 }

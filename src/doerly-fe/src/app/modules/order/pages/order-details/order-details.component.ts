@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { OrderService } from '../../domain/order.service';
 import { GetOrderResponse } from '../../models/responses/get-order-response';
-import { EOrderStatus } from '../../domain/enums/order-status';
+import { EOrderStatus, getOrderStatusSeverity } from '../../domain/enums/order-status';
 import { EPaymentKind } from '../../domain/enums/payment-kind';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -14,6 +14,11 @@ import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 import { UpdateOrderStatusRequest } from '../../models/requests/update-order-status-request';
 import { BaseApiResponse } from 'app/@core/models/base-api-response';
 import { UpdateOrderStatusResponse } from '../../models/responses/update-order-status-response';
+import { PanelModule } from 'primeng/panel';
+import { Tag } from 'primeng/tag';
+import { AvatarModule } from 'primeng/avatar';
+import { DividerModule } from 'primeng/divider';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-order-details',
@@ -24,7 +29,13 @@ import { UpdateOrderStatusResponse } from '../../models/responses/update-order-s
     Card,
     Button,
     RouterLink,
-    TranslatePipe
+    TranslatePipe,
+    PanelModule,
+    Tag,
+    AvatarModule,
+    DividerModule,
+    TooltipModule,
+    NgOptimizedImage
   ]
 })
 export class OrderDetailsComponent implements OnInit {
@@ -33,6 +44,7 @@ export class OrderDetailsComponent implements OnInit {
   profileId: number;
   EOrderStatus = EOrderStatus;
   EPaymentKind = EPaymentKind;
+  public getOrderStatusSeverity = getOrderStatusSeverity;
 
   constructor(
     private route: ActivatedRoute,

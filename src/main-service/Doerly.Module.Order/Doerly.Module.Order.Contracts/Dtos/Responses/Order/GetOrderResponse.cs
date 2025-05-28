@@ -27,9 +27,13 @@ public class GetOrderResponse
 
     public int CustomerId { get; set; }
 
+    public ProfileInfo Customer { get; set; }
+
     public bool CustomerCompletionConfirmed { get; set; }
 
     public int? ExecutorId { get; set; }
+
+    public ProfileInfo? Executor { get; set; }
 
     public bool ExecutorCompletionConfirmed { get; set; }
 

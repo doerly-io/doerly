@@ -10,6 +10,7 @@ import { EExecutionProposalStatus } from '../../domain/enums/execution-proposal-
 import { GetExecutionProposalsWithPaginationByPredicatesRequest } from '../../models/requests/get-execution-proposals-request';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
+import { Avatar } from 'primeng/avatar';
 
 @Component({
   selector: 'app-execution-proposals-list',
@@ -19,7 +20,8 @@ import { ToastHelper } from 'app/@core/helpers/toast.helper';
     PaginatorModule,
     CommonModule,
     TranslatePipe,
-    RouterLink
+    RouterLink,
+    Avatar
   ],
   templateUrl: './execution-proposals-list.component.html',
   styleUrl: './execution-proposals-list.component.scss'

@@ -1,24 +1,53 @@
 <section class="row justify-content-center">
-    <p-dataview [value]="proposals" [paginator]="true" [rows]="10" 
-        [rowsPerPageOptions]="[10, 20, 50, 100]" [totalRecords]="totalRecords" 
-        [lazy]="true" (onLazyLoad)="loadProposals($event)" [loading]="loading" emptyMessage="{{ 'ordering.no_execution_proposals' | translate }}">
+    <p-dataview [value]="proposals" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 50, 100]"
+        [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="loadProposals($event)" [loading]="loading"
+        emptyMessage="{{ 'ordering.no_execution_proposals' | translate }}">
         <ng-template #list>
-            <div *ngFor="let proposal of proposals; let first = first">
-                <div class="execution-proposal-item" [routerLink]="['/ordering/execution-proposal', proposal.id]" routerLinkActive="router-link-active">
-                    <div class="execution-proposal-header">
-                        <div>
-                            <div class="text-lg font-medium text-surface-900 dark:text-surface-0">{{ proposal.receiverId }}</div>
-                        </div>
-                        <div>
-                            <span class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{ proposal.orderId }}</span>
-                        </div>
+            <div *ngFor="let proposal of proposals">
+                <div class="execution-proposal-item d-flex flex-row align-items-center"
+                    [routerLink]="['/ordering/execution-proposal', proposal.id]" routerLinkActive="router-link-active">
+
+                    <!-- Аватар та ім'я -->
+                    <div class="proposal-avatar-block d-flex flex-column align-items-center me-3">
+                        <img *ngIf="(receiverId && proposal.sender?.avatarUrl) || (senderId && proposal.receiver?.avatarUrl)"
+                            [src]="receiverId ? proposal.sender?.avatarUrl : proposal.receiver?.avatarUrl"
+                            alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar proposal-list-avatar mb-1"
+                            width="56" height="56" />
+                        <p-avatar
+                            *ngIf="(receiverId && !proposal.sender?.avatarUrl) || (senderId && !proposal.receiver?.avatarUrl)"
+                            icon="pi pi-user" shape="circle" size="large"
+                            class="avatar-bg proposal-list-avatar mb-1"></p-avatar>
+                        <span class="proposal-person-name text-center text-sm">
+                            {{ receiverId ? (proposal.sender?.firstName + ' ' + proposal.sender?.lastName) :
+                            (proposal.receiver?.firstName + ' ' + proposal.receiver?.lastName) }}
+                        </span>
                     </div>
-                    <div class="execution-proposal-footer">
-                        <div>
-                            <span class="font-medium text-secondary text-sm">{{ proposal.senderId }}</span>
+
+                    <!-- Інформація про пропозицію -->
+                    <div class="flex-grow-1">
+                        <div class="execution-proposal-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-lg font-medium text-surface-900 dark:text-surface-0">
+                                    {{ proposal.comment }}
+                                </span>
+                            </div>
+                            <div>
+                                <span class="text-xl font-semibold text-surface-900 dark:text-surface-0">
+                                    {{ proposal.orderId }}
+                                </span>
+                            </div>
                         </div>
-                        <div>
-                            <p-tag [value]="'ordering.proposal_statuses.' + EExecutionProposalStatus[proposal.status] | translate" [severity]="getProposalStatusSeverity(proposal.status)"></p-tag>
+                        <div class="execution-proposal-footer d-flex justify-content-between align-items-center mt-2">
+                            <div>
+                                <!-- <span class="font-medium text-secondary text-sm">
+                                    {{ proposal.createdAt | date:'dd.MM.yyyy HH:mm' }}
+                                </span> -->
+                            </div>
+                            <div>
+                                <p-tag
+                                    [value]="'ordering.proposal_statuses.' + EExecutionProposalStatus[proposal.status] | translate"
+                                    [severity]="getProposalStatusSeverity(proposal.status)"></p-tag>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,29 +1,45 @@
-<section class="row justify-content-center">
+<section class="order-list row justify-content-center">
     <div class="d-flex justify-content-end mb-3">
-        <p-button icon="pi pi-shopping-cart" [routerLink]="'/ordering/create-order'" 
-                    label="{{ 'ordering.create_order' | translate }}"
-                    [severity]="'success'" *ngIf="canCreateOrder"/>
+        <p-button icon="pi pi-shopping-cart" [routerLink]="'/ordering/create-order'"
+            label="{{ 'ordering.create_order' | translate }}" [severity]="'success'" *ngIf="canCreateOrder" />
     </div>
-    <p-dataview [value]="orders" [paginator]="true" [rows]="10" 
-        [rowsPerPageOptions]="[10, 20, 50, 100]" [totalRecords]="totalRecords" 
-        [lazy]="true" (onLazyLoad)="loadOrders($event)" [loading]="loading" emptyMessage="{{ 'ordering.no_orders' | translate }}">
+    <p-dataview [value]="orders" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 50, 100]"
+        [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="loadOrders($event)" [loading]="loading"
+        emptyMessage="{{ 'ordering.no_orders' | translate }}">
         <ng-template #list>
             <div *ngFor="let order of orders; let first = first">
-                <div class="order-item" [routerLink]="['/ordering/order', order.id]">
-                    <div class="order-header">
-                        <div>
-                            <div class="text-lg font-medium text-surface-900 dark:text-surface-0">{{ order.name }}</div>
-                        </div>
-                        <div>
-                            <span class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{ '$' + order.price }}</span>
-                        </div>
+                <div class="order-item d-flex flex-row align-items-center" [routerLink]="['/ordering/order', order.id]">
+                    <!-- Аватар та ім'я замовника -->
+                    <div class="customer-avatar-block d-flex flex-column align-items-center me-3">
+                        <img *ngIf="order.customer?.avatarUrl" [src]="order.customer.avatarUrl"
+                            alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar order-list-avatar mb-1"
+                            width="56" height="56" />
+                        <p-avatar *ngIf="!order.customer?.avatarUrl" icon="pi pi-user" shape="circle" size="large"
+                            class="avatar-bg order-list-avatar mb-1"></p-avatar>
+                        <span class="customer-name text-center text-sm">
+                            {{ order.customer.firstName }}
+                        </span>
                     </div>
-                    <div class="order-footer">
-                        <div>
-                            <span class="font-medium text-secondary text-sm">{{ order.customerId }}</span>
+                    <!-- Інформація про замовлення -->
+                    <div class="flex-grow-1">
+                        <div class="order-header">
+                            <div>
+                                <div class="text-lg font-medium text-surface-900 dark:text-surface-0">{{ order.name }}
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{ '$' +
+                                    order.price }}</span>
+                            </div>
                         </div>
-                        <div>
-                            <p-tag [value]="'ordering.order_statuses.' + EOrderStatus[order.status] | translate" [severity]="getOrderStatusSeverity(order.status)"></p-tag>
+                        <div class="order-footer">
+                            <div>
+                                <span class="font-medium text-secondary text-sm">{{ order.customerId }}</span>
+                            </div>
+                            <div>
+                                <p-tag [value]="'ordering.order_statuses.' + EOrderStatus[order.status] | translate"
+                                    [severity]="getOrderStatusSeverity(order.status)"></p-tag>
+                            </div>
                         </div>
                     </div>
                 </div>

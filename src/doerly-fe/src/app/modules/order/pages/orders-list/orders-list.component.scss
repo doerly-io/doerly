@@ -1,26 +1,61 @@
-/* filepath: c:\Dan\Projects\Doerly\src\doerly-fe\src\app\modules\order\pages\list\list.component.scss */
-.order-item {
-    padding: 1rem;
-    border: 1px solid grey;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-    // background-color: rgb(50, 50, 50);
-    // transition: background-color 0.3s;
-
-    // &:hover {
-    //     background-color: var(--surface-100);
-    // }
-
-    .order-header {
+.order-list {
+    .order-item {
+        padding: 1rem;
+        border: 1px solid grey;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
         display: flex;
-        justify-content: space-between;
         align-items: center;
+
+        .customer-avatar-block {
+            min-width: 70px;
+            max-width: 90px;
+        }
+
+        .order-list-avatar {
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border: 2px solid var(--p-primary-color, #2196f3);
+        }
+
+        .customer-name {
+            font-weight: 500;
+            font-size: 0.95rem;
+            word-break: break-word;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
     }
 
-    .order-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 1rem;
+    @media (max-width: 500px) {
+        .order-item {
+            flex-direction: column;
+            align-items: flex-start;
+
+            .customer-avatar-block {
+                margin-bottom: 0.5rem;
+                margin-right: 0;
+            }
+
+            .order-header,
+            .order-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
     }
 }

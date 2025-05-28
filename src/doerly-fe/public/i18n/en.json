@@ -272,7 +272,9 @@
     "order_editing": "Order editing",
     "payment_redirect": "You are gonna be redirected to the payment page in a few seconds",
     "end": "End",
-    "pay": "Pay"
+    "pay": "Pay",
+    "view_profile": "View profile",
+    "executor": "Executor"
   },
   "common": {
     "actions": "Actions",
