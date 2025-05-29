@@ -274,7 +274,9 @@
     "end": "End",
     "pay": "Pay",
     "view_profile": "View profile",
-    "executor": "Executor"
+    "sent": "Sent",
+    "executor": "Executor",
+    "order_number": "Order №{{number}}"
   },
   "common": {
     "actions": "Actions",
@@ -290,6 +292,7 @@
     "page_not_found": "Page not found",
     "edit": "Edit",
     "delete": "Delete",
+    "error_occurred": "An error occurred",
     "control": {
       "unset": "Unset"
     }

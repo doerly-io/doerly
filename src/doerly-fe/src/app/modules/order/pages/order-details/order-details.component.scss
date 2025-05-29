@@ -1,4 +1,12 @@
 .order-details-container {
+  .order-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--p-primary-color);
+    text-align: center;
+  }
+
   .title {
     margin-bottom: 1rem;
     font-size: 1.5rem;
@@ -52,6 +60,22 @@
     text-overflow: ellipsis;
   }
 
+  p-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 2px solid var(--p-primary-color, #2196f3);
+    object-fit: cover;
+  }
+
+  .avatar {
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 2px solid var(--p-primary-color, #2196f3);
+    object-fit: cover;
+  }
+
   .executor-profile-container {
     min-width: 140px;
     max-width: 100%;
@@ -62,16 +86,6 @@
       justify-content: center;
       align-items: center;
       margin-bottom: 0;
-    }
-
-    .executor-avatar {
-      border-radius: 50%;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      border: 2px solid var(--p-primary-color, #2196f3);
-      width: 90px !important;
-      height: 90px !important;
-      object-fit: cover;
-      background: #fff;
     }
 
     .executor-name {

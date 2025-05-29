@@ -65,7 +65,7 @@ export class EditExecutionProposalComponent implements OnInit {
             this.toastHelper.showError('common.error', error.error.errorMessage);
           }
           else {
-            this.toastHelper.showError('common.error', 'common.error-occurred');
+            this.toastHelper.showError('common.error', 'common.error_occurred');
           }
         }
       });
@@ -98,7 +98,7 @@ export class EditExecutionProposalComponent implements OnInit {
             this.toastHelper.showError('common.error', error.error.errorMessage);
           }
           else {
-            this.toastHelper.showError('common.error', 'common.error-occurred');
+            this.toastHelper.showError('common.error', 'common.error_occurred');
           }
         }
       });
@@ -117,7 +117,7 @@ export class EditExecutionProposalComponent implements OnInit {
             this.toastHelper.showError('common.error', error.error.errorMessage);
           }
           else {
-            this.toastHelper.showError('common.error', 'common.error-occurred');
+            this.toastHelper.showError('common.error', 'common.error_occurred');
           }
         }
       });

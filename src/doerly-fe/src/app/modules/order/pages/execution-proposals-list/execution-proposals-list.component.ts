@@ -11,6 +11,7 @@ import { GetExecutionProposalsWithPaginationByPredicatesRequest } from '../../mo
 import { TranslatePipe } from '@ngx-translate/core';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
 import { Avatar } from 'primeng/avatar';
+import { getExecutionProposalStatusSeverity } from '../../domain/enums/execution-proposal-status';
 
 @Component({
   selector: 'app-execution-proposals-list',
@@ -36,12 +37,13 @@ export class ExecutionProposalsListComponent implements OnInit {
   loading: boolean = true;
   returnUrl!: string;
   EExecutionProposalStatus = EExecutionProposalStatus;
+  public getExecutionProposalStatusSeverity = getExecutionProposalStatusSeverity;
 
   constructor(private executionProposalService: ExecutionProposalService,
-                private toastHelper: ToastHelper,
-                private route: ActivatedRoute) {}
+    private toastHelper: ToastHelper,
+    private route: ActivatedRoute) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['return'];
   }
 
@@ -66,24 +68,9 @@ export class ExecutionProposalsListComponent implements OnInit {
           this.toastHelper.showError('common.error', error.error.errorMessage);
         }
         else {
-          this.toastHelper.showError('common.error', 'common.error-occurred');
+          this.toastHelper.showError('common.error', 'common.error_occurred');
         }
       }
     });
-  }
-
-  getProposalStatusSeverity(status: EExecutionProposalStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
-    switch (status) {
-      case EExecutionProposalStatus.Pending:
-        return 'info';
-      case EExecutionProposalStatus.Accepted:
-        return 'success';
-      case EExecutionProposalStatus.Rejected:
-        return 'danger';
-      case EExecutionProposalStatus.Revoked:
-        return 'warn';
-      default:
-        return 'info';
-    }
   }
 }

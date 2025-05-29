@@ -10,4 +10,5 @@ export interface GetExecutionProposalResponse {
     receiverId: number;
     receiver: ProfileInfoModel | null;
     status: EExecutionProposalStatus;
+    dateCreated: Date;
 }

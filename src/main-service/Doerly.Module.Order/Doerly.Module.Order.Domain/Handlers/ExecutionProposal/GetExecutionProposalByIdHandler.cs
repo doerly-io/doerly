@@ -59,7 +59,8 @@ public class GetExecutionProposalByIdHandler : BaseOrderHandler
                     AvatarUrl = customerProfile.Value.ImageUrl
                 }
                 : null,
-            Status = executionProposal.Status
+            Status = executionProposal.Status,
+            DateCreated = executionProposal.DateCreated
         };
 
         return HandlerResult.Success(result);

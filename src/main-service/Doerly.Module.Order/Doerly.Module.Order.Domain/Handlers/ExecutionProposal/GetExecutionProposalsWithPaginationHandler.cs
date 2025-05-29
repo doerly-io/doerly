@@ -47,9 +47,9 @@ public class GetExecutionProposalsWithPaginationHandler : BaseOrderHandler
         int[] profileIDs = [];
 
         if (dto.ReceiverId.HasValue)
-            profileIDs = entities.Select(x => x.ReceiverId).ToArray();
+            profileIDs = entities.Select(x => x.SenderId).Distinct().ToArray();
         else if (dto.SenderId.HasValue)
-            profileIDs = entities.Select(x => x.SenderId).ToArray();
+            profileIDs = entities.Select(x => x.ReceiverId).Distinct().ToArray();
 
         var profiles = await _profileModuleProxy.GetProfilesAsync(profileIDs);
 
@@ -59,6 +59,7 @@ public class GetExecutionProposalsWithPaginationHandler : BaseOrderHandler
         .Select(executionProposal => new GetExecutionProposalResponse
         {
             Id = executionProposal.Id,
+            OrderId = executionProposal.OrderId,
             SenderId = executionProposal.SenderId,
             Sender = profileIDsDictionary.TryGetValue(executionProposal.SenderId, out var senderProfile)
                 ? new ProfileInfo
@@ -79,7 +80,8 @@ public class GetExecutionProposalsWithPaginationHandler : BaseOrderHandler
                     AvatarUrl = receiverProfile.ImageUrl
                 }
                 : null,
-            Status = executionProposal.Status
+            Status = executionProposal.Status,
+            DateCreated = executionProposal.DateCreated
         }).ToList();
 
         var result = new GetExecutionProposalsWithPaginationResponse

@@ -24,4 +24,6 @@ public class GetExecutionProposalResponse
     public ProfileInfo Receiver { get; set; }
 
     public EExecutionProposalStatus Status { get; set; }
+
+    public DateTime DateCreated { get; set; }
 }

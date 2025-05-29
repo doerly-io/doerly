@@ -1,4 +1,4 @@
-<section class="row justify-content-center">
+<section class="execution-proposal-list row justify-content-center">
     <p-dataview [value]="proposals" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 50, 100]"
         [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="loadProposals($event)" [loading]="loading"
         emptyMessage="{{ 'ordering.no_execution_proposals' | translate }}">
@@ -18,36 +18,27 @@
                             icon="pi pi-user" shape="circle" size="large"
                             class="avatar-bg proposal-list-avatar mb-1"></p-avatar>
                         <span class="proposal-person-name text-center text-sm">
-                            {{ receiverId ? (proposal.sender?.firstName + ' ' + proposal.sender?.lastName) :
-                            (proposal.receiver?.firstName + ' ' + proposal.receiver?.lastName) }}
+                            {{ receiverId ? proposal.sender?.firstName : proposal.receiver?.firstName  }}
                         </span>
                     </div>
 
-                    <!-- Інформація про пропозицію -->
-                    <div class="flex-grow-1">
-                        <div class="execution-proposal-header d-flex justify-content-between align-items-center">
-                            <div>
+                    <!-- Інформація та статус у два стовпчики -->
+                    <div class="info-status-container d-flex flex-grow-1">
+                        <div class="info-container flex-grow-1 d-flex flex-column justify-content-center">
+                            <div class="execution-proposal-header">
                                 <span class="text-lg font-medium text-surface-900 dark:text-surface-0">
-                                    {{ proposal.comment }}
+                                    {{ 'ordering.order_number' | translate: {orderId: proposal.orderId} }}
                                 </span>
-                            </div>
-                            <div>
-                                <span class="text-xl font-semibold text-surface-900 dark:text-surface-0">
-                                    {{ proposal.orderId }}
+                                <span class="font-medium text-secondary text-sm">
+                                    {{ proposal.dateCreated | date:'dd.MM.yyyy HH:mm' }}
                                 </span>
                             </div>
                         </div>
-                        <div class="execution-proposal-footer d-flex justify-content-between align-items-center mt-2">
-                            <div>
-                                <!-- <span class="font-medium text-secondary text-sm">
-                                    {{ proposal.createdAt | date:'dd.MM.yyyy HH:mm' }}
-                                </span> -->
-                            </div>
-                            <div>
-                                <p-tag
-                                    [value]="'ordering.proposal_statuses.' + EExecutionProposalStatus[proposal.status] | translate"
-                                    [severity]="getProposalStatusSeverity(proposal.status)"></p-tag>
-                            </div>
+                        <div class="status-container d-flex flex-column justify-content-center align-items-center">
+                            <p-tag
+                                [value]="'ordering.proposal_statuses.' + EExecutionProposalStatus[proposal.status] | translate"
+                                [severity]="getExecutionProposalStatusSeverity(proposal.status)">
+                            </p-tag>
                         </div>
                     </div>
                 </div>

@@ -17,6 +17,7 @@ import { GetOrderResponse } from '../../models/responses/get-order-response';
 import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 import { CreateOrderRequest } from '../../models/requests/create-order-request';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
+import { CreateOrderResponse } from '../../models/responses/create-order-response';
 
 @Component({
   selector: 'app-edit-order',
@@ -80,7 +81,7 @@ export class EditOrderComponent implements OnInit {
             this.toastHelper.showError('common.error', error.error.errorMessage);
           }
           else {
-            this.toastHelper.showError('common.error', 'common.error-occurred');
+            this.toastHelper.showError('common.error', 'common.error_occurred');
           }
         }
       });
@@ -117,40 +118,41 @@ export class EditOrderComponent implements OnInit {
   }
 
   submit() {
-    if (this.orderForm.invalid) 
+    if (this.orderForm.invalid)
       return;
-    
+
     if (this.isEdit) {
       this.orderService.updateOrder(this.orderId!, this.orderForm.value)
-      .subscribe({
-        next: () => {
-          this.router.navigate(['/ordering/order', this.orderId]);
-        },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.toastHelper.showError('common.error', error.error.errorMessage);
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/ordering/order', this.orderId]);
+          },
+          error: (error: HttpErrorResponse) => {
+            if (error.status === 400) {
+              this.toastHelper.showError('common.error', error.error.errorMessage);
+            }
+            else {
+              this.toastHelper.showError('common.error', 'common.error_occurred');
+            }
           }
-          else {
-            this.toastHelper.showError('common.error', 'common.error-occurred');
-          }
-        }
-    });
+        });
     } else {
       const request = this.orderForm.value as CreateOrderRequest;
       this.orderService.createOrder(request)
-      .subscribe({
-        next: (response: BaseApiResponse<number>) => {
-        this.router.navigate(['/ordering/order', response.value]);
-      },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.toastHelper.showError('common.error', error.error.errorMessage);
+        .subscribe({
+          next: (response: BaseApiResponse<CreateOrderResponse>) => {
+            console.log(response);
+            this.router.navigate(['/ordering/order', response.value!.id]);
+          },
+          error: (error: HttpErrorResponse) => {
+            if (error.status === 400) {
+              this.toastHelper.showError('common.error', error.error.errorMessage);
+            }
+            else {
+              this.toastHelper.showError('common.error', 'common.error_occurred');
+            }
           }
-          else {
-            this.toastHelper.showError('common.error', 'common.error-occurred');
-          }
-        }
-      });
+        });
     }
   }
 

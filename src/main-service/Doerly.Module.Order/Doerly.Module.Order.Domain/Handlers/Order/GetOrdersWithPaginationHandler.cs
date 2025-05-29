@@ -31,7 +31,7 @@ public class GetOrdersWithPaginationHandler : BaseOrderHandler
             .AsNoTracking()
             .GetEntitiesWithPaginationAsync(dto.PageInfo, predicates);
 
-        var profileIDs = entities.Select(x => x.CustomerId).ToArray();
+        var profileIDs = entities.Select(x => x.CustomerId).Distinct().ToArray();
 
         var profiles = await _profileModuleProxy.GetProfilesAsync(profileIDs);
 

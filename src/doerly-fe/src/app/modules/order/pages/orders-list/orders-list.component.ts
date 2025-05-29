@@ -44,10 +44,10 @@ export class OrdersListComponent implements OnInit {
   public getOrderStatusSeverity = getOrderStatusSeverity;
 
   constructor(private orderService: OrderService,
-              private toastHelper: ToastHelper,
-                private route: ActivatedRoute) {}
+    private toastHelper: ToastHelper,
+    private route: ActivatedRoute) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['return'];
   }
 
@@ -72,7 +72,7 @@ export class OrdersListComponent implements OnInit {
           this.toastHelper.showError('common.error', error.error.errorMessage);
         }
         else {
-          this.toastHelper.showError('common.error', 'common.error-occurred');
+          this.toastHelper.showError('common.error', 'common.error_occurred');
         }
       }
     });
