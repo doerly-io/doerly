@@ -1,10 +1,10 @@
 using System.Globalization;
-using Doerly.Host;
-using System.Reflection;
 using System.Text;
 using Doerly.Domain.Factories;
 using Doerly.Common.Settings;
+using Doerly.Domain;
 using Doerly.FileRepository;
+using Doerly.Host.Middlewares;
 using Doerly.Infrastructure.Api;
 using Doerly.Localization;
 using Doerly.Messaging;
@@ -12,6 +12,7 @@ using Doerly.Module.Communication.Domain.Hubs;
 using Doerly.Notification.EmailSender;
 using Doerly.Proxy.BaseProxy;
 using Doerly.Proxy.Payment;
+using Doerly.Proxy.Profile;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
@@ -40,45 +41,17 @@ builder.Services
 
 builder.Services.AddSignalR();
 
-#region Configure Modules
+builder.RegisterModule(new Doerly.Module.Payments.Api.ModuleInitializer());
+builder.RegisterModule(new Doerly.Module.Authorization.Api.ModuleInitializer());
+builder.RegisterModule(new Doerly.Module.Profile.Api.ModuleInitializer());
+builder.RegisterModule(new Doerly.Module.Order.Api.ModuleInitializer());
+builder.RegisterModule(new Doerly.Module.Common.Api.ModuleInitializer());
 
-var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies()
-    .Where(a => a.GetName().Name!.StartsWith(HostConstants.MODULE_PREFIX));
-
-var loadedPaths = loadedAssemblies.Select(a => a.Location).ToArray();
-
-var referencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, $"{HostConstants.MODULE_PREFIX}.*.dll");
-var toLoad = referencedPaths.Where(r => !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase));
-
-foreach (var path in toLoad)
-{
-    Assembly.LoadFrom(path);
-}
-
-loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies()
-    .Where(a => a.GetName().Name!.StartsWith(HostConstants.MODULE_PREFIX));
-
-foreach (var moduleAssembly in loadedAssemblies)
-{
-    var moduleInitializerType = moduleAssembly.GetTypes()
-        .FirstOrDefault(t => typeof(IModuleInitializer).IsAssignableFrom(t) && !t.IsAbstract);
-
-    if (moduleInitializerType == null)
-        continue;
-
-    var moduleInitializer = (IModuleInitializer)Activator.CreateInstance(moduleInitializerType);
-    if (moduleInitializer != null)
-    {
-        builder.Services.AddSingleton(moduleInitializer);
-        moduleInitializer.ConfigureServices(builder);
-    }
-}
-
-#endregion
 
 #region ModuleProxies
 
 builder.Services.AddProxy<IPaymentModuleProxy, PaymentModuleProxy>();
+builder.Services.AddProxy<IProfileModuleProxy, ProfileModuleProxy>();
 
 #endregion
 
@@ -193,6 +166,8 @@ builder.Services.AddMassTransit(cfg =>
     });
 });
 
+builder.Services.AddScoped<IDoerlyRequestContext, DoerlyRequestContext>();
+
 
 var app = builder.Build();
 
@@ -242,6 +217,8 @@ app.UseCors(policy => policy
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<RequestContextMiddleware>();
 
 app.MapControllers();
 

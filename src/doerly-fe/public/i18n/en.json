@@ -1,4 +1,12 @@
 {
+  "address": {
+    "region": {
+      "placeholder": "Select your region"
+    },
+    "city": {
+      "placeholder": "Select your city"
+    }
+  },
   "auth": {
     "login": "Login",
     "logout": "Logout",
@@ -34,6 +42,9 @@
         "edit": "Edit basic info",
         "save": "Save basic info"
       },
+      "address": {
+        "title": "Address"
+      },
       "bio": {
         "title": "Bio",
         "placeholder": "Tell us about yourself"
@@ -48,7 +59,8 @@
         "subtitle": "Profile picture will help you be recognized in the service",
         "upload": {
           "button": {
-            "text": "Upload"
+            "text": "Upload",
+            "tooltip": "Upload profile picture"
           },
           "select": "Select picture",
           "title": "Upload picture"
@@ -113,6 +125,45 @@
           "loading": "An error occurred while loading the CV",
           "navigation": "An error occurred while navigating the PDF"
         }
+      },
+      "languages": {
+        "title": "Languages",
+        "subtitle": "Add languages you know and your proficiency level",
+        "add": {
+          "title": "Add language",
+          "success": "Language has been added successfully",
+          "error": "An error occurred while adding the language. Message: {{message}}"
+        },
+        "edit": {
+          "title": "Edit language"
+        },
+        "delete": {
+          "title": "Delete language",
+          "success": "Language has been deleted successfully",
+          "error": "An error occurred while deleting the language. Message: {{message}}"
+        },
+        "update": {
+          "success": "Language has been updated successfully",
+          "error": "An error occurred while updating the language. Message: {{message}}"
+        },
+        "load": {
+          "error": "An error occurred while loading languages. Message: {{message}}"
+        },
+        "language": {
+          "label": "Language",
+          "placeholder": "Select a language"
+        },
+        "level": {
+          "label": "Proficiency level",
+          "placeholder": "Select your proficiency level",
+          "beginner": "Beginner (A1)",
+          "elementary": "Elementary (A2)",
+          "intermediate": "Intermediate (B1)",
+          "upperIntermediate": "Upper Intermediate (B2)",
+          "advanced": "Advanced (C1)",
+          "proficient": "Proficient (C2)",
+          "native": "Native"
+        }
       }
     },
     "message": {
@@ -168,10 +219,10 @@
     "customer_id": "Customer ID",
     "executor_id": "Executor ID",
     "execution_date": "Execution Date",
-    "bill_id": "Bill ID",  
+    "bill_id": "Bill ID",
     "field_required": "This field is required",
-    "price_min": "Price must be greater than or equal to 0",
-    "invalid_date": "The date is incorrect",
+    "price_min": "Minimum price is 1",
+    "minimum_length": "Мінімальна довжина {{length}} символів",
     "send_execution_proposal": "Send execution proposal",
     "comment": "Comment",
     "loading": "Loading...",
@@ -191,36 +242,52 @@
     "status": "Status",
     "order_status": "Order status",
     "order_statuses": {
-      "new": "New",
-      "in_progress": "In progress",
-      "completed": "Completed",
-      "canceled": "Canceled"
+      "Placed": "Placed",
+      "InProgress": "In progress",
+      "AwaitingPayment": "Awaiting payment",
+      "AwaitingConfirmation": "Awaiting confirmation",
+      "Completed": "Completed",
+      "Canceled": "Canceled"
     },
     "proposal_status": "Proposal status",
     "proposal_statuses": {
-      "new": "New",
-      "accepted": "Accepted",
-      "rejected": "Rejected"
+      "Pending": "Pending",
+      "Accepted": "Accepted",
+      "Rejected": "Rejected",
+      "Revoked": "Revoked"
     },
     "payment_kind": "Payment kind",
     "payment_kinds": {
-      "post": "Post",
-      "pre": "Pre"
+      "Online": "Online",
+      "Cash": "Cash"
     },
     "proposal_options": {
       "accept": "Accept",
       "reject": "Reject",
       "revoke": "Revoke"
     },
-    "cancelled-successfully": "Cancelled successfully"
+    "cancelled_successfully": "Cancelled successfully",
+    "order_status_changed": "Order status has been changed",
+    "execution_proposal_editing": "Execution proposal editing",
+    "order_editing": "Order editing",
+    "payment_redirect": "You are gonna be redirected to the payment page in a few seconds",
+    "end": "End",
+    "pay": "Pay"
   },
   "common": {
+    "actions": "Actions",
+    "cancel": "Cancel",
+    "save": "Save",
     "error": "Error",
     "success": "Success",
+    "info": "Info",
+    "warning": "Warning",
     "max_length": "Max length is {{length}} characters",
     "min_length": "Min length is {{length}} characters",
     "field_required": "This field is required",
     "page_not_found": "Page not found",
+    "edit": "Edit",
+    "delete": "Delete",
     "control": {
       "unset": "Unset"
     }

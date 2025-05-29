@@ -1,17 +1,23 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.DataAccess.Enums;
-using Doerly.Module.Order.Domain.Dtos.Requests;
-using Doerly.Module.Order.Domain.Dtos.Responses;
+using Doerly.Module.Order.Enums;
+using Doerly.Module.Order.Contracts.Dtos;
+using Doerly.Module.Payments.Api.ModuleWrapper;
+using Doerly.Module.Payments.Contracts;
+using Doerly.Module.Payments.Enums;
 
 using OrderEntity = Doerly.Module.Order.DataAccess.Models.Order;
+using Doerly.Localization;
+using Doerly.Domain;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 
 public class CreateOrderHandler : BaseOrderHandler
 {
-    public CreateOrderHandler(OrderDbContext dbContext) : base(dbContext)
+    private readonly IDoerlyRequestContext _doerlyRequestContext;
+    public CreateOrderHandler(OrderDbContext dbContext, IDoerlyRequestContext doerlyRequestContext) : base(dbContext)
     {
+        _doerlyRequestContext = doerlyRequestContext;
     }
 
     public async Task<HandlerResult<CreateOrderResponse>> HandleAsync(CreateOrderRequest dto)
@@ -25,7 +31,7 @@ public class CreateOrderHandler : BaseOrderHandler
             PaymentKind = dto.PaymentKind,
             DueDate = dto.DueDate,
             Status = EOrderStatus.Placed,
-            CustomerId = dto.CustomerId,
+            CustomerId = _doerlyRequestContext.UserId ?? throw new Exception("We are fucked!"),
         };
 
         DbContext.Orders.Add(order);

@@ -1,4 +1,12 @@
 {
+  "address": {
+    "region": {
+      "placeholder": "Введіть регіон"
+    },
+    "city": {
+      "placeholder": "Введіть місто"
+    }
+  },
   "auth": {
     "login": "Вхід",
     "logout": "Вихід",
@@ -33,6 +41,9 @@
         "cancel": "Скасувати",
         "edit": "Редагувати основну інформацію",
         "save": "Зберегти основну інформацію"
+      },
+      "address": {
+        "title": "Адреса"
       },
       "bio": {
         "title": "Про себе",
@@ -114,6 +125,45 @@
           "loading": "Виникла помилка під час завантаження резюме",
           "navigation": "Виникла помилка навігації по PDF"
         }
+      },
+      "languages": {
+        "title": "Мови",
+        "subtitle": "Додайте мови, які ви знаєте, та рівень володіння",
+        "add": {
+          "title": "Додати мову",
+          "success": "Мову успішно додано",
+          "error": "Виникла помилка при додаванні мови. Повідомлення: {{message}}"
+        },
+        "edit": {
+          "title": "Редагувати мову"
+        },
+        "delete": {
+          "title": "Видалити мову",
+          "success": "Мову успішно видалено",
+          "error": "Виникла помилка при видаленні мови. Повідомлення: {{message}}"
+        },
+        "update": {
+          "success": "Мову успішно оновлено",
+          "error": "Виникла помилка при оновленні мови. Повідомлення: {{message}}"
+        },
+        "load": {
+          "error": "Виникла помилка при завантаженні мов. Повідомлення: {{message}}"
+        },
+        "language": {
+          "label": "Мова",
+          "placeholder": "Виберіть мову"
+        },
+        "level": {
+          "label": "Рівень володіння",
+          "placeholder": "Виберіть рівень володіння",
+          "beginner": "Початківець (A1)",
+          "elementary": "Елементарний (A2)",
+          "intermediate": "Середній (B1)",
+          "upperIntermediate": "Вище середнього (B2)",
+          "advanced": "Просунутий (C1)",
+          "proficient": "Вільний (C2)",
+          "native": "Рідна мова"
+        }
       }
     },
     "message": {
@@ -166,14 +216,14 @@
     "title": "Назва",
     "description": "Опис",
     "price": "Ціна",
-    "due_date": "Дата виконання",
+    "due_date": "Термін виконання",
     "customer_id": "ID замовника",
     "executor_id": "ID виконавця",
     "execution_date": "Дата виконання",
     "bill_id": "ID рахунку",
     "field_required": "Це поле обов'язкове для заповнення",
-    "price_min": "Ціна повинна бути більше або дорівнювати 0",
-    "invalid_date": "Дата некоректна",
+    "price_min": "Мінімальна ціна - 1",
+    "minimum_length": "Мінімальна довжина {{length}} символів",
     "send_execution_proposal": "Відправити пропозицію виконання",
     "comment": "Коментар",
     "loading": "Завантаження...",
@@ -192,36 +242,52 @@
     "status": "Статус",
     "order_status": "Статус замовлення",
     "order_statuses": {
-      "new": "Нове",
-      "in_progress": "В процесі",
-      "completed": "Завершене",
-      "canceled": "Скасоване"
+      "Placed": "Розміщене",
+      "InProgress": "В процесі",
+      "AwaitingPayment": "Очікує оплати",
+      "AwaitingConfirmation": "Очікує підтвердження",
+      "Completed": "Завершене",
+      "Canceled": "Скасоване"
     },
     "proposal_status": "Статус пропозиції",
     "proposal_statuses": {
-      "new": "Нова",
-      "accepted": "Прийнята",
-      "rejected": "Відхилена"
+      "Pending": "В очікуванні",
+      "Accepted": "Прийнято",
+      "Rejected": "Відхилено",
+      "Revoked": "Відкликано"
     },
     "payment_kind": "Вид оплати",
     "payment_kinds": {
-      "post": "Післяплата",
-      "pre": "Попередня оплата"
+      "Online": "Онлайн",
+      "Cash": "Готівка"
     },
     "proposal_options": {
       "accept": "Прийняти",
       "reject": "Відхилити",
       "revoke": "Відкликати"
     },
-    "cancelled-successfully": "Успішно скасовано"
+    "cancelled_successfully": "Успішно скасовано",
+    "order_status_changed": "Статус замовлення змінено",
+    "execution_proposal_editing": "Редагування пропозиції виконання",
+    "order_editing": "Редагування замовлення",
+    "payment_redirect": "Ви будете перенаправлені на сторінку оплати через декілька секунд" ,
+    "end": "Завершити",
+    "pay": "Оплатити"
   },
   "common": {
+    "actions": "Дії",
+    "cancel": "Скасувати",
+    "save": "Зберегти",
     "error": "Помилка",
     "success": "Успіх",
+    "info": "Інформація",
+    "warning": "Попередження",
     "max_length": "Максимальна довжина {{length}} символів",
     "min_length": "Mінімальна довжина {{length}} символів",
     "field_required": "Це поле обов'язкове для заповнення.",
     "page_not_found": "Сторінку не знайдено",
+    "edit": "Редагувати",
+    "delete": "Видалити",
     "control": {
       "unset": "Не встановлено"
     }

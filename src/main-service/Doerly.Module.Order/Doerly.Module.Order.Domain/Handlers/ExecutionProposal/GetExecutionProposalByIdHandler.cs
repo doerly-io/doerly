@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Doerly.Domain.Models;
+﻿using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.Domain.Dtos.Responses;
+using Doerly.Module.Order.Contracts.Dtos;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetExecutionProposalByIdHandler : BaseOrderHandler
@@ -20,7 +14,7 @@ public class GetExecutionProposalByIdHandler : BaseOrderHandler
         var executionProposal = await DbContext.ExecutionProposals.FindAsync(id);
 
         if (executionProposal == null)
-            return HandlerResult.Failure<GetExecutionProposalResponse>(Resources.Get("EXECUTION_PROPOSAL_NOT_FOUND"));
+            return HandlerResult.Failure<GetExecutionProposalResponse>(Resources.Get("ExecutionProposalNotFound"));
 
         return HandlerResult.Success(new GetExecutionProposalResponse
         {

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { OrderService } from '../../domain/order.service';
-import { FormBuilder } from '@angular/forms';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DataView } from 'primeng/dataview';
 import { Tag } from 'primeng/tag';
 import { CommonModule } from '@angular/common';
@@ -11,6 +10,8 @@ import { PaginatorModule } from 'primeng/paginator';
 import { EOrderStatus } from '../../domain/enums/order-status';
 import { Button } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ToastHelper } from 'app/@core/helpers/toast.helper';
 
 @Component({
   selector: 'app-orders-list',
@@ -36,9 +37,10 @@ export class OrdersListComponent implements OnInit {
   totalRecords: number = 0;
   loading: boolean = true;
   returnUrl!: string;
+  EOrderStatus = EOrderStatus;
 
   constructor(private orderService: OrderService,
-                private router: Router,
+              private toastHelper: ToastHelper,
                 private route: ActivatedRoute) {}
 
   ngOnInit() { 
@@ -61,15 +63,15 @@ export class OrdersListComponent implements OnInit {
         this.totalRecords = response.value?.total || 0;
         this.loading = false;
       },
-      error: (error) => {
-        console.log(error);
-        this.loading = false;
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.toastHelper.showError('common.error', error.error.errorMessage);
+        }
+        else {
+          this.toastHelper.showError('common.error', 'common.error-occurred');
+        }
       }
     });
-  }
-
-  getOrderStatusString(status: EOrderStatus): string {
-      return EOrderStatus[status];
   }
 
   getOrderStatusSeverity(status: EOrderStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
@@ -86,8 +88,4 @@ export class OrdersListComponent implements OnInit {
           return 'secondary';
       }
     }
-
-  navigateToOrderDetails(orderId: number): void {
-    this.router.navigate(['/ordering/order', orderId]);
-  }
 }

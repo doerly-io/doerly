@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System.Linq.Expressions;
 using Doerly.Domain.Models;
 using Doerly.Extensions;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Models;
-using Doerly.Module.Order.Domain.Dtos.Requests;
-using Doerly.Module.Order.Domain.Dtos.Responses;
+using Doerly.Module.Order.Contracts.Dtos;
 
 using Microsoft.EntityFrameworkCore;
 
