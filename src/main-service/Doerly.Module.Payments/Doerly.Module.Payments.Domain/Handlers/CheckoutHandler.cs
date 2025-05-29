@@ -39,7 +39,7 @@ public class CheckoutHandler : BasePaymentHandler
             Currency = checkoutRequest.Currency,
             Amount = checkoutRequest.AmountTotal,
             Status = EPaymentStatus.Pending,
-            Action = checkoutRequest.PaymentAction, //TODO: remove hardcode after adding other payment methods
+            Action = checkoutRequest.PaymentAction,
             Bill = bill,
         };
 
@@ -53,6 +53,7 @@ public class CheckoutHandler : BasePaymentHandler
             Amount = checkoutRequest.AmountTotal,
             Currency = CurrencyToStringCode(checkoutRequest.Currency),
             Description = checkoutRequest.BillDescription,
+            PaymentId = payment.Id,
             BillId = bill.Id,
             PaymentAction = checkoutRequest.PaymentAction,
             ReturnUrl = checkoutRequest.ReturnUrl,

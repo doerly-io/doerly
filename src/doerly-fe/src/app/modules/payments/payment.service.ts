@@ -30,4 +30,10 @@ export class PaymentService {
     window.open(checkout.checkoutUrl, '_blank');
   }
 
+  getUserPayments() {
+
+  }
+
+
+
 }

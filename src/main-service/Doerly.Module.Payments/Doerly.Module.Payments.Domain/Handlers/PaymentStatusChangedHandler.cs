@@ -1,8 +1,8 @@
 using Doerly.Domain.Models;
 using Doerly.Messaging;
-using Doerly.Module.Payments.Client.LiqPay.Helpers;
 using Doerly.Module.Payments.Contracts.Messages;
 using Doerly.Module.Payments.DataAccess;
+using Doerly.Module.Payments.Domain.Models;
 using Doerly.Module.Payments.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -24,31 +24,31 @@ public class PaymentStatusChangedHandler : BasePaymentHandler
         _logger = logger;
     }
     
-    public async Task<HandlerResult> Handle(PaymentStatusChangedMessage message)
+    public async Task<HandlerResult> Handle(PaymentStatusChangedModel model)
     {
-        var bill = await DbContext.Bills
-            .Include(i => i.Payments.Where(x => x.Status == EPaymentStatus.Pending))
-            .FirstOrDefaultAsync(i => i.Id == message.BillId);
-        if (bill == null)
-        {
-            _logger.LogWarning("Bill not found for billId: {BillId}", message.BillId);
-            return HandlerResult.Failure("Bill not found");
-        }
+        var payment = await DbContext.Payments
+            .Include(x => x.Bill)
+            .FirstOrDefaultAsync(x => x.Id == model.PaymentId && x.Status == EPaymentStatus.Pending);
         
-        var payment = bill.Payments.FirstOrDefault();
         if (payment == null)
         {
-            _logger.LogWarning("Payment not found for billId: {BillId}", message.BillId);
+            _logger.LogWarning("Payment not found for PaymentId: {PaymentId}", model.PaymentId);
             return HandlerResult.Failure("Payment not found");
         }
 
-        payment.Status = message.Status;
-        bill.AmountPaid += payment.Amount;
+        payment.Status = model.Status;
+        payment.Bill.AmountPaid += payment.Amount;
         await DbContext.SaveChangesAsync();
 
-        await _messagePublisher.Publish(message);
+        await PublishPaymentStatusChangedEvent(payment.BillId, model.Status);
         
         return HandlerResult.Success();
+    }
+    
+    private async Task PublishPaymentStatusChangedEvent(int billId, EPaymentStatus status)
+    {
+        var message = new BillStatusChangedMessage(billId, status);
+        await _messagePublisher.Publish(message);
     }
 }
 

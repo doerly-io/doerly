@@ -13,7 +13,7 @@ internal static class DtoMappingExtensions
             Amount = liqPayCheckout.Amount,
             Currency = liqPayCheckout.Currency,
             Description = liqPayCheckout.Description,
-            OrderId = liqPayCheckout.BillId.ToString(),
+            OrderId = liqPayCheckout.PaymentId.ToString(),
             ApiVersion = liqPayCheckout.ApiVersion,
             PaymentAction = LiqPayMappingHelper.MapCommonActionToLiqPayAction(liqPayCheckout.PaymentAction),
             ResultUrl = liqPayCheckout.ReturnUrl,

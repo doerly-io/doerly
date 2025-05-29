@@ -6,7 +6,7 @@ using MassTransit;
 using Microsoft.Extensions.Logging;
 
 namespace Doerly.Module.Order.Domain.EventConsumers;
-public class PaymentStatusConsumer : BaseConsumer<PaymentStatusChangedMessage>
+public class PaymentStatusConsumer : BaseConsumer<BillStatusChangedMessage>
 {
     private readonly IHandlerFactory _handlerFactory;
 
@@ -15,7 +15,7 @@ public class PaymentStatusConsumer : BaseConsumer<PaymentStatusChangedMessage>
         _handlerFactory = handlerFactory;
     }
 
-    protected override async Task Handle(ConsumeContext<PaymentStatusChangedMessage> context)
+    protected override async Task Handle(ConsumeContext<BillStatusChangedMessage> context)
     {
         await _handlerFactory.Get<UpdateOrderPaymentStatusHandler>().HandleAsync(context.Message.BillId, context.Message.Status == Payments.Enums.EPaymentStatus.Completed);
     }

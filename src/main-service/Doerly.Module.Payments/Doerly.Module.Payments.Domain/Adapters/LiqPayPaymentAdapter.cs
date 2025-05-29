@@ -7,6 +7,7 @@ using Doerly.Module.Payments.BaseClient;
 using Doerly.Module.Payments.Client.LiqPay;
 using Doerly.Module.Payments.Contracts.Messages;
 using Doerly.Module.Payments.Domain.Handlers;
+using Doerly.Module.Payments.Domain.Models;
 using Doerly.Module.Payments.Enums;
 using Microsoft.Extensions.Logging;
 
@@ -50,14 +51,14 @@ public class LiqPayPaymentAdapter : IPaymentAdapter
         }
         
         var liqPayCheckoutStatus = liqPayCheckoutStatusResult.Value;
-        if (!int.TryParse(liqPayCheckoutStatus.OrderId, out var billId))
+        if (!int.TryParse(liqPayCheckoutStatus.OrderId, out var paymentId))
         {
-            _logger.LogWarning("Invalid order Id in LiqPay checkout response. BillId: {BillId}", liqPayCheckoutStatus.OrderId);
+            _logger.LogWarning("Invalid order Id in LiqPay checkout response. PaymentId: {PaymentId}", liqPayCheckoutStatus.OrderId);
             return HandlerResult.Failure("Invalid order Id");
         }
 
         var paymentStatusChangedHandler = _handlerFactory.Get<PaymentStatusChangedHandler>();
-        var result = await paymentStatusChangedHandler.Handle(new PaymentStatusChangedMessage(billId, EPaymentStatus.Completed));
+        var result = await paymentStatusChangedHandler.Handle(new PaymentStatusChangedModel(paymentId, EPaymentStatus.Completed));
         return result;
     }
 }
