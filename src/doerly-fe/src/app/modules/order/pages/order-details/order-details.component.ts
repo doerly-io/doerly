@@ -111,10 +111,10 @@ export class OrderDetailsComponent implements OnInit {
   }
 
   get canEdit(): boolean {
-    return this.order?.customerId === this.profileId;
+    return this.order?.status === EOrderStatus.Placed && this.order?.customerId === this.profileId;
   }
   get canCancel(): boolean {
-    return this.order?.customerId === this.profileId;
+    return this.order?.status === EOrderStatus.Placed && this.order?.customerId === this.profileId;
   }
   get canSendProposal(): boolean {
     return this.order?.customerId !== this.profileId && this.order?.status === EOrderStatus.Placed;

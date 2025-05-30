@@ -8,6 +8,7 @@ export interface GetOrderResponse {
     name: string;
     description: string;
     price: number;
+    isPriceNegotiable: boolean;
     paymentKind: EPaymentKind;
     dueDate: Date;
     status: EOrderStatus;

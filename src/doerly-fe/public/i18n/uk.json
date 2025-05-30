@@ -216,6 +216,7 @@
     "title": "Назва",
     "description": "Опис",
     "price": "Ціна",
+    "is_price_negotiable": "Ціна обговорюється",
     "due_date": "Термін виконання",
     "customer_id": "ID замовника",
     "executor_id": "ID виконавця",
@@ -276,7 +277,8 @@
     "view_profile": "Переглянути профіль",
     "sent": "Надіслано",
     "executor": "Виконавець",
-    "order_number": "Замовлення №{{orderId}}"
+    "order_number": "Замовлення №{{orderId}}",
+    "execution_proposal_number": "Пропозиція виконання №{{proposalId}}"
   },
   "common": {
     "actions": "Дії",

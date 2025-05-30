@@ -23,6 +23,7 @@ public class GetOrderByIdHandler : BaseOrderHandler
             Name = order.Name,
             Description = order.Description,
             Price = order.Price,
+            IsPriceNegotiable = order.IsPriceNegotiable,
             PaymentKind = order.PaymentKind,
             DueDate = order.DueDate,
             Status = order.Status,

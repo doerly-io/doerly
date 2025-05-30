@@ -30,7 +30,8 @@ public class UpdateOrderHandler : BaseOrderHandler
             .SetProperty(order => order.Description, dto.Description)
             .SetProperty(order => order.Price, dto.Price)
             .SetProperty(order => order.PaymentKind, dto.PaymentKind)
-            .SetProperty(order => order.DueDate, dto.DueDate));
+            .SetProperty(order => order.DueDate, dto.DueDate)
+            .SetProperty(order => order.IsPriceNegotiable, dto.IsPriceNegotiable));
 
         return HandlerResult.Success();
     }

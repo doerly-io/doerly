@@ -28,4 +28,7 @@ public class CreateOrderRequest
 
     [Required(ErrorMessage = "FieldIsRequired")]
     public DateTime DueDate { get; set; }
+
+    [Required(ErrorMessage = "FieldIsRequired")]
+    public bool IsPriceNegotiable { get; set; }
 }

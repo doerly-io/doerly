@@ -20,7 +20,7 @@
 
           <!-- Назва -->
           <div class="title mb-3">
-            <span class="ms-2">{{ order.name }}</span>
+            <span>{{ order.name }}</span>
           </div>
 
           <!-- Опис -->
@@ -31,9 +31,13 @@
           </div>
 
           <!-- Ціна -->
-          <div class="mb-3">
-            <span class="field-label">{{ 'ordering.price' | translate }}:</span>
-            <span class="ms-2">{{ '$' + order.price }}</span>
+          <div class="mb-3 d-flex align-items-center justify-content-between">
+            <div>
+              <span class="field-label">{{ 'ordering.price' | translate }}:</span>
+              <span class="ms-2">{{ '$' + order.price }}</span>
+            </div>
+            <p-tag *ngIf="order.isPriceNegotiable" severity="secondary" class="ms-2" [value]="'ordering.price_negotiable' | translate">
+            </p-tag>
           </div>
 
           <p-divider />
@@ -91,7 +95,7 @@
             </div>
           </div>
 
-          <!-- КНОПКИ (залишаються як були) -->
+          <!-- Кнопки дій -->
           <div class="action-buttons d-flex justify-content-center mb-3">
             <p-button *ngIf="canSendProposal" [routerLink]="'/ordering/send-execution-proposal'"
               [queryParams]="{ orderId: order.id, receiverId: order.customerId }"

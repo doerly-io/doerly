@@ -28,6 +28,7 @@ public class CreateOrderHandler : BaseOrderHandler
             Name = dto.Name,
             Description = dto.Description,
             Price = dto.Price,
+            IsPriceNegotiable = dto.IsPriceNegotiable,
             PaymentKind = dto.PaymentKind,
             DueDate = dto.DueDate,
             Status = EOrderStatus.Placed,

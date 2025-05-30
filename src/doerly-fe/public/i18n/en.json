@@ -215,6 +215,7 @@
     "title": "Title",
     "description": "Description",
     "price": "Price",
+    "price_negotiable": "Price is negotiable",
     "due_date": "Due Date",
     "customer_id": "Customer ID",
     "executor_id": "Executor ID",
@@ -276,7 +277,8 @@
     "view_profile": "View profile",
     "sent": "Sent",
     "executor": "Executor",
-    "order_number": "Order №{{number}}"
+    "order_number": "Order №{{orderId}}",
+    "execution_proposal_number": "Execution proposal №{{proposalId}}"
   },
   "common": {
     "actions": "Actions",

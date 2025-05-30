@@ -18,6 +18,7 @@ import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 import { CreateOrderRequest } from '../../models/requests/create-order-request';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
 import { CreateOrderResponse } from '../../models/responses/create-order-response';
+import { Checkbox } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-edit-order',
@@ -32,7 +33,8 @@ import { CreateOrderResponse } from '../../models/responses/create-order-respons
     DatePickerModule,
     SelectModule,
     NgIf,
-    Card
+    Card,
+    Checkbox
   ]
 })
 export class EditOrderComponent implements OnInit {
@@ -71,7 +73,8 @@ export class EditOrderComponent implements OnInit {
               description: order.description,
               price: order.price,
               paymentKind: order.paymentKind,
-              dueDate: new Date(order.dueDate)
+              dueDate: new Date(order.dueDate),
+              isPriceNegotiable: order.isPriceNegotiable
             });
           }
           this.loading = false;
@@ -95,7 +98,8 @@ export class EditOrderComponent implements OnInit {
       description: ['', [Validators.required, this.minimumLengthValidator(5), Validators.maxLength(4000)]],
       price: [1, [Validators.required, Validators.min(1)]],
       paymentKind: [1, Validators.required],
-      dueDate: ['', Validators.required]
+      dueDate: ['', Validators.required],
+      isPriceNegotiable: [false, Validators.required]
     });
   }
 

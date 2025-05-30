@@ -13,6 +13,8 @@ public class Order : BaseEntity
 
     public decimal Price { get; set; }
 
+    public bool IsPriceNegotiable { get; set; }
+
     public EPaymentKind PaymentKind { get; set; }
 
     public DateTime DueDate { get; set; }

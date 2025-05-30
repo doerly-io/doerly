@@ -1,4 +1,12 @@
 .execution-proposal-details-container {
+    .proposal-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--p-primary-color);
+        text-align: center;
+    }
+
     .avatar {
         border-radius: 50%;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
