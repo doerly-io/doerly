@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Doerly.Domain.Models;
+﻿using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.Domain.Dtos.Responses;
+using Doerly.Module.Order.Contracts.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetOrderByIdHandler : BaseOrderHandler
@@ -17,11 +12,7 @@ public class GetOrderByIdHandler : BaseOrderHandler
     }
     public async Task<HandlerResult<GetOrderResponse>> HandleAsync(int id)
     {
-        var order = await DbContext.Orders.FindAsync(id);
-        if (order == null)
-            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("ORDER_NOT_FOUND"));
-
-        var orderDto = new GetOrderResponse
+        var order = await DbContext.Orders.Select(order => new GetOrderResponse
         {
             Id = order.Id,
             CategoryId = order.CategoryId,
@@ -32,11 +23,16 @@ public class GetOrderByIdHandler : BaseOrderHandler
             DueDate = order.DueDate,
             Status = order.Status,
             CustomerId = order.CustomerId,
+            CustomerCompletionConfirmed = order.CustomerCompletionConfirmed,    
             ExecutorId = order.ExecutorId,
+            ExecutorCompletionConfirmed = order.ExecutorCompletionConfirmed,
             ExecutionDate = order.ExecutionDate,
             BillId = order.BillId
-        };
+        }).FirstOrDefaultAsync(x => x.Id == id);
 
-        return HandlerResult.Success(orderDto);
+        if (order == null)
+            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
+
+        return HandlerResult.Success(order);
     }
 }

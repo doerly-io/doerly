@@ -1,5 +1,5 @@
 /* filepath: c:\Dan\Projects\Doerly\src\doerly-fe\src\app\modules\order\pages\order-details\order-details.component.scss */
-.order-details {
+.order-details-container {
   padding: 1rem;
   margin-top: 1rem;
 
@@ -12,6 +12,15 @@
     border: 1px solid var(--surface-200);
     border-radius: 0.5rem;
     background-color: var(--surface-50);
+
+    .action-buttons {
+      gap: 0.5rem;
+
+      button {
+        width: 100%;
+        margin: 0 0.5rem;
+      }
+    }
   }
 
   h2 {

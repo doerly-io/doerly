@@ -216,14 +216,14 @@
     "title": "Назва",
     "description": "Опис",
     "price": "Ціна",
-    "due_date": "Дата виконання",
+    "due_date": "Термін виконання",
     "customer_id": "ID замовника",
     "executor_id": "ID виконавця",
     "execution_date": "Дата виконання",
     "bill_id": "ID рахунку",
     "field_required": "Це поле обов'язкове для заповнення",
-    "price_min": "Ціна повинна бути більше або дорівнювати 0",
-    "invalid_date": "Дата некоректна",
+    "price_min": "Мінімальна ціна - 1",
+    "minimum_length": "Мінімальна довжина {{length}} символів",
     "send_execution_proposal": "Відправити пропозицію виконання",
     "comment": "Коментар",
     "loading": "Завантаження...",
@@ -242,28 +242,37 @@
     "status": "Статус",
     "order_status": "Статус замовлення",
     "order_statuses": {
-      "new": "Нове",
-      "in_progress": "В процесі",
-      "completed": "Завершене",
-      "canceled": "Скасоване"
+      "Placed": "Розміщене",
+      "InProgress": "В процесі",
+      "AwaitingPayment": "Очікує оплати",
+      "AwaitingConfirmation": "Очікує підтвердження",
+      "Completed": "Завершене",
+      "Canceled": "Скасоване"
     },
     "proposal_status": "Статус пропозиції",
     "proposal_statuses": {
-      "new": "Нова",
-      "accepted": "Прийнята",
-      "rejected": "Відхилена"
+      "Pending": "В очікуванні",
+      "Accepted": "Прийнято",
+      "Rejected": "Відхилено",
+      "Revoked": "Відкликано"
     },
     "payment_kind": "Вид оплати",
     "payment_kinds": {
-      "post": "Післяплата",
-      "pre": "Попередня оплата"
+      "Online": "Онлайн",
+      "Cash": "Готівка"
     },
     "proposal_options": {
       "accept": "Прийняти",
       "reject": "Відхилити",
       "revoke": "Відкликати"
     },
-    "cancelled-successfully": "Успішно скасовано"
+    "cancelled_successfully": "Успішно скасовано",
+    "order_status_changed": "Статус замовлення змінено",
+    "execution_proposal_editing": "Редагування пропозиції виконання",
+    "order_editing": "Редагування замовлення",
+    "payment_redirect": "Ви будете перенаправлені на сторінку оплати через декілька секунд" ,
+    "end": "Завершити",
+    "pay": "Оплатити"
   },
   "common": {
     "actions": "Дії",
@@ -271,10 +280,14 @@
     "save": "Зберегти",
     "error": "Помилка",
     "success": "Успіх",
+    "info": "Інформація",
+    "warning": "Попередження",
     "max_length": "Максимальна довжина {{length}} символів",
     "min_length": "Mінімальна довжина {{length}} символів",
     "field_required": "Це поле обов'язкове для заповнення.",
     "page_not_found": "Сторінку не знайдено",
+    "edit": "Редагувати",
+    "delete": "Видалити",
     "control": {
       "unset": "Не встановлено"
     }
