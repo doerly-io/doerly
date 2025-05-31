@@ -356,7 +356,7 @@
 
         <!-- Language Proficiency list -->
         <div *ngIf="languageProficiencies?.length"
-          class="d-flex flex-column gap-2 border border-color-primary rounded-2 p-2">
+             class="d-flex flex-column gap-2 border border-color-primary rounded-2 p-2">
           <!-- Table header -->
           <div
             class="d-flex justify-content-between align-items-center pt-1 pb-3 border-bottom border-1 border-color-primary">
@@ -411,7 +411,28 @@
     </div>
   </p-card>
 
-  
+  <!-- Payment history -->
+  <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
+
+    <div class="d-flex flex-column gap-3 m-3">
+
+      <!-- Payment history section title -->
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div class="mt-1">
+          <h4 class="c-primary">
+            {{ 'profile.paymentHistory.title' | translate }}
+          </h4>
+        </div>
+      </div>
+
+      <!-- Payment history content -->
+
+      <app-payment-history />
+
+
+    </div>
+  </p-card>
+
 
   <!-- Image upload dialog -->
   <p-dialog

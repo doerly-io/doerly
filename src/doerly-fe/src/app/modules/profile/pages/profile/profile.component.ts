@@ -2,7 +2,7 @@ import {
   Component,
   OnInit,
   ElementRef,
-  ViewChild,
+  ViewChild, inject,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -36,6 +36,7 @@ import { LanguageProficiencyDto } from '../../models/responses/LanguageProficien
 import { LanguageDto } from '../../models/responses/LanguageDto';
 import { ELanguageProficiencyLevel } from '../../models/enums/ELanguageProficiencyLevel';
 import { LanguagesQueryDto } from '../../domain/profile.service';
+import {PaymentHistoryComponent} from 'app/modules/profile/components/payment-history/payment-history.component';
 
 @Component({
   selector: 'app-profile',
@@ -59,7 +60,8 @@ import { LanguagesQueryDto } from '../../domain/profile.service';
     NgOptimizedImage,
     Tooltip,
     AddressSelectComponent,
-    NgForOf
+    NgForOf,
+    PaymentHistoryComponent
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
@@ -97,12 +99,11 @@ export class ProfileComponent implements OnInit {
   private searchTimeout: any;
   private isSearching: boolean = false;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private profileService: ProfileService,
-    private toastHelper: ToastHelper,
-    public pdfService: PdfService
-  ) {}
+  private readonly formBuilder: FormBuilder = inject(FormBuilder);
+  private readonly profileService: ProfileService = inject(ProfileService);
+  private readonly toastHelper: ToastHelper = inject(ToastHelper);
+  public pdfService: PdfService = inject(PdfService);
+
 
   ngOnInit(): void {
     this.onInitForm();

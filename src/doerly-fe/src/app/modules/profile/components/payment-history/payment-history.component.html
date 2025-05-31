@@ -1,0 +1,77 @@
+<p-virtual-scroller *ngIf="payments().length !== 0"
+  [items]="payments()"
+  [itemSize]="80"
+  [style]="{ width: '100%', height: '450px' }"
+  [lazy]="false"
+>
+  <ng-template pTemplate="item" let-payment>
+    <p-panel [styleClass]="'mb-3'" [showHeader]="false" [style]="{ borderRadius: '8px' }">
+      <div class="d-flex justify-content-between mt-2">
+        <div class="float-start">
+          <span>
+            {{ payment.amount | paymentCurrency: payment.currency }}
+          </span>
+          <br/>
+          <span class="mt-2">
+            {{ payment.description }}
+          </span>
+        </div>
+        <div class="text-end">
+          <p-tag [severity]="getSeverity(payment.status)" class="mb-2">
+            {{ payment.status | paymentStatus | async }}
+          </p-tag>
+          <br/>
+          <small>{{ payment.createdAt | date: 'dd.MM.yyyy HH:mm' }}</small>
+        </div>
+      </div>
+    </p-panel>
+  </ng-template>
+
+</p-virtual-scroller>
+
+<div class="d-flex justify-content-center">
+  <p-button *ngIf="hasMorePayments()" (click)="loadMoreClicked()" class="load-more-btn"
+            [severity]="'secondary'">
+    Завантажити більше
+  </p-button>
+</div>
+
+<div class="row m-3 d-flex justify-content-center" *ngIf="payments().length === 0">
+  <p>Відсутня історія оплат</p>
+</div>
+
+
+<!--<p-scroll-panel [style]="{ width: '100%', height: '450px' }" [styleClass]="'payment-history-scroll-panel'">-->
+<!--  <div *ngIf="!loading() && payments().length > 0">-->
+
+<!--    @for (payment of payments(); track payment.paymentId) {-->
+
+<!--      <p-panel [styleClass]="'mb-3'" [showHeader]="false" [style]="{ borderRadius: '8px' }">-->
+<!--        <div class="d-flex justify-content-between mt-2">-->
+<!--          <div class="float-start">-->
+<!--            <span>-->
+<!--            {{ payment.amount | paymentCurrency: payment.currency }}-->
+<!--            </span>-->
+<!--            <br/>-->
+<!--            <span class="mt-2">-->
+<!--            {{ payment.description }}-->
+<!--          </span>-->
+<!--          </div>-->
+<!--          <div class="text-end">-->
+<!--            <p-tag [severity]="getSeverity(payment.status)" class="mb-2">-->
+<!--              {{ payment.status | paymentStatus | async }}-->
+<!--            </p-tag>-->
+<!--            <br/>-->
+<!--            <small>{{ payment.createdAt | date: 'dd.MM.yyyy HH:mm' }}</small>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--      </p-panel>-->
+<!--    }-->
+
+<!--  </div>-->
+<!--  &lt;!&ndash; Кнопка для завантаження додаткових платежів &ndash;&gt;-->
+
+
+<!--</p-scroll-panel>-->
+

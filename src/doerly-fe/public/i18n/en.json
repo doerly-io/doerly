@@ -166,6 +166,19 @@
         }
       }
     },
+    "paymentHistory": {
+      "title": "Payment history",
+      "subtitle": "View your payment history and details",
+      "no_payments": "No payments found",
+      "date": "Date",
+      "amount": "Amount",
+      "status": "Status",
+      "details": "Details",
+      "loading": "Loading...",
+      "errors": {
+        "load": "An error occurred while loading payment history."
+      }
+    },
     "message": {
       "save": {
         "success": "Profile has been saved successfully.",
@@ -273,6 +286,21 @@
     "payment_redirect": "You are gonna be redirected to the payment page in a few seconds",
     "end": "End",
     "pay": "Pay"
+  },
+  "payments": {
+    "status": {
+      "pending": "Pending",
+      "failed": "Failed to process payment",
+      "error": "Error entering payment details",
+      "completed": "Successful",
+      "canceled": "Canceled",
+      "unknown": "Unknown status"
+    },
+    "currency": {
+      "usd": "USD",
+      "eur": "EUR",
+      "uah": "UAH"
+    }
   },
   "common": {
     "actions": "Actions",

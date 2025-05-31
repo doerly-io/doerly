@@ -13,9 +13,13 @@ public record Cursor(int? LastId)
         return res;
     }
     
-    public static Cursor Decode(string encodedCursor)
+    public static Cursor Decode(string? encodedCursor)
     {
-        var json = Base64UrlEncoder.Decode(encodedCursor);
+        var trimmedCursor = encodedCursor?.Trim();
+        if (string.IsNullOrEmpty(trimmedCursor))
+            return new Cursor((int?)null);
+        
+        var json = Base64UrlEncoder.Decode(trimmedCursor);
         var cursor = JsonSerializer.Deserialize<Cursor>(json);
         return cursor;
     }
