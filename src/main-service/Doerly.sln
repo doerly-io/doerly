@@ -97,6 +97,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Communication
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Communication.Enums", "Doerly.Module.Communication\Doerly.Module.Communication.Enums\Doerly.Module.Communication.Enums.csproj", "{278515D0-9E7C-4477-9430-EC5C88D1922A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Proxy.Profile", "Doerly.Proxy.Profile\Doerly.Proxy.Profile.csproj", "{A5E08BAA-6DDE-4FA0-B4DB-DDBE1F67A5F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Common.Api", "Doerly.Module.Common\Doerly.Module.Common.Api\Doerly.Module.Common.Api.csproj", "{700B1B87-85E4-4C14-AC49-46792F1D3110}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Common.DataAccess", "Doerly.Module.Common\Doerly.Module.Common.DataAccess\Doerly.Module.Common.DataAccess.csproj", "{2CB2138E-2E45-4CC9-AA95-16CE99F971F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Order.Contracts", "Doerly.Module.Order\Doerly.Module.Order.Contracts\Doerly.Module.Order.Contracts.csproj", "{F340C220-964A-4224-8C64-9DA41FF43143}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doerly.Module.Order.Enums", "Doerly.Module.Order\Doerly.Module.Order.Enums\Doerly.Module.Order.Enums.csproj", "{9A6B34B1-8775-43C9-AD75-2A845EFF1CB7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -255,6 +265,26 @@ Global
 		{278515D0-9E7C-4477-9430-EC5C88D1922A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{278515D0-9E7C-4477-9430-EC5C88D1922A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{278515D0-9E7C-4477-9430-EC5C88D1922A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5E08BAA-6DDE-4FA0-B4DB-DDBE1F67A5F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5E08BAA-6DDE-4FA0-B4DB-DDBE1F67A5F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5E08BAA-6DDE-4FA0-B4DB-DDBE1F67A5F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5E08BAA-6DDE-4FA0-B4DB-DDBE1F67A5F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{700B1B87-85E4-4C14-AC49-46792F1D3110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{700B1B87-85E4-4C14-AC49-46792F1D3110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{700B1B87-85E4-4C14-AC49-46792F1D3110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{700B1B87-85E4-4C14-AC49-46792F1D3110}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CB2138E-2E45-4CC9-AA95-16CE99F971F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CB2138E-2E45-4CC9-AA95-16CE99F971F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CB2138E-2E45-4CC9-AA95-16CE99F971F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CB2138E-2E45-4CC9-AA95-16CE99F971F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F340C220-964A-4224-8C64-9DA41FF43143}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F340C220-964A-4224-8C64-9DA41FF43143}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F340C220-964A-4224-8C64-9DA41FF43143}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F340C220-964A-4224-8C64-9DA41FF43143}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A6B34B1-8775-43C9-AD75-2A845EFF1CB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A6B34B1-8775-43C9-AD75-2A845EFF1CB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A6B34B1-8775-43C9-AD75-2A845EFF1CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A6B34B1-8775-43C9-AD75-2A845EFF1CB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -295,5 +325,10 @@ Global
 		{8B0352D7-4A28-46F0-9E1A-790010875FC9} = {4B8C95BF-D474-4A94-8DF6-71B75675326C}
 		{D5401B72-2307-45FA-8E60-2A5E4C494283} = {4B8C95BF-D474-4A94-8DF6-71B75675326C}
 		{278515D0-9E7C-4477-9430-EC5C88D1922A} = {4B8C95BF-D474-4A94-8DF6-71B75675326C}
+		{A5E08BAA-6DDE-4FA0-B4DB-DDBE1F67A5F6} = {245B6B27-1DD6-4B32-AE9D-EA17C24B3EFE}
+		{700B1B87-85E4-4C14-AC49-46792F1D3110} = {96457558-2E9B-484E-B18E-388753B29918}
+		{2CB2138E-2E45-4CC9-AA95-16CE99F971F3} = {96457558-2E9B-484E-B18E-388753B29918}
+		{F340C220-964A-4224-8C64-9DA41FF43143} = {65FBD588-7C94-4087-9ACD-0A0A6EE30B06}
+		{9A6B34B1-8775-43C9-AD75-2A845EFF1CB7} = {65FBD588-7C94-4087-9ACD-0A0A6EE30B06}
 	EndGlobalSection
 EndGlobal

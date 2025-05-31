@@ -48,6 +48,26 @@
     </div>
   </div>
 
+  <div class="chat-input">
+    <input
+      pInputText
+      type="text"
+      [value]="messageText() || ''"
+      (input)="updateMessageText($event)"
+      (keyup.enter)="sendMessage()"
+      placeholder="Напишіть повідомлення..."
+      class="message-input"
+    />
+    <button
+      pButton
+      pButtonLabel="Відправити"
+      pButtonIcon="pi pi-send"
+      type="button"
+      (click)="sendMessage()"
+      class="send-button"
+    ></button>
+  </div>
+
   <!-- Toast для сповіщень -->
   <p-toast></p-toast>
 </div>
