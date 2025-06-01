@@ -1,5 +1,6 @@
 import { EOrderStatus } from "../../domain/enums/order-status";
 import { EPaymentKind } from "../../domain/enums/payment-kind";
+import { FileInfoModel } from "./file-info-model";
 import { ProfileInfoModel } from "./profile-info-model";
 
 export interface GetOrderResponse { 
@@ -20,4 +21,6 @@ export interface GetOrderResponse {
     executorCompletionConfirmation: boolean;
     executionDate?: Date;
     billId?: number;
+    existingFiles?: FileInfoModel[];
+    createdDate: Date;
 }

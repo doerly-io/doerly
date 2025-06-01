@@ -1,7 +1,7 @@
 ﻿using Doerly.DataAccess.Models;
 using Doerly.Module.Order.Enums;
 
-namespace Doerly.Module.Order.DataAccess.Models;
+namespace Doerly.Module.Order.DataAccess.Entities;
 
 public class Order : BaseEntity
 {
@@ -32,6 +32,8 @@ public class Order : BaseEntity
     public DateTime? ExecutionDate { get; set; }
 
     public int? BillId { get; set; }
+
+    public virtual ICollection<OrderFile> OrderFiles { get; set; } = [];
 
     public virtual ICollection<ExecutionProposal> ExecutionProposals { get; set; }
 }

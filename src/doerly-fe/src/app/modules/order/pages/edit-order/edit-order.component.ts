@@ -4,21 +4,26 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../../domain/order.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { ButtonDirective } from 'primeng/button';
+import { Button, ButtonDirective } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { Card } from 'primeng/card';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { EPaymentKind } from '../../domain/enums/payment-kind';
-import { getError, isInvalid, setServerErrors, getServersideError } from 'app/@core/helpers/input-validation-helpers';
+import { getError, isInvalid, getServersideError } from 'app/@core/helpers/input-validation-helpers';
 import { BaseApiResponse } from 'app/@core/models/base-api-response';
 import { GetOrderResponse } from '../../models/responses/get-order-response';
-import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 import { CreateOrderRequest } from '../../models/requests/create-order-request';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
 import { CreateOrderResponse } from '../../models/responses/create-order-response';
 import { Checkbox } from 'primeng/checkbox';
+import { FileUploadModule } from 'primeng/fileupload';
+import { Badge } from 'primeng/badge';
+import { FileInfoModel } from '../../models/responses/file-info-model';
+import { Tooltip } from 'primeng/tooltip';
+import { Textarea } from 'primeng/textarea';
+import { ImageModule } from 'primeng/image';
 
 @Component({
   selector: 'app-edit-order',
@@ -34,7 +39,14 @@ import { Checkbox } from 'primeng/checkbox';
     SelectModule,
     NgIf,
     Card,
-    Checkbox
+    Checkbox,
+    FileUploadModule,
+    Button,
+    Badge,
+    CommonModule,
+    Tooltip,
+    Textarea,
+    ImageModule
   ]
 })
 export class EditOrderComponent implements OnInit {
@@ -44,6 +56,13 @@ export class EditOrderComponent implements OnInit {
   isEdit: boolean = false;
   loading: boolean = false;
   currentDate: Date = new Date();
+
+  totalSizeLimit: number = 10 * 1024 * 1024;
+  files: File[] = [];
+  existingFiles: FileInfoModel[] = [];
+  totalFiles: number = 0;
+  totalFilesLimit: number = 10;
+  fileLimitForUpload: number = 10;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -61,10 +80,12 @@ export class EditOrderComponent implements OnInit {
     this.initForm();
     this.initPaymentKinds();
 
+    this.orderForm.setValidators(() => this.filesCountValidator());
+
     if (this.isEdit) {
       this.loading = true;
       this.orderService.getOrder(this.orderId!).subscribe({
-        next: (response: BaseApiResponse<GetOrderResponse>) => {
+        next: (response: BaseApiResponse<GetOrderResponse & { existingFiles?: FileInfoModel[] }>) => {
           const order = response.value;
           if (order) {
             this.orderForm.patchValue({
@@ -76,18 +97,20 @@ export class EditOrderComponent implements OnInit {
               dueDate: new Date(order.dueDate),
               isPriceNegotiable: order.isPriceNegotiable
             });
+            this.existingFiles = (order as any).existingFiles || [];
+            this.updateTotalFiles();
+            this.updateFileLimitForUpload();
           }
           this.loading = false;
         },
         error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.toastHelper.showError('common.error', error.error.errorMessage);
-          }
-          else {
-            this.toastHelper.showError('common.error', 'common.error_occurred');
-          }
+          this.toastHelper.showError('common.error', error.error?.errorMessage || 'common.error_occurred');
+          this.loading = false;
         }
       });
+    } else {
+      this.updateTotalFiles();
+      this.updateFileLimitForUpload();
     }
   }
 
@@ -112,6 +135,11 @@ export class EditOrderComponent implements OnInit {
     };
   }
 
+  filesCountValidator() {
+    const totalFiles = this.files.length + this.existingFiles.length;
+    return totalFiles > this.totalFilesLimit ? { filesLimitExceeded: true } : null;
+  }
+
   initPaymentKinds() {
     this.paymentKinds = Object.keys(EPaymentKind)
       .filter(key => isNaN(Number(key)))
@@ -121,12 +149,59 @@ export class EditOrderComponent implements OnInit {
       }));
   }
 
+  choose(event: Event, callback: Function) {
+    callback();
+  }
+
+  onClearTemplatingUpload(clear: Function) {
+    clear();
+    this.files = [];
+    this.existingFiles = [];
+    this.updateTotalFiles();
+    this.updateFileLimitForUpload();
+  }
+
+  onSelectedFiles(event: any) {
+    this.files = [...this.files, ...event.currentFiles];
+    this.updateTotalFiles();
+  }
+
+  removeExistingFile(file: FileInfoModel) {
+    this.existingFiles = this.existingFiles.filter(f => f.filePath !== file.filePath);
+    this.updateTotalFiles();
+    this.updateFileLimitForUpload();
+  }
+
+  onRemoveTemplatingFile(event: Event, file: File, removeFileCallback: Function) {
+    removeFileCallback(file);
+    this.files = this.files.filter(f => f !== file);
+    this.updateTotalFiles();
+  }
+
+  updateTotalFiles() {
+    this.totalFiles = this.files.length + this.existingFiles.length;
+    this.orderForm.updateValueAndValidity();
+  }
+
+  updateFileLimitForUpload() {
+    this.fileLimitForUpload = this.totalFilesLimit - this.existingFiles.length;
+  }
+
+  formatSize(bytes: number): string {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const dm = 2;
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
   submit() {
     if (this.orderForm.invalid)
       return;
 
     if (this.isEdit) {
-      this.orderService.updateOrder(this.orderId!, this.orderForm.value)
+      this.orderService.updateOrder(this.orderId!, this.orderForm.value, this.files, this.existingFiles)
         .subscribe({
           next: () => {
             this.router.navigate(['/ordering/order', this.orderId]);
@@ -142,10 +217,9 @@ export class EditOrderComponent implements OnInit {
         });
     } else {
       const request = this.orderForm.value as CreateOrderRequest;
-      this.orderService.createOrder(request)
+      this.orderService.createOrder(request, this.files)
         .subscribe({
           next: (response: BaseApiResponse<CreateOrderResponse>) => {
-            console.log(response);
             this.router.navigate(['/ordering/order', response.value!.id]);
           },
           error: (error: HttpErrorResponse) => {

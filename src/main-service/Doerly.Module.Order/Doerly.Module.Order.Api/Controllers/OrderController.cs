@@ -4,6 +4,7 @@ using Doerly.Module.Order.Domain.Handlers;
 using Microsoft.AspNetCore.Mvc;
 using Doerly.Module.Order.Domain.Handlers.Order;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace Doerly.Module.Order.Api.Controllers;
 
@@ -14,9 +15,9 @@ namespace Doerly.Module.Order.Api.Controllers;
 public class OrderController : BaseApiController
 {
     [HttpPost]
-    public async Task<IActionResult> CreateOrder(CreateOrderRequest dto)
+    public async Task<IActionResult> CreateOrder([FromForm] CreateOrderRequest dto, [FromForm] List<IFormFile> files)
     {
-        var result = await ResolveHandler<CreateOrderHandler>().HandleAsync(dto);
+        var result = await ResolveHandler<CreateOrderHandler>().HandleAsync(dto, files);
         if (result.IsSuccess)
             return Ok(result);
 
@@ -42,11 +43,11 @@ public class OrderController : BaseApiController
 
         return BadRequest(result);
     }
-
+        
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateOrder(int id, UpdateOrderRequest dto)
+    public async Task<IActionResult> UpdateOrder([FromRoute] int id, [FromForm] UpdateOrderRequest dto, [FromForm] List<IFormFile>? files, [FromForm] List<string>? existingFileNames)
     {
-        var result = await ResolveHandler<UpdateOrderHandler>().HandleAsync(id, dto);
+        var result = await ResolveHandler<UpdateOrderHandler>().HandleAsync(id, dto, files, existingFileNames);
         if (result.IsSuccess)
             return Ok(result);
 

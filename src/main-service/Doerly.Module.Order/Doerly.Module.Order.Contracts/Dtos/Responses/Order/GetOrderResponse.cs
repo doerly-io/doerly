@@ -42,4 +42,8 @@ public class GetOrderResponse
     public DateTime? ExecutionDate { get; set; }
 
     public int? BillId { get; set; }
+
+    public IEnumerable<FileInfo> ExistingFiles { get; set; }
+
+    public DateTime CreatedDate { get; set; }
 }

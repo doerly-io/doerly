@@ -216,6 +216,7 @@
     "description": "Description",
     "price": "Price",
     "price_negotiable": "Price is negotiable",
+    "placed": "Placed",
     "due_date": "Due Date",
     "customer_id": "Customer ID",
     "executor_id": "Executor ID",
@@ -246,6 +247,7 @@
       "Placed": "Placed",
       "InProgress": "In progress",
       "AwaitingPayment": "Awaiting payment",
+      "ProcessingPayment": "Processing payment",
       "AwaitingConfirmation": "Awaiting confirmation",
       "Completed": "Completed",
       "Canceled": "Canceled"
@@ -278,7 +280,20 @@
     "sent": "Sent",
     "executor": "Executor",
     "order_number": "Order №{{orderId}}",
-    "execution_proposal_number": "Execution proposal №{{proposalId}}"
+    "execution_proposal_number": "Execution proposal №{{proposalId}}",
+    "size": "Size",
+    "added": "Added",
+    "uploaded": "Uploaded",
+    "drag_and_drop_images": "Drag and drop image files here to upload",
+    "download": "Download",
+    "uploaded_files": "Uploaded files",
+    "added_files": "Added files",
+    "add_files": "Add files",
+    "clear_files": "Clear files",
+    "delete_file": "Delete file",
+    "additional_files": "Additional files",
+    "file_limit_exceeded": "File limit exceeded. Maximum number of files is {{limit}}.",
+    "files_count": "Files"
   },
   "common": {
     "actions": "Actions",

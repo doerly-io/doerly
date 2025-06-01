@@ -3,7 +3,7 @@ using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Proxy.Profile;
-using Doerly.Module.Order.DataAccess.Models;
+using Doerly.Module.Order.DataAccess.Entities;
 using Doerly.Domain;
 
 namespace Doerly.Module.Order.Domain.Handlers;

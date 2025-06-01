@@ -2,7 +2,7 @@
 using Doerly.Domain.Models;
 using Doerly.Extensions;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.DataAccess.Models;
+using Doerly.Module.Order.DataAccess.Entities;
 using Doerly.Module.Order.Contracts.Dtos;
 
 using Microsoft.EntityFrameworkCore;

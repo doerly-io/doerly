@@ -7,6 +7,7 @@ internal class DbConstants
     internal class Tables
     {
         internal const string Order = "order";
+        internal const string OrderFile = "order_file";
         internal const string ExecutionProposal = "execution_proposal";
     }
 }

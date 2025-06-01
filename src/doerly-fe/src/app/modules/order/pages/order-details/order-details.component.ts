@@ -19,6 +19,8 @@ import { Tag } from 'primeng/tag';
 import { AvatarModule } from 'primeng/avatar';
 import { DividerModule } from 'primeng/divider';
 import { TooltipModule } from 'primeng/tooltip';
+import { ImageModule } from 'primeng/image';
+import { GalleriaModule } from 'primeng/galleria';
 
 @Component({
   selector: 'app-order-details',
@@ -35,7 +37,9 @@ import { TooltipModule } from 'primeng/tooltip';
     AvatarModule,
     DividerModule,
     TooltipModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    ImageModule,
+    GalleriaModule
   ]
 })
 export class OrderDetailsComponent implements OnInit {

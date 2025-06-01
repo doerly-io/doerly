@@ -1,6 +1,6 @@
 ﻿using Doerly.DataAccess;
-using Doerly.Module.Order.DataAccess.Models;
-using OrderEntity = Doerly.Module.Order.DataAccess.Models.Order;
+using Doerly.Module.Order.DataAccess.Entities;
+using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 

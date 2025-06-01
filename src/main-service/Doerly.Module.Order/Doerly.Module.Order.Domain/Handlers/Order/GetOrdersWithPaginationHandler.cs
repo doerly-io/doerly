@@ -5,7 +5,7 @@ using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Extensions;
 using System.Linq.Expressions;
 
-using OrderEntity = Doerly.Module.Order.DataAccess.Models.Order;
+using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
 using Doerly.Proxy.Profile;
 
 namespace Doerly.Module.Order.Domain.Handlers;

@@ -11,7 +11,8 @@
             <div class="avatar-container" pTooltip="{{ 'ordering.view_profile' | translate }}" tooltipPosition="top">
               <img *ngIf="order.customer.avatarUrl" [src]="order.customer.avatarUrl"
                 alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar" width="120" height="120" />
-              <p-avatar *ngIf="!order.customer.avatarUrl" icon="pi pi-user" shape="circle" size="xlarge" class="avatar"></p-avatar>
+              <p-avatar *ngIf="!order.customer.avatarUrl" icon="pi pi-user" shape="circle" size="xlarge"
+                class="avatar"></p-avatar>
             </div>
             <span>
               {{ order.customer.firstName }} {{ order.customer.lastName }}
@@ -25,8 +26,29 @@
 
           <!-- Опис -->
           <div class="mb-3">
-            <p-panel class="field-label" header="{{ 'ordering.description' | translate }}" class="mt-2" [toggleable]="true">
-                <span>{{ order.description }}</span>
+            <p-panel class="description-panel" header="{{ 'ordering.description' | translate }}" [toggleable]="true">
+              <span>{{ order.description }}</span>
+            </p-panel>
+          </div>
+
+          <!-- Додаткові фото -->
+          <div class="mb-3" *ngIf="order?.existingFiles?.length! > 0">
+            <p-panel class="panel-container" header="{{ 'ordering.additional_files' | translate }}" [toggleable]="true">
+              <div class="files-list">
+                <div *ngFor="let file of order.existingFiles" class="file-card">
+                  <p-image [alt]="file.fileName" [src]="file.filePath" [preview]="true">
+                    <ng-template #indicator>
+                      <i class="pi pi-search"></i>
+                    </ng-template>
+                    <ng-template #image>
+                      <img [alt]="file.fileName" [src]="file.filePath" class="file-image" width="250" />
+                    </ng-template>
+                    <ng-template #preview let-style="style" let-previewCallback="previewCallback">
+                      <img [alt]="file.fileName" [src]="file.filePath" class="file-image-preview" [style]="style" />
+                    </ng-template>
+                  </p-image>
+                </div>
+              </div>
             </p-panel>
           </div>
 
@@ -34,9 +56,10 @@
           <div class="mb-3 d-flex align-items-center justify-content-between">
             <div>
               <span class="field-label">{{ 'ordering.price' | translate }}:</span>
-              <span class="ms-2">{{ '$' + order.price }}</span>
+              <span class="ms-2">{{ order.price }} ₴</span>
             </div>
-            <p-tag *ngIf="order.isPriceNegotiable" severity="secondary" class="ms-2" [value]="'ordering.price_negotiable' | translate">
+            <p-tag *ngIf="order.isPriceNegotiable" severity="secondary" class="ms-2"
+              [value]="'ordering.price_negotiable' | translate">
             </p-tag>
           </div>
 
@@ -50,9 +73,13 @@
 
           <p-divider />
 
-          <!-- Термін виконання та дата виконання -->
+          <!-- Дата розміщення, термін виконання та дата виконання -->
           <div class="mb-3 dates-row">
             <div class="date-item">
+              <span class="field-label">{{ 'ordering.placed' | translate }}:</span>
+              <span class="date-value">{{ order.createdDate | date: 'dd.MM.yyyy HH:mm' }}</span>
+            </div>
+            <div *ngIf="!order.executionDate"class="date-item">
               <span class="field-label">{{ 'ordering.due_date' | translate }}:</span>
               <span class="date-value">{{ order.dueDate | date: 'dd.MM.yyyy HH:mm' }}</span>
             </div>
@@ -61,7 +88,7 @@
                 <span class="field-label">{{ 'ordering.execution_date' | translate }}:</span>
                 <span class="date-value">{{ order.executionDate | date: 'dd.MM.yyyy HH:mm' }}</span>
               </div>
-            </ng-container>    
+            </ng-container>
           </div>
 
           <p-divider />
@@ -100,14 +127,15 @@
             <p-button *ngIf="canSendProposal" [routerLink]="'/ordering/send-execution-proposal'"
               [queryParams]="{ orderId: order.id, receiverId: order.customerId }"
               label="{{ 'ordering.send_execution_proposal' | translate }}" [severity]="'success'" />
-            <p-button *ngIf="canEdit" [routerLink]="['/ordering/edit-order', order.id]" label="{{ 'common.edit' | translate }}"
-              icon="pi pi-pencil" class="me-2"></p-button>
+            <p-button *ngIf="canEdit" [routerLink]="['/ordering/edit-order', order.id]"
+              label="{{ 'common.edit' | translate }}" icon="pi pi-pencil" class="me-2"></p-button>
             <p-button *ngIf="canCancel" label="{{ 'ordering.cancel' | translate }}" icon="pi pi-times" severity="danger"
               (click)="updateOrderStatus(EOrderStatus.Canceled)"></p-button>
             <p-button *ngIf="canEnd" label="{{ 'ordering.end' | translate }}" icon="pi pi-check" severity="success"
               (click)="updateOrderStatus(EOrderStatus.Completed)"></p-button>
             <p-button *ngIf="canPay" label="{{ 'ordering.pay' | translate }}" icon="pi pi-money-bill" severity="success"
-              (click)="updateOrderStatus(EOrderStatus.Completed)"></p-button>    </div> 
+              (click)="updateOrderStatus(EOrderStatus.Completed)"></p-button>
+          </div>
         </div>
       </div>
     </div>

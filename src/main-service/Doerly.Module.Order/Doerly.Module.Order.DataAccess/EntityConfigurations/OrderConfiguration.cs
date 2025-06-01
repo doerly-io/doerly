@@ -1,4 +1,4 @@
-﻿using OrderEntity = Doerly.Module.Order.DataAccess.Models.Order;
+﻿using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Doerly.Module.Order.DataAccess.Constants;
@@ -21,5 +21,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<OrderEntity>
         builder.Property(x => x.CustomerId).IsRequired();
 
         builder.HasMany(x => x.ExecutionProposals).WithOne(x => x.Order).HasForeignKey(x => x.OrderId);
+        builder.HasMany(x => x.OrderFiles).WithOne(x => x.Order).HasForeignKey(x => x.OrderId);
     }
 }

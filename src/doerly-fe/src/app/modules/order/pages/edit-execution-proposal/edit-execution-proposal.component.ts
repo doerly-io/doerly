@@ -13,6 +13,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { NgIf } from '@angular/common';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
 import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
+import { TextAccessibilityManager } from 'pdfjs-dist/types/web/text_accessibility';
+import { Textarea } from 'primeng/textarea';
 
 @Component({
   selector: 'app-edit-execution-proposal',
@@ -24,7 +26,8 @@ import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
     Card,
     ButtonDirective,
     TranslatePipe,
-    NgIf
+    NgIf,
+    Textarea
   ]
 })
 export class EditExecutionProposalComponent implements OnInit {
