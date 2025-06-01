@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { mockUserState } from 'app/reducers/user';
 import useAccessValidate from 'hooks/useAccessValidate';
 import useChangePage from 'hooks/useChangePage';
 import useLocationSearch from 'hooks/useLocationSearch';
@@ -27,8 +26,7 @@ function  PageAccessValidator({
   const {
     isFetchingUser,
     isAuthorized,
-  } = mockUserState;
-  // } = useSelector(({ user }: any) => user);
+  } = useSelector(({ user }: any) => user);
 
   const hasAccess = useMemo(
     () => validateAccess(neededAuthorities, mode),

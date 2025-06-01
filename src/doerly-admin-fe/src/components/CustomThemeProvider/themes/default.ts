@@ -2,13 +2,15 @@ const theme = {
   button: {
     primary: {
       color: {
-        background: '#34d399',
-        text: '#FFFFFF',
+        background: '#298967',
+        hover: '#34d399',
+        text: '#18181b',
       },
     },
     secondary: {
       color: {
-        background: '#F8F8F8',
+        background: '#298967',
+        hover: '#34d399',
         text: '#111111',
       },
     },
@@ -18,7 +20,7 @@ const theme = {
       edit: '#EBF1F6',
       error: '#F6CCCE',
       info: '#D9E5EE',
-      paper: '#FFFFFF',
+      paper: '#18181b',
       success: '#D0E4D6',
       warning: '#FAEDD5',
     },
@@ -67,10 +69,10 @@ const theme = {
     },
   },
   link: {
-    color: '#1C7FDB',
+    color: '#298967',
   },
   loading: {
-    background: '#FFFFFF',
+    background: '#18181b',
   },
   pageContainer: {
     border: '#121212',
@@ -89,6 +91,16 @@ const theme = {
   spacing: (x: number = 1) => x * 8,
   tabs: {
     background: '#FFFFFF',
+  },
+  textField: {
+    color: {
+      error: '#D3000C',
+      info: '#1C7FDB',
+      primary: '#34d399',
+      secondary: '#059669',
+      success: '#007504',
+      warning: '#E9A631',
+    },
   },
   typography: {
     color: {

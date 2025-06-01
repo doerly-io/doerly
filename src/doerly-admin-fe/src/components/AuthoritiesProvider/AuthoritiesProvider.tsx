@@ -2,17 +2,15 @@ import React, {
   createContext,
 } from 'react';
 import { useSelector } from 'react-redux';
-import authoritiesUI from 'constants/authoritiesUI';
 
 export const AuthoritiesContext = createContext<string[]>([]);
 
 const AuthoritiesProvider = ({
   children,
 }: IProps) => {
-  // const {
-  //   authorities,
-  // } = useSelector(({ user }: any) => user);
-  const authorities = Object.values(authoritiesUI);
+  const {
+    authorities,
+  } = useSelector(({ user }: any) => user);
   return (
     <AuthoritiesContext.Provider value={authorities}>
       {children}

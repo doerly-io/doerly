@@ -42,8 +42,26 @@ const addReduxInterceptors = (store: any) => {
   );
 };
 
+const getAllErrorsMessages = (errors: any) => {
+  if (!errors) return [];
+
+  const messages: string[] = [];
+
+  // Handle case where errors is an object with arrays of messages
+  Object.values(errors).forEach(fieldErrors => {
+    if (Array.isArray(fieldErrors)) {
+      messages.push(...fieldErrors);
+    } else if (typeof fieldErrors === 'string') {
+      messages.push(fieldErrors);
+    }
+  });
+
+  return messages;
+};
+
 export {
-  addReduxInterceptors
+  addReduxInterceptors,
+  getAllErrorsMessages
 };
 
 export default axios;

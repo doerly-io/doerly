@@ -86,11 +86,11 @@ const allNavPages: any[] = [
 ];
 
 const neededAuthoritiesToPages: { [index: string]: string | string[] } = {
-  [pages.users]: authoritiesUI.USERS_MANAGE,
-  [pages.catalog]: authoritiesUI.CATALOG_MANAGE,
-  [pages.orders]: authoritiesUI.ORDERS_MANAGE,
-  [pages.reporting]: authoritiesUI.REPORTING_MANAGE,
-  [pages.settings]: authoritiesUI.SETTINGS_MANAGE,
+  [pages.users]: authoritiesUI.authorities.USERS_MANAGE,
+  [pages.catalog]: authoritiesUI.authorities.CATALOG_MANAGE,
+  [pages.orders]: authoritiesUI.authorities.ORDERS_MANAGE,
+  [pages.reporting]: authoritiesUI.authorities.REPORTING_MANAGE,
+  [pages.settings]: authoritiesUI.authorities.SETTINGS_MANAGE,
 };
 
 const getRootPage = (page: string) => page.split('/').shift();

@@ -23,7 +23,6 @@ import languages, { TLanguages } from 'constants/languages';
 import pagesURLs from 'constants/pagesURLs';
 import SwipeableDrawer from '../SwipeableDrawer';
 import SideBar from '../SideBar';
-import { mockUserState } from 'app/reducers/user';
 
 const getClasses = makeStyles<any>()((_, theme: any) => ({
   container: {
@@ -94,8 +93,7 @@ function Header({ onLogout }: IProps) {
   const isMobile = useIsMobile();
   const langsMenuRef = useRef(null);
   const locationSearch = useLocationSearch();
-  // const user = useSelector(({ user: reducerUser }: any) => reducerUser);
-  const user = mockUserState;
+  const user = useSelector(({ user: reducerUser }: any) => reducerUser);
   const userMenuRef = useRef(null);
 
   const [state, setState] = useState({

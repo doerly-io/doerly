@@ -192,7 +192,7 @@ app.UseRequestLocalization(options =>
 app.UseRouting();
 
 app.UseCors(policy => policy
-    .WithOrigins(frontendSettings.FrontendUrl)
+    .WithOrigins(frontendSettings.FrontendUrls)
     .AllowCredentials()
     .AllowAnyHeader()
     .AllowAnyMethod());
