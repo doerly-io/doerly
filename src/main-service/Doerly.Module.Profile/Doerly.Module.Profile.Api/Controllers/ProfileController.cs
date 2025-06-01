@@ -1,4 +1,4 @@
-﻿using Doerly.Api.Infrastructure;
+﻿using Doerly.Infrastructure.Api;
 using Doerly.Domain.Models;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.Domain.Handlers;
@@ -21,7 +21,7 @@ public class ProfileController : BaseApiController
         if (!result.IsSuccess)
             return NotFound(result);
 
-        return Ok(result.Value);
+        return Ok(result);
     }
 
     [HttpPost]
@@ -60,11 +60,37 @@ public class ProfileController : BaseApiController
     [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> UploadProfileImage([FromRoute] int userId, [FromForm] IFormFile imageFile)
     {
-        using var stream = new MemoryStream();
-        await imageFile.CopyToAsync(stream);
-        var fileBytes = stream.ToArray();
-
-        var result = await ResolveHandler<UploadProfileImageHandler>().HandleAsync(userId, fileBytes);
+        var result = await ResolveHandler<UploadProfileImageHandler>().HandleAsync(userId, GetFormFileBytes(imageFile));
+        if (!result.IsSuccess)
+            return BadRequest(result);
+        
+        return Ok(result);
+    }
+    
+    [HttpDelete("{userId:int}/image")]
+    [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteProfileImage([FromRoute] int userId)
+    {
+        var result = await ResolveHandler<DeleteProfileImageHandler>().HandleAsync(userId);
+        return Ok(result);
+    }
+    
+    [HttpPost("{userId:int}/cv")]
+    [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> UploadProfileCv([FromRoute] int userId, [FromForm] IFormFile cvFile)
+    {
+        var result = await ResolveHandler<UploadProfileCvHandler>().HandleAsync(userId, GetFormFileBytes(cvFile));
+        if (!result.IsSuccess)
+            return BadRequest(result);
+        
+        return Ok(result);
+    }
+    
+    [HttpDelete("{userId:int}/cv")]
+    [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteProfileCv([FromRoute] int userId)
+    {
+        var result = await ResolveHandler<DeleteProfileCvHandler>().HandleAsync(userId);
         return Ok(result);
     }
 }

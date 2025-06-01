@@ -1,9 +1,5 @@
 ﻿using Doerly.DataAccess.Models;
-using Doerly.Module.Order.DataAccess.Constants;
-using Doerly.Module.Order.DataAccess.Enums;
-
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Doerly.Module.Order.Enums;
 
 namespace Doerly.Module.Order.DataAccess.Models;
 

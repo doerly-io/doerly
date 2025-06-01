@@ -1,15 +1,17 @@
 using System.Globalization;
-using Doerly.Host;
-using System.Reflection;
-using System.Resources;
 using System.Text;
 using Doerly.Domain.Factories;
-using Doerly.Api.Infrastructure;
 using Doerly.Common.Settings;
+using Doerly.Domain;
 using Doerly.FileRepository;
+using Doerly.Host.Middlewares;
+using Doerly.Infrastructure.Api;
 using Doerly.Localization;
 using Doerly.Messaging;
 using Doerly.Notification.EmailSender;
+using Doerly.Proxy.BaseProxy;
+using Doerly.Proxy.Payment;
+using Doerly.Proxy.Profile;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
@@ -24,18 +26,18 @@ var configuration = builder.Configuration;
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-builder.Services.AddControllers(options => { options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider()); })
+builder.Services
+    .AddControllers(options => { options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider()); })
     .AddDataAnnotationsLocalization(options =>
     {
         options.DataAnnotationLocalizerProvider = (type, factory) =>
         {
-            var resourceManager = new ResourceManager("Doerly.Localization.Resources", typeof(Resources).Assembly);
+            var resourceManager = Resources.ResourceManager;
             return new DataAnnotationsStringLocalizer(resourceManager);
         };
     })
     .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase; });
 
-#region Configure Modules
 
 builder.RegisterModule(new Doerly.Module.Payments.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Authorization.Api.ModuleInitializer());
@@ -44,42 +46,28 @@ builder.RegisterModule(new Doerly.Module.Order.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Catalog.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Common.Api.ModuleInitializer());
 
-var loadedPaths = loadedAssemblies.Select(a => a.Location).ToArray();
 
-var referencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, $"{HostConstants.MODULE_PREFIX}.*.dll");
-var toLoad = referencedPaths.Where(r => !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase));
+#region ModuleProxies
 
-foreach (var path in toLoad)
-{
-    Assembly.LoadFrom(path);
-}
-
-loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies()
-    .Where(a => a.GetName().Name!.StartsWith(HostConstants.MODULE_PREFIX));
-
-foreach (var moduleAssembly in loadedAssemblies)
-{
-    var moduleInitializerType = moduleAssembly.GetTypes()
-        .FirstOrDefault(t => typeof(IModuleInitializer).IsAssignableFrom(t) && !t.IsAbstract);
-
-    if (moduleInitializerType == null)
-        continue;
-
-    var moduleInitializer = (IModuleInitializer)Activator.CreateInstance(moduleInitializerType);
-    if (moduleInitializer != null)
-    {
-        builder.Services.AddSingleton(moduleInitializer);
-        moduleInitializer.ConfigureServices(builder);
-    }
-}
+builder.Services.AddProxy<IPaymentModuleProxy, PaymentModuleProxy>();
+builder.Services.AddProxy<IProfileModuleProxy, ProfileModuleProxy>();
 
 #endregion
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddSingleton<WebhookUrlBuilder>();
 
 builder.Services.AddScoped<SendEmailHandler>();
 
 builder.Services.AddScoped<IHandlerFactory, HandlerFactory>();
 
 builder.Services.AddScoped<IMessagePublisher, MessagePublisher>();
+
+builder.Services.ConfigureHttpClientDefaults(httpClientBuilder => httpClientBuilder.AddStandardResilienceHandler(options =>
+{
+    
+}));
 
 #region Configure Settings
 
@@ -114,6 +102,12 @@ builder.Services.AddOptions<AzureStorageSettings>()
     .ValidateOnStart();
 
 var azureStorageSettings = azureStorageSettingsConfiguration.Get<AzureStorageSettings>();
+
+var backendSettingsConfiguration = configuration.GetSection(BackendSettings.BackendSettingsName);
+builder.Services.AddOptions<BackendSettings>()
+    .Bind(backendSettingsConfiguration)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 
 #endregion
 
@@ -155,6 +149,8 @@ builder.Services.AddMassTransit(cfg =>
         configurator.UseMessageRetry(r => r.Intervals(2_000, 20_000, 60_000, 300_000, 600_000));
     });
 });
+
+builder.Services.AddScoped<IDoerlyRequestContext, DoerlyRequestContext>();
 
 
 var app = builder.Build();
@@ -205,6 +201,8 @@ app.UseCors(policy => policy
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseMiddleware<RequestContextMiddleware>();
 
 app.MapControllers();
 

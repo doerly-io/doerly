@@ -25,14 +25,20 @@
                   <p><strong>{{ 'ordering.receiver_id' | translate }}</strong> {{ proposal.receiverId }}</p>
                 </div>
                 <div class="execution-proposal-detail-item mb-3">
-                  <p><strong>{{ 'ordering.status' | translate }}:</strong> {{ getProposalStatusString(proposal.status) }}</p>
+                  <p><strong>{{ 'ordering.status' | translate }}:</strong> {{ 'ordering.proposal_statuses.' + EExecutionProposalStatus[proposal.status] | translate}}</p>
                 </div>
               </div>
             </div>
-            <div class="d-flex justify-content-center mb-3 gap-5" *ngIf="proposal.status == 0">
-              <p-button label="{{ 'ordering.proposal_options.accept' | translate }}" icon="pi pi-check" severity="success" (click)="resolveProposal(1)" *ngIf="proposal.receiverId == profileId"></p-button>
-              <p-button label="{{ 'ordering.proposal_options.reject' | translate }}" icon="pi pi-times" severity="danger" (click)="resolveProposal(2)" *ngIf="proposal.receiverId == profileId"></p-button>
-              <p-button label="{{ 'ordering.proposal_options.revoke' | translate }}" icon="pi pi-times" severity="danger" (click)="resolveProposal(3)" *ngIf="proposal.senderId == profileId"></p-button>
+            <div class="d-flex justify-content-center mb-3 gap-5" *ngIf="proposal.status == EExecutionProposalStatus.Pending">
+              <p-button [routerLink]="['/ordering/edit-execution-proposal', proposal.id]"
+                        label="{{ 'common.edit' | translate }}"
+                        icon="pi pi-pencil"
+                        class="me-2"
+                        *ngIf="proposal.senderId == profileId">
+              </p-button>
+              <p-button label="{{ 'ordering.proposal_options.accept' | translate }}" icon="pi pi-check" severity="success" (click)="resolveProposal(EExecutionProposalStatus.Accepted)" *ngIf="proposal.receiverId == profileId"></p-button>
+              <p-button label="{{ 'ordering.proposal_options.reject' | translate }}" icon="pi pi-times" severity="danger" (click)="resolveProposal(EExecutionProposalStatus.Rejected)" *ngIf="proposal.receiverId == profileId"></p-button>
+              <p-button label="{{ 'ordering.proposal_options.revoke' | translate }}" icon="pi pi-times" severity="warn" (click)="resolveProposal(EExecutionProposalStatus.Revoked)" *ngIf="proposal.senderId == profileId"></p-button>
             </div>
           </div>
         </div>

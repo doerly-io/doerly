@@ -6,6 +6,16 @@ import {environment} from 'environments/environment.development';
 import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 import { ProfileResponse } from '../models/responses/ProfileResponse';
 import { ProfileRequest } from '../models/requests/ProfileRequest';
+import { LanguageDto } from '../models/responses/LanguageDto';
+import { LanguageProficiencyDto } from '../models/responses/LanguageProficiencyDto';
+import { PageDto } from 'app/@core/models/page.dto';
+import { map } from 'rxjs/operators';
+
+export interface LanguagesQueryDto {
+  number: number;
+  size: number;
+  name?: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -52,4 +62,81 @@ export class ProfileService {
       )
   }
 
+  deleteImage(): Observable<BaseApiResponse<any>> {
+    const userId = this.jwtTokenHelper.getUserInfo()?.id;
+    return this
+      .httpClient
+      .delete<BaseApiResponse<any>>(
+        `${this.baseUrl}/${userId}/image`,
+        {withCredentials: true}
+      )
+  }
+
+  uploadCV(cv: File): Observable<BaseApiResponse<any>> {
+    const formData = new FormData();
+    const userId = this.jwtTokenHelper.getUserInfo()?.id;
+    formData.append('cvFile', cv);
+    return this
+      .httpClient
+      .post<BaseApiResponse<any>>(
+        `${this.baseUrl}/${userId}/cv`,
+        formData,
+        {withCredentials: true}
+      )
+  }
+
+  deleteCV(): Observable<BaseApiResponse<any>> {
+    const userId = this.jwtTokenHelper.getUserInfo()?.id;
+    return this
+      .httpClient
+      .delete<BaseApiResponse<any>>(
+        `${this.baseUrl}/${userId}/cv`,
+        {withCredentials: true}
+      )
+  }
+
+  getAvailableLanguages(query: LanguagesQueryDto): Observable<PageDto<LanguageDto>> {
+    return this
+      .httpClient
+      .post<BaseApiResponse<PageDto<LanguageDto>>>(
+        `${this.baseUrl}/languages/list`,
+        query,
+        {withCredentials: true}
+      )
+      .pipe(
+        map(response => response.value!)
+      );
+  }
+
+  addLanguageProficiency(dto: { languageId: number; level: number }): Observable<LanguageProficiencyDto> {
+    const userId = this.jwtTokenHelper.getUserInfo()?.id;
+    return this
+      .httpClient
+      .post<LanguageProficiencyDto>(
+        `${this.baseUrl}/${userId}/language-proficiency`,
+        dto,
+        {withCredentials: true}
+      );
+  }
+
+  updateLanguageProficiency(id: number, dto: { languageId: number; level: number }): Observable<LanguageProficiencyDto> {
+    const userId = this.jwtTokenHelper.getUserInfo()?.id;
+    return this
+      .httpClient
+      .put<LanguageProficiencyDto>(
+        `${this.baseUrl}/${userId}/language-proficiency/${id}`,
+        dto,
+        {withCredentials: true}
+      );
+  }
+
+  deleteLanguageProficiency(id: number): Observable<void> {
+    const userId = this.jwtTokenHelper.getUserInfo()?.id;
+    return this
+      .httpClient
+      .delete<void>(
+        `${this.baseUrl}/${userId}/language-proficiency/${id}`,
+        {withCredentials: true}
+      );
+  }
 }

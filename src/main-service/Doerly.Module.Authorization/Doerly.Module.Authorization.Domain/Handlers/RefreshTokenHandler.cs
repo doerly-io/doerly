@@ -42,6 +42,6 @@ public class RefreshTokenHandler : BaseAuthHandler
         var refreshTokenNew = GetResetToken();
         await CreateRefreshTokenAsync(refreshTokenNew.hashedToken, token.UserId);
 
-        return HandlerResult.Success((loginResultDto, refreshTokenNew.hashedToken));
+        return HandlerResult.Success((loginResultDto, refreshTokenNew.originalToken));
     }
 }

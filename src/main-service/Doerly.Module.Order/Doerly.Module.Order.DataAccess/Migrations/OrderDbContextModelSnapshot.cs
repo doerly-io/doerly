@@ -93,6 +93,10 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("category_id");
 
+                    b.Property<bool>("CustomerCompletionConfirmed")
+                        .HasColumnType("boolean")
+                        .HasColumnName("customer_completion_confirmed");
+
                     b.Property<int>("CustomerId")
                         .HasColumnType("integer")
                         .HasColumnName("customer_id");
@@ -114,6 +118,10 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                     b.Property<DateTime?>("ExecutionDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("execution_date");
+
+                    b.Property<bool>("ExecutorCompletionConfirmed")
+                        .HasColumnType("boolean")
+                        .HasColumnName("executor_completion_confirmed");
 
                     b.Property<int?>("ExecutorId")
                         .HasColumnType("integer")

@@ -7,5 +7,4 @@ export interface CreateOrderRequest {
     price: number;
     paymentKind: EPaymentKind;
     dueDate: Date;
-    customerId: number;
 }

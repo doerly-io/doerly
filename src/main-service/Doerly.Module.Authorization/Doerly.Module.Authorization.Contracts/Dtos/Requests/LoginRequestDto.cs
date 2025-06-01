@@ -8,6 +8,6 @@ public class LoginRequestDto
     [EmailAddress(ErrorMessage = "InvalidEmailFormatInput")]
     public string Email { get; set; }
     
-    [Required(ErrorMessage = "PasswordRequired")]
+    [Required(ErrorMessage = "FieldIsRequired")]
     public string Password { get; set; }
 }

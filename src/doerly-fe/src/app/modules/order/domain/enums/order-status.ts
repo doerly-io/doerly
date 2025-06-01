@@ -1,6 +1,8 @@
 export enum EOrderStatus { 
     Placed = 1,
     InProgress = 2,
-    Completed = 3,
-    Canceled = 4,
+    AwaitingPayment = 3,
+    AwaitingConfirmation = 4,
+    Completed = 5,
+    Canceled = 6,
 }

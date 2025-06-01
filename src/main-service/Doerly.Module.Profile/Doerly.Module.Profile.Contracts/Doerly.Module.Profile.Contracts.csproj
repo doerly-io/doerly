@@ -7,6 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Doerly.DataAccess\Doerly.DataAccess.csproj" />
+      <ProjectReference Include="..\..\Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj" />
       <ProjectReference Include="..\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj" />
     </ItemGroup>
 

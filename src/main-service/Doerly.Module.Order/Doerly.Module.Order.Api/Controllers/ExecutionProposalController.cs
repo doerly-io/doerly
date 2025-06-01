@@ -1,11 +1,13 @@
-﻿using Doerly.Api.Infrastructure;
-using Doerly.Module.Order.Domain.Dtos.Requests;
+﻿using Doerly.Infrastructure.Api;
+using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Module.Order.Domain.Handlers;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Doerly.Module.Order.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Area("order")]
 [Route("api/[area]/[controller]")]
@@ -21,10 +23,10 @@ public class ExecutionProposalController : BaseApiController
         return BadRequest(result);
     }
 
-    [HttpPost("resolve")]
-    public async Task<IActionResult> ResolveExecutionProposal(ResolveExecutionProposalRequest dto)
+    [HttpPut("resolve/{id}")]
+    public async Task<IActionResult> ResolveExecutionProposal(int id, ResolveExecutionProposalRequest dto)
     {
-        var result = await ResolveHandler<ResolveExecutionProposalHandler>().HandleAsync(dto);
+        var result = await ResolveHandler<ResolveExecutionProposalHandler>().HandleAsync(id, dto);
         if (result.IsSuccess)
             return Ok(result);
 
