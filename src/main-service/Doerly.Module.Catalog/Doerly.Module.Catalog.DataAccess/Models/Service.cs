@@ -19,9 +19,9 @@ namespace Doerly.Module.Catalog.DataAccess.Models
         public int UserId { get; set; }
 
         public decimal? Price { get; set; }
+        public bool IsEnabled { get; set; }
         public bool IsDeleted { get; set; }
 
-        public ICollection<Filter> Filters { get; set; } = new List<Filter>();
         public ICollection<ServiceFilterValue> FilterValues { get; set; } = new List<ServiceFilterValue>();
     }
 }

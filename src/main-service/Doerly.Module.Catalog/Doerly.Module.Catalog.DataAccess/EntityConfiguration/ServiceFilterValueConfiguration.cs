@@ -1,11 +1,6 @@
 ﻿using Doerly.Module.Catalog.DataAccess.Constants;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ServiceFilterValueEntity = Doerly.Module.Catalog.DataAccess.Models.ServiceFilterValue;
 
 namespace Doerly.Module.Catalog.DataAccess.EntityConfiguration
@@ -16,16 +11,24 @@ namespace Doerly.Module.Catalog.DataAccess.EntityConfiguration
         {
             builder.ToTable(DbConstants.Tables.ServiceFilterValue, DbConstants.CatalogSchema);
 
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Value).IsRequired().HasMaxLength(100);
+            builder.HasKey(sfv => sfv.Id);
 
-            builder.HasOne(x => x.Service)
-                   .WithMany(x => x.FilterValues)
-                   .HasForeignKey(x => x.ServiceId);
+            builder.Property(sfv => sfv.Value)
+                .IsRequired()
+                .HasMaxLength(200);
 
-            builder.HasOne(x => x.Filter)
-                   .WithMany()
-                   .HasForeignKey(x => x.FilterId);
+            builder.HasOne(sfv => sfv.Service)
+                .WithMany(s => s.FilterValues)
+                .HasForeignKey(sfv => sfv.ServiceId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(sfv => sfv.Filter)
+                .WithMany(f => f.FilterValues)
+                .HasForeignKey(sfv => sfv.FilterId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(sfv => sfv.ServiceId);
+            builder.HasIndex(sfv => sfv.FilterId);
         }
     }
 }

@@ -7,9 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\Requests\Filter\" />
-    <Folder Include="Dtos\Requests\Service\" />
-    <Folder Include="Dtos\Responses\Filter\" />
+    <ProjectReference Include="..\..\Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj" />
+    <ProjectReference Include="..\Doerly.Module.Catalog.Enums\Doerly.Module.Catalog.Enums.csproj" />
   </ItemGroup>
 
 </Project>

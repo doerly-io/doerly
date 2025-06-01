@@ -1,12 +1,85 @@
-﻿using System;
+﻿using Doerly.Domain.Models;
+using Doerly.Module.Catalog.Contracts.Dtos.Requests.Service;
+using Doerly.Module.Catalog.Contracts.Dtos.Responses.Service;
+using Doerly.Module.Catalog.DataAccess;
+using Microsoft.EntityFrameworkCore;
+using ServiceEntity = Doerly.Module.Catalog.DataAccess.Models.Service;
+using CategoryEntity = Doerly.Module.Catalog.DataAccess.Models.Category;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Doerly.Extensions;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Service
 {
-    internal class GetServicesWithPaginationHandler
+    public class GetServicesWithPaginationHandler : BaseCatalogHandler
     {
+        public GetServicesWithPaginationHandler(CatalogDbContext dbContext) : base(dbContext)
+        {
+        }
+
+        public async Task<HandlerResult<(List<GetServiceResponse> Services, int TotalCount)>> HandleAsync(GetServiceWithPaginationRequest request)
+        {
+            var baseQuery = DbContext.Services
+                .AsNoTracking()
+                .Include(s => s.Category)
+                .Include(s => s.FilterValues)
+                .Where(s => !s.IsDeleted && s.IsEnabled);
+
+            var predicates = new List<Expression<Func<ServiceEntity, bool>>>();
+
+            if (request.CategoryId.HasValue)
+                predicates.Add(s => s.CategoryId == request.CategoryId.Value);
+
+            if (request.FilterValues is { Count: > 0 })
+            {
+                foreach (var (filterId, value) in request.FilterValues)
+                {
+                    var fid = filterId; var val = value;
+                    predicates.Add(s => s.FilterValues.Any(fv => fv.FilterId == fid && fv.Value == val));
+                }
+            }
+
+            baseQuery = request.SortBy?.ToLower() switch
+            {
+                "name_desc" => baseQuery.OrderByDescending(s => s.Name),
+                _ => baseQuery.OrderBy(s => s.Name)
+            };
+
+            var (entities, totalCount) = await baseQuery.GetEntitiesWithPaginationAsync(
+                request.PageInfo,
+                predicates
+            );
+
+            var dtos = entities.Select(s => new GetServiceResponse
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Description = s.Description,
+                CategoryId = s.CategoryId,
+                CategoryName = s.Category?.Name,
+                UserId = s.UserId,
+                Price = s.Price,
+                IsEnabled = s.IsEnabled,
+                IsDeleted = s.IsDeleted,
+                CategoryPath = GetCategoryPath(s.Category)
+            }).ToList();
+
+            return HandlerResult.Success((dtos, totalCount));
+        }
+
+        private List<string> GetCategoryPath(CategoryEntity? category)
+        {
+            var path = new List<string>();
+            while (category != null)
+            {
+                path.Insert(0, category.Name);
+                category = category.Parent;
+            }
+            return path;
+        }
     }
 }

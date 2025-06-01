@@ -1,7 +1,9 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
+using Doerly.Module.Catalog.Contracts.Dtos.Responses.Category;
 using Doerly.Module.Catalog.DataAccess;
-using Doerly.Module.Catalog.Domain.Dtos.Responses.Category;
+using Microsoft.EntityFrameworkCore;
+using CategoryEntity = Doerly.Module.Catalog.DataAccess.Models.Category;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,25 +20,30 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Category
 
         public async Task<HandlerResult<GetCategoryResponse>> HandleAsync(int id)
         {
-            var category = await DbContext.Categories.FindAsync(id);
-            if (category == null)
-                return HandlerResult.Failure<GetCategoryResponse>(Resources.Get("CATEGORY_NOT_FOUND"));
+            var allCategories = await DbContext.Categories
+                .AsNoTracking()
+                .ToListAsync();
 
-            var categoryDto = new GetCategoryResponse
+            var category = allCategories.FirstOrDefault(c => c.Id == id);
+            if (category == null)
+                return HandlerResult.Failure<GetCategoryResponse>(Resources.Get("CategoryNotFound"));
+
+            var lookup = allCategories.ToLookup(c => c.ParentId);
+
+            GetCategoryResponse BuildTree(CategoryEntity category)
             {
-                Id = order.Id,
-                CategoryId = order.CategoryId,
-                Name = order.Name,
-                Description = order.Description,
-                Price = order.Price,
-                PaymentKind = order.PaymentKind,
-                DueDate = order.DueDate,
-                Status = order.Status,
-                CustomerId = order.CustomerId,
-                ExecutorId = order.ExecutorId,
-                ExecutionDate = order.ExecutionDate,
-                BillId = order.BillId
-            };
+                return new GetCategoryResponse
+                {
+                    Id = category.Id,
+                    Name = category.Name,
+                    Description = category.Description,
+                    IsDeleted = category.IsDeleted,
+                    IsEnabled = category.IsEnabled,
+                    Children = lookup[category.Id].Select(BuildTree).ToList()
+                };
+            }
+
+            var categoryDto = BuildTree(category);
 
             return HandlerResult.Success(categoryDto);
         }

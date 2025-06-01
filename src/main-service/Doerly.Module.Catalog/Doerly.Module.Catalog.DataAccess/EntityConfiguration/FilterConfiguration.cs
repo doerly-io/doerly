@@ -2,11 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using FilterEntity = Doerly.Module.Catalog.DataAccess.Models.Filter;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Doerly.Module.Catalog.DataAccess.EntityConfiguration
 {
@@ -16,14 +11,22 @@ namespace Doerly.Module.Catalog.DataAccess.EntityConfiguration
         {
             builder.ToTable(DbConstants.Tables.Filter, DbConstants.CatalogSchema);
 
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
-            builder.Property(x => x.Type).IsRequired().HasMaxLength(50);
-            builder.Property(x => x.IsCustomInput).IsRequired();
+            builder.HasKey(f => f.Id);
 
-            builder.HasOne(x => x.Service)
-                   .WithMany(x => x.Filters)
-                   .HasForeignKey(x => x.ServiceId);
+            builder.Property(f => f.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.Property(f => f.Type)
+                .IsRequired();
+
+            builder.HasOne(f => f.Category)
+                .WithMany(c => c.Filters)
+                .HasForeignKey(f => f.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(f => f.CategoryId);
+            builder.HasIndex(f => f.Name);
         }
     }
 }

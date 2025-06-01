@@ -7,14 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Handlers\Filter\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
     <ProjectReference Include="..\..\Doerly.Localization\Doerly.Localization.csproj" />
     <ProjectReference Include="..\Doerly.Module.Catalog.Contracts\Doerly.Module.Catalog.Contracts.csproj" />
     <ProjectReference Include="..\Doerly.Module.Catalog.DataAccess\Doerly.Module.Catalog.DataAccess.csproj" />
+    <ProjectReference Include="..\Doerly.Module.Catalog.Enums\Doerly.Module.Catalog.Enums.csproj" />
   </ItemGroup>
 
 </Project>

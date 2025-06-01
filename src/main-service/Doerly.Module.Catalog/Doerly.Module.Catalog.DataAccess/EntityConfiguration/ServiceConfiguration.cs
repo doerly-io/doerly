@@ -16,24 +16,28 @@ namespace Doerly.Module.Catalog.DataAccess.EntityConfiguration
         {
             builder.ToTable(DbConstants.Tables.Service, DbConstants.CatalogSchema);
 
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
-            builder.Property(x => x.Description).HasMaxLength(1000);
-            builder.Property(x => x.Price).HasPrecision(15, 2);
-            builder.Property(x => x.IsDeleted).IsRequired();
-            builder.Property(x => x.UserId);
+            builder.HasKey(s => s.Id);
 
-            builder.HasOne(x => x.Category)
-                   .WithMany(x => x.Services)
-                   .HasForeignKey(x => x.CategoryId);
+            builder.Property(s => s.Name)
+                .IsRequired()
+                .HasMaxLength(150);
 
-            builder.HasMany(x => x.Filters)
-                   .WithOne(x => x.Service)
-                   .HasForeignKey(x => x.ServiceId);
+            builder.Property(s => s.Description)
+                .HasMaxLength(1000);
 
-            builder.HasMany(x => x.FilterValues)
-                   .WithOne(x => x.Service)
-                   .HasForeignKey(x => x.ServiceId);
+            builder.Property(s => s.Price)
+                .HasColumnType("decimal(18,2)");
+
+            builder.HasOne(s => s.Category)
+                .WithMany(c => c.Services)
+                .HasForeignKey(s => s.CategoryId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasIndex(s => s.CategoryId);
+            builder.HasIndex(s => s.UserId);
+            builder.HasIndex(s => s.IsDeleted);
+            builder.HasIndex(s => s.IsEnabled);
+            builder.HasIndex(s => s.Name);
         }
     }
 }

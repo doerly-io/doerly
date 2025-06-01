@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Doerly.Module.Catalog.Contracts.Dtos.Requests.Category
 {
-    public class CreateCategoryRequest
+    public class UpdateCategoryRequest
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
+        public string? Description { get; set; }
         public int? ParentId { get; set; }
         public bool IsEnabled { get; set; }
     }
+
 }

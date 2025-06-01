@@ -1,7 +1,8 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
+using Doerly.Module.Catalog.Contracts.Dtos.Responses.Service;
 using Doerly.Module.Catalog.DataAccess;
-using Doerly.Module.Catalog.Domain.Dtos.Responses.Service;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,24 +19,24 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
 
         public async Task<HandlerResult<GetServiceResponse>> HandleAsync(int id)
         {
-            var service = await DbContext.Services.FindAsync(id);
+            var service = await DbContext.Services
+                .Include(s => s.Category)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
             if (service == null)
-                return HandlerResult.Failure<GetServiceResponse>(Resources.Get("SERVICE_NOT_FOUND"));
+                return HandlerResult.Failure<GetServiceResponse>(Resources.Get("ServiceNotFound"));
 
             var serviceDto = new GetServiceResponse
             {
-                Id = order.Id,
-                CategoryId = order.CategoryId,
-                Name = order.Name,
-                Description = order.Description,
-                Price = order.Price,
-                PaymentKind = order.PaymentKind,
-                DueDate = order.DueDate,
-                Status = order.Status,
-                CustomerId = order.CustomerId,
-                ExecutorId = order.ExecutorId,
-                ExecutionDate = order.ExecutionDate,
-                BillId = order.BillId
+                Id = service.Id,
+                Name = service.Name,
+                Description = service.Description,
+                CategoryId = service.CategoryId,
+                CategoryName = service.Category?.Name,
+                UserId = service.UserId,
+                Price = service.Price,
+                IsDeleted = service.IsDeleted,
+                IsEnabled = service.IsEnabled
             };
 
             return HandlerResult.Success(serviceDto);

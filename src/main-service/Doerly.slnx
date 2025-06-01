@@ -1,0 +1,70 @@
+<Solution>
+  <Folder Name="/Common/">
+    <Project Path="Doerly.Common.Settings\Doerly.Common.Settings.csproj" />
+  </Folder>
+  <Folder Name="/FileRepository/">
+    <Project Path="Doerly.FileRepository\Doerly.FileRepository.csproj" />
+  </Folder>
+  <Folder Name="/ModuleProxies/">
+    <Project Path="Doerly.Proxy.BaseProxy\Doerly.Proxy.BaseProxy.csproj" />
+    <Project Path="Doerly.Proxy.Payment\Doerly.Proxy.Payment.csproj" />
+    <Project Path="Doerly.Proxy.Profile\Doerly.Proxy.Profile.csproj" />
+  </Folder>
+  <Folder Name="/Modules/" />
+  <Folder Name="/Modules/Authorization/">
+    <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.Api\Doerly.Module.Authorization.Api.csproj" />
+    <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.Contracts\Doerly.Module.Authorization.Contracts.csproj" />
+    <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.DataAccess\Doerly.Module.Authorization.DataAccess.csproj" />
+    <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.Domain\Doerly.Module.Authorization.Domain.csproj" />
+    <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.Enums\Doerly.Module.Authorization.Enums.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Catalog/">
+    <Project Path="Doerly.Module.Catalog/Doerly.Module.Catalog.Api/Doerly.Module.Catalog.Api.csproj" />
+    <Project Path="Doerly.Module.Catalog/Doerly.Module.Catalog.Contracts/Doerly.Module.Catalog.Contracts.csproj" />
+    <Project Path="Doerly.Module.Catalog/Doerly.Module.Catalog.DataAccess/Doerly.Module.Catalog.DataAccess.csproj" />
+    <Project Path="Doerly.Module.Catalog/Doerly.Module.Catalog.Domain/Doerly.Module.Catalog.Domain.csproj" />
+    <Project Path="Doerly.Module.Catalog/Doerly.Module.Catalog.Enums/Doerly.Module.Catalog.Enums.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Common/">
+    <Project Path="Doerly.Module.Common\Doerly.Module.Common.Api\Doerly.Module.Common.Api.csproj" />
+    <Project Path="Doerly.Module.Common\Doerly.Module.Common.DataAccess\Doerly.Module.Common.DataAccess.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Orders/">
+    <Project Path="Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj" />
+    <Project Path="Doerly.Module.Order\Doerly.Module.Order.DataAccess\Doerly.Module.Order.DataAccess.csproj" />
+    <Project Path="Doerly.Module.Order\Doerly.Module.Order.Domain\Doerly.Module.Order.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Payments/">
+    <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.Api\Doerly.Module.Payments.Api.csproj" />
+    <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.Contracts\Doerly.Module.Payments.Contracts.csproj" />
+    <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.DataAccess\Doerly.Module.Payments.DataAccess.csproj" />
+    <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.Domain\Doerly.Module.Payments.Domain.csproj" />
+    <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.Enums\Doerly.Module.Payments.Enums.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Payments/PaymentClients/">
+    <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.BaseClient\Doerly.Module.Payments.BaseClient.csproj" />
+    <Project Path="Doerly.Module.Payments\Doerly.Module.Payments.Client.LiqPay\Doerly.Module.Payments.Client.LiqPay.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Profile/">
+    <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Api\Doerly.Module.Profile.Api.csproj" />
+    <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Contracts\Doerly.Module.Profile.Contracts.csproj" />
+    <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.DataAccess\Doerly.Module.Profile.DataAccess.csproj" />
+    <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Domain\Doerly.Module.Profile.Domain.csproj" />
+    <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj" />
+  </Folder>
+  <Folder Name="/Notifications/">
+    <Project Path="Doerly.Notification.EmailSender\Doerly.Notification.EmailSender.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests\Doerly.EndToEndTests\Doerly.EndToEndTests.csproj" />
+    <Project Path="tests\Doerly.Module.Authorization.Tests\Doerly.Module.Authorization.Tests.csproj" />
+  </Folder>
+  <Project Path="Doerly.DataAccess\Doerly.DataAccess.csproj" />
+  <Project Path="Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj" />
+  <Project Path="Doerly.Domain\Doerly.Domain.csproj" />
+  <Project Path="Doerly.Extensions\Doerly.Extensions.csproj" />
+  <Project Path="Doerly.Host\Doerly.Host.csproj" />
+  <Project Path="Doerly.Infrastructure.Api\Doerly.Infrastructure.Api.csproj" />
+  <Project Path="Doerly.Localization\Doerly.Localization.csproj" />
+  <Project Path="Doerly.Messaging\Doerly.Messaging.csproj" />
+</Solution>

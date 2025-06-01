@@ -19,6 +19,7 @@ namespace Doerly.Module.Catalog.DataAccess.Models
         public bool IsDeleted { get; set; }
         public bool IsEnabled { get; set; }
 
+        public ICollection<Filter> Filters { get; set; } = new List<Filter>();
         public ICollection<Service> Services { get; set; } = new List<Service>();
     }
 }
