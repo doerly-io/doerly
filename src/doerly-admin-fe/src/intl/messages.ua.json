@@ -1,8 +1,11 @@
 {
   "error.INTERNAL_SERVER_ERROR": "Сталась внутрішня помилка. Будь ласка, спробуйте пізніше.",
   "error.UNAUTHORIZED": "У вас немає привілеїв для використання функціоналу системи.",
-  "page.login": "Логiн",
+  "page.catalog": "Каталог",
+  "page.default": "Головна",
+  "page.orders": "Замовлення",
+  "page.reporting": "Звітність",
+  "page.users": "Користувачі",
   "page.settings": "Налаштування",
-  "signIn": "Увiйти",
   "signOut": "Вийти"
 }

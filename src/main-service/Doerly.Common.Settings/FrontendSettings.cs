@@ -8,5 +8,5 @@ public class FrontendSettings
     public const string FrontendSettingsName = nameof(FrontendSettings);
     
     [Required]
-    public string FrontendUrl { get; set; }
+    public string[] FrontendUrls { get; set; } = Array.Empty<string>();
 }
