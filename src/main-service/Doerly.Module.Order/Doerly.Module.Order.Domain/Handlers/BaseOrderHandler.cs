@@ -96,4 +96,10 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
         var message = new OrderStatusUpdatedMessage(orderId, orderStatus);
         await _messagePublisher.Publish(message);
     }
+
+    protected async Task PublishExecutionProposalStatusUpdatedEventAsync(int executionProposalId, EExecutionProposalStatus executionProposalStatus)
+    {
+        var message = new ExecutionProposalStatucUpdatedMessage(executionProposalId, executionProposalStatus);
+        await _messagePublisher.Publish(message);
+    }
 }

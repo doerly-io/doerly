@@ -1,4 +1,16 @@
+::ng-deep .p-fileupload-progressbar {
+    display: none !important;
+}
+
 .order-container {
+    ::ng-deep .p-fileupload-files {
+        display: none !important;
+    }
+
+    p-progressbar{
+        display: none !important;
+    }
+
     .upload-header {
         justify-content: space-between;
     }

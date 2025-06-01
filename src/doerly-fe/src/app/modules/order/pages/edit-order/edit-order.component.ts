@@ -57,12 +57,11 @@ export class EditOrderComponent implements OnInit {
   loading: boolean = false;
   currentDate: Date = new Date();
 
-  totalSizeLimit: number = 10 * 1024 * 1024;
+  totalSizeLimit: number = 10 * 1024 * 1024; // 10 MB
   files: File[] = [];
   existingFiles: FileInfoModel[] = [];
-  totalFiles: number = 0;
-  totalFilesLimit: number = 10;
-  fileLimitForUpload: number = 10;
+  totalFilesSize: number = 0;
+  allowedSizeForUpload: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -80,12 +79,12 @@ export class EditOrderComponent implements OnInit {
     this.initForm();
     this.initPaymentKinds();
 
-    this.orderForm.setValidators(() => this.filesCountValidator());
+    this.orderForm.setValidators(() => this.filesTotalSizeValidator());
 
     if (this.isEdit) {
       this.loading = true;
       this.orderService.getOrder(this.orderId!).subscribe({
-        next: (response: BaseApiResponse<GetOrderResponse & { existingFiles?: FileInfoModel[] }>) => {
+        next: (response: BaseApiResponse<GetOrderResponse>) => {
           const order = response.value;
           if (order) {
             this.orderForm.patchValue({
@@ -97,9 +96,8 @@ export class EditOrderComponent implements OnInit {
               dueDate: new Date(order.dueDate),
               isPriceNegotiable: order.isPriceNegotiable
             });
-            this.existingFiles = (order as any).existingFiles || [];
-            this.updateTotalFiles();
-            this.updateFileLimitForUpload();
+            this.existingFiles = order.existingFiles || [];
+            this.updateFilesSizeAndLimit();
           }
           this.loading = false;
         },
@@ -109,8 +107,7 @@ export class EditOrderComponent implements OnInit {
         }
       });
     } else {
-      this.updateTotalFiles();
-      this.updateFileLimitForUpload();
+      this.updateFilesSizeAndLimit();
     }
   }
 
@@ -135,56 +132,62 @@ export class EditOrderComponent implements OnInit {
     };
   }
 
-  filesCountValidator() {
-    const totalFiles = this.files.length + this.existingFiles.length;
-    return totalFiles > this.totalFilesLimit ? { filesLimitExceeded: true } : null;
+  filesTotalSizeValidator() {
+    const total = this.getTotalFilesSize();
+    return total > this.totalSizeLimit ? { filesSizeLimitExceeded: true } : null;
   }
 
-  initPaymentKinds() {
-    this.paymentKinds = Object.keys(EPaymentKind)
-      .filter(key => isNaN(Number(key)))
-      .map(key => ({
-        label: this.translate.instant('ordering.payment_kinds.' + key),
-        value: EPaymentKind[key as keyof typeof EPaymentKind]
-      }));
-  }
-
-  choose(event: Event, callback: Function) {
-    callback();
+  onSelectedFiles(event: any) {
+    let added = false;
+    for (const file of event.currentFiles) {
+      if (!this.files.includes(file)) {
+        this.files.push(file);
+        added = true;
+      }
+    }
+    this.updateFilesSizeAndLimit();
+    if (this.getTotalFilesSize() > this.totalSizeLimit) {
+      this.toastHelper.showWarn(
+        'ordering.files_size_limit_exceeded',
+        this.translate.instant('ordering.files_size_limit', { size: this.formatSize(this.totalSizeLimit) })
+      );
+    }
   }
 
   onClearTemplatingUpload(clear: Function) {
     clear();
     this.files = [];
     this.existingFiles = [];
-    this.updateTotalFiles();
-    this.updateFileLimitForUpload();
-  }
-
-  onSelectedFiles(event: any) {
-    this.files = [...this.files, ...event.currentFiles];
-    this.updateTotalFiles();
+    this.updateFilesSizeAndLimit();
   }
 
   removeExistingFile(file: FileInfoModel) {
     this.existingFiles = this.existingFiles.filter(f => f.filePath !== file.filePath);
-    this.updateTotalFiles();
-    this.updateFileLimitForUpload();
+    this.updateFilesSizeAndLimit();
   }
 
   onRemoveTemplatingFile(event: Event, file: File, removeFileCallback: Function) {
     removeFileCallback(file);
     this.files = this.files.filter(f => f !== file);
-    this.updateTotalFiles();
+    this.updateFilesSizeAndLimit();
   }
 
-  updateTotalFiles() {
-    this.totalFiles = this.files.length + this.existingFiles.length;
+  updateFilesSizeAndLimit() {
+    this.totalFilesSize = this.getTotalFilesSize();
+    this.allowedSizeForUpload = this.totalSizeLimit - this.getExistingFilesSize();
     this.orderForm.updateValueAndValidity();
   }
 
-  updateFileLimitForUpload() {
-    this.fileLimitForUpload = this.totalFilesLimit - this.existingFiles.length;
+  getTotalFilesSize(): number {
+    return this.getExistingFilesSize() + this.getNewFilesSize();
+  }
+
+  getExistingFilesSize(): number {
+    return this.existingFiles.reduce((sum, f) => sum + (f.fileSize || 0), 0);
+  }
+
+  getNewFilesSize(): number {
+    return this.files.reduce((sum, f) => sum + f.size, 0);
   }
 
   formatSize(bytes: number): string {
@@ -232,6 +235,19 @@ export class EditOrderComponent implements OnInit {
           }
         });
     }
+  }
+
+  initPaymentKinds() {
+    this.paymentKinds = Object.keys(EPaymentKind)
+      .filter(key => isNaN(Number(key)))
+      .map(key => ({
+        label: this.translate.instant('ordering.payment_kinds.' + key),
+        value: EPaymentKind[key as keyof typeof EPaymentKind]
+      }));
+  }
+
+  choose(event: Event, callback: Function) {
+    callback();
   }
 
   protected readonly getError = getError;

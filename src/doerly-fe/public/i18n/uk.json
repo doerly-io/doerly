@@ -293,7 +293,10 @@
     "delete_file": "Видалити файл",
     "additional_files": "Додаткові файли",
     "file_limit_exceeded": "Перевищено ліміт файлів. Максимальна кількість файлів - {{limit}}.",
-    "files_count": "Файлів"
+    "files_count": "Файлів",
+    "files_size": "Розмір файлів",
+    "files_size_limit_exceeded": "Перевищено ліміт розміру файлу",
+    "files_size_limit": "Максимальний розмір файлів - {{size}}."
     },
   "common": {
     "actions": "Дії",

@@ -44,24 +44,25 @@
           </div>
           <div class="row mb-3 mx-0 px-0">
             <div class="card">
-              <p-fileupload [multiple]="true" accept="image/*" auto="false" [maxFileSize]="totalSizeLimit" [fileLimit]="fileLimitForUpload"
-                (onSelect)="onSelectedFiles($event)" invalidFileLimitMessageDetail="{{ 'ordering.file_limit_exceeded' | translate: {limit: totalFilesLimit} }}"
-                invalidFileLimitMessageSummary="">
+              <p-fileupload [multiple]="true" accept="image/*" auto="false"
+                (onSelect)="onSelectedFiles($event)">
                 <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback">
                   <div class="upload-header flex items-center flex-1 gap-2 w-100">
                     <div class="flex gap-2">
                       <p-button pTooltip="{{ 'ordering.add_files' | translate }}" tooltipPosition="top"
-                        (onClick)="choose($event, chooseCallback)" icon="pi pi-images" [rounded]="true" [outlined]="true" />
-                      <p-button pTooltip="{{ 'ordering.clear_files' | translate }}" tooltipPosition="top" icon="pi pi-times"
-                        [rounded]="true" [outlined]="true" severity="danger"
+                        (onClick)="choose($event, chooseCallback)" icon="pi pi-images" [rounded]="true"
+                        [outlined]="true" />
+                      <p-button pTooltip="{{ 'ordering.clear_files' | translate }}" tooltipPosition="top"
+                        icon="pi pi-times" [rounded]="true" [outlined]="true" severity="danger"
                         [disabled]="(!files || files.length === 0) && (!existingFiles || existingFiles.length === 0)"
                         (onClick)="onClearTemplatingUpload(clearCallback)" />
                     </div>
-                    <div class="text-secondary mt-1">
-                      {{ 'ordering.files_count' | translate }}:
-                      <b>{{ totalFiles }}</b> / <b>{{ totalFilesLimit }}</b>
+                    <div class="text-secondary mt-1" [ngClass]="{'text-danger fw-bold': orderForm.errors?.['filesSizeLimitExceeded']}">
+                      {{ 'ordering.files_size' | translate }}:
+                      <b>{{ formatSize(totalFilesSize) }}</b> / <b>{{ formatSize(totalSizeLimit) }}</b>
                     </div>
-                  </div>  </ng-template>
+                  </div>
+                </ng-template>
                 <ng-template #content let-files let-removeFileCallback="removeFileCallback">
                   <div class="files-section">
                     <!-- Нові файли -->
@@ -107,7 +108,7 @@
                             <img [alt]="file.fileName" [src]="file.filePath" class="file-image-preview"
                               [style]="style" />
                           </ng-template>
-                         </p-image>
+                        </p-image>
                         <div class="file-info">
                           <span class="file-name">{{ file.fileName }}</span>
                           <div class="file-size">{{ formatSize(file.fileSize) }}</div>

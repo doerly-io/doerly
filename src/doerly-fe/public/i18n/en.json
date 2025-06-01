@@ -293,7 +293,10 @@
     "delete_file": "Delete file",
     "additional_files": "Additional files",
     "file_limit_exceeded": "File limit exceeded. Maximum number of files is {{limit}}.",
-    "files_count": "Files"
+    "files_count": "Files",
+    "files_size": "Files size",
+    "files_size_limit_exceeded": "File size limit exceeded.",
+    "files_size_limit": "Maximum files size is {{size}}."
   },
   "common": {
     "actions": "Actions",
