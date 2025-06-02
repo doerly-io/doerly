@@ -3,12 +3,12 @@ using Doerly.Localization;
 using Doerly.Module.Communication.Contracts.Dtos.Responses;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Profile.Contracts.Dtos;
-using Doerly.Module.Profile.Contracts.Services;
+using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Communication.Domain.Handlers;
 
-public class GetMessageByIdHandler(CommunicationDbContext dbContext, IProfileService profileService) : BaseCommunicationHandler(dbContext)
+public class GetMessageByIdHandler(CommunicationDbContext dbContext, IProfileModuleProxy profileModule) : BaseCommunicationHandler(dbContext)
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
@@ -26,7 +26,7 @@ public class GetMessageByIdHandler(CommunicationDbContext dbContext, IProfileSer
         var profiles = new Dictionary<int, ProfileDto>();
         foreach (var userId in message.Conversation.ParticipantIds)
         {
-            var profile = await profileService.GetProfileAsync(userId);
+            var profile = (await profileModule.GetProfileAsync(userId)).Value;
             profiles[userId] = profile;
         }
         

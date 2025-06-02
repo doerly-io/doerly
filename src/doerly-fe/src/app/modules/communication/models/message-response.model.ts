@@ -8,7 +8,7 @@ export interface MessageResponse {
   conversationId: number;
   messageType: MessageTypeEnum;
   senderId: number;
-  sender: ProfileResponse;
+  sender?: ProfileResponse;
   messageContent: string;
   sentAt: Date;
   status: MessageStatus;

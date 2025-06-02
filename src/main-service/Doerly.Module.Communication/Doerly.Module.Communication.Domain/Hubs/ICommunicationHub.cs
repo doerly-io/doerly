@@ -1,10 +1,12 @@
+using Doerly.Module.Communication.Contracts.Dtos.Responses;
+
 namespace Doerly.Module.Communication.Domain.Hubs;
 
 public interface ICommunicationHub
 {
-    Task JoinConversation(string conversationId);
+    Task UserJoined(string conversationId);
 
-    Task SendMessage(string senderId, string messageContent);
+    Task ReceiveMessage(MessageResponseDto message);
 
     Task LeaveConversation(string conversationId);
 

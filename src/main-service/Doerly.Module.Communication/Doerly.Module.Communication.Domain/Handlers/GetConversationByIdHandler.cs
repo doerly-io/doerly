@@ -3,12 +3,12 @@ using Doerly.Localization;
 using Doerly.Module.Communication.Contracts.Dtos.Responses;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Profile.Contracts.Dtos;
-using Doerly.Module.Profile.Contracts.Services;
+using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Communication.Domain.Handlers;
 
-public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfileService profileService) : BaseCommunicationHandler(dbContext)
+public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfileModuleProxy profileModule) : BaseCommunicationHandler(dbContext)
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
@@ -26,7 +26,7 @@ public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfi
             })
             .OrderByDescending(c => c.LastMessageSentAt)
             .Select(c => c.Conversation)
-            .Include(c => c.Messages.OrderByDescending(m => m.SentAt).Take(1))
+            .Include(c => c.Messages.OrderBy(m => m.SentAt))
             .AsNoTracking()
             .FirstOrDefaultAsync();
                 
@@ -39,7 +39,7 @@ public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfi
         var profiles = new Dictionary<int, ProfileDto>();
         foreach (var participantId in participantsIds)
         {
-            var profile = await profileService.GetProfileAsync(participantId);
+            var profile = (await profileModule.GetProfileAsync(participantId)).Value;
             profiles[participantId] = profile;
         }
         

@@ -1,5 +1,7 @@
 using Doerly.Domain.Models;
+using Doerly.Localization;
 using Doerly.Module.Communication.Contracts.Dtos.Requests;
+using Doerly.Module.Communication.Contracts.Dtos.Responses;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Communication.DataAccess.Entities;
 using Doerly.Module.Communication.Domain.Hubs;
@@ -9,30 +11,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Communication.Domain.Handlers;
 
-public class SendMessageHandler(CommunicationDbContext dbContext, IHubContext<CommunicationHub, ICommunicationHub> hubContext) : BaseCommunicationHandler(dbContext)
+public class SendMessageHandler(CommunicationDbContext dbContext) : BaseCommunicationHandler(dbContext)
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
-    public async Task<HandlerResult> HandleAsync(SendMessageRequest dto)
+    public async Task<HandlerResult<MessageResponseDto>> HandleAsync(SendMessageRequest dto)
     {
-        var conversation = await _dbContext.Conversations.FirstOrDefaultAsync(c => c.InitiatorId == dto.InitiatorId && c.RecipientId == dto.RecipientId);
-    
+        var conversation = await _dbContext.Conversations
+            .FirstOrDefaultAsync(c => c.Id == dto.ConversationId);
+        
         if (conversation == null)
         {
-            conversation = new ConversationEntity
-            {
-                InitiatorId = dto.InitiatorId,
-                RecipientId = dto.RecipientId,
-            };
-    
-            _dbContext.Conversations.Add(conversation);
-            conversation.Id = await _dbContext.SaveChangesAsync();
+            return HandlerResult.Failure<MessageResponseDto>(Resources.Get("Communication.ConversationNotFound"));
+        }
+        
+        if (conversation.InitiatorId != dto.SenderId && conversation.RecipientId != dto.SenderId)
+        {
+            return HandlerResult.Failure<MessageResponseDto>(Resources.Get("Communication.UnauthorizedSender"));
         }
     
         var message = new MessageEntity
         {
             ConversationId = conversation.Id,
-            SenderId = dto.InitiatorId,
+            SenderId = dto.SenderId,
             MessageContent = dto.MessageContent,
             SentAt = DateTime.UtcNow,
             Status = MessageStatus.Sent
@@ -41,8 +42,16 @@ public class SendMessageHandler(CommunicationDbContext dbContext, IHubContext<Co
         _dbContext.Messages.Add(message);
         await _dbContext.SaveChangesAsync();
         
-        await hubContext.Clients.Group(conversation.Id.ToString()).SendMessage(message.SenderId.ToString(), message.MessageContent);
+        var response = new MessageResponseDto
+        {
+            Id = message.Id,
+            ConversationId = message.ConversationId,
+            SenderId = message.SenderId,
+            MessageContent = message.MessageContent,
+            SentAt = message.SentAt,
+            Status = message.Status
+        };
         
-        return HandlerResult.Success();
+        return HandlerResult.Success(response);
     }
 }

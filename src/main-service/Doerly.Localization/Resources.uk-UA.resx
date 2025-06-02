@@ -95,6 +95,12 @@ Doerly</value>
     <data name="Communication.MessageNotFound" xml:space="preserve">
         <value>Повідомлення не знайдено</value>
     </data>
+    <data name="Communication.UnauthorizedSender" xml:space="preserve">
+        <value>Користувач не є учасником цієї бесіди</value>
+    </data>
+    <data name="Communication.CannotCreateConversationWithSelf" xml:space="preserve">
+        <value>Не можна створити бесіду з самим собою</value>
+    </data>
   <data name="OrderNotFound" xml:space="preserve">
         <value>Замовлення не знайдено</value>
     </data>

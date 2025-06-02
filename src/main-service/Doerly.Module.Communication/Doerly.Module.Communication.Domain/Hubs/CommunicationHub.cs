@@ -1,21 +1,25 @@
 using System.Security.Claims;
+using Doerly.Domain.Factories;
+using Doerly.Module.Communication.Contracts.Dtos.Requests;
+using Doerly.Module.Communication.Domain.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Doerly.Module.Communication.Domain.Hubs;
 
 [Authorize]
-public class CommunicationHub : Hub<ICommunicationHub>
+public class CommunicationHub(IHandlerFactory handlerFactory) : Hub<ICommunicationHub>
 {
-    public async Task SendMessage(string conversationId, string senderId, string messageContent)
+    public async Task SendMessage(SendMessageRequest request)
     {
-        await Clients.Group(conversationId).SendMessage(senderId, messageContent);
+        var result = await handlerFactory.Get<SendMessageHandler>().HandleAsync(request);
+        await Clients.Group(request.ConversationId.ToString()).ReceiveMessage(result.Value);
     }
     
     public async Task JoinConversation(string conversationId)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, conversationId);
-        await Clients.Group(conversationId).JoinConversation(conversationId);
+        await Clients.Group(conversationId).UserJoined(conversationId);
     }
 
     public async Task LeaveConversation(string conversationId)
@@ -24,10 +28,9 @@ public class CommunicationHub : Hub<ICommunicationHub>
         await Clients.Caller.LeaveConversation(conversationId);
     }
     
-    public async Task SendTyping(string conversationId)
+    public async Task SendTyping(string conversationId, string fullName)
     {
-        var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        await Clients.OthersInGroup(conversationId).UserTyping(userId);
+        await Clients.OthersInGroup(conversationId).UserTyping(fullName);
     }
     
     public async Task MarkMessageAsRead(string conversationId, int messageId)

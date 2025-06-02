@@ -98,6 +98,12 @@ Doerly</value>
   <data name="Communication.MessageNotFound" xml:space="preserve">
         <value>Message not found</value>
     </data>
+  <data name="Communication.UnauthorizedSender" xml:space="preserve">
+        <value>The user is not a member of this conversation.</value>
+    </data>
+  <data name="Communication.CannotCreateConversationWithSelf" xml:space="preserve">
+        <value>You cannot create a conversation with yourself</value>
+    </data>
   <data name="OrderNotFound" xml:space="preserve">
         <value>Order not found</value>
      </data>

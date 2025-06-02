@@ -4,18 +4,19 @@ using Doerly.Extensions;
 using Doerly.Module.Communication.Contracts.Dtos.Responses;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Profile.Contracts.Dtos;
-using Doerly.Module.Profile.Contracts.Services;
+using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Communication.Domain.Handlers;
 
-public class GetUserConversationsWithPaginationHandler(CommunicationDbContext dbContext, IProfileService profileService) : BaseCommunicationHandler(dbContext)
+public class GetUserConversationsWithPaginationHandler(CommunicationDbContext dbContext, IProfileModuleProxy profileModule) : BaseCommunicationHandler(dbContext)
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
     public async Task<HandlerResult<GetUserConversationsWithPaginationResponse>> HandleAsync(int userId, GetEntitiesWithPaginationRequest pagination)
     {
         var (conversations, totalCount) = await _dbContext.Conversations
+            .Where(c => c.InitiatorId == userId || c.RecipientId == userId)
             .Select(c => new
             {
                 Conversation = c,
@@ -34,7 +35,7 @@ public class GetUserConversationsWithPaginationHandler(CommunicationDbContext db
         var profiles = new Dictionary<int, ProfileDto>();
         foreach (var participantId in participantsIds)
         {
-            var profile = await profileService.GetProfileAsync(participantId);
+            var profile = (await profileModule.GetProfileAsync(participantId)).Value;
             profiles[participantId] = profile;
         }
         

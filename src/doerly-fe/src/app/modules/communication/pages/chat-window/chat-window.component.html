@@ -1,38 +1,31 @@
 <div class="chat-window-container">
   <!-- Індикатор завантаження -->
-  <div *ngIf="loading()" class="loading-overlay">
-    <p-progressSpinner></p-progressSpinner>
-  </div>
+  <p-progressSpinner *ngIf="loading()" styleClass="custom-spinner"></p-progressSpinner>
 
-  <!-- Повідомлення, якщо бесіда не вибрана -->
-  <div class="no-selection" *ngIf="!loading() && !conversationId()">
+  <!-- Якщо бесіда не обрана -->
+  <div *ngIf="!loading() && !conversationId()" class="no-selection">
     <p>Оберіть бесіду, щоб почати спілкування</p>
-    <i class="pi pi-comments" style="font-size: 1em;"></i>
+    <i class="pi pi-comments"></i>
   </div>
 
-  <!-- Повідомлення, якщо бесіда не знайдена -->
-  <div class="no-conversation" *ngIf="!loading() && conversationId() && !conversation()">
+  <!-- Якщо розмову не знайдено -->
+  <div *ngIf="!loading() && conversationId() && !conversation()" class="no-conversation">
     <p>Розмову не знайдено</p>
   </div>
 
-  <!-- Бесіда завантажена -->
+  <!-- Чат -->
   <div *ngIf="!loading() && conversation()" class="chat-content">
-    <!-- Заголовок із ім’ям співрозмовника -->
+    <!-- Хедер -->
     <div class="chat-header">
-      <img
-        *ngIf="getRecipientImageUrl()"
-        [src]="getRecipientImageUrl()"
-        alt="Avatar"
-        class="avatar"
-      />
+      <p-avatar *ngIf="getRecipientImageUrl()" [image]="getRecipientImageUrl()!" shape="circle" size="large"></p-avatar>
       <h2>{{ getRecipientName() }}</h2>
     </div>
 
     <!-- Список повідомлень -->
-    <div class="chat-messages" *ngIf="conversation()?.messages?.length">
+    <div #messageContainer class="chat-messages">
       <div
-        class="message"
         *ngFor="let message of conversation()!.messages; trackBy: trackByMessageId"
+        class="message"
         [ngClass]="{'own-message': isOwnMessage(message), 'other-message': !isOwnMessage(message)}"
       >
         <div class="message-content">
@@ -40,34 +33,32 @@
           <small>{{ message.sentAt | date: 'shortTime' }}</small>
         </div>
       </div>
+      <div class="no-messages" *ngIf="!conversation()?.messages?.length">
+        <p>Повідомлень ще немає</p>
+      </div>
     </div>
 
-    <!-- Повідомлення, якщо немає повідомлень -->
-    <div class="no-messages" *ngIf="conversation() && !conversation()?.messages?.length">
-      <p>Повідомлень ще немає</p>
+    <!-- Поле вводу -->
+    <div class="chat-input">
+      <input
+        pInputText
+        type="text"
+        [value]="message() || ''"
+        (input)="updateMessageText($event)"
+        (keyup.enter)="message() && sendMessage()"
+        placeholder="Напишіть повідомлення..."
+        class="message-input"
+      />
+      <button
+        pButton
+        type="button"
+        [disabled]="!message()"
+        (click)="sendMessage()"
+        icon="pi pi-send"
+        class="send-button p-button-rounded"
+      ></button>
     </div>
   </div>
 
-  <div class="chat-input">
-    <input
-      pInputText
-      type="text"
-      [value]="messageText() || ''"
-      (input)="updateMessageText($event)"
-      (keyup.enter)="sendMessage()"
-      placeholder="Напишіть повідомлення..."
-      class="message-input"
-    />
-    <button
-      pButton
-      pButtonLabel="Відправити"
-      pButtonIcon="pi pi-send"
-      type="button"
-      (click)="sendMessage()"
-      class="send-button"
-    ></button>
-  </div>
-
-  <!-- Toast для сповіщень -->
   <p-toast></p-toast>
 </div>

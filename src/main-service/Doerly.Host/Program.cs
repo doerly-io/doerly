@@ -41,6 +41,7 @@ builder.Services
 
 builder.Services.AddSignalR();
 
+builder.RegisterModule(new Doerly.Module.Communication.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Payments.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Authorization.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Profile.Api.ModuleInitializer());

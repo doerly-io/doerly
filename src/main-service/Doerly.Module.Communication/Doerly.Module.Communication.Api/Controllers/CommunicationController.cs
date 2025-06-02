@@ -1,6 +1,7 @@
 ﻿using Doerly.DataTransferObjects.Pagination;
 using Doerly.Domain.Models;
 using Doerly.Infrastructure.Api;
+using Doerly.Localization;
 using Doerly.Module.Communication.Contracts.Dtos.Requests;
 using Doerly.Module.Communication.Contracts.Dtos.Responses;
 using Doerly.Module.Communication.Domain.Handlers;
@@ -55,12 +56,36 @@ public class CommunicationController : BaseApiController
         return Ok(result);
     }
     
+    [HttpPost("conversations")]
+    [ProducesResponseType<HandlerResult<ConversationResponseDto>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> CreateConversation([FromBody] CreateConversationRequest request)
+    {
+        var initiatorId = GetUserId();
+        if(initiatorId == 0)
+            return Unauthorized();
+
+        if (initiatorId == request.RecipientId)
+        {
+            return BadRequest(HandlerResult.Failure<ConversationResponseDto>(Resources.Get("Communication.CannotCreateConversationWithSelf")));
+        }
+        
+        var result = await ResolveHandler<CreateConversationHandler>().HandleAsync(request, initiatorId);
+
+        if (!result.IsSuccess)
+            return Conflict(result);
+
+        return Ok(result);
+    }
+    
     [HttpPost("messages/send")]
     [ProducesResponseType<HandlerResult<SendMessageRequest>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> SendMessage(SendMessageRequest requestRequest)
     {
         var userId = GetUserId();
-        requestRequest.InitiatorId = userId;
+        if(userId == 0)
+            return Unauthorized();
+        requestRequest.SenderId = userId;
+        
         var result = await ResolveHandler<SendMessageHandler>().HandleAsync(requestRequest);
         
         if (!result.IsSuccess)
