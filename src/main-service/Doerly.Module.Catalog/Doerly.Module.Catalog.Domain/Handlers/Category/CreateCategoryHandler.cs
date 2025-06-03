@@ -1,7 +1,6 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Catalog.Contracts.Dtos.Requests.Category;
-using Doerly.Module.Catalog.Contracts.Dtos.Responses.Category;
+using Doerly.Module.Catalog.Contracts.Requests;
 using Doerly.Module.Catalog.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using CategoryEntity = Doerly.Module.Catalog.DataAccess.Models.Category;
@@ -27,7 +26,6 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Category
                 Description = request.Description,
                 ParentId = request.ParentId,
                 IsEnabled = request.IsEnabled,
-                IsDeleted = false
             };
 
             DbContext.Categories.Add(category);

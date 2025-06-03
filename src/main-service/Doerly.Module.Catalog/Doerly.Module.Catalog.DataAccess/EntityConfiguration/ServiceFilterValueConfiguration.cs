@@ -27,8 +27,7 @@ namespace Doerly.Module.Catalog.DataAccess.EntityConfiguration
                 .HasForeignKey(sfv => sfv.FilterId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasIndex(sfv => sfv.ServiceId);
-            builder.HasIndex(sfv => sfv.FilterId);
+            builder.HasIndex(sfv => new { sfv.FilterId, sfv.Value });
         }
     }
 }

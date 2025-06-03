@@ -1,13 +1,8 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Catalog.Contracts.Dtos.Responses.Service;
+using Doerly.Module.Catalog.Contracts.Responses;
 using Doerly.Module.Catalog.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Service
 {
@@ -19,27 +14,38 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
 
         public async Task<HandlerResult<GetServiceResponse>> HandleAsync(int id)
         {
-            var service = await DbContext.Services
-                .Include(s => s.Category)
-                .FirstOrDefaultAsync(s => s.Id == id);
+            var serviceDto = await DbContext.Services
+                .Where(s => s.Id == id)
+                .Select(s => new
+                {
+                    s.Id,
+                    s.Name,
+                    s.Description,
+                    s.CategoryId,
+                    CategoryName = s.Category.Name,
+                    s.UserId,
+                    s.Price,
+                    s.IsDeleted,
+                    s.IsEnabled
+                })
+                .FirstOrDefaultAsync();
 
-            if (service == null)
+            if (serviceDto == null)
                 return HandlerResult.Failure<GetServiceResponse>(Resources.Get("ServiceNotFound"));
 
-            var serviceDto = new GetServiceResponse
+            return HandlerResult.Success(new GetServiceResponse
             {
-                Id = service.Id,
-                Name = service.Name,
-                Description = service.Description,
-                CategoryId = service.CategoryId,
-                CategoryName = service.Category?.Name,
-                UserId = service.UserId,
-                Price = service.Price,
-                IsDeleted = service.IsDeleted,
-                IsEnabled = service.IsEnabled
-            };
-
-            return HandlerResult.Success(serviceDto);
+                Id = serviceDto.Id,
+                Name = serviceDto.Name,
+                Description = serviceDto.Description,
+                CategoryId = serviceDto.CategoryId,
+                CategoryName = serviceDto.CategoryName,
+                UserId = serviceDto.UserId,
+                Price = serviceDto.Price,
+                IsDeleted = serviceDto.IsDeleted,
+                IsEnabled = serviceDto.IsEnabled
+            });
         }
+
     }
 }

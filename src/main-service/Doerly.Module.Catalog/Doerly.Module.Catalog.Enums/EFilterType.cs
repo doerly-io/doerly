@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Doerly.Module.Catalog.Enums
+﻿namespace Doerly.Module.Catalog.Enums
 {
-    public enum EFilterType
+    public enum EFilterType : byte
     {
-        Checkbox = 0,
-        Dropdown = 1,
-        Price = 2,
-        Radio = 3
+        Checkbox = 1,
+        Dropdown = 2,
+        Price = 3,
+        Radio = 4
     }
 }

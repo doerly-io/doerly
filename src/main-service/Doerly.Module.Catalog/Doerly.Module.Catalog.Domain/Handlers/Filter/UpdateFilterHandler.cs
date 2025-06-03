@@ -1,13 +1,8 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Catalog.Contracts.Dtos.Requests.Filter;
+using Doerly.Module.Catalog.Contracts.Requests;
 using Doerly.Module.Catalog.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Filter
 {
@@ -17,9 +12,9 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
         {
         }
 
-        public async Task<HandlerResult> HandleAsync(UpdateFilterRequest request)
+        public async Task<HandlerResult> HandleAsync(int id, UpdateFilterRequest request)
         {
-            var filter = await DbContext.Filters.FindAsync(request.Id);
+            var filter = await DbContext.Filters.FindAsync(id);
             if (filter == null)
                 return HandlerResult.Failure(Resources.Get("FilterNotFound"));
 
@@ -29,7 +24,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
                 return HandlerResult.Failure(Resources.Get("CategoryNotFound"));
 
             filter.Name = request.Name;
-            filter.Type = ((int)request.Type);
+            filter.Type = request.Type;
             filter.CategoryId = request.CategoryId;
 
             await DbContext.SaveChangesAsync();

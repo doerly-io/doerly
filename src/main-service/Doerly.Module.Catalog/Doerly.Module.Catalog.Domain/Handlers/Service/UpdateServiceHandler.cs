@@ -1,14 +1,9 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Catalog.Contracts.Dtos.Requests.Service;
+using Doerly.Module.Catalog.Contracts.Requests;
 using Doerly.Module.Catalog.DataAccess;
 using Doerly.Module.Catalog.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Service
 {
@@ -18,11 +13,11 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
         { 
         }
 
-        public async Task<HandlerResult> HandleAsync(UpdateServiceRequest request)
+        public async Task<HandlerResult> HandleAsync(int id, UpdateServiceRequest request)
         {
             var service = await DbContext.Services
                 .Include(s => s.FilterValues)
-                .FirstOrDefaultAsync(s => s.Id == request.Id);
+                .FirstOrDefaultAsync(s => s.Id == id);
 
             if (service == null || service.IsDeleted)
                 return HandlerResult.Failure(Resources.Get("ServiceNotFound"));

@@ -1,9 +1,4 @@
 ﻿using Doerly.DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Doerly.Module.Catalog.DataAccess.Models
 {
@@ -19,7 +14,7 @@ namespace Doerly.Module.Catalog.DataAccess.Models
         public bool IsDeleted { get; set; }
         public bool IsEnabled { get; set; }
 
-        public ICollection<Filter> Filters { get; set; } = new List<Filter>();
-        public ICollection<Service> Services { get; set; } = new List<Service>();
+        public virtual ICollection<Filter> Filters { get; set; } = new List<Filter>();
+        public virtual ICollection<Service> Services { get; set; } = new List<Service>();
     }
 }

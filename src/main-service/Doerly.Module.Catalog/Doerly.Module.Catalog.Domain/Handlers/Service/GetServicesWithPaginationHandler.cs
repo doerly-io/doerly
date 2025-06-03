@@ -1,17 +1,12 @@
 ﻿using Doerly.Domain.Models;
-using Doerly.Module.Catalog.Contracts.Dtos.Requests.Service;
-using Doerly.Module.Catalog.Contracts.Dtos.Responses.Service;
 using Doerly.Module.Catalog.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using ServiceEntity = Doerly.Module.Catalog.DataAccess.Models.Service;
 using CategoryEntity = Doerly.Module.Catalog.DataAccess.Models.Category;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using Doerly.Extensions;
+using Doerly.Module.Catalog.Contracts.Requests;
+using Doerly.Module.Catalog.Contracts.Responses;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Service
 {

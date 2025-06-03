@@ -1,14 +1,7 @@
 ﻿using Doerly.Domain.Models;
-using Doerly.Localization;
-using Doerly.Module.Catalog.Contracts.Dtos.Responses.Category;
-using Doerly.Module.Catalog.Contracts.Dtos.Responses.Service;
+using Doerly.Module.Catalog.Contracts.Responses;
 using Doerly.Module.Catalog.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Category
 {

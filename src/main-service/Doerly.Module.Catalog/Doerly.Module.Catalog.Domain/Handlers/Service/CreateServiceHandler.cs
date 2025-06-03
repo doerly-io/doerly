@@ -1,6 +1,6 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Catalog.Contracts.Dtos.Requests.Service;
+using Doerly.Module.Catalog.Contracts.Requests;
 using Doerly.Module.Catalog.DataAccess;
 using Doerly.Module.Catalog.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
@@ -29,20 +29,20 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
                 UserId = request.UserId,
                 CategoryId = request.CategoryId,
                 IsEnabled = true,
-                IsDeleted = false
             };
 
-            var filters = await DbContext.Filters
+            var filterIds = await DbContext.Filters
                 .Where(f => f.CategoryId == request.CategoryId)
+                .Select(f => f.Id)
                 .ToListAsync();
 
-            foreach (var filter in filters)
+            foreach (var filterId in filterIds)
             {
-                if (request.FilterValues.TryGetValue(filter.Id, out var value))
+                if (request.FilterValues.TryGetValue(filterId, out var value))
                 {
                     service.FilterValues.Add(new ServiceFilterValue
                     {
-                        FilterId = filter.Id,
+                        FilterId = filterId,
                         Value = value
                     });
                 }

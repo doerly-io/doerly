@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +12,10 @@
     <ProjectReference Include="..\Doerly.Module.Catalog.Contracts\Doerly.Module.Catalog.Contracts.csproj" />
     <ProjectReference Include="..\Doerly.Module.Catalog.DataAccess\Doerly.Module.Catalog.DataAccess.csproj" />
     <ProjectReference Include="..\Doerly.Module.Catalog.Enums\Doerly.Module.Catalog.Enums.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
 
 </Project>

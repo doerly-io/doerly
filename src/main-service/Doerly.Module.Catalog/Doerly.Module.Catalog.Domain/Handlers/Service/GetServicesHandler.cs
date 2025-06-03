@@ -1,13 +1,8 @@
 ﻿using Doerly.Domain.Models;
-using Doerly.Module.Catalog.Contracts.Dtos.Responses.Service;
+using Doerly.Module.Catalog.Contracts.Responses;
 using Doerly.Module.Catalog.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using CategoryEntity = Doerly.Module.Catalog.DataAccess.Models.Category;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Service
 {
@@ -21,11 +16,16 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
         {
             var services = await DbContext.Services
                 .AsNoTracking()
-                .Where(s => !s.IsDeleted)
-                .Include(s => s.Category)!
-                    .ThenInclude(c => c.Parent)!
-                        .ThenInclude(p => p.Parent)
+                .Where(s => !s.IsDeleted && s.IsEnabled)
                 .ToListAsync();
+
+            var allCategoryIds = services.Select(s => s.CategoryId).Distinct();
+            var allCategories = await DbContext.Categories
+                .AsNoTracking()
+                .Where(c => allCategoryIds.Contains(c.Id) || c.ParentId != null)
+                .ToListAsync();
+
+            var categoryDict = allCategories.ToDictionary(c => c.Id);
 
             var result = services.Select(s => new GetServiceResponse
             {
@@ -37,20 +37,20 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
                 IsEnabled = s.IsEnabled,
                 IsDeleted = s.IsDeleted,
                 CategoryId = s.CategoryId,
-                CategoryName = s.Category.Name,
-                CategoryPath = GetCategoryPath(s.Category)
+                CategoryName = categoryDict.TryGetValue(s.CategoryId.Value, out var category) ? category.Name : "",
+                CategoryPath = GetCategoryPath(categoryDict, s.CategoryId)
             }).ToList();
 
             return HandlerResult.Success(result);
         }
 
-        private List<string> GetCategoryPath(CategoryEntity? category)
+        private List<string> GetCategoryPath(Dictionary<int, CategoryEntity> categoryDict, int? categoryId)
         {
             var path = new List<string>();
-            while (category != null)
+            while (categoryId != null && categoryDict.TryGetValue(categoryId.Value, out var category))
             {
                 path.Insert(0, category.Name);
-                category = category.Parent;
+                categoryId = category.ParentId;
             }
             return path;
         }

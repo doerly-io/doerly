@@ -1,15 +1,9 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Catalog.Contracts.Dtos.Requests.Category;
+using Doerly.Module.Catalog.Contracts.Requests;
 using Doerly.Module.Catalog.DataAccess;
-using FilterEntity = Doerly.Module.Catalog.DataAccess.Models.Filter;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Doerly.Module.Catalog.Contracts.Dtos.Requests.Filter;
+using FilterEntity = Doerly.Module.Catalog.DataAccess.Models.Filter;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Filter
 {
@@ -21,14 +15,16 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
 
         public async Task<HandlerResult<int>> HandleAsync(CreateFilterRequest request)
         {
-            var category = await DbContext.Categories.FindAsync(request.CategoryId);
-            if (category == null)
+            var categoryExists = await DbContext.Categories
+                .AnyAsync(c => c.Id == request.CategoryId && !c.IsDeleted);
+
+            if (!categoryExists)
                 return HandlerResult.Failure<int>(Resources.Get("CategoryNotFound"));
 
             var filter = new FilterEntity
             {
                 Name = request.Name,
-                Type = ((int)request.Type),
+                Type = request.Type,
                 CategoryId = request.CategoryId
             };
 

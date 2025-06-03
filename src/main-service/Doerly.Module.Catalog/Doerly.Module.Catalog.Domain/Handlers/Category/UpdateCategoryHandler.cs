@@ -1,13 +1,8 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Catalog.Contracts.Dtos.Requests.Category;
+using Doerly.Module.Catalog.Contracts.Requests;
 using Doerly.Module.Catalog.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Category
 {
@@ -17,14 +12,14 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Category
         { 
         }
 
-        public async Task<HandlerResult> HandleAsync(UpdateCategoryRequest request)
+        public async Task<HandlerResult> HandleAsync(int id, UpdateCategoryRequest request)
         {
-            var category = await DbContext.Categories.FindAsync(request.Id);
+            if (request.ParentId == id)
+                return HandlerResult.Failure(Resources.Get("CategoryCannotBeOwnParent"));
+
+            var category = await DbContext.Categories.FindAsync(id);
             if (category == null)
                 return HandlerResult.Failure(Resources.Get("CategoryNotFound"));
-
-            if (request.ParentId == request.Id)
-                return HandlerResult.Failure(Resources.Get("CategoryCannotBeOwnParent"));
 
             if (request.ParentId.HasValue)
             {

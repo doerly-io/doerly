@@ -1,6 +1,6 @@
 ﻿using Doerly.Module.Catalog.Enums;
 
-namespace Doerly.Module.Catalog.Contracts.Dtos.Requests.Filter
+namespace Doerly.Module.Catalog.Contracts.Requests
 {
     public class CreateFilterRequest
     {

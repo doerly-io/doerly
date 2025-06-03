@@ -1,13 +1,8 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Catalog.Contracts.Dtos.Responses.Filter;
+using Doerly.Module.Catalog.Contracts.Responses;
 using Doerly.Module.Catalog.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Filter
 {
@@ -19,39 +14,25 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
 
         public async Task<HandlerResult<List<GetFilterResponse>>> HandleAsync(int categoryId)
         {
-            var allCategories = await DbContext.Categories
-                .AsNoTracking()
-                .ToDictionaryAsync(c => c.Id);
+            var query = DbContext.Filters
+                .Where(f => !f.Category.IsDeleted &&
+                            (f.CategoryId == categoryId ||
+                             f.Category.ParentId == categoryId ||
+                             f.Category.Parent.ParentId == categoryId))
+                .Select(f => new GetFilterResponse
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    Type = f.Type,
+                    CategoryId = f.CategoryId
+                });
 
-            if (!allCategories.ContainsKey(categoryId))
-            {
+            var filters = await query.ToListAsync();
+
+            if (!filters.Any())
                 return HandlerResult.Failure<List<GetFilterResponse>>(Resources.Get("CategoryNotFound"));
-            }
 
-            var categoryIds = new List<int>();
-            int? currentId = categoryId;
-
-            while (currentId.HasValue)
-            {
-                categoryIds.Add(currentId.Value);
-                var category = allCategories.GetValueOrDefault(currentId.Value);
-                currentId = category?.ParentId;
-            }
-
-            var filters = await DbContext.Filters
-                .AsNoTracking()
-                .Where(f => categoryIds.Contains(f.CategoryId))
-                .ToListAsync();
-
-            var dtos = filters.Select(f => new GetFilterResponse
-            {
-                Id = f.Id,
-                Name = f.Name,
-                Type = (Enums.EFilterType)f.Type,
-                CategoryId = f.CategoryId
-            }).ToList();
-
-            return HandlerResult.Success(dtos);
+            return HandlerResult.Success(filters);
         }
     }
 }

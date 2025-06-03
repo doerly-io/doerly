@@ -1,11 +1,6 @@
 ﻿using Doerly.Module.Catalog.DataAccess.Constants;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ServiceEntity = Doerly.Module.Catalog.DataAccess.Models.Service;
 
 namespace Doerly.Module.Catalog.DataAccess.EntityConfiguration
