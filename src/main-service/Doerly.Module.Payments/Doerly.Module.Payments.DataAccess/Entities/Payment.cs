@@ -16,6 +16,10 @@ public class Payment : BaseEntity
     
     public EPaymentStatus Status { get; set; }
 
+    public EPaymentMethod PaymentMethod { get; set; }
+
+    public string? CardNumber { get; set; }
+
     public string? CheckoutUrl { get; set; }
     
     public int BillId { get; set; }

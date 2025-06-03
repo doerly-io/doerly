@@ -38,6 +38,8 @@ public class PaymentStatusChangedHandler : BasePaymentHandler
 
         payment.Status = model.Status;
         payment.Bill.AmountPaid += payment.Amount;
+        payment.PaymentMethod = model.PaymentMethod;
+        payment.CardNumber = model.CardNumber;
         await DbContext.SaveChangesAsync();
 
         await PublishPaymentStatusChangedEvent(payment.BillId, model.Status);
