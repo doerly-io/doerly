@@ -22,6 +22,7 @@ public class PaymentsController : BaseApiController
         _webhookUrlBuilder = webhookUrlBuilder;
     }
 
+    [AllowAnonymous]
     [HttpGet("test")]
     public async Task<IActionResult> Test()
     {

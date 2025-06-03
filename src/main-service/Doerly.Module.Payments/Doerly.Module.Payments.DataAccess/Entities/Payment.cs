@@ -5,6 +5,7 @@ namespace Doerly.Module.Payments.DataAccess.Models;
 
 public class Payment : BaseEntity
 {
+    public Guid Guid { get; set; }
     public decimal Amount { get; set; }
 
     public required string Description { get; set; }
@@ -14,6 +15,8 @@ public class Payment : BaseEntity
     public EPaymentAction Action { get; set; }
     
     public EPaymentStatus Status { get; set; }
+
+    public string? CheckoutUrl { get; set; }
     
     public int BillId { get; set; }
     

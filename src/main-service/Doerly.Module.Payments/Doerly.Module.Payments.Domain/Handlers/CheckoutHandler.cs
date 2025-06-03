@@ -1,10 +1,10 @@
 using Doerly.Domain.Models;
 using Doerly.Module.Payments.BaseClient;
-using Doerly.Module.Payments.Client.LiqPay;
 using Doerly.Module.Payments.Contracts;
 using Doerly.Module.Payments.DataAccess;
 using Doerly.Module.Payments.DataAccess.Models;
 using Doerly.Module.Payments.Enums;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Doerly.Module.Payments.Domain.Handlers;
@@ -24,54 +24,100 @@ public class CheckoutHandler : BasePaymentHandler
         _logger = logger;
     }
 
+    /// <summary>
+    /// 1.Check if billId is provided, if so, check for existing pending payment.
+    /// 2. If a pending payment exists, return its checkout URL.
+    /// 3. If no pending payment exists, check if the bill exists and is not already paid.
+    /// 4. If the billId is not provided, create a new bill with the provided amount and description.
+    /// </summary>
+    /// <param name="checkoutRequest"></param>
+    /// <param name="webhookUrl"></param>
+    /// <returns></returns>
     public async Task<HandlerResult<BaseCheckoutResponse>> HandleAsync(CheckoutRequest checkoutRequest, Uri webhookUrl)
     {
-        var bill = new Bill
+        Bill bill;
+
+        if (checkoutRequest.BillId.HasValue)
         {
-            AmountTotal = checkoutRequest.AmountTotal,
-            Description = checkoutRequest.BillDescription,
-            PayerId = checkoutRequest.PayerId,
-        };
+            var existingPendingPayment = await DbContext.Payments
+                .Where(p => p.BillId == checkoutRequest.BillId && p.Status == EPaymentStatus.Pending)
+                .Select(x => new { x.Id, x.CheckoutUrl })
+                .FirstOrDefaultAsync();
 
-        var payment = new Payment
+            if (!string.IsNullOrEmpty(existingPendingPayment?.CheckoutUrl))
+            {
+                return HandlerResult.Success(new BaseCheckoutResponse
+                {
+                    CheckoutUrl = existingPendingPayment.CheckoutUrl,
+                    BillId = checkoutRequest.BillId.Value,
+                    Aggregator = EPaymentAggregator.LiqPay
+                });
+            }
+
+            bill = await DbContext.Bills
+                .FirstOrDefaultAsync(b => b.Id == checkoutRequest.BillId.Value);
+
+            if (bill == null)
+            {
+                _logger.LogError("Bill with Id {BillId} not found", checkoutRequest.BillId);
+                return HandlerResult.Failure<BaseCheckoutResponse>("BillNotFound");
+            }
+
+            if (bill.AmountPaid != bill.AmountTotal)
+                return HandlerResult.Failure<BaseCheckoutResponse>("BillAlreadyPaid");
+        }
+        else
         {
-            Description = checkoutRequest.PaymentDescription,
-            Currency = checkoutRequest.Currency,
-            Amount = checkoutRequest.AmountTotal,
-            Status = EPaymentStatus.Pending,
-            Action = checkoutRequest.PaymentAction,
-            Bill = bill,
-        };
+            bill = new Bill
+            {
+                AmountTotal = checkoutRequest.AmountTotal,
+                Description = checkoutRequest.BillDescription,
+                PayerId = checkoutRequest.PayerId,
+            };
+            DbContext.Bills.Add(bill);
+        }
 
-        DbContext.Bills.Add(bill);
-        DbContext.Payments.Add(payment);
-        await DbContext.SaveChangesAsync();
+        var paymentGuid = Guid.CreateVersion7();
 
-        var paymentClient = _paymentClientFactory(EPaymentAggregator.LiqPay); //TODO: remove hardcode after adding other payment methods
+        var paymentClient = _paymentClientFactory(EPaymentAggregator.LiqPay);
         var checkoutResult = await paymentClient.Checkout(new CheckoutModel
         {
             Amount = checkoutRequest.AmountTotal,
-            Currency = CurrencyToStringCode(checkoutRequest.Currency),
+            Currency = checkoutRequest.Currency,
             Description = checkoutRequest.BillDescription,
-            PaymentId = payment.Id,
+            PaymentId = paymentGuid.ToString(),
             BillId = bill.Id,
             PaymentAction = checkoutRequest.PaymentAction,
             ReturnUrl = checkoutRequest.ReturnUrl,
             CallbackUrl = webhookUrl.ToString(),
         });
 
-        if (checkoutResult.IsSuccess)
-            return checkoutResult;
+        if (!checkoutResult.IsSuccess)
+        {
+            _logger.LogError("Checkout request failed, CheckoutRequestError: {CheckoutRequestError}", checkoutResult.ErrorMessage);
+            return HandlerResult.Failure<BaseCheckoutResponse>("FailedToCreateCheckout");
+        }
 
-        _logger.LogError("Checkout request failed, CheckoutRequestError: {CheckoutRequestError}", checkoutResult.ErrorMessage);
-        return HandlerResult.Failure<BaseCheckoutResponse>("FailedToCreateCheckout");
+        var payment = new Payment
+        {
+            Guid = paymentGuid,
+            Description = checkoutRequest.PaymentDescription,
+            Currency = checkoutRequest.Currency,
+            Amount = checkoutRequest.AmountTotal,
+            Status = EPaymentStatus.Pending,
+            Action = checkoutRequest.PaymentAction,
+            Bill = bill,
+            CheckoutUrl = checkoutResult.Value.CheckoutUrl,
+        };
+
+        DbContext.Payments.Add(payment);
+        await DbContext.SaveChangesAsync();
+
+        return HandlerResult.Success(new BaseCheckoutResponse
+        {
+            CheckoutUrl = payment.CheckoutUrl,
+            BillId = bill.Id,
+            Aggregator = EPaymentAggregator.LiqPay
+        });
     }
-
-    private string CurrencyToStringCode(ECurrency currency) => currency switch
-    {
-        ECurrency.UAH => LiqPayConstants.CurrenciesConstants.UAH,
-        ECurrency.USD => LiqPayConstants.CurrenciesConstants.USD,
-        ECurrency.EUR => LiqPayConstants.CurrenciesConstants.EUR,
-        _ => LiqPayConstants.CurrenciesConstants.UAH
-    };
 }

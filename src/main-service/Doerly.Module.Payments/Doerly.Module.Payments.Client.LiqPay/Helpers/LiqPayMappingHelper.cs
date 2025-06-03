@@ -32,4 +32,14 @@ public class LiqPayMappingHelper
             _ => throw new ArgumentOutOfRangeException(nameof(paymentAction), paymentAction, null)
         };
     }
+    
+    public static string CurrencyToStringCode(ECurrency currency) => currency switch
+    {
+        ECurrency.UAH => LiqPayConstants.CurrenciesConstants.UAH,
+        ECurrency.USD => LiqPayConstants.CurrenciesConstants.USD,
+        ECurrency.EUR => LiqPayConstants.CurrenciesConstants.EUR,
+        _ => LiqPayConstants.CurrenciesConstants.UAH
+    };
+    
+    
 }

@@ -28,11 +28,11 @@ public class PaymentStatusChangedHandler : BasePaymentHandler
     {
         var payment = await DbContext.Payments
             .Include(x => x.Bill)
-            .FirstOrDefaultAsync(x => x.Id == model.PaymentId && x.Status == EPaymentStatus.Pending);
+            .FirstOrDefaultAsync(x => x.Guid == model.PaymentGuid && x.Status == EPaymentStatus.Pending);
         
         if (payment == null)
         {
-            _logger.LogWarning("Payment not found for PaymentId: {PaymentId}", model.PaymentId);
+            _logger.LogWarning("Pending payment not found for PaymentGuid: {PaymentGuid}", model.PaymentGuid);
             return HandlerResult.Failure("Payment not found");
         }
 

@@ -11,9 +11,9 @@ internal static class DtoMappingExtensions
         return new LiqPayCheckoutRequest
         {
             Amount = liqPayCheckout.Amount,
-            Currency = liqPayCheckout.Currency,
+            Currency = LiqPayMappingHelper.CurrencyToStringCode(liqPayCheckout.Currency),
             Description = liqPayCheckout.Description,
-            OrderId = liqPayCheckout.PaymentId.ToString(),
+            OrderId = liqPayCheckout.PaymentId,
             ApiVersion = liqPayCheckout.ApiVersion,
             PaymentAction = LiqPayMappingHelper.MapCommonActionToLiqPayAction(liqPayCheckout.PaymentAction),
             ResultUrl = liqPayCheckout.ReturnUrl,

@@ -5,6 +5,11 @@ namespace Doerly.Module.Payments.Contracts;
 
 public class CheckoutRequest
 {
+    /// <summary>
+    /// If not null, the look for pending payment with this BillId and return checkouturl for it.
+    /// </summary>
+    public int? BillId { get; set; }
+    
     public required decimal AmountTotal { get; set; }
 
     /// <summary>
