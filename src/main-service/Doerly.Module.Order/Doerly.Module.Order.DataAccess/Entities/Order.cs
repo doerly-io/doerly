@@ -7,6 +7,8 @@ public class Order : BaseEntity
 {
     public int CategoryId { get; set; }
 
+    public Guid Code { get; set; }
+
     public string Name { get; set; }
 
     public string Description { get; set; }

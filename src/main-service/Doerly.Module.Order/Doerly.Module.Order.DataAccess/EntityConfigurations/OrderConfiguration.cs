@@ -19,6 +19,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<OrderEntity>
         builder.Property(x => x.DueDate).IsRequired();
         builder.Property(x => x.Status).IsRequired();
         builder.Property(x => x.CustomerId).IsRequired();
+        builder.Property(x => x.Code).IsRequired().HasMaxLength(36);
 
         builder.HasMany(x => x.ExecutionProposals).WithOne(x => x.Order).HasForeignKey(x => x.OrderId);
         builder.HasMany(x => x.OrderFiles).WithOne(x => x.Order).HasForeignKey(x => x.OrderId);

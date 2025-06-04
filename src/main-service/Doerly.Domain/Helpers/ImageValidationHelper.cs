@@ -1,6 +1,6 @@
 using SixLabors.ImageSharp;
 
-namespace Doerly.Module.Profile.Domain.Helpers;
+namespace Doerly.Domain.Helpers;
 
 public class ImageValidationHelper
 {

@@ -1,4 +1,4 @@
-namespace Doerly.Module.Profile.Domain.Constants;
+namespace DoerlyDomain.Constants;
 
 public class ImageExtensions
 {

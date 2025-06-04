@@ -8,6 +8,7 @@ using Doerly.Domain;
 using Microsoft.AspNetCore.Http;
 using Doerly.FileRepository;
 using Doerly.Module.Profile.Domain.Constants;
+using Doerly.Module.Order.DataAccess.Entities;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class UpdateOrderHandler : BaseOrderHandler
@@ -36,17 +37,31 @@ public class UpdateOrderHandler : BaseOrderHandler
         order.DueDate = dto.DueDate;
         order.IsPriceNegotiable = dto.IsPriceNegotiable;
 
-        var filesToDelete = order.OrderFiles
-            .Where(f => !existingFileNames.Contains(f.FileName))
-            .ToList();
-
-        await DeleteOrderFilesAsync(order, filesToDelete);
+        foreach (var orderFile in order.OrderFiles)
+        {
+            if (!existingFileNames.Contains(orderFile.Name))
+                await DeleteOrderFileAsync(orderFile);
+        }
 
         if (files != null && files.Count != 0)
-            await UploadOrderFilesAsync(order, files);
+        {
+            foreach (var file in files)
+            {
+                var orderFile = await CreateOrderFileAsync(order.Code, file);
+                if (orderFile != null)
+                    order.OrderFiles.Add(orderFile);
+            }
+        }
 
         await DbContext.SaveChangesAsync();
 
         return HandlerResult.Success();
+    }
+
+    private async Task DeleteOrderFileAsync(OrderFile file)
+    {
+        await DeleteOrderFileFromStorageAsync(file);
+
+        DbContext.OrderFiles.Remove(file);
     }
 }

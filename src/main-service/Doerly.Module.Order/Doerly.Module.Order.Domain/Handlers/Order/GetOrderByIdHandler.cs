@@ -39,10 +39,10 @@ public class GetOrderByIdHandler : BaseOrderHandler
                 BillId = order.BillId,
                 ExistingFiles = order.OrderFiles.Select(file => new FileInfo
                 {
-                    FilePath = file.FilePath,
-                    FileName = file.FileName,
-                    FileSize = file.FileSize,
-                    FileType = file.FileType
+                    FilePath = file.Path,
+                    FileName = file.Name,
+                    FileSize = file.Size,
+                    FileType = file.Type
                 }),
                 CreatedDate = order.DateCreated
             })

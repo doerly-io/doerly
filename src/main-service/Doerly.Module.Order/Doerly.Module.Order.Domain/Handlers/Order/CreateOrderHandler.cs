@@ -15,6 +15,7 @@ using Doerly.Module.Profile.Domain.Constants;
 using Doerly.Module.Order.DataAccess.Entities;
 using Doerly.Module.Order.Contracts.Messages;
 using Doerly.Messaging;
+using Doerly.Domain.Helpers;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 
@@ -30,6 +31,12 @@ public class CreateOrderHandler : BaseOrderHandler
 
     public async Task<HandlerResult<CreateOrderResponse>> HandleAsync(CreateOrderRequest dto, List<IFormFile> files)
     {
+        var orderCode = new Guid();
+        ICollection<OrderFile> orderFiles = [];
+
+        if (files != null || files.Count != 0)
+            orderFiles = await CreateOrderFilesAsync(orderCode, files);
+
         var order = new OrderEntity()
         {
             CategoryId = dto.CategoryId,
@@ -40,12 +47,10 @@ public class CreateOrderHandler : BaseOrderHandler
             PaymentKind = dto.PaymentKind,
             DueDate = dto.DueDate,
             Status = EOrderStatus.Placed,
+            OrderFiles = orderFiles,
             CustomerId = _doerlyRequestContext.UserId ?? throw new Exception("We are fucked!"),
         };
 
-
-        if (files != null || files.Count != 0)
-            await UploadOrderFilesAsync(order, files);
 
         DbContext.Orders.Add(order);
         await DbContext.SaveChangesAsync();

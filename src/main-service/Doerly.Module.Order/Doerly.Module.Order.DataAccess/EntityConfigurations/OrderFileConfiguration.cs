@@ -16,9 +16,9 @@ public class OrderFileConfiguration : IEntityTypeConfiguration<OrderFile>
     {
         builder.ToTable(DbConstants.Tables.OrderFile, DbConstants.OrderSchema);
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.FilePath).IsRequired().HasMaxLength(1000);
-        builder.Property(x => x.FileName).IsRequired().HasMaxLength(255);
-        builder.Property(x => x.FileType).IsRequired().HasMaxLength(50);
+        builder.Property(x => x.Path).IsRequired().HasMaxLength(1000);
+        builder.Property(x => x.Name).IsRequired().HasMaxLength(255);
+        builder.Property(x => x.Type).IsRequired().HasMaxLength(50);
 
         builder.HasOne(x => x.Order).WithMany(x => x.OrderFiles).HasForeignKey(x => x.OrderId);
     }
