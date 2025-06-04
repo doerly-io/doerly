@@ -1,0 +1,49 @@
+.execution-proposal-details-container {
+    .proposal-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--p-primary-color);
+        text-align: center;
+    }
+
+    .avatar {
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border: 2px solid var(--p-primary-color, #2196f3);
+        object-fit: cover;
+        background: #fff;
+    }
+
+    .proposal-profile-avatar {
+        width: 120px;
+        height: 120px;
+    }
+
+    .field-label {
+        font-weight: 700;
+        color: var(--p-primary-color);
+        margin-right: 0.5rem;
+    }
+
+    .proposal-bottom-row {
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+
+        .p-button {
+            margin-left: 0.5rem;
+        }
+
+        .p-tag {
+            font-size: 1rem;
+        }
+    }
+
+    .action-buttons {
+        gap: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

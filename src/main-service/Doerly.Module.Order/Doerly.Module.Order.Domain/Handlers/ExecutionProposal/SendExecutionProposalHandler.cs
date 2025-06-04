@@ -1,19 +1,21 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Enums;
-using Doerly.Module.Order.DataAccess.Models;
+using Doerly.Module.Order.DataAccess.Entities;
 using Doerly.Module.Order.Contracts.Dtos;
 
 using Microsoft.EntityFrameworkCore;
 using Doerly.Localization;
 using Doerly.Domain;
+using Doerly.Messaging;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class SendExecutionProposalHandler : BaseOrderHandler
 {
     private readonly IDoerlyRequestContext _doerlyRequestContext;
 
-    public SendExecutionProposalHandler(OrderDbContext dbContext, IDoerlyRequestContext doerlyRequestContext) : base(dbContext)
+    public SendExecutionProposalHandler(OrderDbContext dbContext, IDoerlyRequestContext doerlyRequestContext,
+        IMessagePublisher messagePublisher) : base(dbContext, messagePublisher)
     {
         _doerlyRequestContext = doerlyRequestContext;
     }
@@ -47,6 +49,8 @@ public class SendExecutionProposalHandler : BaseOrderHandler
 
         DbContext.ExecutionProposals.Add(executionProposal);
         await DbContext.SaveChangesAsync();
+
+        await PublishExecutionProposalStatusUpdatedEventAsync(executionProposal.Id, executionProposal.Status);
 
         var result = new SendExecutionProposalResponse()
         {

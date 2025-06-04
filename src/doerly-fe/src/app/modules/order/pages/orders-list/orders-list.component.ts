@@ -12,6 +12,8 @@ import { Button } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
+import { getOrderStatusSeverity } from '../../domain/enums/order-status';
+import { Avatar } from 'primeng/avatar';
 
 @Component({
   selector: 'app-orders-list',
@@ -22,7 +24,8 @@ import { ToastHelper } from 'app/@core/helpers/toast.helper';
     CommonModule,
     Button,
     TranslatePipe,
-    RouterLink
+    RouterLink,
+    Avatar
   ],
   templateUrl: './orders-list.component.html',
   styleUrl: './orders-list.component.scss'
@@ -38,12 +41,13 @@ export class OrdersListComponent implements OnInit {
   loading: boolean = true;
   returnUrl!: string;
   EOrderStatus = EOrderStatus;
+  public getOrderStatusSeverity = getOrderStatusSeverity;
 
   constructor(private orderService: OrderService,
-              private toastHelper: ToastHelper,
-                private route: ActivatedRoute) {}
+    private toastHelper: ToastHelper,
+    private route: ActivatedRoute) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['return'];
   }
 
@@ -68,24 +72,9 @@ export class OrdersListComponent implements OnInit {
           this.toastHelper.showError('common.error', error.error.errorMessage);
         }
         else {
-          this.toastHelper.showError('common.error', 'common.error-occurred');
+          this.toastHelper.showError('common.error', 'common.error_occurred');
         }
       }
     });
   }
-
-  getOrderStatusSeverity(status: EOrderStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
-      switch (status) {
-        case EOrderStatus.Placed:
-          return 'info';
-        case EOrderStatus.InProgress:
-          return 'warn';
-        case EOrderStatus.Completed:
-          return 'success';
-        case EOrderStatus.Canceled:
-          return 'danger';
-        default:
-          return 'secondary';
-      }
-    }
 }

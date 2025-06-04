@@ -4,19 +4,26 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../../domain/order.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { ButtonDirective } from 'primeng/button';
+import { Button, ButtonDirective } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { Card } from 'primeng/card';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { EPaymentKind } from '../../domain/enums/payment-kind';
-import { getError, isInvalid, setServerErrors, getServersideError } from 'app/@core/helpers/input-validation-helpers';
+import { getError, isInvalid, getServersideError } from 'app/@core/helpers/input-validation-helpers';
 import { BaseApiResponse } from 'app/@core/models/base-api-response';
 import { GetOrderResponse } from '../../models/responses/get-order-response';
-import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 import { CreateOrderRequest } from '../../models/requests/create-order-request';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
+import { CreateOrderResponse } from '../../models/responses/create-order-response';
+import { Checkbox } from 'primeng/checkbox';
+import { FileUploadModule } from 'primeng/fileupload';
+import { Badge } from 'primeng/badge';
+import { FileInfoModel } from '../../models/responses/file-info-model';
+import { Tooltip } from 'primeng/tooltip';
+import { Textarea } from 'primeng/textarea';
+import { ImageModule } from 'primeng/image';
 
 @Component({
   selector: 'app-edit-order',
@@ -31,7 +38,15 @@ import { ToastHelper } from 'app/@core/helpers/toast.helper';
     DatePickerModule,
     SelectModule,
     NgIf,
-    Card
+    Card,
+    Checkbox,
+    FileUploadModule,
+    Button,
+    Badge,
+    CommonModule,
+    Tooltip,
+    Textarea,
+    ImageModule
   ]
 })
 export class EditOrderComponent implements OnInit {
@@ -41,6 +56,12 @@ export class EditOrderComponent implements OnInit {
   isEdit: boolean = false;
   loading: boolean = false;
   currentDate: Date = new Date();
+
+  totalSizeLimit: number = 10 * 1024 * 1024; // 10 MB
+  files: File[] = [];
+  existingFiles: FileInfoModel[] = [];
+  totalFilesSize: number = 0;
+  allowedSizeForUpload: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -58,6 +79,8 @@ export class EditOrderComponent implements OnInit {
     this.initForm();
     this.initPaymentKinds();
 
+    this.orderForm.setValidators(() => this.filesTotalSizeValidator());
+
     if (this.isEdit) {
       this.loading = true;
       this.orderService.getOrder(this.orderId!).subscribe({
@@ -70,20 +93,21 @@ export class EditOrderComponent implements OnInit {
               description: order.description,
               price: order.price,
               paymentKind: order.paymentKind,
-              dueDate: new Date(order.dueDate)
+              dueDate: new Date(order.dueDate),
+              isPriceNegotiable: order.isPriceNegotiable
             });
+            this.existingFiles = order.existingFiles || [];
+            this.updateFilesSizeAndLimit();
           }
           this.loading = false;
         },
         error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.toastHelper.showError('common.error', error.error.errorMessage);
-          }
-          else {
-            this.toastHelper.showError('common.error', 'common.error-occurred');
-          }
+          this.toastHelper.showError('common.error', error.error?.errorMessage || 'common.error_occurred');
+          this.loading = false;
         }
       });
+    } else {
+      this.updateFilesSizeAndLimit();
     }
   }
 
@@ -94,7 +118,8 @@ export class EditOrderComponent implements OnInit {
       description: ['', [Validators.required, this.minimumLengthValidator(5), Validators.maxLength(4000)]],
       price: [1, [Validators.required, Validators.min(1)]],
       paymentKind: [1, Validators.required],
-      dueDate: ['', Validators.required]
+      dueDate: ['', Validators.required],
+      isPriceNegotiable: [false, Validators.required]
     });
   }
 
@@ -107,6 +132,111 @@ export class EditOrderComponent implements OnInit {
     };
   }
 
+  filesTotalSizeValidator() {
+    const total = this.getTotalFilesSize();
+    return total > this.totalSizeLimit ? { filesSizeLimitExceeded: true } : null;
+  }
+
+  onSelectedFiles(event: any) {
+    let added = false;
+    for (const file of event.currentFiles) {
+      if (!this.files.includes(file)) {
+        this.files.push(file);
+        added = true;
+      }
+    }
+    this.updateFilesSizeAndLimit();
+    if (this.getTotalFilesSize() > this.totalSizeLimit) {
+      this.toastHelper.showWarn(
+        'ordering.files_size_limit_exceeded',
+        this.translate.instant('ordering.files_size_limit', { size: this.formatSize(this.totalSizeLimit) })
+      );
+    }
+  }
+
+  onClearTemplatingUpload(clear: Function) {
+    clear();
+    this.files = [];
+    this.existingFiles = [];
+    this.updateFilesSizeAndLimit();
+  }
+
+  removeExistingFile(file: FileInfoModel) {
+    this.existingFiles = this.existingFiles.filter(f => f.filePath !== file.filePath);
+    this.updateFilesSizeAndLimit();
+  }
+
+  onRemoveTemplatingFile(event: Event, file: File, removeFileCallback: Function) {
+    removeFileCallback(file);
+    this.files = this.files.filter(f => f !== file);
+    this.updateFilesSizeAndLimit();
+  }
+
+  updateFilesSizeAndLimit() {
+    this.totalFilesSize = this.getTotalFilesSize();
+    this.allowedSizeForUpload = this.totalSizeLimit - this.getExistingFilesSize();
+    this.orderForm.updateValueAndValidity();
+  }
+
+  getTotalFilesSize(): number {
+    return this.getExistingFilesSize() + this.getNewFilesSize();
+  }
+
+  getExistingFilesSize(): number {
+    return this.existingFiles.reduce((sum, f) => sum + (f.fileSize || 0), 0);
+  }
+
+  getNewFilesSize(): number {
+    return this.files.reduce((sum, f) => sum + f.size, 0);
+  }
+
+  formatSize(bytes: number): string {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const dm = 2;
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+  submit() {
+    if (this.orderForm.invalid)
+      return;
+
+    if (this.isEdit) {
+      this.orderService.updateOrder(this.orderId!, this.orderForm.value, this.files, this.existingFiles)
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/ordering/order', this.orderId]);
+          },
+          error: (error: HttpErrorResponse) => {
+            if (error.status === 400) {
+              this.toastHelper.showError('common.error', error.error.errorMessage);
+            }
+            else {
+              this.toastHelper.showError('common.error', 'common.error_occurred');
+            }
+          }
+        });
+    } else {
+      const request = this.orderForm.value as CreateOrderRequest;
+      this.orderService.createOrder(request, this.files)
+        .subscribe({
+          next: (response: BaseApiResponse<CreateOrderResponse>) => {
+            this.router.navigate(['/ordering/order', response.value!.id]);
+          },
+          error: (error: HttpErrorResponse) => {
+            if (error.status === 400) {
+              this.toastHelper.showError('common.error', error.error.errorMessage);
+            }
+            else {
+              this.toastHelper.showError('common.error', 'common.error_occurred');
+            }
+          }
+        });
+    }
+  }
+
   initPaymentKinds() {
     this.paymentKinds = Object.keys(EPaymentKind)
       .filter(key => isNaN(Number(key)))
@@ -116,42 +246,8 @@ export class EditOrderComponent implements OnInit {
       }));
   }
 
-  submit() {
-    if (this.orderForm.invalid) 
-      return;
-    
-    if (this.isEdit) {
-      this.orderService.updateOrder(this.orderId!, this.orderForm.value)
-      .subscribe({
-        next: () => {
-          this.router.navigate(['/ordering/order', this.orderId]);
-        },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.toastHelper.showError('common.error', error.error.errorMessage);
-          }
-          else {
-            this.toastHelper.showError('common.error', 'common.error-occurred');
-          }
-        }
-    });
-    } else {
-      const request = this.orderForm.value as CreateOrderRequest;
-      this.orderService.createOrder(request)
-      .subscribe({
-        next: (response: BaseApiResponse<number>) => {
-        this.router.navigate(['/ordering/order', response.value]);
-      },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.toastHelper.showError('common.error', error.error.errorMessage);
-          }
-          else {
-            this.toastHelper.showError('common.error', 'common.error-occurred');
-          }
-        }
-      });
-    }
+  choose(event: Event, callback: Function) {
+    callback();
   }
 
   protected readonly getError = getError;

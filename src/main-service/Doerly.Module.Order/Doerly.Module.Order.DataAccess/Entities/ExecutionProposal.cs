@@ -1,7 +1,7 @@
 ﻿using Doerly.DataAccess.Models;
 using Doerly.Module.Order.Enums;
 
-namespace Doerly.Module.Order.DataAccess.Models;
+namespace Doerly.Module.Order.DataAccess.Entities;
 
 public class ExecutionProposal : BaseEntity
 {
