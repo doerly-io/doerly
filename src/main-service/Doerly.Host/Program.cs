@@ -43,6 +43,7 @@ builder.RegisterModule(new Doerly.Module.Payments.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Authorization.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Profile.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Order.Api.ModuleInitializer());
+builder.RegisterModule(new Doerly.Module.Catalog.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Common.Api.ModuleInitializer());
 
 
