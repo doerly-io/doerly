@@ -1,27 +1,24 @@
 <div class="chat-window-container">
-  <!-- Індикатор завантаження -->
   <p-progressSpinner *ngIf="loading()" styleClass="custom-spinner"></p-progressSpinner>
 
-  <!-- Якщо бесіда не обрана -->
   <div *ngIf="!loading() && !conversationId()" class="no-selection">
-    <p>Оберіть бесіду, щоб почати спілкування</p>
+    <p>{{'communication.choose_conversation' | translate}}</p>
     <i class="pi pi-comments"></i>
   </div>
 
-  <!-- Якщо розмову не знайдено -->
   <div *ngIf="!loading() && conversationId() && !conversation()" class="no-conversation">
-    <p>Розмову не знайдено</p>
+    <p>{{'communication.conversation_not_found' | translate}}</p>
   </div>
 
-  <!-- Чат -->
+  <!-- Chat -->
   <div *ngIf="!loading() && conversation()" class="chat-content">
-    <!-- Хедер -->
+    <!-- Header -->
     <div class="chat-header">
       <p-avatar *ngIf="getRecipientImageUrl()" [image]="getRecipientImageUrl()!" shape="circle" size="large"></p-avatar>
       <h2>{{ getRecipientName() }}</h2>
     </div>
 
-    <!-- Список повідомлень -->
+    <!-- Messages list -->
     <div #messageContainer class="chat-messages">
       <div
         *ngFor="let message of conversation()!.messages; trackBy: trackByMessageId"
@@ -34,11 +31,14 @@
         </div>
       </div>
       <div class="no-messages" *ngIf="!conversation()?.messages?.length">
-        <p>Повідомлень ще немає</p>
+        <p>{{'communication.no_messages_yet' | translate}}</p>
+      </div>
+      <div class="typing-indicator" *ngIf="typingUser()">
+        <p>{{ typingUser() }} {{'communication.typing' | translate}}</p>
       </div>
     </div>
 
-    <!-- Поле вводу -->
+    <!-- Input field -->
     <div class="chat-input">
       <input
         pInputText
@@ -46,7 +46,7 @@
         [value]="message() || ''"
         (input)="updateMessageText($event)"
         (keyup.enter)="message() && sendMessage()"
-        placeholder="Напишіть повідомлення..."
+        placeholder="{{'communication.message_placeholder' | translate}}"
         class="message-input"
       />
       <button

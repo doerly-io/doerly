@@ -1,4 +1,15 @@
-import { Component, effect, ElementRef, inject, input, model, signal, ViewChild, AfterViewChecked } from '@angular/core';
+import {
+  Component,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  model,
+  signal,
+  ViewChild,
+  AfterViewChecked,
+  computed
+} from '@angular/core';
 import { DatePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
@@ -12,11 +23,12 @@ import { ButtonDirective } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { SendMessageRequest } from '../../models/requests/send-message-request.model';
 import { Avatar } from 'primeng/avatar';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-chat-window',
   standalone: true,
-  imports: [NgIf, NgForOf, DatePipe, ProgressSpinnerModule, ToastModule, NgClass, ButtonDirective, InputText, Avatar],
+  imports: [NgIf, NgForOf, DatePipe, ProgressSpinnerModule, ToastModule, NgClass, ButtonDirective, InputText, Avatar, TranslatePipe],
   providers: [MessageService],
   templateUrl: './chat-window.component.html',
   styleUrls: ['./chat-window.component.scss'],
@@ -26,17 +38,28 @@ export class ChatWindowComponent implements AfterViewChecked {
   private readonly jwtTokenHelper = inject(JwtTokenHelper);
   private readonly messageService = inject(MessageService);
   private readonly communicationSignalR = inject(CommunicationSignalRService);
+  private readonly translateService = inject(TranslateService);
+
+  private isFirstLoad = true;
+  private typingTimeout: any;
+
   private userId = this.jwtTokenHelper.getUserInfo()?.id;
+  protected readonly userProfile = computed(() => {
+    const conv = this.conversation();
+    if (!conv) return null;
+
+    return conv.recipient.id === this.userId ? conv.initiator : conv.recipient;
+  });
+
 
   @ViewChild('messageContainer') messageContainer!: ElementRef<HTMLDivElement>;
-  protected message = model<string>('');
 
+  protected message = model<string>('');
   protected readonly loading = signal(true);
   protected readonly conversation = signal<ConversationResponse | null>(null);
 
+  protected readonly typingUser = signal<string | null>(null);
   public conversationId = input<number>();
-
-  private isFirstLoad = true;
 
   constructor() {
     effect(() => {
@@ -44,6 +67,7 @@ export class ChatWindowComponent implements AfterViewChecked {
       if (id) {
         this.loadConversation(id);
         this.communicationSignalR.startConnection(id, this.userId!);
+
         this.communicationSignalR.onMessageReceived((newMessage) => {
           this.conversation.update((conv) => {
             if (conv) {
@@ -62,6 +86,15 @@ export class ChatWindowComponent implements AfterViewChecked {
           });
           this.scrollToBottom();
         });
+
+        this.communicationSignalR.onUserTyping((fullName) => {
+          this.typingUser.set(fullName);
+          clearTimeout(this.typingTimeout);
+          this.typingTimeout = setTimeout(() => {
+            this.typingUser.set(null);
+          }, 2000);
+        });
+
       } else {
         this.conversation.set(null);
         this.loading.set(false);
@@ -93,8 +126,7 @@ export class ChatWindowComponent implements AfterViewChecked {
         this.loading.set(false);
         this.messageService.add({
           severity: 'error',
-          summary: 'Помилка',
-          detail: 'Не вдалося завантажити розмову',
+          detail: this.translateService.instant('communication.errors.load_conversation'),
         });
       },
     });
@@ -102,14 +134,20 @@ export class ChatWindowComponent implements AfterViewChecked {
 
   protected getRecipientName(): string {
     const conversation = this.conversation();
-    if (!conversation) return 'Невідомий користувач';
+    if (!conversation){
+      this.messageService.add({
+        severity: 'error',
+        detail: this.translateService.instant('communication.errors.no_conversation'),
+      });
+      return this.translateService.instant('communication.unknown_user');
+    }
 
     const isInitiator = this.userId === conversation.initiator.id;
     const recipient = isInitiator ? conversation.recipient : conversation.initiator;
 
     return recipient
       ? `${recipient.firstName} ${recipient.lastName}`
-      : 'Невідомий користувач';
+      : this.translateService.instant('communication.unknown_user');
   }
 
   protected getRecipientImageUrl(): string | null {
@@ -133,6 +171,14 @@ export class ChatWindowComponent implements AfterViewChecked {
   protected updateMessageText(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.message.set(target.value);
+
+    const conversationId = this.conversationId();
+    if (conversationId && target.value.trim()) {
+      const userProfile = this.userProfile();
+      const fullName = userProfile ? `${userProfile.firstName} ${userProfile.lastName}` : this.translateService.instant('communication.unknown_user');
+      this.communicationSignalR.sendTyping(conversationId, fullName)
+        .catch(err => console.error('Error sending typing event:', err));
+    }
   }
 
   protected sendMessage(): void {
@@ -143,8 +189,7 @@ export class ChatWindowComponent implements AfterViewChecked {
     if (!messageContent || !conversationId || !senderId) {
       this.messageService.add({
         severity: 'warn',
-        summary: 'Попередження',
-        detail: 'Введіть повідомлення перед відправкою',
+        detail: this.translateService.instant('communication.send_message_before_sending'),
       });
       return;
     }
@@ -164,8 +209,7 @@ export class ChatWindowComponent implements AfterViewChecked {
       .catch((err) => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Помилка',
-          detail: 'Не вдалося відправити повідомлення',
+          detail: this.translateService.instant('communication.errors.send_message'),
         });
       });
   }

@@ -274,6 +274,22 @@
     "end": "End",
     "pay": "Pay"
   },
+  "communication" : {
+    "unknown_user": "Unknown user",
+    "no_messages": "No messages yet",
+
+    "choose_conversation": "Choose a conversation to start chatting",
+    "conversation_not_found": "Conversation not found",
+    "no_messages_yet": "No messages yet. Start chatting with other users!",
+    "typing": "Typing...",
+    "message_placeholder": "Type your message here...",
+    "send_message_before_sending": "Please type your message before sending.",
+    "error": {
+      "load_conversation": "An error occurred while loading conversation. Please try again later.",
+      "no_conversations": "No conversations found",
+      "send_message": "An error occurred while sending the message."
+    }
+  },
   "common": {
     "actions": "Actions",
     "cancel": "Cancel",

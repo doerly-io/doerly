@@ -5,10 +5,10 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { CommunicationService } from '../../domain/communication.service';
-import { Router } from '@angular/router';
 import {PageInfo} from '../../../../@core/models/page-info';
 import {ConversationHeaderResponse} from '../../models/conversation-header-response.model';
 import {JwtTokenHelper} from '../../../../@core/helpers/jwtToken.helper';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-conversation-list',
@@ -21,6 +21,7 @@ import {JwtTokenHelper} from '../../../../@core/helpers/jwtToken.helper';
     ProgressSpinnerModule,
     PaginatorModule,
     ToastModule,
+    TranslatePipe,
   ],
   providers: [MessageService],
   templateUrl: './conversation-list.component.html',
@@ -29,6 +30,7 @@ import {JwtTokenHelper} from '../../../../@core/helpers/jwtToken.helper';
 export class ConversationListComponent implements OnInit {
   private readonly communicationService = inject(CommunicationService);
   private readonly jwtTokenHelper = inject(JwtTokenHelper);
+  private readonly translateService = inject(TranslateService);
 
   protected readonly loading = signal(false);
   protected readonly pageSize = signal(10);
@@ -66,7 +68,6 @@ export class ConversationListComponent implements OnInit {
         },
         error: () => {
           this.loading.set(false);
-        //TODO:   Add toasts
         },
       });
   }
@@ -77,7 +78,7 @@ export class ConversationListComponent implements OnInit {
     const recipient = isInitiator ? conversation.recipient : conversation.initiator;
 
     if (!recipient) {
-      return 'Невідомий користувач'; //TODO: Add toast
+      return this.translateService.instant('communication.unknown_user');
     }
 
     return `${recipient.firstName} ${recipient.lastName}`;

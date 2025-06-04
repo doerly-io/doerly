@@ -1,10 +1,9 @@
 <div class="conversation-list-container">
-  <!-- Індикатор завантаження -->
   <div *ngIf="loading()" class="loading-overlay">
     <p-progressSpinner></p-progressSpinner>
   </div>
 
-  <!-- Список розмов -->
+<!-- conversation list -->
   <div class="conversation-list" *ngIf="!loading() && conversations().length > 0">
     <div
       class="conversation-item"
@@ -33,12 +32,11 @@
     </div>
   </div>
 
-  <!-- Повідомлення, якщо розмов немає -->
   <div class="no-conversations" *ngIf="!loading() && conversations().length === 0">
-    <p>Розмов не знайдено</p>
+    <p>{{ 'communication.no_messages' | translate}}</p>
   </div>
 
-  <!-- Пагінатор -->
+  <!-- paginator -->
   <p-paginator
     [rows]="pageSize()"
     [totalRecords]="totalRecords()"
@@ -46,6 +44,6 @@
     [rowsPerPageOptions]="[10, 20, 50]"
   ></p-paginator>
 
-  <!-- Toast для сповіщень -->
+  <!-- Toast for messages -->
   <p-toast></p-toast>
 </div>

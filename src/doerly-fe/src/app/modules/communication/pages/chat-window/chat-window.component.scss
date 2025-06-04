@@ -87,7 +87,7 @@
         }
 
         &.own-message .message-content {
-          background: #4169e1;
+          background: var(--p-button-primary-background);
           color: #fff;
           border-top-right-radius: 0;
         }
@@ -122,12 +122,10 @@
       }
 
       .send-button {
-        background-color: #4169e1;
         color: #fff;
       }
 
       .send-button:hover {
-        background-color: #3557c0;
       }
     }
   }
