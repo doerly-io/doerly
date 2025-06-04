@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Doerly.Module.Authorization.Contracts.Dtos;
+namespace Doerly.Module.Authorization.Contracts.Requests;
 
 public class ResetPasswordRequestDto
 {

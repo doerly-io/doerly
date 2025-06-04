@@ -1,4 +1,4 @@
-namespace Doerly.Module.Authorization.Contracts.Dtos;
+namespace Doerly.Module.Authorization.Contracts.Responses;
 
 public record LoginResponseDto
 {

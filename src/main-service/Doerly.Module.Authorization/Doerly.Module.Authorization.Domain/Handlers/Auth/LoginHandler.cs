@@ -4,7 +4,8 @@ using Doerly.Common.Settings;
 using Doerly.Domain.Models;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Localization;
-using Doerly.Module.Authorization.Contracts.Dtos;
+using Doerly.Module.Authorization.Contracts.Requests;
+using Doerly.Module.Authorization.Contracts.Responses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -21,7 +22,7 @@ public class LoginHandler : BaseAuthHandler
         var user = await DbContext.Users
             .AsNoTracking()
             .Include(user => user.Role)
-            .Where(x => x.Email == requestDto.Email && x.IsEmailVerified)
+            .Where(x => x.Email == requestDto.Email && x.IsEmailVerified && x.IsEnabled)
             .Select(x => new
             {
                 x.Id,

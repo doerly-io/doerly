@@ -9,6 +9,7 @@ using Doerly.Infrastructure.Api;
 using Doerly.Localization;
 using Doerly.Messaging;
 using Doerly.Notification.EmailSender;
+using Doerly.Proxy.Authorization;
 using Doerly.Proxy.BaseProxy;
 using Doerly.Proxy.Payment;
 using Doerly.Proxy.Profile;
@@ -27,7 +28,10 @@ var configuration = builder.Configuration;
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services
-    .AddControllers(options => { options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider()); })
+    .AddControllers(options =>
+    {
+        options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider());
+    })
     .AddDataAnnotationsLocalization(options =>
     {
         options.DataAnnotationLocalizerProvider = (type, factory) =>
@@ -36,7 +40,10 @@ builder.Services
             return new DataAnnotationsStringLocalizer(resourceManager);
         };
     })
-    .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase; });
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    });
 
 
 builder.RegisterModule(new Doerly.Module.Payments.Api.ModuleInitializer());
@@ -51,6 +58,7 @@ builder.RegisterModule(new Doerly.Module.Common.Api.ModuleInitializer());
 
 builder.Services.AddProxy<IPaymentModuleProxy, PaymentModuleProxy>();
 builder.Services.AddProxy<IProfileModuleProxy, ProfileModuleProxy>();
+builder.Services.AddProxy<IAuthorizationModuleProxy, AuthorizationModuleProxy>();
 
 #endregion
 
@@ -64,10 +72,8 @@ builder.Services.AddScoped<IHandlerFactory, HandlerFactory>();
 
 builder.Services.AddScoped<IMessagePublisher, MessagePublisher>();
 
-builder.Services.ConfigureHttpClientDefaults(httpClientBuilder => httpClientBuilder.AddStandardResilienceHandler(options =>
-{
-    
-}));
+builder.Services.ConfigureHttpClientDefaults(httpClientBuilder =>
+    httpClientBuilder.AddStandardResilienceHandler(options => { }));
 
 #region Configure Settings
 
@@ -135,7 +141,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSendGrid(opt => { opt.ApiKey = sendGridSettings.ApiKey; });
 
-builder.Services.AddAzureClients(factoryBuilder => { factoryBuilder.AddBlobServiceClient(azureStorageSettings.ConnectionString); });
+builder.Services.AddAzureClients(factoryBuilder =>
+{
+    factoryBuilder.AddBlobServiceClient(azureStorageSettings.ConnectionString);
+});
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
 

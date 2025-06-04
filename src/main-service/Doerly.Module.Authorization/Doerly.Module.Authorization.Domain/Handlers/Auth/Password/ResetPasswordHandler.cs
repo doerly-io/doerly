@@ -3,7 +3,7 @@ using Doerly.Domain.Factories;
 using Doerly.Domain.Models;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Localization;
-using Doerly.Module.Authorization.Contracts.Dtos;
+using Doerly.Module.Authorization.Contracts.Requests;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
