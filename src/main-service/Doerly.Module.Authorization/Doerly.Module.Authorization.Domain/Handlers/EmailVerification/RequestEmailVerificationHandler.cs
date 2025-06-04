@@ -47,7 +47,7 @@ public class RequestEmailVerificationHandler : BaseAuthHandler
         await DbContext.SaveChangesAsync();
 
         var encodedToken = HttpUtility.UrlEncode(token.originalToken);
-        var url = $"{_frontendOptions.Value.FrontendUrl}/auth/email-verification?token={encodedToken}&email={message.Email}";
+        var url = $"{_frontendOptions.Value.FrontendUrls[0]}/auth/email-verification?token={encodedToken}&email={message.Email}";
         emailBody = emailBody.Replace("{{welcomeVerificationText}}", Resources.Get("EmailVerificationText"));
         emailBody = emailBody.Replace("{{verificationLinkText}}", $"{url}");
         emailBody = emailBody.Replace("{{verificationLink}}", $"{url}");

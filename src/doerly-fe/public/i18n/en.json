@@ -228,6 +228,8 @@
     "title": "Title",
     "description": "Description",
     "price": "Price",
+    "price_negotiable": "Price is negotiable",
+    "placed": "Placed",
     "due_date": "Due Date",
     "customer_id": "Customer ID",
     "executor_id": "Executor ID",
@@ -258,6 +260,7 @@
       "Placed": "Placed",
       "InProgress": "In progress",
       "AwaitingPayment": "Awaiting payment",
+      "ProcessingPayment": "Processing payment",
       "AwaitingConfirmation": "Awaiting confirmation",
       "Completed": "Completed",
       "Canceled": "Canceled"
@@ -285,7 +288,28 @@
     "order_editing": "Order editing",
     "payment_redirect": "You are gonna be redirected to the payment page in a few seconds",
     "end": "End",
-    "pay": "Pay"
+    "pay": "Pay",
+    "view_profile": "View profile",
+    "sent": "Sent",
+    "executor": "Executor",
+    "order_number": "Order №{{orderId}}",
+    "execution_proposal_number": "Execution proposal №{{proposalId}}",
+    "size": "Size",
+    "added": "Added",
+    "uploaded": "Uploaded",
+    "drag_and_drop_images": "Drag and drop image files here to upload",
+    "download": "Download",
+    "uploaded_files": "Uploaded files",
+    "added_files": "Added files",
+    "add_files": "Add files",
+    "clear_files": "Clear files",
+    "delete_file": "Delete file",
+    "additional_files": "Additional files",
+    "file_limit_exceeded": "File limit exceeded. Maximum number of files is {{limit}}.",
+    "files_count": "Files",
+    "files_size": "Files size",
+    "files_size_limit_exceeded": "File size limit exceeded.",
+    "files_size_limit": "Maximum files size is {{size}}."
   },
   "payments": {
     "status": {
@@ -316,6 +340,7 @@
     "page_not_found": "Page not found",
     "edit": "Edit",
     "delete": "Delete",
+    "error_occurred": "An error occurred",
     "control": {
       "unset": "Unset"
     }

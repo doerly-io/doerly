@@ -22,7 +22,7 @@ namespace Doerly.Module.Order.DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Doerly.Module.Order.DataAccess.Models.ExecutionProposal", b =>
+            modelBuilder.Entity("Doerly.Module.Order.DataAccess.Entities.ExecutionProposal", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -76,7 +76,7 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                     b.ToTable("execution_proposal", "order");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Order.DataAccess.Models.Order", b =>
+            modelBuilder.Entity("Doerly.Module.Order.DataAccess.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -92,6 +92,11 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer")
                         .HasColumnName("category_id");
+
+                    b.Property<Guid>("Code")
+                        .HasMaxLength(36)
+                        .HasColumnType("uuid")
+                        .HasColumnName("code");
 
                     b.Property<bool>("CustomerCompletionConfirmed")
                         .HasColumnType("boolean")
@@ -127,6 +132,10 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("executor_id");
 
+                    b.Property<bool>("IsPriceNegotiable")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_price_negotiable");
+
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_modified_date");
@@ -156,9 +165,61 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                     b.ToTable("order", "order");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Order.DataAccess.Models.ExecutionProposal", b =>
+            modelBuilder.Entity("Doerly.Module.Order.DataAccess.Entities.OrderFile", b =>
                 {
-                    b.HasOne("Doerly.Module.Order.DataAccess.Models.Order", "Order")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_created");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer")
+                        .HasColumnName("order_id");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("path");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint")
+                        .HasColumnName("size");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_order_file");
+
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_order_file_order_id");
+
+                    b.ToTable("order_file", "order");
+                });
+
+            modelBuilder.Entity("Doerly.Module.Order.DataAccess.Entities.ExecutionProposal", b =>
+                {
+                    b.HasOne("Doerly.Module.Order.DataAccess.Entities.Order", "Order")
                         .WithMany("ExecutionProposals")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -168,9 +229,23 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("Doerly.Module.Order.DataAccess.Models.Order", b =>
+            modelBuilder.Entity("Doerly.Module.Order.DataAccess.Entities.OrderFile", b =>
+                {
+                    b.HasOne("Doerly.Module.Order.DataAccess.Entities.Order", "Order")
+                        .WithMany("OrderFiles")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_order_file_order_order_id");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Doerly.Module.Order.DataAccess.Entities.Order", b =>
                 {
                     b.Navigation("ExecutionProposals");
+
+                    b.Navigation("OrderFiles");
                 });
 #pragma warning restore 612, 618
         }

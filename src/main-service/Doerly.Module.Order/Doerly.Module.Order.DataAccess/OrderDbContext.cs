@@ -1,6 +1,6 @@
 ﻿using Doerly.DataAccess;
-using Doerly.Module.Order.DataAccess.Models;
-using OrderEntity = Doerly.Module.Order.DataAccess.Models.Order;
+using Doerly.Module.Order.DataAccess.Entities;
+using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -15,6 +15,8 @@ public class OrderDbContext: BaseDbContext
     public DbSet<OrderEntity> Orders { get; set; }
 
     public DbSet<ExecutionProposal> ExecutionProposals { get; set; }
+
+    public DbSet<OrderFile> OrderFiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,5 +1,5 @@
 ﻿using Doerly.Module.Order.DataAccess.Constants;
-using Doerly.Module.Order.DataAccess.Models;
+using Doerly.Module.Order.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

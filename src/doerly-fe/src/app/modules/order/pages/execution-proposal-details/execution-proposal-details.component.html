@@ -1,47 +1,63 @@
-<section class="row justify-content-center mt-5">
-    <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
-      <div class="row justify-content-center">
-        <div class="col-sm-12 col-md-10">
-          <div *ngIf="loading" class="text-center">Loading...</div>
-          <div *ngIf="!loading && proposal" class="execution-proposal-details">
-            <h3 class="c-primary text-center mb-3">{{ 'ordering.execution_proposal_details' | translate }}</h3>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="execution-proposal-detail-item mb-3">
-                  <p><strong>{{ 'ordering.proposal_id' | translate }}</strong> {{ proposal.id }}</p>
-                </div>
-                <div class="execution-proposal-detail-item mb-3">
-                  <p><strong>{{ 'ordering.order_id' | translate }}</strong> {{ proposal.orderId }}</p>
-                </div>
-                <div class="execution-proposal-detail-item mb-3">
-                  <p><strong>{{ 'ordering.comment' | translate }}</strong> {{ proposal.comment }}</p>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="execution-proposal-detail-item mb-3">
-                  <p><strong>{{ 'ordering.sender_id' | translate }}</strong> {{ proposal.senderId }}</p>
-                </div>
-                <div class="execution-proposal-detail-item mb-3">
-                  <p><strong>{{ 'ordering.receiver_id' | translate }}</strong> {{ proposal.receiverId }}</p>
-                </div>
-                <div class="execution-proposal-detail-item mb-3">
-                  <p><strong>{{ 'ordering.status' | translate }}:</strong> {{ 'ordering.proposal_statuses.' + EExecutionProposalStatus[proposal.status] | translate}}</p>
-                </div>
-              </div>
+<section class="execution-proposal-details-container row justify-content-center mt-5">
+  <h3 class="proposal-title">{{'ordering.execution_proposal_number' | translate: ({proposalId: proposal?.id })}}</h3>
+  <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
+    <div class="row justify-content-center">
+      <div class="col-sm-12 col-md-10">
+        <div *ngIf="loading" class="text-center">{{ 'ordering.loading' | translate }}</div>
+        <div *ngIf="!loading && proposal" class="execution-proposal-details">
+
+          <!-- Фото профілю та ім'я по центру -->
+          <div class="d-flex flex-column align-items-center mb-4">
+            <div class="avatar-container" pTooltip="{{ 'ordering.view_profile' | translate }}" tooltipPosition="top">
+              <img *ngIf="profileAvatarUrl" [src]="profileAvatarUrl" alt="{{ 'profile.basic.image.alt' | translate }}"
+                class="avatar proposal-profile-avatar" width="120" height="120" />
+              <p-avatar *ngIf="!profileAvatarUrl" icon="pi pi-user" shape="circle" size="xlarge"
+                class="avatar-bg proposal-profile-avatar"></p-avatar>
             </div>
-            <div class="d-flex justify-content-center mb-3 gap-5" *ngIf="proposal.status == EExecutionProposalStatus.Pending">
-              <p-button [routerLink]="['/ordering/edit-execution-proposal', proposal.id]"
-                        label="{{ 'common.edit' | translate }}"
-                        icon="pi pi-pencil"
-                        class="me-2"
-                        *ngIf="proposal.senderId == profileId">
-              </p-button>
-              <p-button label="{{ 'ordering.proposal_options.accept' | translate }}" icon="pi pi-check" severity="success" (click)="resolveProposal(EExecutionProposalStatus.Accepted)" *ngIf="proposal.receiverId == profileId"></p-button>
-              <p-button label="{{ 'ordering.proposal_options.reject' | translate }}" icon="pi pi-times" severity="danger" (click)="resolveProposal(EExecutionProposalStatus.Rejected)" *ngIf="proposal.receiverId == profileId"></p-button>
-              <p-button label="{{ 'ordering.proposal_options.revoke' | translate }}" icon="pi pi-times" severity="warn" (click)="resolveProposal(EExecutionProposalStatus.Revoked)" *ngIf="proposal.senderId == profileId"></p-button>
+            <span class="mt-2">
+              {{ profileName }}
+            </span>
+          </div>
+
+          <div class="execution-proposal-detail-item mb-3">
+            <p-panel class="field-label" header="{{ 'ordering.comment' | translate }}" class="mt-2" [toggleable]="true">
+              <span>{{ proposal.comment }}</span>
+            </p-panel>
+          </div>
+
+          <!-- Низ: замовлення, надіслано та статус -->
+          <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap proposal-bottom-row">
+            <div class="d-flex align-items-center gap-2">
+              <span class="field-label">{{ 'ordering.sent' | translate }}:</span>
+              <span>{{ proposal.dateCreated | date:'dd.MM.yyyy HH:mm' }}</span>
             </div>
+            <div class="d-flex align-items-center gap-2">
+              <p-tag [value]="'ordering.proposal_statuses.' + EExecutionProposalStatus[proposal.status] | translate"
+                [severity]="getExecutionProposalStatusSeverity(proposal.status)">
+              </p-tag>
+            </div>
+          </div>
+
+          <!-- Кнопки дій -->
+          <div class="action-buttons">
+            <p-button [routerLink]="['/ordering/order', proposal.orderId]" icon="pi pi-arrow-right" iconPos="right"
+              label="{{ 'ordering.order_number' | translate: {orderId: proposal.orderId} }}" severity="info"></p-button>
+            <p-button [routerLink]="['/ordering/edit-execution-proposal', proposal.id]" label="{{ 'common.edit' | translate }}"
+              icon="pi pi-pencil"
+              *ngIf="proposal.status == EExecutionProposalStatus.Pending && proposal.senderId == profileId">
+            </p-button>
+            <p-button label="{{ 'ordering.proposal_options.accept' | translate }}" icon="pi pi-check" severity="success"
+              (click)="resolveProposal(EExecutionProposalStatus.Accepted)"
+              *ngIf="proposal.status == EExecutionProposalStatus.Pending && proposal.receiverId == profileId"></p-button>
+            <p-button label="{{ 'ordering.proposal_options.reject' | translate }}" icon="pi pi-times" severity="danger"
+              (click)="resolveProposal(EExecutionProposalStatus.Rejected)"
+              *ngIf="proposal.status == EExecutionProposalStatus.Pending && proposal.receiverId == profileId"></p-button>
+            <p-button label="{{ 'ordering.proposal_options.revoke' | translate }}" icon="pi pi-times" severity="warn"
+              (click)="resolveProposal(EExecutionProposalStatus.Revoked)"
+              *ngIf="proposal.status == EExecutionProposalStatus.Pending && proposal.senderId == profileId"></p-button>
           </div>
         </div>
       </div>
-    </p-card>
-  </section>
+    </div>
+  </p-card>
+</section>

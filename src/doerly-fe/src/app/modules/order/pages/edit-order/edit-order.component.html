@@ -1,4 +1,4 @@
-<section class="row justify-content-center mt-5">
+<section class="order-container row justify-content-center mt-5">
   <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
     <div class="row justify-content-center">
       <div class="col-sm-12 col-md-10">
@@ -11,7 +11,7 @@
           <div class="row mb-3 mx-0 px-0">
             <div>
               <label for="categoryId">{{ 'ordering.category_id' | translate }}</label>
-              <input pInputText formControlName="categoryId" class="w-100" id="categoryId" type="number" step="1"/>
+              <input pInputText formControlName="categoryId" class="w-100" id="categoryId" type="number" step="1" />
               <small *ngIf="isInvalid(orderForm, 'categoryId')" class="input-validation-item">
                 {{ getError(orderForm, 'categoryId', 'required', 'ordering.field_required' | translate) }}
                 {{ getServersideError(orderForm, 'categoryId') }}
@@ -36,26 +36,130 @@
                 maxlength="4000"></textarea>
               <small *ngIf="isInvalid(orderForm, 'description')" class="input-validation-item">
                 {{ getError(orderForm, 'description', 'required', 'ordering.field_required' | translate) }}
-                {{ getError(orderForm, 'description', 'minimumLength', 'ordering.minimum_length' | translate: {length: 5}) }}
+                {{ getError(orderForm, 'description', 'minimumLength', 'ordering.minimum_length' | translate: {length:
+                5}) }}
                 {{ getServersideError(orderForm, 'description') }}
               </small>
             </div>
           </div>
           <div class="row mb-3 mx-0 px-0">
-            <div>
+            <div class="card">
+              <p-fileupload [multiple]="true" accept=".jpg,.jpeg,.png" auto="false"
+                (onSelect)="onSelectedFiles($event)">
+                <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback">
+                  <div class="upload-header flex items-center flex-1 gap-2 w-100">
+                    <div class="flex gap-2">
+                      <p-button pTooltip="{{ 'ordering.add_files' | translate }}" tooltipPosition="top"
+                        (onClick)="choose($event, chooseCallback)" icon="pi pi-images" [rounded]="true"
+                        [outlined]="true" />
+                      <p-button pTooltip="{{ 'ordering.clear_files' | translate }}" tooltipPosition="top"
+                        icon="pi pi-times" [rounded]="true" [outlined]="true" severity="danger"
+                        [disabled]="(!files || files.length === 0) && (!existingFiles || existingFiles.length === 0)"
+                        (onClick)="onClearTemplatingUpload(clearCallback)" />
+                    </div>
+                    <div class="text-secondary mt-1" [ngClass]="{'text-danger fw-bold': orderForm.errors?.['filesSizeLimitExceeded']}">
+                      {{ 'ordering.files_size' | translate }}:
+                      <b>{{ formatSize(totalFilesSize) }}</b> / <b>{{ formatSize(totalSizeLimit) }}</b>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template #content let-files let-removeFileCallback="removeFileCallback">
+                  <div class="files-section">
+                    <!-- Нові файли -->
+                    <div *ngIf="files?.length > 0" class="files-list">
+                      <h5>{{ 'ordering.added_files' | translate }}</h5>
+                      <div *ngFor="let file of files" class="file-card">
+                        <p-image [alt]="file.fileName" [src]="file.filePath" [preview]="true">
+                          <ng-template #indicator>
+                            <i class="pi pi-search"></i>
+                          </ng-template>
+                          <ng-template #image>
+                            <img role="presentation" [alt]="file.name" [src]="file.objectURL" class="file-image" />
+                          </ng-template>
+                          <ng-template #preview let-style="style" let-previewCallback="previewCallback">
+                            <img [alt]="file.name" [src]="file.objectURL" class="file-image-preview" [style]="style" />
+                          </ng-template>
+                        </p-image>
+                        <div class="file-info">
+                          <span class="file-name">{{ file.name }}</span>
+                          <div class="file-size">{{ formatSize(file.size) }}</div>
+                          <p-badge class="file-badge" value="{{ 'ordering.added' | translate }}"
+                            severity="warn"></p-badge>
+                        </div>
+                        <div class="file-actions mt-3">
+                          <p-button pTooltip="{{ 'ordering.delete_file' | translate }}" tooltipPosition="top"
+                            icon="pi pi-times" (click)="onRemoveTemplatingFile($event, file, removeFileCallback)"
+                            [outlined]="true" [rounded]="true" severity="danger" />
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Існуючі файли -->
+                    <div *ngIf="existingFiles?.length! > 0" class="files-list">
+                      <h5>{{ 'ordering.uploaded_files' | translate }}</h5>
+                      <div *ngFor="let file of existingFiles" class="file-card">
+                        <p-image [alt]="file.fileName" [src]="file.filePath" [preview]="true">
+                          <ng-template #indicator>
+                            <i class="pi pi-search"></i>
+                          </ng-template>
+                          <ng-template #image>
+                            <img [alt]="file.fileName" [src]="file.filePath" class="file-image" />
+                          </ng-template>
+                          <ng-template #preview let-style="style" let-previewCallback="previewCallback">
+                            <img [alt]="file.fileName" [src]="file.filePath" class="file-image-preview"
+                              [style]="style" />
+                          </ng-template>
+                        </p-image>
+                        <div class="file-info">
+                          <span class="file-name">{{ file.fileName }}</span>
+                          <div class="file-size">{{ formatSize(file.fileSize) }}</div>
+                          <a [href]="file.filePath" target="_blank" rel="noopener">{{ 'ordering.download' | translate
+                            }}</a>
+                          <p-badge class="file-badge" value="{{ 'ordering.uploaded' | translate }}"
+                            severity="success"></p-badge>
+                        </div>
+                        <div class="file-actions">
+                          <p-button pTooltip="{{ 'ordering.delete_file' | translate }}" tooltipPosition="top"
+                            icon="pi pi-times" (click)="removeExistingFile(file)" [outlined]="true" [rounded]="true"
+                            severity="danger" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template #file></ng-template>
+                <ng-template #empty>
+                  <div class="flex items-center justify-center flex-col">
+                    <p class="mt-6 mb-0">{{'ordering.drag_and_drop_images' | translate}}</p>
+                  </div>
+                </ng-template>
+              </p-fileupload>
+            </div>
+          </div>
+          <div class="row mb-3 mx-0 px-0">
+            <div class="col-6">
               <label for="price">{{ 'ordering.price' | translate }}</label>
-              <input pInputText formControlName="price" class="w-100" id="price" type="number" min="1" max="9999999999999.99" step="0.01" />
+              <input pInputText formControlName="price" class="w-100" id="price" type="number" min="1"
+                max="9999999999999.99" step="0.01" />
               <small *ngIf="isInvalid(orderForm, 'price')" class="input-validation-item">
                 {{ getError(orderForm, 'price', 'required', 'ordering.field_required' | translate) }}
                 {{ getError(orderForm, 'price', 'min', 'ordering.price_min' | translate) }}
                 {{ getServersideError(orderForm, 'price') }}
               </small>
             </div>
+            <div class="col-6 d-flex align-items-center mt-3">
+              <p-checkbox formControlName="isPriceNegotiable" binary="true" inputId="isPriceNegotiable"></p-checkbox>
+              <label for="isPriceNegotiable" class="ms-2 mb-0">{{ 'ordering.price_negotiable' | translate }}</label>
+              <small *ngIf="isInvalid(orderForm, 'isPriceNegotiable')" class="input-validation-item ms-2">
+                {{ getError(orderForm, 'isPriceNegotiable', 'required', 'ordering.field_required' | translate) }}
+                {{ getServersideError(orderForm, 'isPriceNegotiable') }}
+              </small>
+            </div>
           </div>
           <div class="row mb-3 mx-0 px-0">
             <div class="col-12 col-md-6 mb-3 mb-md-0">
               <label for="paymentKind">{{ 'ordering.payment_kind' | translate }}</label>
-              <p-select [options]="paymentKinds" formControlName="paymentKind" class="w-100" id="paymentKind"></p-select>
+              <p-select [options]="paymentKinds" formControlName="paymentKind" class="w-100"
+                id="paymentKind"></p-select>
               <small *ngIf="isInvalid(orderForm, 'paymentKind')" class="input-validation-item">
                 {{ getError(orderForm, 'paymentKind', 'required', 'ordering.field_required' | translate) }}
                 {{ getServersideError(orderForm, 'paymentKind') }}
@@ -64,7 +168,8 @@
             <div class="datepicker-container col-12 col-md-6">
               <label for="dueDate" class="w-100">{{ 'ordering.due_date' | translate }}</label>
               <p-datepicker formControlName="dueDate" class="w-100" id="dueDate" [showTime]="true" [hourFormat]="'24'"
-                [showIcon]="true" dateFormat="dd.mm.yy" [minDate]="currentDate"></p-datepicker>
+                [showIcon]="true" dateFormat="dd.mm.yy"
+                [minDate]="isEdit && currentDate > orderForm.value.dueDate ? orderForm.value.dueDate : currentDate"></p-datepicker>
               <small *ngIf="isInvalid(orderForm, 'dueDate')" class="input-validation-item">
                 {{ getError(orderForm, 'dueDate', 'required', 'ordering.field_required' | translate) }}
                 {{ getError(orderForm, 'dueDate', 'invalidDate', 'ordering.invalid_date' | translate) }}
@@ -73,9 +178,9 @@
             </div>
           </div>
           <div class="row mx-0 px-0 mt-3">
-            <button pButton pRipple type="submit"
-              [label]="isEdit ? ('common.save' | translate) : ('ordering.create_order' | translate)"
-              icon="pi pi-check" class="w-100" [disabled]="!orderForm.valid"></button>
+            <button pButton pRipple type="submit" [disabled]="orderForm.invalid"
+              [label]="isEdit ? ('common.save' | translate) : ('ordering.create_order' | translate)" icon="pi pi-check"
+              class="w-100" [disabled]="!orderForm.valid"></button>
           </div>
         </form>
       </div>

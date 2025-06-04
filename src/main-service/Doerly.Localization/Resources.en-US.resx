@@ -139,7 +139,7 @@ Doerly</value>
 	</data>
   <data name="CompetenceAlreadyExists" xml:space="preserve">
         <value>Competence already exists in profile</value>
-    </data>
+  </data>
   <data name="OrderPaymentDescription" xml:space="preserve">
     <value>Payment for order №{0}</value>
   </data>
@@ -157,6 +157,33 @@ Doerly</value>
   </data>
   <data name="FieldIsUrl" xml:space="preserve">
     <value>{0} must be {1}</value>
+  </data>
+    <data name="ORDER_NOT_FOUND" xml:space="preserve">
+    <value>Order not found</value>
+  </data>
+  <data name="EXECUTION_PROPOSAL_NOT_FOUND" xml:space="preserve">
+    <value>Execution proposal not found</value>
+  </data>
+  <data name="EXECUTION_PROPOSAL_ALREADY_SENT" xml:space="preserve">
+    <value>Execution proposal to this user has already been sent</value>
+  </data>
+  <data name="CategoryNotFound" xml:space="preserve">
+    <value>Category not found</value>
+  </data>
+  <data name="ServiceNotFound" xml:space="preserve">
+    <value>Service not found</value>
+  </data>
+  <data name="ServiceAlreadyDeleted" xml:space="preserve">
+    <value>Service already deleted</value>
+  </data>
+  <data name="CategoryAlreadyDeleted" xml:space="preserve">
+    <value>Category already deleted</value>
+  </data>
+  <data name="CategoryCannotBeOwnParent" xml:space="preserve">
+    <value>Сategory cannot be own parent</value>
+  </data>
+  <data name="ParentCategoryNotFound" xml:space="preserve">
+    <value>Parent category not found</value>
   </data>
   <data name="PaymentReceipt" xml:space="preserve">
     <value>Payment receipt</value>

@@ -228,7 +228,9 @@
     "title": "Назва",
     "description": "Опис",
     "price": "Ціна",
-    "due_date": "Термін виконання",
+    "price_negotiable": "Ціна обговорюється",
+    "placed": "Розміщено",
+    "due_date": "Виконати до",
     "customer_id": "ID замовника",
     "executor_id": "ID виконавця",
     "execution_date": "Дата виконання",
@@ -257,6 +259,7 @@
       "Placed": "Розміщене",
       "InProgress": "В процесі",
       "AwaitingPayment": "Очікує оплати",
+      "ProcessingPayment": "Обробка платежу",
       "AwaitingConfirmation": "Очікує підтвердження",
       "Completed": "Завершене",
       "Canceled": "Скасоване"
@@ -284,7 +287,28 @@
     "order_editing": "Редагування замовлення",
     "payment_redirect": "Ви будете перенаправлені на сторінку оплати через декілька секунд",
     "end": "Завершити",
-    "pay": "Оплатити"
+    "pay": "Оплатити",
+    "view_profile": "Переглянути профіль",
+    "sent": "Надіслано",
+    "executor": "Виконавець",
+    "order_number": "Замовлення №{{orderId}}",
+    "execution_proposal_number": "Пропозиція виконання №{{proposalId}}",
+    "size": "Розмір",
+    "added": "Додано",
+    "uploaded": "Завантажено",
+    "drag_and_drop_images": "Перетягніть та відпустіть файли зображень сюди для відправки",
+    "download": "Скачати",
+    "uploaded_files": "Завантажені файли",
+    "added_files": "Додані файли",
+    "add_files": "Додати файли",
+    "clear_files": "Очистити файли",
+    "delete_file": "Видалити файл",
+    "additional_files": "Додаткові файли",
+    "file_limit_exceeded": "Перевищено ліміт файлів. Максимальна кількість файлів - {{limit}}.",
+    "files_count": "Файлів",
+    "files_size": "Розмір файлів",
+    "files_size_limit_exceeded": "Перевищено ліміт розміру файлу",
+    "files_size_limit": "Максимальний розмір файлів - {{size}}."
   },
   "payments": {
     "status": {
@@ -315,6 +339,7 @@
     "page_not_found": "Сторінку не знайдено",
     "edit": "Редагувати",
     "delete": "Видалити",
+    "error_occurred": "Виникла помилка",
     "control": {
       "unset": "Не встановлено"
     }
