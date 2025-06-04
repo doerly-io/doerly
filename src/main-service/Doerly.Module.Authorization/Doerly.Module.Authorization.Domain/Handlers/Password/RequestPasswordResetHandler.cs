@@ -54,7 +54,7 @@ public class RequestPasswordResetHandler : BaseAuthHandler
         var emailBody = EmailTemplate.Get(EmailTemplate.ResetPassword);
 
         var encodedToken = HttpUtility.UrlEncode(token.originalToken);
-        var url = $"{_frontedOptions.Value.FrontendUrl}/auth/password-reset?token={encodedToken}&email={email}";
+        var url = $"{_frontedOptions.Value.FrontendUrls[0]}/auth/password-reset?token={encodedToken}&email={email}";
         emailBody = emailBody.Replace("{{welcomeVerificationText}}", Resources.Get("ResetPasswordEmailVerificationText"));
         emailBody = emailBody.Replace("{{verificationLinkText}}", $"{url}");
         emailBody = emailBody.Replace("{{verificationLink}}", $"{url}");

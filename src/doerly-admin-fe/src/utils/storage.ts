@@ -10,6 +10,10 @@ const setItem = (key: string, value: any) => {
   localStorage.setItem(key, value);
 };
 
+export const keys = {
+  ACCESS_TOKEN: 'access_token',
+};
+
 const forExport = {
   getItem,
   removeItem,
