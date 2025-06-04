@@ -2,8 +2,8 @@ using Doerly.Domain;
 using Doerly.Domain.Factories;
 using Doerly.Domain.Helpers;
 using Doerly.Localization;
+using Doerly.Module.Payments.Contracts.Messages;
 using Doerly.Module.Payments.DataAccess;
-using Doerly.Module.Payments.Domain.Models;
 using Doerly.Notification.EmailSender;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -34,7 +34,7 @@ public class SendPaymentReceiptHandler : BasePaymentHandler
         _requestContext = requestContext;
     }
 
-    public async Task HandleAsync(PaymentStatusChangedModel model)
+    public async Task HandleAsync(BillStatusChangedMessage model)
     {
         var payment = await DbContext.Payments
             .FirstOrDefaultAsync(x => x.Guid == model.PaymentGuid && x.Status == model.Status);
@@ -56,8 +56,8 @@ public class SendPaymentReceiptHandler : BasePaymentHandler
 
         emailBody = emailBody
             .Replace(PaymentDateTemplate, "payment.DateCreated:yyyy-MM-dd HH:mm:ss")
-            .Replace(PaymentMethodTemplate, model.PaymentMethod.ToDescription())
-            .Replace(PaymentCardNumberTemplate, model.CardNumber ?? string.Empty)
+            .Replace(PaymentMethodTemplate, payment.PaymentMethod.ToDescription())
+            .Replace(PaymentCardNumberTemplate, payment.CardNumber ?? string.Empty)
             .Replace(PaymentDescriptionTemplate, payment.Description)
             .Replace(PaymentTotalPaidTemplate, payment.Amount.ToString("C"));
 

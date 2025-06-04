@@ -1,5 +1,8 @@
+using Doerly.Domain.Factories;
 using Doerly.Messaging;
 using Doerly.Module.Payments.Contracts.Messages;
+using Doerly.Module.Payments.Domain.Handlers;
+using Doerly.Module.Payments.Domain.Models;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
@@ -7,13 +10,21 @@ namespace Doerly.Module.Payments.Domain.EventConsumers;
 
 public class PaymentStatusEventConsumer : BaseConsumer<BillStatusChangedMessage>
 {
-    public PaymentStatusEventConsumer(ILogger logger) : base(logger)
+    private readonly IHandlerFactory _handlerFactory;
+
+    public PaymentStatusEventConsumer(
+        IHandlerFactory handlerFactory,
+        ILogger<PaymentStatusEventConsumer> logger) : base(logger)
     {
+        _handlerFactory = handlerFactory;
     }
 
-    protected override Task Handle(ConsumeContext<BillStatusChangedMessage> context)
+    protected override async Task Handle(ConsumeContext<BillStatusChangedMessage> context)
     {
-        //ToDo: add sending email notification logic here
-        return Task.CompletedTask;
+        var message = context.Message;
+        var handler = _handlerFactory.Get<SendPaymentReceiptHandler>();
+        await handler.HandleAsync(message);
+        
+        
     }
 }

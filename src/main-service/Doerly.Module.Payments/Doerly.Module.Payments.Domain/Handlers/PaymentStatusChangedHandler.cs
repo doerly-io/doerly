@@ -18,18 +18,18 @@ public class PaymentStatusChangedHandler : BasePaymentHandler
         PaymentDbContext dbContext,
         IMessagePublisher messagePublisher,
         ILogger<PaymentStatusChangedHandler> logger
-        ) : base(dbContext)
+    ) : base(dbContext)
     {
         _messagePublisher = messagePublisher;
         _logger = logger;
     }
-    
+
     public async Task<HandlerResult> Handle(PaymentStatusChangedModel model)
     {
         var payment = await DbContext.Payments
             .Include(x => x.Bill)
             .FirstOrDefaultAsync(x => x.Guid == model.PaymentGuid && x.Status == EPaymentStatus.Pending);
-        
+
         if (payment == null)
         {
             _logger.LogWarning("Pending payment not found for PaymentGuid: {PaymentGuid}", model.PaymentGuid);
@@ -42,15 +42,14 @@ public class PaymentStatusChangedHandler : BasePaymentHandler
         payment.CardNumber = model.CardNumber;
         await DbContext.SaveChangesAsync();
 
-        await PublishPaymentStatusChangedEvent(payment.BillId, model.Status);
-        
+        await PublishPaymentStatusChangedEvent(payment.BillId, payment.Guid, model.Status);
+
         return HandlerResult.Success();
     }
-    
-    private async Task PublishPaymentStatusChangedEvent(int billId, EPaymentStatus status)
+
+    private async Task PublishPaymentStatusChangedEvent(int billId, Guid paymentGuid, EPaymentStatus status)
     {
-        var message = new BillStatusChangedMessage(billId, status);
+        var message = new BillStatusChangedMessage(billId, paymentGuid, status);
         await _messagePublisher.Publish(message);
     }
 }
-
