@@ -34,7 +34,8 @@ public class PaymentsController : BaseApiController
             PaymentDescription = "Hello world",
             ReturnUrl = null,
             Currency = ECurrency.UAH,
-            PaymentAction = EPaymentAction.Pay
+            PaymentAction = EPaymentAction.Pay,
+            PayerEmail = RequestContext.UserEmail
         };
 
         var uri = _webhookUrlBuilder.BuildWebhookUrl(nameof(WebhookController).ToControllerName(), nameof(WebhookController.FinalStatus));

@@ -1,3 +1,4 @@
+using Doerly.Domain;
 using Doerly.Domain.Factories;
 using Doerly.Messaging;
 using Doerly.Module.Authorization.Contracts.Messages;
@@ -12,7 +13,10 @@ public class UserRegisteredEventConsumer : BaseConsumer<UserRegisteredMessage>
 {
     private readonly IHandlerFactory _handlerFactory;
 
-    public UserRegisteredEventConsumer(ILogger<UserRegisteredEventConsumer> logger, IHandlerFactory handlerFactory) : base(logger)
+    public UserRegisteredEventConsumer(
+        ILogger<UserRegisteredEventConsumer> logger,
+        IDoerlyRequestContext doerlyRequestContext,
+        IHandlerFactory handlerFactory) : base(logger, doerlyRequestContext)
     {
         _handlerFactory = handlerFactory;
     }

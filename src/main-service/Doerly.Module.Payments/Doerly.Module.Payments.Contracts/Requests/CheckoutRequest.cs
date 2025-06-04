@@ -16,6 +16,8 @@ public class CheckoutRequest
     /// Id of user who will pay for the bill
     /// </summary>
     public required int PayerId { get; set; }
+    
+    public required string PayerEmail { get; set; }
 
     [MinLength(5)]
     [MaxLength(50)]

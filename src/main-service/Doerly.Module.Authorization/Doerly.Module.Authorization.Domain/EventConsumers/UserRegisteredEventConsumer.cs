@@ -1,3 +1,4 @@
+using Doerly.Domain;
 using Doerly.Domain.Factories;
 using Doerly.Messaging;
 using Doerly.Module.Authorization.Domain.Handlers;
@@ -16,8 +17,9 @@ public class UserRegisteredEventConsumer : BaseConsumer<UserRegisteredMessage>
     public UserRegisteredEventConsumer(
         ILogger<UserRegisteredEventConsumer> logger,
         IHandlerFactory handlerFactory,
+        IDoerlyRequestContext doerlyRequestContext,
         IHostEnvironment hostEnvironment
-        ) : base(logger)
+    ) : base(logger, doerlyRequestContext)
     {
         _handlerFactory = handlerFactory;
         _hostEnvironment = hostEnvironment;

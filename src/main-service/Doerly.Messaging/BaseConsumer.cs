@@ -1,3 +1,4 @@
+using Doerly.Domain;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
@@ -6,10 +7,12 @@ namespace Doerly.Messaging;
 public abstract class BaseConsumer<TMessage> : IConsumer<TMessage> where TMessage : class
 {
     private readonly ILogger _logger;
+    private readonly IDoerlyRequestContext _doerlyRequestContext;
 
-    protected BaseConsumer(ILogger logger)
+    protected BaseConsumer(ILogger logger, IDoerlyRequestContext doerlyRequestContext)
     {
         _logger = logger;
+        _doerlyRequestContext = doerlyRequestContext;
     }
 
     public async Task Consume(ConsumeContext<TMessage> context)
@@ -30,7 +33,15 @@ public abstract class BaseConsumer<TMessage> : IConsumer<TMessage> where TMessag
         }
     }
 
-    protected virtual Task BeforeConsume(ConsumeContext<TMessage> context) => Task.CompletedTask;
+    protected virtual Task BeforeConsume(ConsumeContext<TMessage> context)
+    {
+        _doerlyRequestContext.UserEmail = context.Headers.Get("UserEmail", string.Empty);
+        if (int.TryParse(context.Headers.Get("UserId", string.Empty), out var userId))
+            _doerlyRequestContext.UserId = userId;
+        
+        return Task.CompletedTask;  
+    }
+
     protected virtual Task AfterConsume(ConsumeContext<TMessage> context) => Task.CompletedTask;
     protected virtual Task OnError(ConsumeContext<TMessage> context, Exception exception) => Task.CompletedTask;
 

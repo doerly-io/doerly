@@ -30,9 +30,6 @@ public class CheckoutHandler : BasePaymentHandler
     /// 3. If no pending payment exists, check if the bill exists and is not already paid.
     /// 4. If the billId is not provided, create a new bill with the provided amount and description.
     /// </summary>
-    /// <param name="checkoutRequest"></param>
-    /// <param name="webhookUrl"></param>
-    /// <returns></returns>
     public async Task<HandlerResult<BaseCheckoutResponse>> HandleAsync(CheckoutRequest checkoutRequest, Uri webhookUrl)
     {
         Bill bill;
@@ -73,6 +70,7 @@ public class CheckoutHandler : BasePaymentHandler
                 AmountTotal = checkoutRequest.AmountTotal,
                 Description = checkoutRequest.BillDescription,
                 PayerId = checkoutRequest.PayerId,
+                PayerEmail = checkoutRequest.PayerEmail
             };
             DbContext.Bills.Add(bill);
         }
@@ -94,7 +92,8 @@ public class CheckoutHandler : BasePaymentHandler
 
         if (!checkoutResult.IsSuccess)
         {
-            _logger.LogError("Checkout request failed, CheckoutRequestError: {CheckoutRequestError}", checkoutResult.ErrorMessage);
+            _logger.LogError("Checkout request failed, CheckoutRequestError: {CheckoutRequestError}",
+                checkoutResult.ErrorMessage);
             return HandlerResult.Failure<BaseCheckoutResponse>("FailedToCreateCheckout");
         }
 

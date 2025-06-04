@@ -26,7 +26,7 @@ public class WebhookUrlBuilder
         var httpContext = _httpContextAccessor.HttpContext;
         
         //ToDo after adding ingress controller replace with passing headers of original request scheme and host
-        var baseUrl = new Uri(_backendSettings.Value.PublicUrl);
+        var baseUrl = new Uri(_backendSettings.Value.PublicUrl + "/api/payments/Webhook/liqpay/final-status");
 
         /*var urlString = _linkGenerator.GetUriByAction(
             httpContext,

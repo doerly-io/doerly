@@ -1,3 +1,4 @@
+using Doerly.Domain;
 using Doerly.Domain.Models;
 using Doerly.Messaging;
 using Doerly.Module.Payments.Contracts.Messages;
@@ -12,15 +13,18 @@ namespace Doerly.Module.Payments.Domain.Handlers;
 public class PaymentStatusChangedHandler : BasePaymentHandler
 {
     private readonly IMessagePublisher _messagePublisher;
+    private readonly IDoerlyRequestContext _requestContext;
     private readonly ILogger<PaymentStatusChangedHandler> _logger;
 
     public PaymentStatusChangedHandler(
         PaymentDbContext dbContext,
         IMessagePublisher messagePublisher,
+        IDoerlyRequestContext requestContext,
         ILogger<PaymentStatusChangedHandler> logger
     ) : base(dbContext)
     {
         _messagePublisher = messagePublisher;
+        _requestContext = requestContext;
         _logger = logger;
     }
 
