@@ -1,4 +1,5 @@
 ﻿using Doerly.DataTransferObjects.Pagination;
+using Doerly.Domain.Models;
 using Doerly.Module.Authorization.Contracts.Responses;
 using Doerly.Proxy.BaseProxy;
 
@@ -8,5 +9,7 @@ public interface IAuthorizationModuleProxy : IModuleProxy
 {
     Task<BasePaginationResponse<UserItemResponse>> GetUsersWithPaginationAsync(
         GetEntitiesWithPaginationRequest paginationRequest);
+    
+    Task<HandlerResult> ChangeUserState(int userId, bool isEnabled);
     
 }

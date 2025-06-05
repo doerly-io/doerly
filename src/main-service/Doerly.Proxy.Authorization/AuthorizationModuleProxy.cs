@@ -1,4 +1,5 @@
 ﻿using Doerly.DataTransferObjects.Pagination;
+using Doerly.Domain.Models;
 using Doerly.Module.Authorization.Api.ModuleWrapper;
 using Doerly.Module.Authorization.Contracts.Responses;
 
@@ -17,5 +18,10 @@ public class AuthorizationModuleProxy : IAuthorizationModuleProxy
         GetEntitiesWithPaginationRequest paginationRequest)
     {
         return await _authorizationModuleWrapper.GetUsersWithPaginationAsync(paginationRequest);
+    }
+
+    public async Task<HandlerResult> ChangeUserState(int userId, bool isEnabled)
+    {
+        return await _authorizationModuleWrapper.ChangeUserState(userId, isEnabled);
     }
 }
