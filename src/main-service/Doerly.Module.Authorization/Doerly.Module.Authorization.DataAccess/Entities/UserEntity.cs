@@ -12,6 +12,8 @@ public class UserEntity : BaseEntity
     public string PasswordSalt { get; set; }
 
     public bool IsEmailVerified { get; set; }
+
+    public bool IsEnabled { get; set; }
     public int? RoleId { get; set; }
     public virtual RoleEntity? Role { get; set; }
 

@@ -21,7 +21,7 @@ function MenuItemContent({ children }: IProps) {
   );
 }
 
-MenuItemContent.pswName = 'MenuItemContent';
+MenuItemContent.doerlyAdminName = 'MenuItemContent';
 
 interface IProps {
   children: React.ReactNode,

@@ -6,6 +6,7 @@ import useIsMobile from 'hooks/useIsMobile';
 
 import * as pages from 'constants/pages';
 import pagesURLs from 'constants/pagesURLs';
+import Typography from 'components/Typography';
 
 const getClasses = makeStyles<any>()((_, theme: any) => ({
   container: {
@@ -51,7 +52,9 @@ function Default() {
 
   return (
     <div>
-      <h1>Default Page</h1>
+      <Typography variant="title">
+        Default Page
+      </Typography>
     </div>
   );
 }

@@ -113,6 +113,10 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_email_verified");
 
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_enabled");
+
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_modified_date");
@@ -134,12 +138,15 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("pk_user");
 
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasDatabaseName("ix_user_email");
+                    b.HasIndex("IsEnabled")
+                        .HasDatabaseName("ix_user_is_enabled");
 
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_user_role_id");
+
+                    b.HasIndex("Email", "IsEmailVerified")
+                        .IsUnique()
+                        .HasDatabaseName("ix_user_email_is_email_verified");
 
                     b.ToTable("user", "auth");
                 });

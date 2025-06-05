@@ -6,4 +6,8 @@ export const routes: Routes = [
     path: '',
     component: ProfileComponent
   },
-]
+  {
+    path: ':userId',
+    component: ProfileComponent
+  }
+];

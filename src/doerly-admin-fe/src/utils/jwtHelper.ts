@@ -62,6 +62,8 @@ const removeAccessToken = (): void => {
 
 const functionsToExport = {
   getUserInfo,
+  isLoggedIn,
+  isTokenExpired,
   removeAccessToken,
   setAccessToken,
 };

@@ -8,20 +8,27 @@
         emptyMessage="{{ 'ordering.no_orders' | translate }}">
         <ng-template #list>
             <div *ngFor="let order of orders; let first = first">
-                <div class="order-item d-flex flex-row align-items-center" [routerLink]="['/ordering/order', order.id]">
-                    <!-- Аватар та ім'я замовника -->
+                <div class="order-item d-flex flex-row align-items-center">
+                    <!-- Customer avatar and name - separate from order link -->
                     <div class="customer-avatar-block d-flex flex-column align-items-center me-3">
-                        <img *ngIf="order.customer?.avatarUrl" [src]="order.customer.avatarUrl"
-                            alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar order-list-avatar mb-1"
-                            width="56" height="56" />
-                        <p-avatar *ngIf="!order.customer?.avatarUrl" icon="pi pi-user" shape="circle" size="large"
-                            class="avatar-bg order-list-avatar mb-1"></p-avatar>
+                        <div class="position-relative" [routerLink]="['/profile', order.customer?.id]" style="cursor: pointer;">
+                            <img *ngIf="order.customer?.avatarUrl" [src]="order.customer.avatarUrl"
+                                alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar order-list-avatar mb-1"
+                                width="56" height="56" />
+                            <p-avatar *ngIf="!order.customer?.avatarUrl" icon="pi pi-user" shape="circle" size="large"
+                                class="avatar-bg order-list-avatar mb-1"></p-avatar>
+                            <div class="profile-hover-overlay">
+                                <i class="pi pi-user"></i>
+                                <span>{{ 'profile.view.title' | translate }}</span>
+                            </div>
+                        </div>
                         <span class="customer-name text-center text-sm">
-                            {{ order.customer.firstName }}
+                            {{ order.customer?.firstName }}
                         </span>
                     </div>
-                    <!-- Інформація про замовлення -->
-                    <div class="order-info flex-grow-1">
+
+                    <!-- Order info - wrapped in router link -->
+                    <div class="order-info flex-grow-1" [routerLink]="['/ordering/order', order.id]" style="cursor: pointer;">
                         <div class="order-header">
                             <div>
                                 <span class="order-title">{{  order.name }}</span>

@@ -12,8 +12,11 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
         builder.Property(x => x.Email).IsRequired();
         builder.Property(x => x.PasswordHash).IsRequired();
         builder.Property(x => x.PasswordSalt).IsRequired();
+        builder.Property(x => x.IsEmailVerified);
+        builder.Property(x => x.IsEnabled);
         builder.HasOne(x => x.Role).WithMany(x => x.Users).HasForeignKey(x => x.RoleId);
 
-        builder.HasIndex(x => x.Email).IsUnique();
+        builder.HasIndex(x => new { x.Email, x.IsEmailVerified }).IsUnique();
+        builder.HasIndex(x => x.IsEnabled);
     }
 }

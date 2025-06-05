@@ -8,10 +8,6 @@ const errorTypes = {
   EMPTY_FIELD_PASSWORD: 'EMPTY_FIELD_PASSWORD',
 };
 
-const ErrorTypesBE = {
-  EMAIL: 'email',
-};
-
 const useLogin = () => {
   const dispatch: Dispatch<any> = useDispatch();
   const {

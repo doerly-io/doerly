@@ -1,6 +1,7 @@
 import {
   ERROR_SIGN_IN,
   ERROR_SIGN_OUT,
+  INITIALIZE_USER,
   REQUEST_SIGN_IN,
   REQUEST_SIGN_OUT,
   SUCCESS_SIGN_IN,
@@ -10,6 +11,16 @@ import axios, { getAllErrorsMessages } from 'utils/requests';
 import config from 'config';
 import jwtHelper from 'utils/jwtHelper';
 import storage, { keys } from 'utils/storage';
+
+const initializeUser = () => (dispatch: any) => {
+  const accessToken = storage.getItem(keys.ACCESS_TOKEN);
+  if (accessToken && !jwtHelper.isTokenExpired()) {
+    const userInfo = jwtHelper.getUserInfo(accessToken);
+    if (userInfo) {
+      dispatch(successSignIn(userInfo));
+    }
+  }
+};
 
 const requestSignIn = () => ({
   type: REQUEST_SIGN_IN,
@@ -51,11 +62,10 @@ const fetchSignIn = ({
     const userInfo = jwtHelper.getUserInfo(accessToken);
     storage.setItem(keys.ACCESS_TOKEN, accessToken);
     dispatch(successSignIn(userInfo));
-    return data;
   }).catch((error) => {
     const response = error?.response?.data;
-    const errorMessage = response.errorMessage;
-    const errors = response.errors;
+    const errorMessage = response?.errorMessage;
+    const errors = response?.errors;
 
     let finalErrorMessage = '';
     if (errors && typeof errors === 'object') {
@@ -99,6 +109,7 @@ const signOut = () => {
 const exportFunctions = {
   fetchSignIn,
   fetchSignOut,
+  initializeUser,
 };
 
 export default exportFunctions;
