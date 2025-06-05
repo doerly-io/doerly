@@ -11,4 +11,11 @@ function useIsMobile() {
   return mobileSizes.includes(screenSizeType);
 }
 
+function useIsSmallMobile() {
+  const screenSizeType = useScreenSizeType();
+  return screenSizeType === screenSizes.sizeTypes.xs;
+}
+
+export { useIsMobile, useIsSmallMobile };
+
 export default useIsMobile;

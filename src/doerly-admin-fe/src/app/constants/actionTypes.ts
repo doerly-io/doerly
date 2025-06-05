@@ -8,3 +8,5 @@ export const ERROR_SIGN_IN = 'ERROR_SIGN_IN';
 export const REQUEST_SIGN_OUT = 'REQUEST_SIGN_OUT';
 export const SUCCESS_SIGN_OUT = 'SUCCESS_SIGN_OUT';
 export const ERROR_SIGN_OUT = 'ERROR_SIGN_OUT';
+
+export const INITIALIZE_USER = 'INITIALIZE_USER';

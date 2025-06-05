@@ -1,4 +1,5 @@
-﻿using Doerly.Infrastructure.Api;
+﻿using Doerly.DataTransferObjects.Pagination;
+using Doerly.Infrastructure.Api;
 using Doerly.Domain.Models;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.Domain.Handlers;
@@ -21,6 +22,22 @@ public class ProfileController : BaseApiController
         if (!result.IsSuccess)
             return NotFound(result);
 
+        return Ok(result);
+    }
+    
+    [HttpGet]
+    [ProducesResponseType<HandlerResult<IEnumerable<ProfileDto>>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetProfiles()
+    {
+        var result = await ResolveHandler<GetAllShortProfilesHandler>().HandleAsync();
+        return Ok(result);
+    }
+    
+    [HttpPost("_search")]
+    [ProducesResponseType<HandlerResult<PageDto<ProfileDto>>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> SearchProfiles(ProfileQueryDto queryDto)
+    {
+        var result = await ResolveHandler<SearchProfilesHandler>().HandleAsync(queryDto);
         return Ok(result);
     }
 

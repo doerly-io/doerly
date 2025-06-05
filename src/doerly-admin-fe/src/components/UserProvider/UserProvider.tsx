@@ -3,12 +3,6 @@ import { useSelector } from 'react-redux';
 
 export const UserContext = createContext<TUser>({});
 
-export const mockUser = {
-  email: 'example@gmail.com',
-  id: '1',
-  name: 'John Doe',
-};
-
 const UserProvider = ({
   children,
 }: IProps) => {
@@ -16,8 +10,7 @@ const UserProvider = ({
     email: userEmail,
     id: userId,
     name: userName,
-  }: any = mockUser;
-  // }: any = useSelector((state: { user: TUser }) => state.user);
+  } = useSelector(({ user }: any) => user);
 
   return (
     <UserContext.Provider
