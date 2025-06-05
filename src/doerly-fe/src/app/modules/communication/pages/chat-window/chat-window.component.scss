@@ -84,12 +84,30 @@
             font-size: 0.75em;
             opacity: 0.7;
           }
+
+          .file-message {
+            .file-link {
+              color: #4169e1;
+              text-decoration: none;
+              font-weight: 500;
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+          }
         }
 
         &.own-message .message-content {
           background: var(--p-button-primary-background);
           color: #fff;
           border-top-right-radius: 0;
+
+          .file-link {
+            color: #fff;
+            &:hover {
+              text-decoration: underline;
+            }
+          }
         }
 
         &.other-message .message-content {
@@ -106,6 +124,13 @@
         justify-content: center;
         color: #888;
       }
+
+      .typing-indicator {
+        font-style: italic;
+        color: #888;
+        font-size: 0.9em;
+        padding: 5px 0;
+      }
     }
 
     .chat-input {
@@ -121,11 +146,20 @@
         padding: 8px;
       }
 
-      .send-button {
+      .attach-button {
+        margin-right: 10px;
+        background: var(--p-button-primary-background);
         color: #fff;
       }
 
+      .send-button {
+        background: var(--p-button-primary-background);
+        color: #fff;
+      }
+
+      .attach-button:hover,
       .send-button:hover {
+        background: var(--p-button-primary-hover-background);
       }
     }
   }

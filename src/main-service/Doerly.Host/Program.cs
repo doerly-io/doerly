@@ -156,6 +156,7 @@ builder.Services.AddSendGrid(opt => { opt.ApiKey = sendGridSettings.ApiKey; });
 builder.Services.AddAzureClients(factoryBuilder => { factoryBuilder.AddBlobServiceClient(azureStorageSettings.ConnectionString); });
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
+builder.Services.AddTransient<IFileHelper, FileHelper>();
 
 builder.Services.AddMassTransit(cfg =>
 {

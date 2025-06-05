@@ -26,7 +26,14 @@
         [ngClass]="{'own-message': isOwnMessage(message), 'other-message': !isOwnMessage(message)}"
       >
         <div class="message-content">
-          <p>{{ message.messageContent }}</p>
+          <!-- Text message -->
+          <p *ngIf="message.messageType === 0">{{ message.messageContent }}</p>
+          <!-- File message -->
+          <div *ngIf="message.messageType === 1" class="file-message">
+            <a [href]="message.messageContent" target="_blank" class="file-link">
+              Завантажити файл
+            </a>
+          </div>
           <small>{{ message.sentAt | date: 'shortTime' }}</small>
         </div>
       </div>
@@ -49,6 +56,20 @@
         placeholder="{{'communication.message_placeholder' | translate}}"
         class="message-input"
       />
+      <input
+        type="file"
+        #fileInput
+        style="display: none;"
+        (change)="onFileSelected($event)"
+      />
+      <button
+        pButton
+        type="button"
+        icon="pi pi-paperclip"
+        class="attach-button p-button-rounded"
+        (click)="fileInput.click()"
+        [disabled]="!conversationId()"
+      ></button>
       <button
         pButton
         type="button"

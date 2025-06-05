@@ -1,14 +1,17 @@
 using Doerly.Domain.Models;
+using Doerly.FileRepository;
 using Doerly.Localization;
 using Doerly.Module.Communication.Contracts.Dtos.Responses;
 using Doerly.Module.Communication.DataAccess;
+using Doerly.Module.Communication.Domain.Constants;
+using Doerly.Module.Communication.Enums;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Communication.Domain.Handlers;
 
-public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfileModuleProxy profileModule) : BaseCommunicationHandler(dbContext)
+public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfileModuleProxy profileModule, IFileRepository fileRepository) : BaseCommunicationHandler(dbContext)
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
@@ -43,22 +46,28 @@ public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfi
             profiles[participantId] = profile;
         }
         
+        var messageDtos = await Task.WhenAll(conversation.Messages.Select(async m => new MessageResponseDto
+        {
+            Id = m.Id,
+            SenderId = m.SenderId,
+            Sender = profiles.GetValueOrDefault(m.SenderId),
+            ConversationId = m.ConversationId,
+            MessageContent = m.MessageType == EMessageType.Text
+                ? m.MessageContent
+                : await fileRepository.GetSasUrlAsync(CommunicationConstants.AzureStorage.FilesContainerName, m.MessageContent)
+                  ?? throw new InvalidOperationException(),
+            SentAt = m.SentAt,
+            MessageType = m.MessageType,
+            Status = m.Status
+        }));
+        
         var conversationResponseDto =  new ConversationResponseDto()
-            {
-                Id = conversation.Id,
-                Initiator = profiles.GetValueOrDefault(conversation.InitiatorId),
-                Recipient = profiles.GetValueOrDefault(conversation.RecipientId),
-                Messages = conversation.Messages.Select(m => new MessageResponseDto()
-                {
-                    Id = m.Id,
-                    SenderId = m.SenderId,
-                    Sender = profiles.GetValueOrDefault(m.SenderId),
-                    ConversationId = m.ConversationId,
-                    MessageContent = m.MessageContent,
-                    SentAt = m.SentAt,
-                    Status = m.Status
-                }).ToList()
-            };
+        {
+            Id = conversation.Id,
+            Initiator = profiles.GetValueOrDefault(conversation.InitiatorId),
+            Recipient = profiles.GetValueOrDefault(conversation.RecipientId),
+            Messages = messageDtos.ToList()
+        };
 
         return HandlerResult.Success(conversationResponseDto);
     }

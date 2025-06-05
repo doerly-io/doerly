@@ -5,6 +5,7 @@ using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Communication.Domain;
 using Doerly.Module.Communication.Domain.Hubs;
 using Doerly.Messaging;
+using Doerly.Module.Communication.Domain.Constants;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
@@ -26,6 +27,7 @@ public class ModuleInitializer : IModuleInitializer, IEndpointRouteInitializer
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         app.ApplicationServices.MigrateDatabase<CommunicationDbContext>();
+        app.ApplicationServices.AddStorageContainer(CommunicationConstants.AzureStorage.FilesContainerName);
     }
 
     public void ConfigureEndpoints(IEndpointRouteBuilder endpoints)

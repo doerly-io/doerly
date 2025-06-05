@@ -11,7 +11,7 @@ public class MessageResponseDto
     
     public ConversationHeaderResponseDto Conversation { get; set; }
     
-    public MessageType MessageType { get; set; }
+    public EMessageType MessageType { get; set; }
     
     public int SenderId { get; set; }
     

@@ -79,14 +79,29 @@ public class CommunicationController : BaseApiController
     
     [HttpPost("messages/send")]
     [ProducesResponseType<HandlerResult<SendMessageRequest>>(StatusCodes.Status200OK)]
-    public async Task<IActionResult> SendMessage(SendMessageRequest requestRequest)
+    public async Task<IActionResult> SendMessage(SendMessageRequest request)
     {
         var userId = GetUserId();
         if(userId == 0)
             return Unauthorized();
-        requestRequest.SenderId = userId;
         
-        var result = await ResolveHandler<SendMessageHandler>().HandleAsync(requestRequest);
+        var result = await ResolveHandler<SendMessageHandler>().HandleAsync(userId, request);
+        
+        if (!result.IsSuccess)
+            return Conflict(result);
+
+        return Ok();
+    }
+    
+    [HttpPost("conversations/{conversationId:int}/messages/file/send")]
+    [ProducesResponseType<HandlerResult<SendMessageRequest>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> SendFileMessage(int conversationId, [FromForm] SendFileMessageRequest request)
+    {
+        var userId = GetUserId();
+        if(userId == 0)
+            return Unauthorized();
+        
+        var result = await ResolveHandler<SendFileMessageHandler>().HandleAsync(conversationId, userId, request.File);
         
         if (!result.IsSuccess)
             return Conflict(result);

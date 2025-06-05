@@ -1,8 +1,7 @@
 ﻿namespace Doerly.Module.Communication.Enums;
 
-public enum MessageType
+public enum EMessageType
 {
     Text = 0,
-    Image,
-    Video
+    File
 }

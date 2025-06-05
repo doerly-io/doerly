@@ -24,6 +24,7 @@ import { InputText } from 'primeng/inputtext';
 import { SendMessageRequest } from '../../models/requests/send-message-request.model';
 import { Avatar } from 'primeng/avatar';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-chat-window',
@@ -212,5 +213,50 @@ export class ChatWindowComponent implements AfterViewChecked {
           detail: this.translateService.instant('communication.errors.send_message'),
         });
       });
+  }
+
+  protected onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+      this.messageService.add({
+        severity: 'warn',
+        detail: 'Файл не вибрано',
+      });
+      return;
+    }
+
+    const conversationId = this.conversationId();
+    if (!conversationId) {
+      this.messageService.add({
+        severity: 'error',
+        detail: 'Розмова не обрана',
+      });
+      return;
+    }
+
+    this.communicationService.uploadFile(conversationId, file).subscribe({
+      next: (response) => {
+        console.log('File uploaded successfully:', response);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Успіх',
+          detail: 'Файл успішно відправлено',
+        });
+        // Повідомлення з файлом буде отримано через SignalR
+      },
+      error: (err) => {
+        console.error('Error uploading file:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Помилка',
+          detail: 'Не вдалося відправити файл',
+        });
+      },
+    });
+
+    // Очищаємо input після відправки
+    input.value = '';
   }
 }

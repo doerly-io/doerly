@@ -12,7 +12,9 @@ public class CommunicationHub(IHandlerFactory handlerFactory) : Hub<ICommunicati
 {
     public async Task SendMessage(SendMessageRequest request)
     {
-        var result = await handlerFactory.Get<SendMessageHandler>().HandleAsync(request);
+        var userIdString = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userId = int.TryParse(userIdString, out var id) ? id : throw new UnauthorizedAccessException();
+        var result = await handlerFactory.Get<SendMessageHandler>().HandleAsync(userId, request);
         await Clients.Group(request.ConversationId.ToString()).ReceiveMessage(result.Value);
     }
     
@@ -48,7 +50,5 @@ public class CommunicationHub(IHandlerFactory handlerFactory) : Hub<ICommunicati
     public override async Task OnConnectedAsync()
     {
         await base.OnConnectedAsync();
-        var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        // await Clients.All.UserStatusChanged(userId, true);
     }
 }

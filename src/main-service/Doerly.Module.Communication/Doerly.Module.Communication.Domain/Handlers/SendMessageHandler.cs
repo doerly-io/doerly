@@ -4,9 +4,7 @@ using Doerly.Module.Communication.Contracts.Dtos.Requests;
 using Doerly.Module.Communication.Contracts.Dtos.Responses;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Communication.DataAccess.Entities;
-using Doerly.Module.Communication.Domain.Hubs;
 using Doerly.Module.Communication.Enums;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Communication.Domain.Handlers;
@@ -15,7 +13,7 @@ public class SendMessageHandler(CommunicationDbContext dbContext) : BaseCommunic
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
-    public async Task<HandlerResult<MessageResponseDto>> HandleAsync(SendMessageRequest dto)
+    public async Task<HandlerResult<MessageResponseDto>> HandleAsync(int userId, SendMessageRequest dto)
     {
         var conversation = await _dbContext.Conversations
             .FirstOrDefaultAsync(c => c.Id == dto.ConversationId);
@@ -25,7 +23,7 @@ public class SendMessageHandler(CommunicationDbContext dbContext) : BaseCommunic
             return HandlerResult.Failure<MessageResponseDto>(Resources.Get("Communication.ConversationNotFound"));
         }
         
-        if (conversation.InitiatorId != dto.SenderId && conversation.RecipientId != dto.SenderId)
+        if (conversation.InitiatorId != userId && conversation.RecipientId != userId)
         {
             return HandlerResult.Failure<MessageResponseDto>(Resources.Get("Communication.UnauthorizedSender"));
         }
@@ -33,10 +31,11 @@ public class SendMessageHandler(CommunicationDbContext dbContext) : BaseCommunic
         var message = new MessageEntity
         {
             ConversationId = conversation.Id,
-            SenderId = dto.SenderId,
+            SenderId = userId,
             MessageContent = dto.MessageContent,
             SentAt = DateTime.UtcNow,
-            Status = MessageStatus.Sent
+            Status = MessageStatus.Sent,
+            MessageType = EMessageType.Text
         };
     
         _dbContext.Messages.Add(message);
@@ -48,6 +47,7 @@ public class SendMessageHandler(CommunicationDbContext dbContext) : BaseCommunic
             ConversationId = message.ConversationId,
             SenderId = message.SenderId,
             MessageContent = message.MessageContent,
+            MessageType = message.MessageType,
             SentAt = message.SentAt,
             Status = message.Status
         };

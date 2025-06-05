@@ -1,14 +1,17 @@
 using Doerly.Domain.Models;
+using Doerly.FileRepository;
 using Doerly.Localization;
 using Doerly.Module.Communication.Contracts.Dtos.Responses;
 using Doerly.Module.Communication.DataAccess;
+using Doerly.Module.Communication.Domain.Constants;
+using Doerly.Module.Communication.Enums;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Communication.Domain.Handlers;
 
-public class GetMessageByIdHandler(CommunicationDbContext dbContext, IProfileModuleProxy profileModule) : BaseCommunicationHandler(dbContext)
+public class GetMessageByIdHandler(CommunicationDbContext dbContext, IProfileModuleProxy profileModule, IFileRepository fileRepository) : BaseCommunicationHandler(dbContext)
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
@@ -30,6 +33,19 @@ public class GetMessageByIdHandler(CommunicationDbContext dbContext, IProfileMod
             profiles[userId] = profile;
         }
         
+        string messageContent;
+        if (message.MessageType == EMessageType.Text)
+        {
+            messageContent = message.MessageContent;
+        }
+        else
+        {
+            messageContent = await fileRepository.GetSasUrlAsync(
+                CommunicationConstants.AzureStorage.FilesContainerName,
+                message.MessageContent
+            ) ?? throw new InvalidOperationException("Failed to generate file URL");
+        }
+
         var messageDto = new MessageResponseDto()
         {
             Id = message.Id,
@@ -41,11 +57,12 @@ public class GetMessageByIdHandler(CommunicationDbContext dbContext, IProfileMod
                 Initiator = profiles.GetValueOrDefault(message.Conversation.InitiatorId),
                 Recipient = profiles.GetValueOrDefault(message.Conversation.RecipientId),
             },
-            MessageContent = message.MessageContent,
+            MessageContent = messageContent,
+            MessageType = message.MessageType,
             SentAt = message.SentAt,
             Status = message.Status
         };
-
+        
         return HandlerResult.Success(messageDto);
     }
 }

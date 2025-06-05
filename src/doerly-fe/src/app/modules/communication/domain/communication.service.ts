@@ -51,4 +51,15 @@ export class CommunicationService {
       }
     );
   }
+
+  uploadFile(conversationId: number, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('request.File', file);
+
+    return this.httpClient.post<any>(
+      `${this.baseUrl}/conversations/${conversationId}/messages/file/send`,
+      formData,
+      { withCredentials: true }
+    );
+  }
 }

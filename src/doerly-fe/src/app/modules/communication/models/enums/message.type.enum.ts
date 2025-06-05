@@ -1,7 +1,4 @@
 export enum MessageTypeEnum {
-  TEXT = 'TEXT',
-  IMAGE = 'IMAGE',
-  VIDEO = 'VIDEO',
-  AUDIO = 'AUDIO',
-  FILE = 'FILE'
+  TEXT = 0,
+  FILE = 1,
 }

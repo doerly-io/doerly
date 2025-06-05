@@ -5,6 +5,4 @@ public class SendMessageRequest
     public required int ConversationId { get; set; }
     
     public required string MessageContent { get; set; }
-    
-    public int SenderId { get; set; }
 }
