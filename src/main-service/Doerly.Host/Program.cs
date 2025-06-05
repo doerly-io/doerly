@@ -8,7 +8,6 @@ using Doerly.Host.Middlewares;
 using Doerly.Infrastructure.Api;
 using Doerly.Localization;
 using Doerly.Messaging;
-using Doerly.Module.Communication.Domain.Hubs;
 using Doerly.Notification.EmailSender;
 using Doerly.Proxy.BaseProxy;
 using Doerly.Proxy.Payment;
@@ -112,6 +111,14 @@ builder.Services.AddOptions<BackendSettings>()
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
+var redisSettingsConfiguration = configuration.GetSection(RedisSettings.RedisSettingName);
+builder.Services.AddOptions<RedisSettings>()
+    .Bind(redisSettingsConfiguration)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+var redisSettings = redisSettingsConfiguration.Get<RedisSettings>();
+
 #endregion
 
 
@@ -154,6 +161,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSendGrid(opt => { opt.ApiKey = sendGridSettings.ApiKey; });
 
 builder.Services.AddAzureClients(factoryBuilder => { factoryBuilder.AddBlobServiceClient(azureStorageSettings.ConnectionString); });
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = redisSettings.ConnectionString;
+    options.InstanceName = "Doerly:";
+});
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
 builder.Services.AddTransient<IFileHelper, FileHelper>();

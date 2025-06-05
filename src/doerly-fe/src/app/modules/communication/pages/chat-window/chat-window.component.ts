@@ -52,6 +52,33 @@ export class ChatWindowComponent implements AfterViewChecked {
     return conv.recipient.id === this.userId ? conv.initiator : conv.recipient;
   });
 
+  protected recipientInfo = computed(() => {
+    const conversation = this.conversation();
+    if (!conversation) {
+      return {
+        id: null,
+        name: this.translateService.instant('communication.unknown_user'),
+        imageUrl: null,
+      };
+    }
+
+    const isInitiator = this.userId === conversation.initiator.id;
+    const recipient = isInitiator ? conversation.recipient : conversation.initiator;
+
+    return {
+      id: recipient ? recipient.id : null,
+      name: recipient ? `${recipient.firstName} ${recipient.lastName}` : this.translateService.instant('communication.unknown_user'),
+      imageUrl: recipient?.imageUrl ?? null,
+    };
+  });
+
+  protected readonly recipientStatus = computed(() => {
+    const statusMap = this.communicationSignalR.userStatusSignal();
+    const recipientId = this.recipientInfo().id;
+    if (recipientId === null) return false;
+    return statusMap.get(recipientId) ?? false;
+  });
+
 
   @ViewChild('messageContainer') messageContainer!: ElementRef<HTMLDivElement>;
 
@@ -60,6 +87,7 @@ export class ChatWindowComponent implements AfterViewChecked {
   protected readonly conversation = signal<ConversationResponse | null>(null);
 
   protected readonly typingUser = signal<string | null>(null);
+
   public conversationId = input<number>();
 
   constructor() {
@@ -96,6 +124,13 @@ export class ChatWindowComponent implements AfterViewChecked {
           }, 2000);
         });
 
+        // this.communicationSignalR.userStatus$.subscribe(statusMap => {
+        //   const recipientId = this.recipientInfo().id;
+        //   if (recipientId) {
+        //     this.recipientStatus.set(statusMap.get(recipientId) || false);
+        //   }
+        // });
+
       } else {
         this.conversation.set(null);
         this.loading.set(false);
@@ -131,34 +166,6 @@ export class ChatWindowComponent implements AfterViewChecked {
         });
       },
     });
-  }
-
-  protected getRecipientName(): string {
-    const conversation = this.conversation();
-    if (!conversation){
-      this.messageService.add({
-        severity: 'error',
-        detail: this.translateService.instant('communication.errors.no_conversation'),
-      });
-      return this.translateService.instant('communication.unknown_user');
-    }
-
-    const isInitiator = this.userId === conversation.initiator.id;
-    const recipient = isInitiator ? conversation.recipient : conversation.initiator;
-
-    return recipient
-      ? `${recipient.firstName} ${recipient.lastName}`
-      : this.translateService.instant('communication.unknown_user');
-  }
-
-  protected getRecipientImageUrl(): string | null {
-    const conversation = this.conversation();
-    if (!conversation) return null;
-
-    const isInitiator = this.userId === conversation.initiator.id;
-    const recipient = isInitiator ? conversation.recipient : conversation.initiator;
-
-    return recipient?.imageUrl ?? null;
   }
 
   protected isOwnMessage(message: MessageResponse): boolean {
@@ -244,7 +251,6 @@ export class ChatWindowComponent implements AfterViewChecked {
           summary: 'Успіх',
           detail: 'Файл успішно відправлено',
         });
-        // Повідомлення з файлом буде отримано через SignalR
       },
       error: (err) => {
         console.error('Error uploading file:', err);
@@ -256,7 +262,6 @@ export class ChatWindowComponent implements AfterViewChecked {
       },
     });
 
-    // Очищаємо input після відправки
     input.value = '';
   }
 }

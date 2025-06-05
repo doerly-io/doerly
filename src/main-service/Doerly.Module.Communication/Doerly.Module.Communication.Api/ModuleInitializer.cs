@@ -6,6 +6,7 @@ using Doerly.Module.Communication.Domain;
 using Doerly.Module.Communication.Domain.Hubs;
 using Doerly.Messaging;
 using Doerly.Module.Communication.Domain.Constants;
+using Doerly.Module.Communication.Domain.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
@@ -22,6 +23,7 @@ public class ModuleInitializer : IModuleInitializer, IEndpointRouteInitializer
         builder.Services.RegisterHandlers(typeof(IAssemblyMarker).Assembly);
         builder.Services.RegisterEventConsumers(typeof(IAssemblyMarker).Assembly);
         builder.Services.AddSingleton<IEndpointRouteInitializer, ModuleInitializer>();
+        builder.Services.AddScoped<IUserOnlineStatusHelper, UserOnlineStatusHelper>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

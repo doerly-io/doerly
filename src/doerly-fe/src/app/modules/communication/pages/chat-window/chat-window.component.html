@@ -14,8 +14,12 @@
   <div *ngIf="!loading() && conversation()" class="chat-content">
     <!-- Header -->
     <div class="chat-header">
-      <p-avatar *ngIf="getRecipientImageUrl()" [image]="getRecipientImageUrl()!" shape="circle" size="large"></p-avatar>
-      <h2>{{ getRecipientName() }}</h2>
+      <p-avatar *ngIf="recipientInfo()?.imageUrl" [image]="recipientInfo()!.imageUrl!" shape="circle" size="large"></p-avatar>
+      <h2>{{ recipientInfo().name }}</h2>
+      <small class="status">
+        <i class="pi pi-circle-on" [ngClass]="{'online': recipientStatus(), 'offline': !recipientStatus()}"></i>
+        {{ recipientStatus() ? ('communication.user_status.online' | translate) : ('communication.user_status.offline' | translate) }}
+      </small>
     </div>
 
     <!-- Messages list -->

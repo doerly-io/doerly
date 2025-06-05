@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import {inject, Injectable, signal} from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import {JwtTokenHelper} from '../../../@core/helpers/jwtToken.helper';
 import {HttpTransportType} from '@microsoft/signalr';
@@ -10,7 +10,20 @@ import {MessageResponse} from '../models/message-response.model';
 })
 export class CommunicationSignalRService {
   private readonly jwtTokenHelper = inject(JwtTokenHelper);
+
   private hubConnection!: signalR.HubConnection;
+  private readonly userStatus = signal(new Map<number, boolean>());
+
+  get userStatusSignal() {
+    return this.userStatus;
+  }
+
+  private updateUserStatus(userId: number, isOnline: boolean): void {
+    const current = this.userStatus();
+    const updated = new Map(current);
+    updated.set(userId, isOnline);
+    this.userStatus.set(updated);
+  }
 
   // Callbacks for handling events
   private typingCallback?: (fullName: string) => void;
@@ -38,6 +51,12 @@ export class CommunicationSignalRService {
       if (this.messageReceivedCallback) {
         this.messageReceivedCallback(message);
       }
+    });
+
+    this.hubConnection.on('UserStatusChanged', (userId: string, isOnline: boolean) => {
+      const parsedUserId = parseInt(userId);
+      console.log('User status changed:', parsedUserId, isOnline);
+      this.updateUserStatus(parsedUserId, isOnline);
     });
 
     this.hubConnection
@@ -82,6 +101,10 @@ export class CommunicationSignalRService {
       throw err;
     }
   }
+
+  // public get userStatus$(): Observable<Map<number, boolean>> {
+  //   return this.userStatus.asObservable();
+  // }
 
   public joinConversation(conversationId: string): void {
     this.hubConnection?.invoke('JoinConversation', conversationId).catch(err => console.error(err));

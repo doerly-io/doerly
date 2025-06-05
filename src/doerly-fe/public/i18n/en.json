@@ -278,6 +278,11 @@
     "unknown_user": "Unknown user",
     "no_messages": "No messages yet",
 
+    "user_status" : {
+      "online": "Online",
+      "offline": "Offline"
+    },
+
     "choose_conversation": "Choose a conversation to start chatting",
     "conversation_not_found": "Conversation not found",
     "no_messages_yet": "No messages yet. Start chatting with other users!",
