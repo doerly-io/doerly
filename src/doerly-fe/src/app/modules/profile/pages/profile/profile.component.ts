@@ -3,6 +3,7 @@ import {
   OnInit,
   ElementRef,
   ViewChild,
+  inject
 } from '@angular/core';
 import {
   FormBuilder,
@@ -20,6 +21,10 @@ import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Divider } from 'primeng/divider';
 import { Observable, catchError, tap } from 'rxjs';
+import { Tree } from 'primeng/tree';
+import { TreeSelect } from 'primeng/treeselect';
+import { TreeNode } from 'primeng/api';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import * as sexVariants from '../../constants/sex';
 import { Textarea } from 'primeng/textarea';
@@ -35,7 +40,11 @@ import { ProfileRequest } from '../../models/requests/ProfileRequest';
 import { LanguageProficiencyDto } from '../../models/responses/LanguageProficiencyDto';
 import { LanguageDto } from '../../models/responses/LanguageDto';
 import { ELanguageProficiencyLevel } from '../../models/enums/ELanguageProficiencyLevel';
-import { LanguagesQueryDto } from '../../domain/profile.service';
+import { LanguagesQueryDto } from '../../models/requests/LanguagesQuery';
+import { CategoryService } from 'app/@core/services/category.service';
+import { ICategory } from 'app/@core/models/category/category.model';
+import { CompetenceDto } from '../../models/responses/CompetenceDto';
+import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 
 @Component({
   selector: 'app-profile',
@@ -59,7 +68,8 @@ import { LanguagesQueryDto } from '../../domain/profile.service';
     NgOptimizedImage,
     Tooltip,
     AddressSelectComponent,
-    NgForOf
+    NgForOf,
+    TreeSelect
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
@@ -94,19 +104,47 @@ export class ProfileComponent implements OnInit {
   };
   totalLanguages: number = 0;
 
+  categories: ICategory[] = [];
+
   private searchTimeout: any;
   private isSearching: boolean = false;
+
+  isCompetenceDialogVisible = false;
+  competences: CompetenceDto[] = [];
+  competenceForm!: FormGroup;
+  editingCompetence: CompetenceDto | null = null;
+  categoryTreeNodes: TreeNode[] = [];
+
+  private jwtTokenHelper = inject(JwtTokenHelper);
+
+  isViewingOtherProfile: boolean = false;
+  viewedUserId: number | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
     private profileService: ProfileService,
     private toastHelper: ToastHelper,
-    public pdfService: PdfService
+    private categoryService: CategoryService,
+    public pdfService: PdfService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
-    this.onInitForm();
-    this.onLoadProfile();
+    this.route.params.subscribe(params => {
+      const userId = params['userId'];
+      if (userId) {
+        this.viewedUserId = parseInt(userId);
+        const tokenUserId = this.jwtTokenHelper.getUserInfo()?.id;
+        this.isViewingOtherProfile = this.viewedUserId !== tokenUserId;
+        this.isEdit = false; // Disable editing for other profiles
+      } else {
+        this.viewedUserId = null;
+        this.isViewingOtherProfile = false;
+      }
+      this.onInitForm();
+      this.onLoadProfile();
+    });
+
     this.sexOptions = [
       { label: 'profile.basic.sex.options.male', value: sexVariants.MALE },
       { label: 'profile.basic.sex.options.female', value: sexVariants.FEMALE },
@@ -114,6 +152,8 @@ export class ProfileComponent implements OnInit {
     this.initLanguageProficiencyForm();
     this.initProficiencyLevels();
     this.loadAvailableLanguages();
+    this.loadCategories();
+    this.initCompetenceForm();
   }
 
   onInitForm(): void {
@@ -172,6 +212,28 @@ export class ProfileComponent implements OnInit {
         this.isSearching = false;
       }
     });
+  }
+
+  private loadCategories(): void {
+    this.categoryService.getCategories().subscribe({
+      next: (response) => {
+        this.categories = response.value || [];
+        this.categoryTreeNodes = this.convertCategoriesToTreeNodes(this.categories);
+      },
+      error: (error) => {
+        this.handleError(error, 'profile.professional.competences.categories.load.error');
+      }
+    });
+  }
+
+  private convertCategoriesToTreeNodes(categories: ICategory[]): TreeNode[] {
+    return categories.map(category => ({
+      key: category.id.toString(),
+      label: category.name,
+      data: category,
+      children: category.children ? this.convertCategoriesToTreeNodes(category.children) : undefined,
+      selectable: true
+    }));
   }
 
   onLanguageSearch(event: { filter: string }): void {
@@ -234,8 +296,12 @@ export class ProfileComponent implements OnInit {
   onLoadProfile(
     loadCV: boolean = false
   ): void {
+    const operation = this.isViewingOtherProfile && this.viewedUserId
+      ? this.profileService.loadById(this.viewedUserId)
+      : this.profileService.load();
+
     this.handleProfileOperation(
-      this.profileService.load(),
+      operation,
       '',
       'profile.message.load.error',
       (profile) => {
@@ -251,6 +317,7 @@ export class ProfileComponent implements OnInit {
     this.isImageAvailable = !!profileValue.imageUrl;
     this.isCVAvailable = !!profileValue.cvUrl;
     this.languageProficiencies = profileValue.languageProficiencies || [];
+    this.competences = profileValue.competences || [];
   }
 
   onSaveProfile(): void {
@@ -514,4 +581,67 @@ export class ProfileComponent implements OnInit {
     );
   }
   // endregion
+
+  private initCompetenceForm(): void {
+    this.competenceForm = this.formBuilder.group({
+      categoryId: [null, Validators.required],
+      categoryName: [null, Validators.required]
+    });
+  }
+
+  onAddCompetence(): void {
+    this.editingCompetence = null;
+    this.competenceForm.reset();
+    this.isCompetenceDialogVisible = true;
+  }
+
+  onDeleteCompetence(competence: CompetenceDto): void {
+    const userId = this.jwtTokenHelper.getUserInfo()?.id;
+    this.handleProfileOperation(
+      this.profileService.deleteCompetence(userId!, competence.id),
+      'profile.professional.competences.delete.success',
+      'profile.professional.competences.delete.error',
+      () => {
+        this.competences = this.competences.filter(c => c.id !== competence.id);
+      }
+    );
+  }
+
+  onCancelCompetence(): void {
+    this.isCompetenceDialogVisible = false;
+    this.editingCompetence = null;
+    this.competenceForm.reset();
+  }
+
+  onSaveCompetence(): void {
+    if (this.competenceForm.invalid) return;
+
+    const formValue = this.competenceForm.value;
+    const userId = this.jwtTokenHelper.getUserInfo()?.id;
+    const request = {
+      categoryId: parseInt(formValue.categoryId),
+      categoryName: formValue.categoryName
+    };
+    const operation = this.profileService.addCompetence(userId!, request);
+
+    this.handleProfileOperation(
+      operation,
+      'profile.professional.competences.add.success',
+      'profile.professional.competences.add.error',
+      () => {
+        this.onCancelCompetence();
+        this.onLoadProfile();
+      }
+    );
+  }
+
+  onCategorySelect(event: any): void {
+    if (event.node) {
+      const selectedNode = event.node;
+      this.competenceForm.patchValue({
+        categoryId: selectedNode.key,
+        categoryName: selectedNode.label
+      });
+    }
+  }
 }

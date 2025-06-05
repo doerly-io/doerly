@@ -9,14 +9,20 @@
 
                     <!-- Аватар та ім'я -->
                     <div class="proposal-avatar-block d-flex flex-column align-items-center me-3">
-                        <img *ngIf="(receiverId && proposal.sender?.avatarUrl) || (senderId && proposal.receiver?.avatarUrl)"
-                            [src]="receiverId ? proposal.sender?.avatarUrl : proposal.receiver?.avatarUrl"
-                            alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar proposal-list-avatar mb-1"
-                            width="56" height="56" />
-                        <p-avatar
-                            *ngIf="(receiverId && !proposal.sender?.avatarUrl) || (senderId && !proposal.receiver?.avatarUrl)"
-                            icon="pi pi-user" shape="circle" size="large"
-                            class="avatar-bg proposal-list-avatar mb-1"></p-avatar>
+                        <div class="position-relative" [routerLink]="['/profile', receiverId ? proposal.sender?.id : proposal.receiver?.id]" style="cursor: pointer;">
+                            <img *ngIf="(receiverId && proposal.sender?.avatarUrl) || (senderId && proposal.receiver?.avatarUrl)"
+                                [src]="receiverId ? proposal.sender?.avatarUrl : proposal.receiver?.avatarUrl"
+                                alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar proposal-list-avatar mb-1"
+                                width="56" height="56" />
+                            <p-avatar
+                                *ngIf="(receiverId && !proposal.sender?.avatarUrl) || (senderId && !proposal.receiver?.avatarUrl)"
+                                icon="pi pi-user" shape="circle" size="large"
+                                class="avatar-bg proposal-list-avatar mb-1"></p-avatar>
+                            <div class="profile-hover-overlay">
+                                <i class="pi pi-user"></i>
+                                <span>{{ 'profile.view.title' | translate }}</span>
+                            </div>
+                        </div>
                         <span class="proposal-person-name text-center text-sm">
                             {{ receiverId ? proposal.sender?.firstName : proposal.receiver?.firstName  }}
                         </span>

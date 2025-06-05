@@ -36,6 +36,21 @@
   "profile": {
     "title": "Personal info",
     "subtitle": "Info about you and your preferences across Doerly services",
+    "view": {
+      "title": "View Profile",
+      "subtitle": "Viewing user profile",
+      "cv": {
+        "title": "CV",
+        "subtitle": {
+          "available": "User's CV is available for preview",
+          "none": "User has not uploaded a CV yet"
+        }
+      },
+      "image": {
+        "title": "Profile Picture",
+        "subtitle": "User's profile picture"
+      }
+    },
     "basic": {
       "actions": {
         "cancel": "Cancel",
@@ -93,21 +108,30 @@
     },
     "professional": {
       "title": "Professional information",
+      "view": {
+        "title": "Professional Information",
+        "languages": {
+          "subtitle": "Languages known by the user"
+        },
+        "competences": {
+          "subtitle": "User's competences and skills"
+        }
+      },
       "cv": {
+        "title": "CV",
+        "subtitle": {
+          "available": "Your CV is available for preview and download",
+          "none": "Upload your CV to help employers find you"
+        },
+        "preview": {
+          "title": "Preview CV"
+        },
         "delete": {
           "text": "Delete",
           "tooltip": "Delete CV"
         },
         "download": {
           "title": "Download CV"
-        },
-        "preview": {
-          "title": "Preview CV"
-        },
-        "title": "CV",
-        "subtitle": {
-          "none": "Upload your CV to help employers find you",
-          "available": "Your CV is available for preview and download"
         },
         "upload": {
           "title": "Upload CV",
@@ -163,6 +187,37 @@
           "advanced": "Advanced (C1)",
           "proficient": "Proficient (C2)",
           "native": "Native"
+        },
+        "view": {
+          "subtitle": "Languages known by the user"
+        }
+      },
+      "competences": {
+        "subtitle": "Add your categories of competences and skills",
+        "add": {
+          "title": "Add Competence",
+          "success": "Competence added successfully",
+          "error": "Failed to add competence. Message: {{message}}"
+        },
+        "edit": {
+          "title": "Edit Competence"
+        },
+        "delete": {
+          "title": "Delete Competence",
+          "success": "Competence deleted successfully",
+          "error": "Failed to delete competence"
+        },
+        "category": {
+          "label": "Category",
+          "placeholder": "Select a category"
+        },
+        "categories": {
+          "load": {
+            "error": "Failed to load categories"
+          }
+        },
+        "view": {
+          "subtitle": "User's competences categories"
         }
       }
     },
@@ -196,6 +251,11 @@
           "success": "Profile picture has been deleted successfully",
           "error": "An error occurred while deleting the profile picture. Please try again later"
         }
+      }
+    },
+    "categories": {
+      "load": {
+        "error": "An error occurred while loading categories. Message: {{message}}"
       }
     }
   },
