@@ -21,10 +21,9 @@ import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Divider } from 'primeng/divider';
 import { Observable, catchError, tap } from 'rxjs';
-import { Tree } from 'primeng/tree';
 import { TreeSelect } from 'primeng/treeselect';
 import { TreeNode } from 'primeng/api';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import * as sexVariants from '../../constants/sex';
 import { Textarea } from 'primeng/textarea';
@@ -40,13 +39,12 @@ import { ProfileRequest } from '../../models/requests/ProfileRequest';
 import { LanguageProficiencyDto } from '../../models/responses/LanguageProficiencyDto';
 import { LanguageDto } from '../../models/responses/LanguageDto';
 import { ELanguageProficiencyLevel } from '../../models/enums/ELanguageProficiencyLevel';
-import { LanguagesQueryDto } from '../../models/requests/LanguagesQuery';
 import { CategoryService } from 'app/@core/services/category.service';
 import { ICategory } from 'app/@core/models/category/category.model';
 import { CompetenceDto } from '../../models/responses/CompetenceDto';
 import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
-import { LanguagesQueryDto } from '../../domain/profile.service';
 import {PaymentHistoryComponent} from 'app/modules/profile/components/payment-history/payment-history.component';
+import {LanguagesQueryDto} from '../../models/requests/LanguagesQuery';
 
 @Component({
   selector: 'app-profile',
