@@ -121,7 +121,9 @@ export class ChatWindowComponent implements AfterViewChecked {
           clearTimeout(this.typingTimeout);
           this.typingTimeout = setTimeout(() => {
             this.typingUser.set(null);
+            this.scrollToBottom();
           }, 2000);
+          this.scrollToBottom();
         });
 
         // this.communicationSignalR.userStatus$.subscribe(statusMap => {
@@ -146,9 +148,12 @@ export class ChatWindowComponent implements AfterViewChecked {
   }
 
   private scrollToBottom(): void {
-    if (this.messageContainer && this.messageContainer.nativeElement) {
-      this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
-    }
+    setTimeout(() => {
+      if (this.messageContainer && this.messageContainer.nativeElement) {
+        const element = this.messageContainer.nativeElement;
+        element.scrollTop = element.scrollHeight;
+      }
+    });
   }
 
   private loadConversation(conversationId: number): void {
@@ -157,6 +162,9 @@ export class ChatWindowComponent implements AfterViewChecked {
       next: (response) => {
         this.conversation.update(() => response.value ?? null);
         this.loading.set(false);
+        if (response.value?.messages?.length) {
+          this.scrollToBottom();
+        }
       },
       error: () => {
         this.loading.set(false);
