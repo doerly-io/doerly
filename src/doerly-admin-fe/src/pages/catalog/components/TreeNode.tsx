@@ -14,6 +14,9 @@ import useTheme from 'hooks/useTheme';
 import useIsMobile from 'hooks/useIsMobile';
 import Collapse from 'components/Collapse';
 import Show from 'components/Show';
+import { useNavigate } from 'react-router-dom';
+import * as pages from 'constants/pages';
+import pagesURLs from 'constants/pagesURLs';
 
 const ICON_SIZE = 20;
 
@@ -108,14 +111,21 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   const { theme } = useTheme();
   const { classes } = getClasses(theme);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const hasChildren = category.children && category.children.length > 0;
 
-  const handleToggleExpanded = () => {
+  const handleToggleExpanded = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (hasChildren) {
       setExpanded(!expanded);
     }
+  };
+
+  const handleNodeClick = () => {
+    navigate(pagesURLs[pages.catalogFilters]
+      .replace(':categoryId', category.id.toString()));
   };
 
   const getNodeClassName = () => {
@@ -151,6 +161,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         </IconButton>
         <div 
           className={getNodeContentClassName()}
+          onClick={handleNodeClick}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
