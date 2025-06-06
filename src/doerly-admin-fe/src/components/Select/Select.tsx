@@ -242,7 +242,7 @@ const Select = ({
             '&:hover:not(.Mui-disabled):before': {
               borderBottomColor: theme.select.color.focus,
             },
-            color: theme.select.color.text,
+            color: theme.select.color.label,
           },
           '& .MuiInputLabel-root': {
             '&.Mui-focused': {
@@ -260,10 +260,10 @@ const Select = ({
             '&:hover fieldset': {
               borderColor: theme.select.color.focus,
             },
-            color: theme.select.color.text,
+            color: theme.select.color.label,
           },
           '& .MuiSelect-icon': {
-            color: theme.select.color.text,
+            color: theme.select.color.label,
           },
         }}
       >

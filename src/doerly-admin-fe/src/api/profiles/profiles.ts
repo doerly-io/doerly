@@ -1,7 +1,25 @@
-import axios from 'utils/requests';
+import axios from 'axios';
 import config from 'config';
 
-const { BASE_URL, PROFILE_SERVICE } = config;
+const {
+  BASE_URL,
+  PROFILE_SERVICE,
+} = config;
+
+const setIsEnabled = ({
+  userId,
+  isEnabled,
+  onFailed,
+  onRequest,
+  onSuccess,
+}: any) => {
+  onRequest();
+  return axios.post(`${BASE_URL}${PROFILE_SERVICE}/${userId}/is-enabled`, {
+    isEnabled,
+  })
+    .then(() => onSuccess())
+    .catch(() => onFailed());
+};
 
 const getProfilesInfos = ({
   onFailed,
@@ -32,9 +50,10 @@ const searchCompleteProfiles = ({
     .catch(() => onFailed());
 };
 
-const exportFunctions = {
+const apiProfile = {
   getProfilesInfos,
   searchCompleteProfiles,
+  setIsEnabled,
 };
 
-export default exportFunctions;
+export default apiProfile;

@@ -25,5 +25,17 @@
   "profile.lastModified": "Last Modified",
   "search": "Search",
   "search.tooltip": "Search available users by first name and last name",
-  "users": "Users"
+  "users": "Users",
+  "label.profile.userInfo": "User Information",
+  "label.profile.email": "Email",
+  "label.profile.role": "Role",
+  "label.profile.accountStatus": "Account Status",
+  "label.profile.status.enabled": "Enabled",
+  "label.profile.status.disabled": "Disabled",
+  "label.profile.status.emailVerified": "Verified",
+  "label.profile.status.emailNotVerified": "Not Verified",
+  "label.profile.verificationStatus": "Verification Status",
+  "snackbar.successUpdateUser": "User status updated successfully",
+  "tooltip.disableUser": "Disable User",
+  "tooltip.enableUser": "Enable User"
 }

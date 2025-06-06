@@ -2,6 +2,7 @@ import React from 'react';
 import MenuItemMUI from '@mui/material/MenuItem';
 
 import MenuItemContent from './MenuItemContent';
+import useTheme from 'hooks/useTheme';
 
 function MenuItem({
   children,
@@ -11,12 +12,26 @@ function MenuItem({
   selected = false,
   value,
 }: IProps) {
+  const { theme } = useTheme();
   return (
     <MenuItemMUI
       disabled={disabled}
       onClick={onClick}
       selected={selected}
       value={value}
+      sx={{
+        '&.Mui-selected': {
+          '&:hover': {
+            backgroundColor: theme.select.color.background,
+          },
+          backgroundColor: theme.select.color.background,
+        },
+        '&:hover': {
+          backgroundColor: theme.select.color.background,
+        },
+        backgroundColor: theme.select.color.background,
+        color: theme.select.color.label,
+      }}
     >
       <MenuItemContent>
         {children}

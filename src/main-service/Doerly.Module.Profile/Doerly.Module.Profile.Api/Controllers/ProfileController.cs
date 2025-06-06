@@ -110,4 +110,14 @@ public class ProfileController : BaseApiController
         var result = await ResolveHandler<DeleteProfileCvHandler>().HandleAsync(userId);
         return Ok(result);
     }
+    
+    [HttpPost("{userId:int}/is-enabled")]
+    public async Task<IActionResult> SetIsEnabled([FromRoute] int userId, [FromBody] EnableUserDto dto)
+    {
+        var result = await ResolveHandler<SetProfileIsEnabledHandler>().HandleAsync(userId, dto);
+        if (!result.IsSuccess)
+            return NotFound(result);
+
+        return Ok(result);
+    }
 }

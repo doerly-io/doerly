@@ -89,6 +89,7 @@ const theme = {
   },
   select: {
     color: {
+      background: '#18181b',
       border: '#34d399',
       focus: '#34d399',
       label: '#34d399',

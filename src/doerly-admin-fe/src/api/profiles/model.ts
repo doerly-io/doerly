@@ -7,6 +7,15 @@ export interface IProfileInfo {
   avatarUrl?: string | null;
 }
 
+export interface IUserInfo {
+  userId: number;
+  email: string;
+  isEnabled: boolean;
+  isEmailVerified: boolean;
+  roleName: string
+  roleId: number;
+}
+
 export interface IProfileDto {
   id: number;
   firstName: string;
@@ -21,6 +30,7 @@ export interface IProfileDto {
   address?: IProfileAddressDto | null;
   languageProficiencies: ILanguageProficiencyDto[];
   competences: ICompetenceDto[];
+  userInfo: IUserInfo;
 }
 
 export interface IProfileSearchResponse extends IPageDto<IProfileDto> {}

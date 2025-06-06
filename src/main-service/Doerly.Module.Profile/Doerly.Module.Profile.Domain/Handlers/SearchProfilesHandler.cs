@@ -6,10 +6,16 @@ using Doerly.FileRepository;
 using Doerly.Module.Common.DataAccess.Address;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
+using Doerly.Proxy.Authorization;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
 
-public class SearchProfilesHandler(ProfileDbContext dbContext, AddressDbContext addressDbContext, IFileRepository fileRepository) : BaseProfileHandler(dbContext)
+public class SearchProfilesHandler(
+    ProfileDbContext dbContext, 
+    AddressDbContext addressDbContext, 
+    IFileRepository fileRepository,
+    IAuthorizationModuleProxy authorizationModuleProxy
+    ) : BaseProfileHandler(dbContext)
 {
     public async Task<HandlerResult<PageDto<ProfileDto>>> HandleAsync(ProfileQueryDto queryDto, CancellationToken cancellationToken = default)
     {
@@ -28,8 +34,16 @@ public class SearchProfilesHandler(ProfileDbContext dbContext, AddressDbContext 
             .OrderBy(p => p.FirstName)
             .ThenBy(p => p.LastName)
             .GetEntitiesWithPaginationAsync(queryDto, predicates, cancellationToken: cancellationToken);
-
-        var profileDtos = await MapCompleteProfilesToDtosAsync(profiles, addressDbContext, fileRepository, cancellationToken);
+        
+        var profilesUsers = await authorizationModuleProxy.GetUserInfoByIdsAsync(
+                    profiles.Select(p => p.UserId).ToList());
+        
+        var profileDtos = await MapCompleteProfilesToDtosAsync(
+            profiles, 
+            addressDbContext, 
+            fileRepository,
+            cancellationToken,
+            profilesUsers);
 
         var pageSize = queryDto.Size > 0 ? queryDto.Size : 10;
         var pagesCount = (int)Math.Ceiling((double)totalCount / pageSize);

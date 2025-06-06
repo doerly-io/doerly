@@ -24,4 +24,9 @@ public class AuthorizationModuleProxy : IAuthorizationModuleProxy
     {
         return await _authorizationModuleWrapper.ChangeUserState(userId, isEnabled);
     }
+    
+    public async Task<List<UserItemResponse>> GetUserInfoByIdsAsync(IEnumerable<int> userIds)
+    {
+        return await _authorizationModuleWrapper.GetUserInfoByIdsAsync(userIds);
+    }
 }

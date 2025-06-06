@@ -2,6 +2,7 @@
 using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Localization;
+using Doerly.Module.Authorization.Contracts.Responses;
 using Doerly.Module.Common.DataAccess.Address;
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Module.Profile.Contracts.Dtos;
@@ -71,7 +72,8 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
         IEnumerable<DataAccess.Models.Profile> profiles,
         AddressDbContext addressDbContext,
         IFileRepository fileRepository,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        IEnumerable<UserItemResponse>? profilesUsers = null)
     {
         var profileList = profiles.ToList();
         if (!profileList.Any())
@@ -116,7 +118,18 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
 
             addressMap.TryGetValue(profile.CityId ?? 0, out var address);
             fileUrlsMap.TryGetValue(profile.Id, out var urls);
-
+            
+            var profileUser = profilesUsers?.FirstOrDefault(u => u.UserId == profile.UserId);
+            var userInfo = profileUser != null ? new UserInfo
+            {
+                UserId = profileUser.UserId,
+                Email = profileUser.Email,
+                IsEnabled = profileUser.IsEnabled,
+                IsEmailVerified = profileUser.IsEmailVerified,
+                RoleName = profileUser.RoleName,
+                RoleId = profileUser.RoleId
+            } : null;
+            
             profileDtos.Add(new ProfileDto
             {
                 Id = profile.Id,
@@ -131,7 +144,8 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
                 CvUrl = urls.CvUrl,
                 Address = address,
                 LanguageProficiencies = languageProficiencies,
-                Competences = competences
+                Competences = competences,
+                UserInfo = userInfo
             });
         }
 

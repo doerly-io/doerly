@@ -12,6 +12,8 @@ public interface IAuthorizationModuleWrapper
         GetEntitiesWithPaginationRequest paginationRequest);
 
     Task<HandlerResult> ChangeUserState(int userId, bool isEnabled);
+    
+    Task<List<UserItemResponse>> GetUserInfoByIdsAsync(IEnumerable<int> userIds);
 }
 
 public class AuthorizationModuleWrapper : IAuthorizationModuleWrapper
@@ -33,6 +35,12 @@ public class AuthorizationModuleWrapper : IAuthorizationModuleWrapper
     public async Task<HandlerResult> ChangeUserState(int userId, bool isEnabled)
     {
         var result = await _handlerFactory.Get<ChangeUserStateHandler>().HandleAsync(userId, isEnabled);
+        return result;
+    }
+    
+    public async Task<List<UserItemResponse>> GetUserInfoByIdsAsync(IEnumerable<int> userIds)
+    {
+        var result = await _handlerFactory.Get<GetUserInfoByIdsHandler>().HandleAsync(userIds);
         return result;
     }
 }

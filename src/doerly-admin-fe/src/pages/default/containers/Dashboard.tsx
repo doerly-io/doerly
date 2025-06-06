@@ -44,7 +44,7 @@ const ICON_SIZE = 40;
 const items: any[] = [];
 
 
-function Default() {
+function Dashboard() {
   // const { theme } = useTheme();
   // const { classes } = getClasses(theme);
   const { formatMessage } = useIntl();
@@ -59,4 +59,4 @@ function Default() {
   );
 }
 
-export default Default;
+export default Dashboard;
