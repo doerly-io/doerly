@@ -384,7 +384,8 @@
       "usd": "USD",
       "eur": "EUR",
       "uah": "UAH"
-    }
+    },
+    "nohistory": "Payments history not found"
   },
   "common": {
     "actions": "Actions",

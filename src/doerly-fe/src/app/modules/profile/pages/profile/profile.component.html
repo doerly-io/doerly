@@ -479,7 +479,7 @@
   </p-card>
 
   <!-- Payment history -->
-  <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
+  <p-card *ngIf="!this.isViewingOtherProfile" styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
 
     <div class="d-flex flex-column gap-3 m-3">
 

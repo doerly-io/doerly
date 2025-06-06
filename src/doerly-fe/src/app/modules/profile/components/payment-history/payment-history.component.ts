@@ -14,6 +14,7 @@ import {Tag} from 'primeng/tag';
 import {EPaymentStatus} from 'app/modules/payments/enums/e-payment-status';
 import {Scroller} from 'primeng/scroller';
 import {PrimeTemplate} from 'primeng/api';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-payment-history',
@@ -29,6 +30,7 @@ import {PrimeTemplate} from 'primeng/api';
     Tag,
     Scroller,
     PrimeTemplate,
+    TranslatePipe,
   ],
   templateUrl: './payment-history.component.html',
   styleUrl: './payment-history.component.scss',
@@ -74,7 +76,7 @@ export class PaymentHistoryComponent implements OnInit {
     });
   }
 
-  protected getSeverity(status: number): string {
+  protected getSeverity(status: number): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
     switch (status) {
       case EPaymentStatus.Completed:
         return 'success';
