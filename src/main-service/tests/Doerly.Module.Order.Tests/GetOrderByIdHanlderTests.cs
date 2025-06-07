@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Doerly.Domain.Models;
 using Doerly.FileRepository;
+using Doerly.Module.Common.DataAccess.Address;
 using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Module.Order.Domain.Handlers;
 using Doerly.Module.Order.Domain.Handlers.Order;
@@ -26,8 +27,9 @@ public class GetOrderByIdHandlerTests : BaseOrderTests
     {
         _fileRepositoryMock = new Mock<IFileRepository>();
         _profileModuleProxyMock = new Mock<IProfileModuleProxy>();
+        var addressDbContext = new Mock<AddressDbContext>();
 
-        _handler = new GetOrderByIdHandler(OrderDbContext, _profileModuleProxyMock.Object, _fileRepositoryMock.Object);
+        _handler = new GetOrderByIdHandler(OrderDbContext, _profileModuleProxyMock.Object, addressDbContext.Object, _fileRepositoryMock.Object);
     }
 
     [Fact]

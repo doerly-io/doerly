@@ -233,7 +233,7 @@
                 {{ 'profile.basic.address.title' | translate }}
               </span>
             </div>
-            <div>
+            <div class="w-100">
                 <span *ngIf="!isEdit" class="c-primary fw-semibold row-text">
                   {{
                     formProfile.get('address.regionName')?.value && formProfile.get('address.cityName')?.value ?
@@ -242,6 +242,7 @@
                 </span>
               <app-address-select
                 *ngIf="isEdit"
+                [form]="addressFormGroup"
                 [initialRegionId]="formProfile.get('address.regionId')?.value"
                 [initialCityId]="formProfile.get('address.cityId')?.value"
                 [initialRegionName]="formProfile.get('address.regionName')?.value"

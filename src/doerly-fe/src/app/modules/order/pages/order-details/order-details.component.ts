@@ -21,6 +21,7 @@ import { DividerModule } from 'primeng/divider';
 import { TooltipModule } from 'primeng/tooltip';
 import { ImageModule } from 'primeng/image';
 import { GalleriaModule } from 'primeng/galleria';
+import { ErrorHandlerService } from '../../domain/error-handler.service';
 
 @Component({
   selector: 'app-order-details',
@@ -55,7 +56,8 @@ export class OrderDetailsComponent implements OnInit {
     private orderService: OrderService,
     private router: Router,
     private toastHelper: ToastHelper,
-    private readonly jwtTokenHelper: JwtTokenHelper
+    private readonly jwtTokenHelper: JwtTokenHelper,
+    private errorHandler: ErrorHandlerService
   ) {
     this.profileId = this.jwtTokenHelper.getUserInfo()?.id ?? 0;
   }
@@ -69,14 +71,7 @@ export class OrderDetailsComponent implements OnInit {
           this.order = response.value || null;
           this.loading = false;
         },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.toastHelper.showError('common.error', error.error.errorMessage);
-          }
-          else {
-            this.toastHelper.showError('common.error', 'common.error_occurred');
-          }
-        }
+        error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
       });
     }
   }
@@ -103,14 +98,7 @@ export class OrderDetailsComponent implements OnInit {
           this.router.navigate(['/ordering'], { queryParams: { tab: 2, subTab: 0 } });
         }
       },
-      error: (error: HttpErrorResponse) => {
-        if (error.status === 400) {
-          this.toastHelper.showError('common.error', error.error.errorMessage);
-        }
-        else {
-          this.toastHelper.showError('common.error', 'common.error_occurred');
-        }
-      }
+      error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
     });
   }
 

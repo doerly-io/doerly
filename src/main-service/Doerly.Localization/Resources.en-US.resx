@@ -158,7 +158,7 @@ Doerly</value>
   <data name="FieldIsUrl" xml:space="preserve">
     <value>{0} must be {1}</value>
   </data>
-    <data name="ORDER_NOT_FOUND" xml:space="preserve">
+  <data name="ORDER_NOT_FOUND" xml:space="preserve">
     <value>Order not found</value>
   </data>
   <data name="EXECUTION_PROPOSAL_NOT_FOUND" xml:space="preserve">
@@ -193,5 +193,8 @@ Doerly</value>
   </data>
   <data name="BillAlreadyPaid" xml:space="preserve">
     <value>Bill already paid</value>
+  </data>
+  <data name="AddressIsEmpty" xml:space="preserve">
+    <value>Address is empty</value>
   </data>
 </root>

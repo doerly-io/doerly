@@ -12,6 +12,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
 import { Avatar } from 'primeng/avatar';
 import { getExecutionProposalStatusSeverity } from '../../domain/enums/execution-proposal-status';
+import { ErrorHandlerService } from '../../domain/error-handler.service';
 
 @Component({
   selector: 'app-execution-proposals-list',
@@ -40,8 +41,8 @@ export class ExecutionProposalsListComponent implements OnInit {
   public getExecutionProposalStatusSeverity = getExecutionProposalStatusSeverity;
 
   constructor(private executionProposalService: ExecutionProposalService,
-    private toastHelper: ToastHelper,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private errorHandler: ErrorHandlerService) { }
 
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['return'];
@@ -63,14 +64,7 @@ export class ExecutionProposalsListComponent implements OnInit {
         this.totalRecords = response.value?.total || 0;
         this.loading = false;
       },
-      error: (error) => {
-        if (error.status === 400) {
-          this.toastHelper.showError('common.error', error.error.errorMessage);
-        }
-        else {
-          this.toastHelper.showError('common.error', 'common.error_occurred');
-        }
-      }
+      error: (error) => this.errorHandler.handleApiError(error)
     });
   }
 }

@@ -43,6 +43,10 @@ public class GetOrderResponse
 
     public int? BillId { get; set; }
 
+    public bool UseProfileAddress { get; set; }
+
+    public AddressInfo AddressInfo { get; set; }
+
     public IEnumerable<FileInfo> ExistingFiles { get; set; }
 
     public DateTime CreatedDate { get; set; }

@@ -24,6 +24,8 @@ import { FileInfoModel } from '../../models/responses/file-info-model';
 import { Tooltip } from 'primeng/tooltip';
 import { Textarea } from 'primeng/textarea';
 import { ImageModule } from 'primeng/image';
+import { AddressSelectComponent } from "../../../../@shared/components/address-select/address-select.component";
+import { ErrorHandlerService } from '../../domain/error-handler.service';
 
 @Component({
   selector: 'app-edit-order',
@@ -46,8 +48,9 @@ import { ImageModule } from 'primeng/image';
     CommonModule,
     Tooltip,
     Textarea,
-    ImageModule
-  ]
+    ImageModule,
+    AddressSelectComponent
+]
 })
 export class EditOrderComponent implements OnInit {
   orderForm!: FormGroup;
@@ -62,6 +65,7 @@ export class EditOrderComponent implements OnInit {
   existingFiles: FileInfoModel[] = [];
   totalFilesSize: number = 0;
   allowedSizeForUpload: number = 0;
+  addressReady: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -69,7 +73,8 @@ export class EditOrderComponent implements OnInit {
     private router: Router,
     private orderService: OrderService,
     private translate: TranslateService,
-    private toastHelper: ToastHelper
+    private toastHelper: ToastHelper,
+    private errorHandler: ErrorHandlerService
   ) { }
 
   ngOnInit() {
@@ -94,20 +99,22 @@ export class EditOrderComponent implements OnInit {
               price: order.price,
               paymentKind: order.paymentKind,
               dueDate: new Date(order.dueDate),
-              isPriceNegotiable: order.isPriceNegotiable
+              isPriceNegotiable: order.isPriceNegotiable,
+              useProfileAddress: order.useProfileAddress,
+              regionId: order.addressInfo?.regionId ?? null,
+              cityId: order.addressInfo?.cityId ?? null
             });
+            this.addressReady = true;
             this.existingFiles = order.existingFiles || [];
             this.updateFilesSizeAndLimit();
           }
           this.loading = false;
         },
-        error: (error: HttpErrorResponse) => {
-          this.toastHelper.showError('common.error', error.error?.errorMessage || 'common.error_occurred');
-          this.loading = false;
-        }
+        error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
       });
     } else {
       this.updateFilesSizeAndLimit();
+      this.addressReady = true;
     }
   }
 
@@ -119,7 +126,26 @@ export class EditOrderComponent implements OnInit {
       price: [1, [Validators.required, Validators.min(1)]],
       paymentKind: [1, Validators.required],
       dueDate: ['', Validators.required],
-      isPriceNegotiable: [false, Validators.required]
+      isPriceNegotiable: [false, Validators.required],
+      useProfileAddress: [false, Validators.required],
+      regionId: ['', Validators.required],
+      cityId: ['', Validators.required]
+    });
+
+    // Динамічна валідація
+    this.orderForm.get('useProfileAddress')!.valueChanges.subscribe((useProfile: boolean) => {
+      if (!useProfile) {
+        this.orderForm.get('regionId')!.setValidators([Validators.required]);
+        this.orderForm.get('cityId')!.setValidators([Validators.required]);
+        // Скидаємо значення при перемиканні
+        //this.orderForm.patchValue({ regionId: null, cityId: null });
+      } else {
+        this.orderForm.get('regionId')!.clearValidators();
+        this.orderForm.get('cityId')!.clearValidators();
+        //this.orderForm.patchValue({ regionId: null, cityId: null });
+      }
+      this.orderForm.get('regionId')!.updateValueAndValidity();
+      this.orderForm.get('cityId')!.updateValueAndValidity();
     });
   }
 
@@ -209,32 +235,24 @@ export class EditOrderComponent implements OnInit {
           next: () => {
             this.router.navigate(['/ordering/order', this.orderId]);
           },
-          error: (error: HttpErrorResponse) => {
-            if (error.status === 400) {
-              this.toastHelper.showError('common.error', error.error.errorMessage);
-            }
-            else {
-              this.toastHelper.showError('common.error', 'common.error_occurred');
-            }
-          }
+          error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
         });
     } else {
-      const request = this.orderForm.value as CreateOrderRequest;
-      this.orderService.createOrder(request, this.files)
+      this.orderService.createOrder(this.orderForm.value, this.files)
         .subscribe({
           next: (response: BaseApiResponse<CreateOrderResponse>) => {
             this.router.navigate(['/ordering/order', response.value!.id]);
           },
-          error: (error: HttpErrorResponse) => {
-            if (error.status === 400) {
-              this.toastHelper.showError('common.error', error.error.errorMessage);
-            }
-            else {
-              this.toastHelper.showError('common.error', 'common.error_occurred');
-            }
-          }
+          error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
         });
     }
+  }
+
+  onAddressChange(address: { cityId: number, regionId?: number }) {
+    this.orderForm.patchValue({
+      cityId: address.cityId,
+      regionId: address.regionId ?? this.orderForm.value.regionId
+    });
   }
 
   initPaymentKinds() {

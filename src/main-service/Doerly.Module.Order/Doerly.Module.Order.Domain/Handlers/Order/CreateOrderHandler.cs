@@ -17,6 +17,8 @@ using Doerly.Module.Order.Contracts.Messages;
 using Doerly.Messaging;
 using Doerly.Domain.Helpers;
 using Doerly.Domain.Exceptions;
+using Doerly.Proxy.Profile;
+using Doerly.Module.Profile.Contracts.Dtos;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 
@@ -24,14 +26,18 @@ public class CreateOrderHandler : BaseOrderHandler
 {
     private readonly IDoerlyRequestContext _doerlyRequestContext;
 
-    public CreateOrderHandler(OrderDbContext dbContext, IDoerlyRequestContext doerlyRequestContext,
-        IFileRepository fileRepository, IMessagePublisher messagePublisher) : base(dbContext, fileRepository, messagePublisher)
+    public CreateOrderHandler(OrderDbContext dbContext, IDoerlyRequestContext doerlyRequestContext, IProfileModuleProxy profileModuleProxy,
+        IFileRepository fileRepository, IMessagePublisher messagePublisher) : base(dbContext, profileModuleProxy, fileRepository, messagePublisher)
     {
         _doerlyRequestContext = doerlyRequestContext;
     }
 
     public async Task<HandlerResult<CreateOrderResponse>> HandleAsync(CreateOrderRequest dto, List<IFormFile> files)
     {
+        var userId = _doerlyRequestContext.UserId ?? throw new DoerlyException("We are fucked!");
+
+        (int regionId, int cityId) = await ManageAddress(userId, dto.UseProfileAddress, dto.RegionId, dto.CityId);
+
         var orderCode = new Guid();
         ICollection<OrderFile> orderFiles = [];
 
@@ -49,9 +55,10 @@ public class CreateOrderHandler : BaseOrderHandler
             DueDate = dto.DueDate,
             Status = EOrderStatus.Placed,
             OrderFiles = orderFiles,
-            CustomerId = _doerlyRequestContext.UserId ?? throw new DoerlyException("We are fucked!"),
+            CustomerId = userId,
+            RegionId = regionId,
+            CityId = cityId
         };
-
 
         DbContext.Orders.Add(order);
         await DbContext.SaveChangesAsync();

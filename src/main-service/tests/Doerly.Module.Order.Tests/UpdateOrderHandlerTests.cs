@@ -9,6 +9,7 @@ using Moq;
 using Doerly.Module.Order.Domain.Handlers;
 using Doerly.Domain;
 using Doerly.FileRepository;
+using Doerly.Proxy.Profile;
 
 namespace Doerly.Module.Order.Tests;
 public class UpdateOrderHandlerTests : BaseOrderTests
@@ -19,9 +20,10 @@ public class UpdateOrderHandlerTests : BaseOrderTests
     public UpdateOrderHandlerTests(PostgresTestContainerFixture fixture) : base(fixture)
     {
         _doerlyRequestContextMock = new Mock<IDoerlyRequestContext>();
+        var profileModuleProxyMock = new Mock<IProfileModuleProxy>();
         var fileRepositoryMock = new Mock<IFileRepository>();
 
-        _handler = new UpdateOrderHandler(OrderDbContext, _doerlyRequestContextMock.Object, fileRepositoryMock.Object);
+        _handler = new UpdateOrderHandler(OrderDbContext, _doerlyRequestContextMock.Object, fileRepositoryMock.Object, profileModuleProxyMock.Object);
     }
 
     [Fact]

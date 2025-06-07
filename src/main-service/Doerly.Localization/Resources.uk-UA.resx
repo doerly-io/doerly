@@ -296,4 +296,7 @@ Doerly</value>
   <data name="BillAlreadyPaid" xml:space="preserve">
     <value>Рахунок вже сплачено</value>
   </data>
+  <data name="AddressIsEmpty" xml:space="preserve">
+    <value>Адреса порожня</value>
+  </data>
 </root>

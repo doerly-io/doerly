@@ -5,6 +5,7 @@ using Doerly.Messaging;
 using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Module.Order.Domain.Handlers;
 using Doerly.Module.Order.Enums;
+using Doerly.Proxy.Profile;
 
 using Microsoft.AspNetCore.Http;
 
@@ -16,16 +17,18 @@ public class CreateOrderHandlerTests : BaseOrderTests
     public CreateOrderHandler _handler;
 
     private readonly Mock<IDoerlyRequestContext> _doerlyRequestContextMock;
+    private readonly Mock<IProfileModuleProxy> _profileModuleProxyMock;
     private readonly Mock<IFileRepository> _fileRepositoryMock;
     private readonly Mock<IMessagePublisher> _messagePublisherMock;
 
     public CreateOrderHandlerTests(PostgresTestContainerFixture fixture) : base(fixture)
     {
         _doerlyRequestContextMock = new Mock<IDoerlyRequestContext>();
+        _profileModuleProxyMock = new Mock<IProfileModuleProxy>();
         _fileRepositoryMock = new Mock<IFileRepository>();
         _messagePublisherMock = new Mock<IMessagePublisher>();
 
-        _handler = new CreateOrderHandler(OrderDbContext, _doerlyRequestContextMock.Object,
+        _handler = new CreateOrderHandler(OrderDbContext, _doerlyRequestContextMock.Object, _profileModuleProxyMock.Object,
             _fileRepositoryMock.Object, _messagePublisherMock.Object);
     }
 

@@ -35,6 +35,10 @@ public class Order : BaseEntity
 
     public int? BillId { get; set; }
 
+    public int RegionId { get; set; }
+
+    public int CityId { get; set; }
+
     public virtual ICollection<OrderFile> OrderFiles { get; set; } = [];
 
     public virtual ICollection<ExecutionProposal> ExecutionProposals { get; set; }

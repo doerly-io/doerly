@@ -11,7 +11,7 @@ export function setServerErrors(form: FormGroup, errors: { [key: string]: string
 
 export function isInvalid(formGroup: FormGroup, controlName: string): boolean {
   const control = formGroup.get(controlName);
-  return control?.touched && control?.invalid || false;
+  return control?.touched && control?.dirty && control?.invalid || false;
 }
 
 export function getError(formGroup: FormGroup, controlName: string, error: string, errorUIText: string): string {

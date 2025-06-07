@@ -29,4 +29,10 @@ public class UpdateOrderRequest
 
     [Required(ErrorMessage = "FieldIsRequired")]
     public bool IsPriceNegotiable { get; set; }
+
+    public bool UseProfileAddress { get; set; }
+
+    public int? RegionId { get; set; }
+
+    public int? CityId { get; set; }
 }
