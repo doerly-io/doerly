@@ -12,7 +12,12 @@ export class CommunicationSignalRService {
   private readonly jwtTokenHelper = inject(JwtTokenHelper);
 
   private hubConnection!: signalR.HubConnection;
+
   private readonly userStatus = signal(new Map<number, boolean>());
+
+  // Callbacks for handling events
+  private typingCallback?: (fullName: string) => void;
+  private messageReceivedCallback?: (message: MessageResponse) => void;
 
   get userStatusSignal() {
     return this.userStatus;
@@ -25,11 +30,7 @@ export class CommunicationSignalRService {
     this.userStatus.set(updated);
   }
 
-  // Callbacks for handling events
-  private typingCallback?: (fullName: string) => void;
-  private messageReceivedCallback?: (message: MessageResponse) => void;
-
-  public startConnection = (conversationId: number, userId: number) => {
+  public startConnection = () => {
     const accessToken = this.jwtTokenHelper.getToken() ?? '';
 
     this.hubConnection = new signalR.HubConnectionBuilder()
@@ -63,13 +64,26 @@ export class CommunicationSignalRService {
       .start()
       .then(() => {
         console.log('SignalR connection established');
-        if (this.hubConnection.state === signalR.HubConnectionState.Connected) {
-          this.joinConversation(conversationId.toString());
-        } else {
-          console.error('Connection not fully established');
-        }
       })
       .catch(err => console.log('Error establishing SignalR connection: ' + err));
+  }
+
+  public async stopConnection(): Promise<void> {
+    if (!this.hubConnection) {
+      console.warn('No active SignalR connection to stop');
+      return;
+    }
+
+    try {
+      await this.hubConnection.stop();
+      console.log('SignalR connection stopped successfully');
+      this.hubConnection = null as any;
+      this.typingCallback = undefined;
+      this.messageReceivedCallback = undefined;
+    } catch (err) {
+      console.error('Error stopping SignalR connection:', err);
+      throw err;
+    }
   }
 
   public async sendTyping(conversationId: number, fullName: string): Promise<void> {
@@ -102,12 +116,12 @@ export class CommunicationSignalRService {
     }
   }
 
-  // public get userStatus$(): Observable<Map<number, boolean>> {
-  //   return this.userStatus.asObservable();
-  // }
-
   public joinConversation(conversationId: string): void {
     this.hubConnection?.invoke('JoinConversation', conversationId).catch(err => console.error(err));
+  }
+
+  public leaveConversation(conversationId: string): void {
+    this.hubConnection?.invoke('LeaveConversation', conversationId).catch(err => console.error(err));
   }
 
   public onUserTyping(callback: (fullName: string) => void): void {

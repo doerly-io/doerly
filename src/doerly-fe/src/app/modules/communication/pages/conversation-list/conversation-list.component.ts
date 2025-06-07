@@ -1,10 +1,11 @@
-import {Component, inject, signal, computed, OnInit, output} from '@angular/core';
+import {Component, inject, signal, computed, OnInit, output, input, effect} from '@angular/core';
 import { NgIf, NgForOf, SlicePipe, DatePipe } from '@angular/common';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { CommunicationService } from '../../domain/communication.service';
+import { CommunicationSignalRService } from '../../domain/communication-signalr.service';
 import {PageInfo} from '../../../../@core/models/page-info';
 import {ConversationHeaderResponse} from '../../models/conversation-header-response.model';
 import {JwtTokenHelper} from '../../../../@core/helpers/jwtToken.helper';
@@ -31,26 +32,54 @@ export class ConversationListComponent implements OnInit {
   private readonly communicationService = inject(CommunicationService);
   private readonly jwtTokenHelper = inject(JwtTokenHelper);
   private readonly translateService = inject(TranslateService);
+  private readonly communicationSignalR = inject(CommunicationSignalRService);
 
   protected readonly loading = signal(false);
   protected readonly pageSize = signal(10);
   protected readonly currentPage = signal(1);
   protected readonly totalRecords = signal(0);
   protected readonly conversations = signal<ConversationHeaderResponse[]>([]);
+  protected readonly currentConversationId = signal<number | null>(null);
 
-  selectedConversationId = output<number>()
+  conversationUpdates = input<ConversationHeaderResponse[] | null>(null);
+
+  selectedConversationId = output<number>();
 
   protected readonly paginationRequest = computed<PageInfo>(() => ({
     number: this.currentPage(),
     size: this.pageSize(),
   }));
 
+  private handleConversationUpdates(): void {
+    effect(() => {
+      const updates = this.conversationUpdates();
+      if (updates) {
+        this.conversations.update(currentConversations => {
+          const updatedConversations = [...currentConversations];
+          updates.forEach(updatedConv => {
+            const index = updatedConversations.findIndex(conv => conv.id === updatedConv.id);
+            if (index !== -1) {
+              updatedConversations[index] = updatedConv;
+            } else {
+              updatedConversations.push(updatedConv);
+            }
+          });
+          return updatedConversations;
+        });
+      }
+    });
+  }
+
+  constructor() {
+    this.handleConversationUpdates();
+  }
+
   ngOnInit(): void {
     this.loadConversations();
   }
 
   protected onPageChange(event: PaginatorState): void {
-    this.currentPage.set(event.page ?? 0);
+    this.currentPage.set(event.page ?? 1);
     this.pageSize.set(event.rows ?? 10);
     this.loadConversations();
   }
@@ -96,6 +125,11 @@ export class ConversationListComponent implements OnInit {
   }
 
   protected navigateToConversation(conversationId: number): void {
+    const previousConversationId = this.currentConversationId();
+    if (previousConversationId !== null && previousConversationId !== conversationId) {
+      this.communicationSignalR.leaveConversation(previousConversationId.toString());
+    }
+    this.currentConversationId.set(conversationId);
     this.selectedConversationId.emit(conversationId);
   }
 }
