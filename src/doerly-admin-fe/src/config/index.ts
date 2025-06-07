@@ -6,6 +6,7 @@ const config = {
   CATEGORY_SERVICE: '/category',
   ORDERS_SERVICE: '/order/order',
   PROFILE_SERVICE: '/profile',
+  STATISTICS_SERVICE: '/statistics',
   UI_URL_PREFIX: process.env.REACT_APP_UI_URL_PREFIX || '',
 };
 

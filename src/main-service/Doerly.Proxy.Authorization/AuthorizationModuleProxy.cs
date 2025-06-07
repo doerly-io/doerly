@@ -29,4 +29,9 @@ public class AuthorizationModuleProxy : IAuthorizationModuleProxy
     {
         return await _authorizationModuleWrapper.GetUserInfoByIdsAsync(userIds);
     }
+
+    public async Task<UserActivityStatisticsDto> GetActivityUsersStatisticsAsync()
+    {
+        return await _authorizationModuleWrapper.GetActivityUsersStatisticsAsync();
+    }
 }

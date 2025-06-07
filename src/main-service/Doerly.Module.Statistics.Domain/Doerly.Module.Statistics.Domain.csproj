@@ -7,7 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Handlers\" />
+      <ProjectReference Include="..\Doerly.Domain\Doerly.Domain.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Statistics.Contracts\Doerly.Module.Statistics.Contracts.csproj" />
+      <ProjectReference Include="..\Doerly.Proxy.Authorization\Doerly.Proxy.Authorization.csproj" />
     </ItemGroup>
 
 </Project>

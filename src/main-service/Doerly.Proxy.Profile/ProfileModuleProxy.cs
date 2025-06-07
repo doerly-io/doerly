@@ -8,7 +8,7 @@ public class ProfileModuleProxy : IProfileModuleProxy
 {
     private readonly IProfileModuleWrapper _profileModuleWrapper;
     
-public ProfileModuleProxy(IProfileModuleWrapper profileModuleWrapper)
+    public ProfileModuleProxy(IProfileModuleWrapper profileModuleWrapper)
     {
         _profileModuleWrapper = profileModuleWrapper;
     }
