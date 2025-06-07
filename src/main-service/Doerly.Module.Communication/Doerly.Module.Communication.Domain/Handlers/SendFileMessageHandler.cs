@@ -68,8 +68,8 @@ public class SendFileMessageHandler(CommunicationDbContext dbContext,
             SenderId = message.SenderId,
             MessageContent = await fileRepository.GetSasUrlAsync(CommunicationConstants.AzureStorage.FilesContainerName, filePath) ?? throw new InvalidOperationException(),
             SentAt = message.SentAt,
-            Status = message.Status.ToString(),
-            MessageType = nameof(EMessageType.File)
+            Status = message.Status,
+            MessageType = EMessageType.File
         };
         
         // Notify clients in the conversation about the new message

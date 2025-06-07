@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Doerly.Module.Communication.DataAccess.Migrations
 {
     [DbContext(typeof(CommunicationDbContext))]
-    [Migration("20250410103321_Communication_Initial")]
+    [Migration("20250607160433_Communication_Initial")]
     partial class Communication_Initial
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("communication")
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -96,9 +96,8 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
                         .HasColumnType("text")
                         .HasColumnName("message_content");
 
-                    b.Property<string>("MessageType")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("MessageType")
+                        .HasColumnType("integer")
                         .HasColumnName("message_type");
 
                     b.Property<int>("SenderId")
@@ -109,9 +108,8 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("sent_at");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
                         .HasColumnName("status");
 
                     b.HasKey("Id")

@@ -57,8 +57,8 @@ public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfi
                 : await fileRepository.GetSasUrlAsync(CommunicationConstants.AzureStorage.FilesContainerName, m.MessageContent)
                   ?? throw new InvalidOperationException(),
             SentAt = m.SentAt,
-            MessageType = m.MessageType.ToString(),
-            Status = m.Status.ToString()
+            MessageType = m.MessageType,
+            Status = m.Status
         }));
         
         var conversationResponseDto =  new ConversationResponseDto()

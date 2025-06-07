@@ -58,9 +58,9 @@ public class GetMessageByIdHandler(CommunicationDbContext dbContext, IProfileMod
                 Recipient = profiles.GetValueOrDefault(message.Conversation.RecipientId),
             },
             MessageContent = messageContent,
-            MessageType = message.MessageType.ToString(),
+            MessageType = message.MessageType,
             SentAt = message.SentAt,
-            Status = message.Status.ToString()
+            Status = message.Status
         };
         
         return HandlerResult.Success(messageDto);

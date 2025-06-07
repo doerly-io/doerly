@@ -1,4 +1,4 @@
 export enum MessageType {
-  TEXT = 'Text',
-  FILE = 'File',
+  TEXT = 0,
+  FILE,
 }
