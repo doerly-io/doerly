@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, input} from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { OrderService } from '../../domain/order.service';
 import { GetOrderResponse } from '../../models/responses/get-order-response';
@@ -22,6 +22,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ImageModule } from 'primeng/image';
 import { GalleriaModule } from 'primeng/galleria';
 import { ErrorHandlerService } from '../../../../@core/services/error-handler.service';
+import {FeedbackInputComponent} from 'app/@components/feedback-input/feedback-input.component';
 
 @Component({
   selector: 'app-order-details',
@@ -40,7 +41,8 @@ import { ErrorHandlerService } from '../../../../@core/services/error-handler.se
     TooltipModule,
     NgOptimizedImage,
     ImageModule,
-    GalleriaModule
+    GalleriaModule,
+    FeedbackInputComponent
   ]
 })
 export class OrderDetailsComponent implements OnInit {
@@ -102,7 +104,7 @@ export class OrderDetailsComponent implements OnInit {
     });
   }
 
-  get canEdit(): boolean {
+  protected get canEdit(): boolean {
     return this.order?.status === EOrderStatus.Placed && this.order?.customerId === this.profileId;
   }
   get canCancel(): boolean {
