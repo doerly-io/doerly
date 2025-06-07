@@ -12,6 +12,9 @@ import { Button } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
+import { getOrderStatusSeverity } from '../../domain/enums/order-status';
+import { Avatar } from 'primeng/avatar';
+import { ErrorHandlerService } from '../../domain/error-handler.service';
 
 @Component({
   selector: 'app-orders-list',
@@ -22,7 +25,8 @@ import { ToastHelper } from 'app/@core/helpers/toast.helper';
     CommonModule,
     Button,
     TranslatePipe,
-    RouterLink
+    RouterLink,
+    Avatar
   ],
   templateUrl: './orders-list.component.html',
   styleUrl: './orders-list.component.scss'
@@ -38,12 +42,14 @@ export class OrdersListComponent implements OnInit {
   loading: boolean = true;
   returnUrl!: string;
   EOrderStatus = EOrderStatus;
+  public getOrderStatusSeverity = getOrderStatusSeverity;
 
   constructor(private orderService: OrderService,
-              private toastHelper: ToastHelper,
-                private route: ActivatedRoute) {}
+    private route: ActivatedRoute,
+    private errorHandler: ErrorHandlerService  
+  ) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['return'];
   }
 
@@ -63,29 +69,7 @@ export class OrdersListComponent implements OnInit {
         this.totalRecords = response.value?.total || 0;
         this.loading = false;
       },
-      error: (error: HttpErrorResponse) => {
-        if (error.status === 400) {
-          this.toastHelper.showError('common.error', error.error.errorMessage);
-        }
-        else {
-          this.toastHelper.showError('common.error', 'common.error-occurred');
-        }
-      }
+      error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
     });
   }
-
-  getOrderStatusSeverity(status: EOrderStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
-      switch (status) {
-        case EOrderStatus.Placed:
-          return 'info';
-        case EOrderStatus.InProgress:
-          return 'warn';
-        case EOrderStatus.Completed:
-          return 'success';
-        case EOrderStatus.Canceled:
-          return 'danger';
-        default:
-          return 'secondary';
-      }
-    }
 }

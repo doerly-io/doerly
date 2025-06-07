@@ -36,6 +36,21 @@
   "profile": {
     "title": "Personal info",
     "subtitle": "Info about you and your preferences across Doerly services",
+    "view": {
+      "title": "View Profile",
+      "subtitle": "Viewing user profile",
+      "cv": {
+        "title": "CV",
+        "subtitle": {
+          "available": "User's CV is available for preview",
+          "none": "User has not uploaded a CV yet"
+        }
+      },
+      "image": {
+        "title": "Profile Picture",
+        "subtitle": "User's profile picture"
+      }
+    },
     "basic": {
       "actions": {
         "cancel": "Cancel",
@@ -93,21 +108,30 @@
     },
     "professional": {
       "title": "Professional information",
+      "view": {
+        "title": "Professional Information",
+        "languages": {
+          "subtitle": "Languages known by the user"
+        },
+        "competences": {
+          "subtitle": "User's competences and skills"
+        }
+      },
       "cv": {
+        "title": "CV",
+        "subtitle": {
+          "available": "Your CV is available for preview and download",
+          "none": "Upload your CV to help employers find you"
+        },
+        "preview": {
+          "title": "Preview CV"
+        },
         "delete": {
           "text": "Delete",
           "tooltip": "Delete CV"
         },
         "download": {
           "title": "Download CV"
-        },
-        "preview": {
-          "title": "Preview CV"
-        },
-        "title": "CV",
-        "subtitle": {
-          "none": "Upload your CV to help employers find you",
-          "available": "Your CV is available for preview and download"
         },
         "upload": {
           "title": "Upload CV",
@@ -163,7 +187,51 @@
           "advanced": "Advanced (C1)",
           "proficient": "Proficient (C2)",
           "native": "Native"
+        },
+        "view": {
+          "subtitle": "Languages known by the user"
         }
+      },
+      "competences": {
+        "subtitle": "Add your categories of competences and skills",
+        "add": {
+          "title": "Add Competence",
+          "success": "Competence added successfully",
+          "error": "Failed to add competence. Message: {{message}}"
+        },
+        "edit": {
+          "title": "Edit Competence"
+        },
+        "delete": {
+          "title": "Delete Competence",
+          "success": "Competence deleted successfully",
+          "error": "Failed to delete competence"
+        },
+        "category": {
+          "label": "Category",
+          "placeholder": "Select a category"
+        },
+        "categories": {
+          "load": {
+            "error": "Failed to load categories"
+          }
+        },
+        "view": {
+          "subtitle": "User's competences categories"
+        }
+      }
+    },
+    "paymentHistory": {
+      "title": "Payment history",
+      "subtitle": "View your payment history and details",
+      "no_payments": "No payments found",
+      "date": "Date",
+      "amount": "Amount",
+      "status": "Status",
+      "details": "Details",
+      "loading": "Loading...",
+      "errors": {
+        "load": "An error occurred while loading payment history."
       }
     },
     "message": {
@@ -197,6 +265,11 @@
           "error": "An error occurred while deleting the profile picture. Please try again later"
         }
       }
+    },
+    "categories": {
+      "load": {
+        "error": "An error occurred while loading categories. Message: {{message}}"
+      }
     }
   },
   "ordering": {
@@ -215,12 +288,17 @@
     "title": "Title",
     "description": "Description",
     "price": "Price",
+    "price_negotiable": "Price is negotiable",
+    "use_profile_address": "Use profile address",
+    "address": "Address",
+    "placed": "Placed",
     "due_date": "Due Date",
     "customer_id": "Customer ID",
     "executor_id": "Executor ID",
     "execution_date": "Execution Date",
     "bill_id": "Bill ID",
     "field_required": "This field is required",
+    "address_required": "Address is required",
     "price_min": "Minimum price is 1",
     "minimum_length": "Мінімальна довжина {{length}} символів",
     "send_execution_proposal": "Send execution proposal",
@@ -245,6 +323,7 @@
       "Placed": "Placed",
       "InProgress": "In progress",
       "AwaitingPayment": "Awaiting payment",
+      "ProcessingPayment": "Processing payment",
       "AwaitingConfirmation": "Awaiting confirmation",
       "Completed": "Completed",
       "Canceled": "Canceled"
@@ -272,7 +351,44 @@
     "order_editing": "Order editing",
     "payment_redirect": "You are gonna be redirected to the payment page in a few seconds",
     "end": "End",
-    "pay": "Pay"
+    "pay": "Pay",
+    "view_profile": "View profile",
+    "sent": "Sent",
+    "executor": "Executor",
+    "order_number": "Order №{{orderId}}",
+    "execution_proposal_number": "Execution proposal №{{proposalId}}",
+    "size": "Size",
+    "added": "Added",
+    "uploaded": "Uploaded",
+    "drag_and_drop_images": "Drag and drop image files here to upload",
+    "download": "Download",
+    "uploaded_files": "Uploaded files",
+    "added_files": "Added files",
+    "add_files": "Add files",
+    "clear_files": "Clear files",
+    "delete_file": "Delete file",
+    "additional_files": "Additional files",
+    "file_limit_exceeded": "File limit exceeded. Maximum number of files is {{limit}}.",
+    "files_count": "Files",
+    "files_size": "Files size",
+    "files_size_limit_exceeded": "File size limit exceeded.",
+    "files_size_limit": "Maximum files size is {{size}}."
+  },
+  "payments": {
+    "status": {
+      "pending": "Pending",
+      "failed": "Failed to process payment",
+      "error": "Error entering payment details",
+      "completed": "Successful",
+      "canceled": "Canceled",
+      "unknown": "Unknown status"
+    },
+    "currency": {
+      "usd": "USD",
+      "eur": "EUR",
+      "uah": "UAH"
+    },
+    "nohistory": "Payments history not found"
   },
   "communication": {
     "title": "Messages",
@@ -308,6 +424,7 @@
     "page_not_found": "Page not found",
     "edit": "Edit",
     "delete": "Delete",
+    "error_occurred": "An error occurred",
     "control": {
       "unset": "Unset"
     }

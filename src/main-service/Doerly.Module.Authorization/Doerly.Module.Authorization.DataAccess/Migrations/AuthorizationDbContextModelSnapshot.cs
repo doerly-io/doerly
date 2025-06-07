@@ -18,7 +18,7 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("auth")
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -113,6 +113,12 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_email_verified");
 
+                    b.Property<bool>("IsEnabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_enabled");
+
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_modified_date");
@@ -134,12 +140,15 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("pk_user");
 
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasDatabaseName("ix_user_email");
+                    b.HasIndex("IsEnabled")
+                        .HasDatabaseName("ix_user_is_enabled");
 
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_user_role_id");
+
+                    b.HasIndex("Email", "IsEmailVerified")
+                        .IsUnique()
+                        .HasDatabaseName("ix_user_email_is_email_verified");
 
                     b.ToTable("user", "auth");
                 });

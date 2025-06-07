@@ -1,12 +1,15 @@
+using Doerly.DataTransferObjects;
 using Doerly.Infrastructure.Api;
 using Doerly.Extensions;
 using Doerly.Module.Payments.Contracts;
 using Doerly.Module.Payments.Domain.Handlers;
 using Doerly.Module.Payments.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Doerly.Module.Payments.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Area("payments")]
 [Route("api/[area]/[controller]")]
@@ -18,7 +21,8 @@ public class PaymentsController : BaseApiController
     {
         _webhookUrlBuilder = webhookUrlBuilder;
     }
-        
+
+    //[AllowAnonymous]
     [HttpGet("test")]
     public async Task<IActionResult> Test()
     {
@@ -30,12 +34,13 @@ public class PaymentsController : BaseApiController
             PaymentDescription = "Hello world",
             ReturnUrl = null,
             Currency = ECurrency.UAH,
-            PaymentAction = EPaymentAction.Pay
-            
+            PaymentAction = EPaymentAction.Pay,
+            PayerEmail = RequestContext.UserEmail
         };
-        
+
         var uri = _webhookUrlBuilder.BuildWebhookUrl(nameof(WebhookController).ToControllerName(), nameof(WebhookController.FinalStatus));
         var result = await ResolveHandler<CheckoutHandler>().HandleAsync(invoiceCreateRequest, uri);
         return Ok(result);
     }
+    
 }

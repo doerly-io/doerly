@@ -19,6 +19,8 @@ public class GetOrderResponse
 
     public decimal Price { get; set; }
 
+    public bool IsPriceNegotiable { get; set; }
+
     public EPaymentKind PaymentKind { get; set; }
 
     public DateTime DueDate { get; set; }
@@ -27,13 +29,25 @@ public class GetOrderResponse
 
     public int CustomerId { get; set; }
 
+    public ProfileInfo Customer { get; set; }
+
     public bool CustomerCompletionConfirmed { get; set; }
 
     public int? ExecutorId { get; set; }
+
+    public ProfileInfo? Executor { get; set; }
 
     public bool ExecutorCompletionConfirmed { get; set; }
 
     public DateTime? ExecutionDate { get; set; }
 
     public int? BillId { get; set; }
+
+    public bool UseProfileAddress { get; set; }
+
+    public AddressInfo AddressInfo { get; set; }
+
+    public IEnumerable<FileInfo> ExistingFiles { get; set; }
+
+    public DateTime CreatedDate { get; set; }
 }

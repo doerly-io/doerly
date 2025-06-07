@@ -7,7 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MassTransit" Version="8.4.0" />
+      <PackageReference Include="MassTransit" Version="8.4.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Doerly.Domain\Doerly.Domain.csproj" />
     </ItemGroup>
 
 </Project>

@@ -5,5 +5,5 @@
   "placeholder.password": "Enter your password",
   "signIn": "Sign In",
   "validationError.EMPTY_FIELD_LOGIN": "Email cannot be empty",
-    "validationError.EMPTY_FIELD_PASSWORD": "Password cannot be empty"
+  "validationError.EMPTY_FIELD_PASSWORD": "Password cannot be empty"
 }

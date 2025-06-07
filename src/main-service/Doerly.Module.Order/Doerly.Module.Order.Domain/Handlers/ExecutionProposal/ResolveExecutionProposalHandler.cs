@@ -6,12 +6,14 @@ using Doerly.Module.Order.Contracts.Dtos;
 
 using Microsoft.EntityFrameworkCore;
 using Doerly.Domain;
+using Doerly.Messaging;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class ResolveExecutionProposalHandler : BaseOrderHandler
 {
     private readonly IDoerlyRequestContext _doerlyRequestContext;
-    public ResolveExecutionProposalHandler(OrderDbContext dbContext, IDoerlyRequestContext doerlyRequestContext) : base(dbContext)
+    public ResolveExecutionProposalHandler(OrderDbContext dbContext, IDoerlyRequestContext doerlyRequestContext,
+        IMessagePublisher messagePublisher) : base(dbContext, messagePublisher)
     {
         _doerlyRequestContext = doerlyRequestContext;
     }
@@ -46,6 +48,8 @@ public class ResolveExecutionProposalHandler : BaseOrderHandler
         }
 
         await DbContext.SaveChangesAsync();
+
+        await PublishExecutionProposalStatusUpdatedEventAsync(executionProposal.Id, executionProposal.Status);
 
         return HandlerResult.Success();
     }

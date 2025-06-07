@@ -1,3 +1,5 @@
+const FONT_FAMILY = '"Segoe UI", sans-serif';
+
 const theme = {
   button: {
     primary: {
@@ -35,11 +37,12 @@ const theme = {
     cobalt: '#34d399',
     greenDark: '#2DC100',
     greenLight: '#D0E4D6',
-    greyDark: '#777777',
+    greyDark: 'rgba(119,119,119,0.5)',
     greyLight: '#E6E6E6',
     purpleLight: '#F3E5F5',
     redDark: '#D3000C',
     redLight: '#F6CCCE',
+    secondary: '#298967',
     white: '#FFFFFF',
     yellowDark: '#E9A631',
     yellowLight: '#FAEDD5',
@@ -54,6 +57,7 @@ const theme = {
     selected: {
       background: '#141a16',
     },
+
   },
   icon: {
     color: {
@@ -83,6 +87,15 @@ const theme = {
       width: 1024,
     },
   },
+  select: {
+    color: {
+      background: '#18181b',
+      border: '#34d399',
+      focus: '#34d399',
+      label: '#34d399',
+      text: '#FFFFFF',
+    },
+  },
   sideBar: {
     background: '#121212',
     border: '#34d399',
@@ -108,13 +121,13 @@ const theme = {
       info: '#1C7FDB',
       paper: '#FFFFFF',
       primary: '#34d399',
-      secondary: '#059669',
+      secondary: '#298967',
       success: '#007504',
       warning: '#E9A631',
     },
     variants: {
       capitalized: {
-        fontFamily: 'sans-serif',
+        fontFamily: FONT_FAMILY,
         fontSize: '14px',
         fontWeight: 400,
         letterSpacing: '0.03333em',
@@ -122,28 +135,28 @@ const theme = {
         textTransform: 'capitalize',
       },
       caption: {
-        fontFamily: 'sans-serif',
+        fontFamily: FONT_FAMILY,
         fontSize: '12px',
         fontWeight: 400,
         letterSpacing: '0.03333em',
         lineHeight: 1.3,
       },
       default: {
-        fontFamily: 'sans-serif',
+        fontFamily: FONT_FAMILY,
         fontSize: '14px',
         fontWeight: 400,
         letterSpacing: '0.03333em',
         lineHeight: 1.3,
       },
       subtitle: {
-        fontFamily: 'sans-serif',
+        fontFamily: FONT_FAMILY,
         fontSize: '16px',
         fontWeight: 400,
         letterSpacing: '0.03333em',
         lineHeight: 1.3,
       },
       title: {
-        fontFamily: 'sans-serif',
+        fontFamily: FONT_FAMILY,
         fontSize: '20px',
         fontWeight: 400,
         letterSpacing: '0.03333em',

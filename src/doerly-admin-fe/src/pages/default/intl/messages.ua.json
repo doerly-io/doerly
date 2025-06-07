@@ -3,5 +3,17 @@
   "contractors": "Підрядники",
   "projects": "Проєкти",
   "noItems.0": "У вас немає привілеїв для використання функціоналу системи.",
-  "settings": "Налаштування"
+  "ordersStatistics": "Статистика замовлень",
+  "settings": "Налаштування",
+  "statistics": "Статистика",
+  "statistics.activityChart": "Активність користувачів",
+  "statistics.activeUsers24h": "Активні користувачі (24г)",
+  "statistics.activeUsers30d": "Активні користувачі (30д)",
+  "statistics.activeUsers7d": "Активні користувачі (7д)",
+  "statistics.chartType.byDay": "Тижневий",
+  "statistics.chartType.byHour": "Сьогодні",
+  "statistics.inactiveUsers30d": "Неактивні користувачі (30д)",
+  "statistics.newUsers30d": "Нові користувачі (30д)",
+  "statistics.totalUsers": "Всього користувачів",
+  "userActivity": "Активність користувачів"
 }

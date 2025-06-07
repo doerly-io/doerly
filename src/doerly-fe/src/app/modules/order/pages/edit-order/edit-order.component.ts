@@ -4,19 +4,28 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../../domain/order.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { ButtonDirective } from 'primeng/button';
+import { Button, ButtonDirective } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { Card } from 'primeng/card';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { EPaymentKind } from '../../domain/enums/payment-kind';
-import { getError, isInvalid, setServerErrors, getServersideError } from 'app/@core/helpers/input-validation-helpers';
+import { getError, isInvalid, getServersideError } from 'app/@core/helpers/input-validation-helpers';
 import { BaseApiResponse } from 'app/@core/models/base-api-response';
 import { GetOrderResponse } from '../../models/responses/get-order-response';
-import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 import { CreateOrderRequest } from '../../models/requests/create-order-request';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
+import { CreateOrderResponse } from '../../models/responses/create-order-response';
+import { Checkbox } from 'primeng/checkbox';
+import { FileUploadModule } from 'primeng/fileupload';
+import { Badge } from 'primeng/badge';
+import { FileInfoModel } from '../../models/responses/file-info-model';
+import { Tooltip } from 'primeng/tooltip';
+import { Textarea } from 'primeng/textarea';
+import { ImageModule } from 'primeng/image';
+import { AddressSelectComponent } from "../../../../@shared/components/address-select/address-select.component";
+import { ErrorHandlerService } from '../../domain/error-handler.service';
 
 @Component({
   selector: 'app-edit-order',
@@ -31,8 +40,17 @@ import { ToastHelper } from 'app/@core/helpers/toast.helper';
     DatePickerModule,
     SelectModule,
     NgIf,
-    Card
-  ]
+    Card,
+    Checkbox,
+    FileUploadModule,
+    Button,
+    Badge,
+    CommonModule,
+    Tooltip,
+    Textarea,
+    ImageModule,
+    AddressSelectComponent
+]
 })
 export class EditOrderComponent implements OnInit {
   orderForm!: FormGroup;
@@ -42,13 +60,21 @@ export class EditOrderComponent implements OnInit {
   loading: boolean = false;
   currentDate: Date = new Date();
 
+  totalSizeLimit: number = 10 * 1024 * 1024; // 10 MB
+  files: File[] = [];
+  existingFiles: FileInfoModel[] = [];
+  totalFilesSize: number = 0;
+  allowedSizeForUpload: number = 0;
+  addressReady: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private orderService: OrderService,
     private translate: TranslateService,
-    private toastHelper: ToastHelper
+    private toastHelper: ToastHelper,
+    private errorHandler: ErrorHandlerService
   ) { }
 
   ngOnInit() {
@@ -57,6 +83,8 @@ export class EditOrderComponent implements OnInit {
 
     this.initForm();
     this.initPaymentKinds();
+
+    this.orderForm.setValidators(() => this.filesTotalSizeValidator());
 
     if (this.isEdit) {
       this.loading = true;
@@ -70,20 +98,23 @@ export class EditOrderComponent implements OnInit {
               description: order.description,
               price: order.price,
               paymentKind: order.paymentKind,
-              dueDate: new Date(order.dueDate)
+              dueDate: new Date(order.dueDate),
+              isPriceNegotiable: order.isPriceNegotiable,
+              useProfileAddress: order.useProfileAddress,
+              regionId: order.addressInfo?.regionId ?? null,
+              cityId: order.addressInfo?.cityId ?? null
             });
+            this.addressReady = true;
+            this.existingFiles = order.existingFiles || [];
+            this.updateFilesSizeAndLimit();
           }
           this.loading = false;
         },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.toastHelper.showError('common.error', error.error.errorMessage);
-          }
-          else {
-            this.toastHelper.showError('common.error', 'common.error-occurred');
-          }
-        }
+        error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
       });
+    } else {
+      this.updateFilesSizeAndLimit();
+      this.addressReady = true;
     }
   }
 
@@ -94,7 +125,27 @@ export class EditOrderComponent implements OnInit {
       description: ['', [Validators.required, this.minimumLengthValidator(5), Validators.maxLength(4000)]],
       price: [1, [Validators.required, Validators.min(1)]],
       paymentKind: [1, Validators.required],
-      dueDate: ['', Validators.required]
+      dueDate: ['', Validators.required],
+      isPriceNegotiable: [false, Validators.required],
+      useProfileAddress: [false, Validators.required],
+      regionId: ['', Validators.required],
+      cityId: ['', Validators.required]
+    });
+
+    // Динамічна валідація
+    this.orderForm.get('useProfileAddress')!.valueChanges.subscribe((useProfile: boolean) => {
+      if (!useProfile) {
+        this.orderForm.get('regionId')!.setValidators([Validators.required]);
+        this.orderForm.get('cityId')!.setValidators([Validators.required]);
+        // Скидаємо значення при перемиканні
+        //this.orderForm.patchValue({ regionId: null, cityId: null });
+      } else {
+        this.orderForm.get('regionId')!.clearValidators();
+        this.orderForm.get('cityId')!.clearValidators();
+        //this.orderForm.patchValue({ regionId: null, cityId: null });
+      }
+      this.orderForm.get('regionId')!.updateValueAndValidity();
+      this.orderForm.get('cityId')!.updateValueAndValidity();
     });
   }
 
@@ -107,6 +158,103 @@ export class EditOrderComponent implements OnInit {
     };
   }
 
+  filesTotalSizeValidator() {
+    const total = this.getTotalFilesSize();
+    return total > this.totalSizeLimit ? { filesSizeLimitExceeded: true } : null;
+  }
+
+  onSelectedFiles(event: any) {
+    let added = false;
+    for (const file of event.currentFiles) {
+      if (!this.files.includes(file)) {
+        this.files.push(file);
+        added = true;
+      }
+    }
+    this.updateFilesSizeAndLimit();
+    if (this.getTotalFilesSize() > this.totalSizeLimit) {
+      this.toastHelper.showWarn(
+        'ordering.files_size_limit_exceeded',
+        this.translate.instant('ordering.files_size_limit', { size: this.formatSize(this.totalSizeLimit) })
+      );
+    }
+  }
+
+  onClearTemplatingUpload(clear: Function) {
+    clear();
+    this.files = [];
+    this.existingFiles = [];
+    this.updateFilesSizeAndLimit();
+  }
+
+  removeExistingFile(file: FileInfoModel) {
+    this.existingFiles = this.existingFiles.filter(f => f.filePath !== file.filePath);
+    this.updateFilesSizeAndLimit();
+  }
+
+  onRemoveTemplatingFile(event: Event, file: File, removeFileCallback: Function) {
+    removeFileCallback(file);
+    this.files = this.files.filter(f => f !== file);
+    this.updateFilesSizeAndLimit();
+  }
+
+  updateFilesSizeAndLimit() {
+    this.totalFilesSize = this.getTotalFilesSize();
+    this.allowedSizeForUpload = this.totalSizeLimit - this.getExistingFilesSize();
+    this.orderForm.updateValueAndValidity();
+  }
+
+  getTotalFilesSize(): number {
+    return this.getExistingFilesSize() + this.getNewFilesSize();
+  }
+
+  getExistingFilesSize(): number {
+    return this.existingFiles.reduce((sum, f) => sum + (f.fileSize || 0), 0);
+  }
+
+  getNewFilesSize(): number {
+    return this.files.reduce((sum, f) => sum + f.size, 0);
+  }
+
+  formatSize(bytes: number): string {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const dm = 2;
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+  submit() {
+    if (this.orderForm.invalid)
+      return;
+
+    if (this.isEdit) {
+      this.orderService.updateOrder(this.orderId!, this.orderForm.value, this.files, this.existingFiles)
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/ordering/order', this.orderId]);
+          },
+          error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
+        });
+    } else {
+      this.orderService.createOrder(this.orderForm.value, this.files)
+        .subscribe({
+          next: (response: BaseApiResponse<CreateOrderResponse>) => {
+            this.router.navigate(['/ordering/order', response.value!.id]);
+          },
+          error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
+        });
+    }
+  }
+
+  onAddressChange(address: { cityId: number, regionId?: number }) {
+    this.orderForm.patchValue({
+      cityId: address.cityId,
+      regionId: address.regionId ?? this.orderForm.value.regionId
+    });
+  }
+
   initPaymentKinds() {
     this.paymentKinds = Object.keys(EPaymentKind)
       .filter(key => isNaN(Number(key)))
@@ -116,42 +264,8 @@ export class EditOrderComponent implements OnInit {
       }));
   }
 
-  submit() {
-    if (this.orderForm.invalid) 
-      return;
-    
-    if (this.isEdit) {
-      this.orderService.updateOrder(this.orderId!, this.orderForm.value)
-      .subscribe({
-        next: () => {
-          this.router.navigate(['/ordering/order', this.orderId]);
-        },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.toastHelper.showError('common.error', error.error.errorMessage);
-          }
-          else {
-            this.toastHelper.showError('common.error', 'common.error-occurred');
-          }
-        }
-    });
-    } else {
-      const request = this.orderForm.value as CreateOrderRequest;
-      this.orderService.createOrder(request)
-      .subscribe({
-        next: (response: BaseApiResponse<number>) => {
-        this.router.navigate(['/ordering/order', response.value]);
-      },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.toastHelper.showError('common.error', error.error.errorMessage);
-          }
-          else {
-            this.toastHelper.showError('common.error', 'common.error-occurred');
-          }
-        }
-      });
-    }
+  choose(event: Event, callback: Function) {
+    callback();
   }
 
   protected readonly getError = getError;

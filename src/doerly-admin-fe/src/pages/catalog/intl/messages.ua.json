@@ -1,0 +1,21 @@
+{
+  "cancel": "Відміна",
+  "catalog": "Каталог",
+  "catalog.addCategory": "Додати категорію до каталогу",
+  "catalog.noCategories": "Категорії відсутні",
+  "catalog.showDisabledCategories": "Вимкнені категорії",
+  "catalog.showDeletedCategories": "Видалені категорії",
+  "category.field.description": "Опис",
+  "category.field.name": "Назва",
+  "delete": "Видалити",
+  "delete.title": "Видалити категорію",
+  "delete.subtitle": "Ви впевнені, що хочете видалити цю категорію?",
+  "save": "Зберегти",
+  "snackbar.successCreateCategory": "Категорію успішно створено",
+  "snackbar.successDeleteCategory": "Категорію успішно видалено",
+  "snackbar.successUpdateCategory": "Категорію успішно оновлено",
+  "title.create": "Створити категорію",
+  "title.update": "Редагувати категорію",
+  "validationError.EMPTY_FIELD_DESCRIPTION": "Опис категорії не може бути порожнім",
+  "validationError.EMPTY_FIELD_NAME": "Назва категорії не може бути порожньою"
+}

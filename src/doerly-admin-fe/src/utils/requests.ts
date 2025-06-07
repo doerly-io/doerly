@@ -1,43 +1,28 @@
 import axios from 'axios';
 import config from 'config';
-import storage from 'utils/storage';
+import storage, { keys } from 'utils/storage';
 
-axios.interceptors.request.use((params) => ({
-  ...params,
-  withCredentials: 'withCredentials' in params
-    ? params.withCredentials
-    : true,
-}));
 
-const signOut = (store: any) => {
-  storage.removeItem('isAuthorized');
-  return Promise.resolve();
-};
-// commented out until the correct logout is implemented
-/*  return axios.post(
-    `${config.BASE_URL}${config.AUTH_SERVICE}/logout`,
-    null
-  ).finally(() => {
-    storage.removeItem('isAuthorized');
-    store.dispatch({
-      type: SUCCESS_SIGN_OUT,
-    });
-  });
-};*/
+axios.interceptors.request.use((params) => {
+  const token = storage.getItem(keys.ACCESS_TOKEN);
+  if (token) {
+    params.headers.setAuthorization(`Bearer ${token}`);
+  }
+  return params;
+});
 
-const addReduxInterceptors = (store: any) => {
+const addAxiosInterceptors = ({
+  onSignOut,
+}: any) => {
   axios.interceptors.response.use(
     (response) => response,
     (error) => {
-      switch (error.response?.status) {
-        case 401: {
-          signOut(store);
-          return Promise.reject(error);
-        }
-        default: {
-          return Promise.reject(error);
-        }
+      if (error.response.data?.status === 401
+        || error.response.data?.status === 403
+      ) {
+        onSignOut();
       }
+      throw error;
     }
   );
 };
@@ -60,7 +45,7 @@ const getAllErrorsMessages = (errors: any) => {
 };
 
 export {
-  addReduxInterceptors,
+  addAxiosInterceptors,
   getAllErrorsMessages
 };
 

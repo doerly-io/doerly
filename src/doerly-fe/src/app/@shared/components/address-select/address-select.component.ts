@@ -18,8 +18,8 @@ import { BaseApiResponse } from 'app/@core/models/base-api-response';
     TranslatePipe
   ],
   template: `
-    <form [formGroup]="form" class="d-flex gap-3 flex-column flex-xl-row">
-      <div class="responsive-dropdown">
+    <div [formGroup]="form" class="d-flex gap-3 flex-column flex-xl-row">
+      <div class="responsive-dropdown col">
         <p-dropdown
           [options]="regions"
           formControlName="regionId"
@@ -34,7 +34,7 @@ import { BaseApiResponse } from 'app/@core/models/base-api-response';
           </ng-template>
         </p-dropdown>
       </div>
-      <div class="responsive-dropdown">
+      <div class="responsive-dropdown col">
         <p-dropdown
           [options]="cities"
           formControlName="cityId"
@@ -50,7 +50,7 @@ import { BaseApiResponse } from 'app/@core/models/base-api-response';
           </ng-template>
         </p-dropdown>
       </div>
-    </form>
+</div>
   `,
   styles: [`
     :host {
@@ -65,15 +65,6 @@ import { BaseApiResponse } from 'app/@core/models/base-api-response';
       width: auto !important;
       min-width: 100%;
     }
-
-    .responsive-dropdown {
-      width: 30vw;
-
-      @media (min-width: 1200px) {
-        width: 15vw;
-        max-width: 206px;
-      }
-    }
   `]
 })
 export class AddressSelectComponent implements OnInit {
@@ -81,20 +72,15 @@ export class AddressSelectComponent implements OnInit {
   @Input() initialCityId?: number;
   @Input() initialRegionName?: string;
   @Input() initialCityName?: string;
-  @Output() addressChange = new EventEmitter<{ cityId: number }>();
+  @Input() form!: FormGroup;
+  @Output() addressChange = new EventEmitter<{ cityId: number, regionId?: number }>();
 
-  form: FormGroup;
   regions: Region[] = [];
   cities: City[] = [];
 
   constructor(
-    private readonly formBuilder: FormBuilder,
     private readonly addressService: AddressService
   ) {
-    this.form = this.formBuilder.group({
-      regionId: [null],
-      cityId: [null]
-    });
   }
 
   ngOnInit(): void {
@@ -137,9 +123,7 @@ export class AddressSelectComponent implements OnInit {
   }
 
   private emitAddressChange(): void {
-    const { cityId } = this.form.value;
-    if (cityId) {
-      this.addressChange.emit({ cityId });
-    }
+    const { cityId, regionId } = this.form.value;
+    this.addressChange.emit({ cityId, regionId });
   }
 }

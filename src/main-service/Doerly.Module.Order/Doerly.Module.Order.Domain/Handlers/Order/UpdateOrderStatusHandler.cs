@@ -7,6 +7,7 @@ using Doerly.Module.Payments.Contracts;
 using Doerly.Module.Payments.Enums;
 using Doerly.Proxy.Payment;
 using Doerly.Domain;
+using Doerly.Messaging;
 
 namespace Doerly.Module.Order.Domain.Handlers.Order;
 public class UpdateOrderStatusHandler : BaseOrderHandler
@@ -14,7 +15,8 @@ public class UpdateOrderStatusHandler : BaseOrderHandler
     private readonly IPaymentModuleProxy _paymentModuleProxy;
     private readonly IDoerlyRequestContext _doerlyRequestContext;
 
-    public UpdateOrderStatusHandler(OrderDbContext dbContext, IPaymentModuleProxy paymentModuleProxy, IDoerlyRequestContext doerlyRequestContext) : base(dbContext)
+    public UpdateOrderStatusHandler(OrderDbContext dbContext, IPaymentModuleProxy paymentModuleProxy, 
+        IDoerlyRequestContext doerlyRequestContext, IMessagePublisher messagePublisher) : base(dbContext, messagePublisher)
     {
         _paymentModuleProxy = paymentModuleProxy;
         _doerlyRequestContext = doerlyRequestContext;
@@ -44,6 +46,7 @@ public class UpdateOrderStatusHandler : BaseOrderHandler
                 {
                     var checkoutRequest = new CheckoutRequest()
                     {
+                        BillId = order.BillId,
                         AmountTotal = order.Price,
                         PayerId = order.CustomerId,
                         BillDescription = string.Empty, //hardcoded for now
@@ -51,6 +54,7 @@ public class UpdateOrderStatusHandler : BaseOrderHandler
                         Currency = ECurrency.UAH, //hardcoded for now
                         PaymentAction = EPaymentAction.Pay,
                         ReturnUrl = dto.ReturnUrl,
+                        PayerEmail = _doerlyRequestContext.UserEmail
                     };
                     var payment = await _paymentModuleProxy.CheckoutAsync(checkoutRequest);
                     result.PaymentUrl = payment.Value.CheckoutUrl;
@@ -86,6 +90,8 @@ public class UpdateOrderStatusHandler : BaseOrderHandler
         }
 
         await DbContext.SaveChangesAsync();
+
+        await PublishOrderStatusUpdatedEventAsync(order.Id, order.Status);
 
         return HandlerResult.Success(result);
     }

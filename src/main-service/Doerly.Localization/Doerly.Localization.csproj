@@ -18,7 +18,7 @@
     <EmbeddedResource Remove="Resources\LocalizationResources.resx" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Doerly.Domain\Doerly.Domain.csproj" />

@@ -299,4 +299,16 @@ Doerly</value>
   <data name="ParentCategoryNotFound" xml:space="preserve">
         <value>Батьківська категорія не знайдена</value>
   </data>
+  <data name="PaymentReceipt" xml:space="preserve">
+    <value>Чек оплати</value>
+  </data>
+  <data name="BillNotFound" xml:space="preserve">
+    <value>Не знайдено рахунок</value>
+  </data>
+  <data name="BillAlreadyPaid" xml:space="preserve">
+    <value>Рахунок вже сплачено</value>
+  </data>
+  <data name="AddressIsEmpty" xml:space="preserve">
+    <value>Адреса порожня</value>
+  </data>
 </root>

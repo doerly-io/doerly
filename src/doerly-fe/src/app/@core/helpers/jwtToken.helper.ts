@@ -58,7 +58,7 @@ export class JwtTokenHelper {
     return localStorage.getItem(ACCESS_TOKEN) || sessionStorage.getItem(ACCESS_TOKEN);
   }
 
-  setToken(token: string, isLocalStorage: boolean = true): void {
+  setToken(token: string, isLocalStorage: boolean = false): void {
     if (isLocalStorage) {
       localStorage.setItem(ACCESS_TOKEN, token);
     } else {

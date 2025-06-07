@@ -1,12 +1,16 @@
-﻿using Doerly.Infrastructure.Api;
+﻿using Doerly.DataTransferObjects;
+using Doerly.DataTransferObjects.Pagination;
+using Doerly.Infrastructure.Api;
 using Doerly.Domain.Models;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.Domain.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Doerly.Module.Profile.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Area("profile")]
 [Route("api/[area]")]
@@ -21,6 +25,22 @@ public class ProfileController : BaseApiController
         if (!result.IsSuccess)
             return NotFound(result);
 
+        return Ok(result);
+    }
+    
+    [HttpGet]
+    [ProducesResponseType<HandlerResult<IEnumerable<ProfileDto>>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetProfiles()
+    {
+        var result = await ResolveHandler<GetAllShortProfilesHandler>().HandleAsync();
+        return Ok(result);
+    }
+    
+    [HttpPost("_search")]
+    [ProducesResponseType<HandlerResult<PageDto<ProfileDto>>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> SearchProfiles(ProfileQueryDto queryDto)
+    {
+        var result = await ResolveHandler<SearchProfilesHandler>().HandleAsync(queryDto);
         return Ok(result);
     }
 
@@ -93,4 +113,22 @@ public class ProfileController : BaseApiController
         var result = await ResolveHandler<DeleteProfileCvHandler>().HandleAsync(userId);
         return Ok(result);
     }
+    
+    [HttpPost("{userId:int}/is-enabled")]
+    public async Task<IActionResult> SetIsEnabled([FromRoute] int userId, [FromBody] EnableUserDto dto)
+    {
+        var result = await ResolveHandler<SetProfileIsEnabledHandler>().HandleAsync(userId, dto);
+        if (!result.IsSuccess)
+            return NotFound(result);
+
+        return Ok(result);
+    }
+    
+    [HttpGet("payments-history")]
+    public async Task<IActionResult> GetUserPayments([FromQuery] CursorPaginationRequest request)
+    {
+        var result = await ResolveHandler<SelectUserPaymentsHistory>().HandleAsync(request);
+        return Ok(result);
+    }
+    
 }

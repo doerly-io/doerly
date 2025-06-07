@@ -1,3 +1,4 @@
+using Doerly.Domain;
 using Doerly.Domain.Factories;
 using Doerly.Messaging;
 using Doerly.Module.Authorization.Domain.Handlers;
@@ -11,7 +12,10 @@ public class PasswordVerificationRequestedEventConsumer : BaseConsumer<PasswordR
 {
     private readonly IHandlerFactory _handlerFactory;
 
-    public PasswordVerificationRequestedEventConsumer(ILogger<PasswordVerificationRequestedEventConsumer> logger, IHandlerFactory handlerFactory) : base(logger)
+    public PasswordVerificationRequestedEventConsumer(
+        ILogger<PasswordVerificationRequestedEventConsumer> logger,
+        IDoerlyRequestContext doerlyRequestContext,
+        IHandlerFactory handlerFactory) : base(logger, doerlyRequestContext)
     {
         _handlerFactory = handlerFactory;
     }
