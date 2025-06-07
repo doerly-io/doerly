@@ -1,17 +1,22 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.Domain.Dtos.Responses;
 using Microsoft.EntityFrameworkCore;
-using Doerly.Module.Order.Domain.Dtos.Requests;
+using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Extensions;
-using OrderEntity = Doerly.Module.Order.DataAccess.Models.Order;
 using System.Linq.Expressions;
+
+using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
+using Doerly.Proxy.Profile;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetOrdersWithPaginationHandler : BaseOrderHandler
 {
-    public GetOrdersWithPaginationHandler(OrderDbContext dbContext) : base(dbContext)
-    { }
+    private readonly IProfileModuleProxy _profileModuleProxy;
+
+    public GetOrdersWithPaginationHandler(OrderDbContext dbContext, IProfileModuleProxy profileModuleProxy) : base(dbContext)
+    {
+        _profileModuleProxy = profileModuleProxy;
+    }
 
     public async Task<HandlerResult<GetOrdersWithPaginationResponse>> HandleAsync(GetOrdersWithPaginationRequest dto)
     {
@@ -26,22 +31,36 @@ public class GetOrdersWithPaginationHandler : BaseOrderHandler
             .AsNoTracking()
             .GetEntitiesWithPaginationAsync(dto.PageInfo, predicates);
 
-        var orders = entities
-            .Select(o => new GetOrderResponse
-            {
-                Id = o.Id,
-                CategoryId = o.CategoryId,
-                CustomerId = o.CustomerId,
-                BillId = o.BillId,
-                Description = o.Description,
-                DueDate = o.DueDate,
-                Status = o.Status,
-                ExecutionDate = o.ExecutionDate,
-                ExecutorId = o.ExecutorId,
-                Name = o.Name,
-                PaymentKind = o.PaymentKind,
-                Price = o.Price,
-            }).ToList();
+        var profileIDs = entities.Select(x => x.CustomerId).Distinct().ToArray();
+
+        var profiles = await _profileModuleProxy.GetProfilesAsync(profileIDs);
+
+        var profileIDsDictionary = profiles.Value.ToDictionary(p => p.Id);
+
+        var orders = entities.Select(order => new GetOrderResponse
+        {
+            Id = order.Id,
+            CategoryId = order.CategoryId,
+            CustomerId = order.CustomerId,
+            Customer = profileIDsDictionary.TryGetValue(order.CustomerId, out var customerProfile)
+                ? new ProfileInfo
+                {
+                    Id = customerProfile.Id,
+                    FirstName = customerProfile.FirstName,
+                    LastName = customerProfile.LastName,
+                    AvatarUrl = customerProfile.ImageUrl
+                }
+                : null,
+            BillId = order.BillId,
+            Description = order.Description,
+            DueDate = order.DueDate,
+            Status = order.Status,
+            ExecutionDate = order.ExecutionDate,
+            ExecutorId = order.ExecutorId,
+            Name = order.Name,
+            PaymentKind = order.PaymentKind,
+            Price = order.Price,
+        }).ToList();
 
         var result = new GetOrdersWithPaginationResponse
         {

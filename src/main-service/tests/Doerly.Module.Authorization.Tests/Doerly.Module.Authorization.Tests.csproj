@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.2"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2025.1.0-eap1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -24,7 +25,10 @@
         <PackageReference Include="Testcontainers" Version="4.4.0" />
         <PackageReference Include="Testcontainers.PostgreSql" Version="4.4.0" />
         <PackageReference Include="Testcontainers.XunitV3" Version="4.4.0" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="xunit.v3.assert" Version="2.0.2" />
         <PackageReference Include="xunit.v3.common" Version="2.0.2" />
     </ItemGroup>
@@ -34,6 +38,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Doerly.Module.Authorization\Doerly.Module.Authorization.Api\Doerly.Module.Authorization.Api.csproj" />
       <ProjectReference Include="..\..\Doerly.Module.Authorization\Doerly.Module.Authorization.DataAccess\Doerly.Module.Authorization.DataAccess.csproj" />
       <ProjectReference Include="..\..\Doerly.Module.Authorization\Doerly.Module.Authorization.Domain\Doerly.Module.Authorization.Domain.csproj" />
     </ItemGroup>

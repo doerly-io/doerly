@@ -1,4 +1,4 @@
-﻿<Solution>
+<Solution>
   <Folder Name="/Common/">
     <Project Path="Doerly.Common.Settings\Doerly.Common.Settings.csproj" Type="Classic C#" />
   </Folder>
@@ -6,7 +6,10 @@
     <Project Path="Doerly.FileRepository\Doerly.FileRepository.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/ModuleProxies/">
+    <Project Path="Doerly.Proxy.Authorization\Doerly.Proxy.Authorization.csproj" Type="Classic C#" />
     <Project Path="Doerly.Proxy.BaseProxy\Doerly.Proxy.BaseProxy.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Proxy.Catalog\Doerly.Proxy.Catalog.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Proxy.Orders\Doerly.Proxy.Orders.csproj" Type="Classic C#" />
     <Project Path="Doerly.Proxy.Payment\Doerly.Proxy.Payment.csproj" Type="Classic C#" />
     <Project Path="Doerly.Proxy.Profile\Doerly.Proxy.Profile.csproj" Type="Classic C#" />
   </Folder>
@@ -18,11 +21,20 @@
     <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.Domain\Doerly.Module.Authorization.Domain.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Authorization\Doerly.Module.Authorization.Enums\Doerly.Module.Authorization.Enums.csproj" Type="Classic C#" />
   </Folder>
+  <Folder Name="/Modules/Catalog/">
+    <Project Path="Doerly.Module.Catalog/Doerly.Module.Catalog.Api/Doerly.Module.Catalog.Api.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Catalog/Doerly.Module.Catalog.Contracts/Doerly.Module.Catalog.Contracts.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Catalog/Doerly.Module.Catalog.DataAccess/Doerly.Module.Catalog.DataAccess.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Catalog/Doerly.Module.Catalog.Domain/Doerly.Module.Catalog.Domain.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Catalog/Doerly.Module.Catalog.Enums/Doerly.Module.Catalog.Enums.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Modules/Common/">
     <Project Path="Doerly.Module.Common\Doerly.Module.Common.Api\Doerly.Module.Common.Api.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Common\Doerly.Module.Common.DataAccess\Doerly.Module.Common.DataAccess.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Modules/Orders/">
+    <Project Path="Doerly.Module.Order/Doerly.Module.Order.Contracts\Doerly.Module.Order.Contracts.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Order/Doerly.Module.Order.Enums\Doerly.Module.Order.Enums.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Order\Doerly.Module.Order.DataAccess\Doerly.Module.Order.DataAccess.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Order\Doerly.Module.Order.Domain\Doerly.Module.Order.Domain.csproj" Type="Classic C#" />
@@ -45,6 +57,11 @@
     <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Domain\Doerly.Module.Profile.Domain.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj" Type="Classic C#" />
   </Folder>
+  <Folder Name="/Modules/Statistics/">
+    <Project Path="Doerly.Module.Statistics.Api\Doerly.Module.Statistics.Api.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Statistics.Contracts\Doerly.Module.Statistics.Contracts.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Statistics.Domain\Doerly.Module.Statistics.Domain.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Modules/Profile/Job/">
     <Project Path="Jobs\ProfileRatingJob\ProfileRatingJob.csproj" Type="Classic C#" />
   </Folder>
@@ -52,6 +69,7 @@
     <Project Path="Doerly.Notification.EmailSender\Doerly.Notification.EmailSender.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests\Doerly.Module.Order.Tests\Doerly.Module.Order.Tests.csproj" Type="Classic C#" />
     <Project Path="tests\Doerly.EndToEndTests\Doerly.EndToEndTests.csproj" Type="Classic C#" />
     <Project Path="tests\Doerly.Module.Authorization.Tests\Doerly.Module.Authorization.Tests.csproj" Type="Classic C#" />
   </Folder>

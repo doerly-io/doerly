@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using Doerly.Common.Settings;
-using Doerly.Module.Authorization.Contracts.Dtos;
+using Doerly.Module.Authorization.Contracts.Requests;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Module.Authorization.DataAccess.Entities;
 using Doerly.Module.Authorization.Domain.Handlers;

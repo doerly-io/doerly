@@ -1,0 +1,112 @@
+::ng-deep .p-fileupload-progressbar {
+    display: none !important;
+}
+
+.order-container {
+    ::ng-deep .p-fileupload-files {
+        display: none !important;
+    }
+
+    p-progressbar{
+        display: none !important;
+    }
+
+    .upload-header {
+        justify-content: space-between;
+    }
+
+    .files-section {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .files-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .file-card {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        border: 1.5px solid var(--p-surface-600);
+        border-radius: 10px;
+        padding: 1rem 1.5rem;
+        box-shadow: 0 2px 8px 0 rgba(60, 60, 60, 0.04);
+
+        p-image {
+            .file-image {
+                border-radius: 6px;
+                width: 100px;
+                height: 60px;
+                object-fit: cover;
+                object-position: center;
+                box-shadow: 0 1px 4px 0 rgba(60, 60, 60, 0.08);
+            }
+
+            .file-image-preview {
+                width: auto;
+            }
+        }
+
+
+        .file-info {
+            flex: 1;
+            flex-direction: column;
+            min-width: 0;
+            display: flex;
+            align-items: start;
+
+            .file-name {
+                font-weight: 600;
+                font-size: 1rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: block;
+                max-width: -webkit-fill-available;
+            }
+
+            .file-size {
+                font-size: 0.95em;
+                color: #888;
+                margin-bottom: 0.2em;
+            }
+
+            .file-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: center;
+            }
+
+            .file-badge {
+                font-size: 0.85em !important;
+                border-radius: 8px !important;
+                margin-bottom: 0.3em;
+                min-width: 80px;
+                text-align: center;
+                white-space: nowrap;
+            }
+        }
+    }
+
+    @media (max-width: 500px) {
+        .file-card {
+            flex-direction: column;
+            gap: 0.75rem;
+            max-width: 100%;
+            padding: 0.75rem 0.5rem;
+
+            .file-info {
+                max-width: 100%;
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    }
+}

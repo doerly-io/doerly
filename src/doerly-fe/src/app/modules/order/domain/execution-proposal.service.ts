@@ -8,6 +8,7 @@ import { GetExecutionProposalsResponse } from "../models/responses/get-execution
 import { GetExecutionProposalResponse } from "../models/responses/get-execution-proposal-response";
 import { ResolveExecutionProposalRequest } from "../models/requests/resolve-execution-proposal-request";
 import { SendExecutionProposalRequest } from "../models/requests/send-execution-proposal-request";
+import { UpdateExecutionProposalRequest } from "../models/requests/update-execution-proposal-request";
 
 @Injectable({
   providedIn: 'root'
@@ -25,11 +26,15 @@ export class ExecutionProposalService {
     return this.httpClient.post<BaseApiResponse<number>>(`${this.baseUrl}`, model); 
   }
 
-  resolveExecutionProposal(model: ResolveExecutionProposalRequest): Observable<BaseApiResponse<number>> {
-    return this.httpClient.post<BaseApiResponse<number>>(`${this.baseUrl}/resolve`, model);
+  resolveExecutionProposal(id: number, model: ResolveExecutionProposalRequest): Observable<BaseApiResponse<number>> {
+    return this.httpClient.put<BaseApiResponse<number>>(`${this.baseUrl}/resolve/${id}`, model);
   }
 
   getExecutionProposal(id: number): Observable<BaseApiResponse<GetExecutionProposalResponse>> {
     return this.httpClient.get<BaseApiResponse<GetExecutionProposalResponse>>(`${this.baseUrl}/${id}`);
+  }
+
+  updateExecutionProposal(id: number, model: UpdateExecutionProposalRequest): Observable<BaseApiResponse<number>> {
+    return this.httpClient.put<BaseApiResponse<number>>(`${this.baseUrl}/${id}`, model);
   }
 }

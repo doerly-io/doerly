@@ -1,31 +1,37 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.DataAccess.Enums;
-using Doerly.Module.Order.Domain.Dtos.Requests;
+using Doerly.Module.Order.Enums;
+using Doerly.Module.Order.Contracts.Dtos;
 
 using Microsoft.EntityFrameworkCore;
+using Doerly.Domain;
+using Doerly.Messaging;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class ResolveExecutionProposalHandler : BaseOrderHandler
 {
-    public ResolveExecutionProposalHandler(OrderDbContext dbContext) : base(dbContext)
+    private readonly IDoerlyRequestContext _doerlyRequestContext;
+    public ResolveExecutionProposalHandler(OrderDbContext dbContext, IDoerlyRequestContext doerlyRequestContext,
+        IMessagePublisher messagePublisher) : base(dbContext, messagePublisher)
     {
+        _doerlyRequestContext = doerlyRequestContext;
     }
 
-    public async Task<HandlerResult> HandleAsync(ResolveExecutionProposalRequest dto)
+    public async Task<HandlerResult> HandleAsync(int id, ResolveExecutionProposalRequest dto)
     {
-        var executionProposal = await DbContext.ExecutionProposals.FindAsync(dto.Id);
+        var executionProposal = await DbContext.ExecutionProposals.FirstOrDefaultAsync(x => x.Id == id && 
+            (x.SenderId == _doerlyRequestContext.UserId || x.ReceiverId == _doerlyRequestContext.UserId));
 
         if (executionProposal == null)
-            return HandlerResult.Failure(Resources.Get("EXECUTION_PROPOSAL_NOT_FOUND"));
+            return HandlerResult.Failure(Resources.Get("ExecutionProposalNotFound"));
 
         executionProposal.Status = dto.Status;
         if (executionProposal.Status == EExecutionProposalStatus.Accepted)
         {
             var order = await DbContext.Orders.FindAsync(executionProposal.OrderId);
             if (order == null)
-                return HandlerResult.Failure(Resources.Get("ORDER_NOT_FOUND"));
+                return HandlerResult.Failure(Resources.Get("OrderNotFound"));
 
             order.Status = EOrderStatus.InProgress;
             if (order.CustomerId == executionProposal.ReceiverId)
@@ -34,7 +40,7 @@ public class ResolveExecutionProposalHandler : BaseOrderHandler
                 order.ExecutorId = executionProposal.ReceiverId;
 
             await DbContext.ExecutionProposals
-                .Where(x => x.OrderId == order.Id && x.Id != executionProposal.Id && x.Status == EExecutionProposalStatus.WaitingForApproval)
+                .Where(x => x.OrderId == order.Id && x.Id != executionProposal.Id && x.Status == EExecutionProposalStatus.Pending)
                 .ForEachAsync(executionProposal =>
                 {
                     executionProposal.Status = EExecutionProposalStatus.Revoked;
@@ -42,6 +48,8 @@ public class ResolveExecutionProposalHandler : BaseOrderHandler
         }
 
         await DbContext.SaveChangesAsync();
+
+        await PublishExecutionProposalStatusUpdatedEventAsync(executionProposal.Id, executionProposal.Status);
 
         return HandlerResult.Success();
     }

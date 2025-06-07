@@ -1,3 +1,4 @@
+import { CompetenceDto } from './CompetenceDto';
 import { LanguageProficiencyDto } from './LanguageProficiencyDto';
 
 export interface ProfileAddress {
@@ -19,4 +20,5 @@ export interface ProfileResponse {
   cvUrl: string;
   address?: ProfileAddress;
   languageProficiencies: LanguageProficiencyDto[];
+  competences: CompetenceDto[];
 }

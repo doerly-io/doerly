@@ -3,10 +3,10 @@
   <!-- Title -->
   <div class="d-flex flex-column align-items-center">
     <h3 class="c-primary">
-      {{ 'profile.title' | translate }}
+      {{ (isViewingOtherProfile ? 'profile.view.title' : 'profile.title') | translate }}
     </h3>
     <p>
-      {{ 'profile.subtitle' | translate }}
+      {{ (isViewingOtherProfile ? 'profile.view.subtitle' : 'profile.subtitle') | translate }}
     </p>
   </div>
 
@@ -22,7 +22,7 @@
           </h4>
         </div>
 
-        <div *ngIf="!isEdit">
+        <div *ngIf="!isEdit && !isViewingOtherProfile">
           <button pButton type="button" class="p-button-rounded p-button-text"
                   (click)="onEditProfile()"
                   pTooltip="{{ 'profile.basic.actions.edit' | translate }}"
@@ -30,7 +30,7 @@
             <i pButtonIcon class="pi pi-pencil"></i>
           </button>
         </div>
-        <div *ngIf="isEdit">
+        <div *ngIf="isEdit && !isViewingOtherProfile">
           <button pButton type="button" class="p-button-rounded p-button-text"
                   (click)="onEditProfile()"
                   pTooltip="{{ 'profile.basic.actions.cancel' | translate }}"
@@ -38,7 +38,7 @@
             <i pButtonIcon class="pi pi-times"></i>
           </button>
         </div>
-        <div *ngIf="isEdit">
+        <div *ngIf="isEdit && !isViewingOtherProfile">
           <button pButton type="button" class="p-button-rounded p-button-text"
                   (click)="onSaveProfile()"
                   pTooltip="{{ 'profile.basic.actions.save' | translate }}"
@@ -58,19 +58,19 @@
             <div class="d-flex align-items-center gap-lg-5 gap-md-4 gap-sm-3">
               <div class="content-title">
                 <span class="fw-normal fs-6">
-                  {{ 'profile.basic.image.title' | translate }}
+                  {{ (isViewingOtherProfile ? 'profile.view.image.title' : 'profile.basic.image.title') | translate }}
                 </span>
               </div>
               <!-- Profile picture subtitle -->
               <div class="d-none d-sm-block">
                 <p class="fw-light">
-                  {{ 'profile.basic.image.subtitle' | translate }}
+                  {{ (isViewingOtherProfile ? 'profile.view.image.subtitle' : 'profile.basic.image.subtitle') | translate }}
                 </p>
               </div>
             </div>
             <div
               class="avatar-container"
-              pTooltip="{{ 'profile.basic.image.upload.title' | translate }}"
+              [pTooltip]="isViewingOtherProfile ? '' : ('profile.basic.image.upload.title' | translate)"
               tooltipPosition="top"
             >
               <img
@@ -78,14 +78,16 @@
                 ngSrc="{{formProfile.get('imageUrl')?.value}}"
                 alt="{{ 'profile.basic.image.alt' | translate }}"
                 class="avatar"
-                (click)="onOpenImageUploadDialog()"
+                [class.clickable]="!isViewingOtherProfile"
+                (click)="!isViewingOtherProfile && onOpenImageUploadDialog()"
                 width="120"
                 height="120"
               />
               <i
                 *ngIf="!isImageAvailable"
                 class="pi pi-user user-icon"
-                (click)="onOpenImageUploadDialog()"
+                [class.clickable]="!isViewingOtherProfile"
+                (click)="!isViewingOtherProfile && onOpenImageUploadDialog()"
               ></i>
             </div>
           </div>
@@ -278,16 +280,17 @@
           <div class="d-flex gap-lg-5 gap-md-4 gap-sm-3">
             <div class="content-title">
               <span class="fw-normal fs-6">
-                {{ 'profile.professional.cv.title' | translate }}
+                {{ (isViewingOtherProfile ? 'profile.view.cv.title' : 'profile.professional.cv.title') | translate }}
               </span>
             </div>
 
             <div class="d-none d-sm-block">
               <p class="fw-light">
                 {{
-                  (isCVAvailable
-                    ? 'profile.professional.cv.subtitle.available'
-                    : 'profile.professional.cv.subtitle.none') | translate
+                  (isViewingOtherProfile
+                    ? (isCVAvailable ? 'profile.view.cv.subtitle.available' : 'profile.view.cv.subtitle.none')
+                    : (isCVAvailable ? 'profile.professional.cv.subtitle.available' : 'profile.professional.cv.subtitle.none')
+                  ) | translate
                 }}
               </p>
             </div>
@@ -300,13 +303,13 @@
               pButton type="button"
               class="p-button-rounded p-button-text"
               (click)="onPreviewCV()"
-              pTooltip="{{ 'profile.professional.cv.preview.title' | translate }}"
+              pTooltip="{{ ('profile.professional.cv.preview.title') | translate }}"
               tooltipPosition="top"
             >
               <i pButtonIcon class="pi pi-eye cv-action-icon"></i>
             </button>
             <button
-              *ngIf="isCVAvailable"
+              *ngIf="isCVAvailable && !isViewingOtherProfile"
               pButton type="button"
               class="p-button-rounded p-button-text"
               (click)="onDownloadCV()"
@@ -316,7 +319,7 @@
               <i pButtonIcon class="pi pi-download cv-action-icon"></i>
             </button>
             <button
-              *ngIf="!isCVAvailable"
+              *ngIf="!isCVAvailable && !isViewingOtherProfile"
               pButton type="button"
               class="p-button-rounded p-button-text"
               (click)="onOpenUploadCVDialog()"
@@ -336,12 +339,12 @@
           <!-- Language Proficiency title and subtitle -->
           <div>
             <span class="fw-normal">
-              {{ 'profile.professional.languages.subtitle' | translate }}
+              {{ (isViewingOtherProfile ? 'profile.professional.languages.view.subtitle' : 'profile.professional.languages.subtitle') | translate }}
             </span>
           </div>
 
           <!-- Language Proficiency actions -->
-          <div class="d-flex gap-2">
+          <div class="d-flex gap-2" *ngIf="!isViewingOtherProfile">
             <button
               pButton type="button"
               class="p-button-rounded p-button-text"
@@ -366,7 +369,7 @@
             <div style="width: 50%">
               <p class="fw-semibold fs-7">{{ 'profile.professional.languages.level.label' | translate }}</p>
             </div>
-            <div style="width: 20%" class="d-flex justify-content-end pe-3">
+            <div style="width: 20%" class="d-flex justify-content-end pe-3" *ngIf="!isViewingOtherProfile">
               <p class="fw-semibold fs-7">{{ 'common.actions' | translate }}</p>
             </div>
           </div>
@@ -383,7 +386,7 @@
                 <p class="fw-normal fs-7">{{ getTranslatedLevel(proficiency.level) | translate }}</p>
               </div>
 
-              <div style="width: 20%" class="d-flex justify-content-end gap-2">
+              <div style="width: 20%" class="d-flex justify-content-end gap-2" *ngIf="!isViewingOtherProfile">
                 <button
                   pButton type="button"
                   class="p-button-rounded p-button-text"
@@ -408,29 +411,94 @@
         </div>
       </div>
 
+      <p-divider [layout]="'horizontal'"/>
+
+      <!-- Competences section -->
+      <div class="d-flex flex-column gap-4">
+        <div class="d-flex justify-content-between align-items-center gap-5">
+          <!-- Competences title and subtitle -->
+          <div>
+            <span class="fw-normal">
+              {{ (isViewingOtherProfile ? 'profile.professional.competences.view.subtitle' : 'profile.professional.competences.subtitle') | translate }}
+            </span>
+          </div>
+
+          <!-- Competences actions -->
+          <div class="d-flex gap-2" *ngIf="!isViewingOtherProfile">
+            <button
+              pButton type="button"
+              class="p-button-rounded p-button-text"
+              (click)="onAddCompetence()"
+              pTooltip="{{ 'profile.professional.competences.add.title' | translate }}"
+              tooltipPosition="top"
+            >
+              <i pButtonIcon class="pi pi-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Competences list -->
+        <div *ngIf="competences?.length"
+          class="d-flex flex-column gap-2 border border-color-primary rounded-2 p-2">
+          <!-- Table header -->
+          <div
+            class="d-flex justify-content-between align-items-center pt-1 pb-3 border-bottom border-1 border-color-primary">
+            <div class="d-flex gap-3" style="width: 80%">
+              <p class="fw-semibold fs-7">{{ 'profile.professional.competences.category.label' | translate }}</p>
+            </div>
+            <div style="width: 20%" class="d-flex justify-content-end pe-3" *ngIf="!isViewingOtherProfile">
+              <p class="fw-semibold fs-7">{{ 'common.actions' | translate }}</p>
+            </div>
+          </div>
+
+          <!-- Table rows -->
+          <div *ngFor="let competence of competences"
+               class="d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex gap-3" style="width: 80%">
+                <p class="fw-normal fs-7">{{ competence.categoryName }}</p>
+              </div>
+
+              <div style="width: 20%" class="d-flex justify-content-end gap-2" *ngIf="!isViewingOtherProfile">
+                <button
+                  pButton type="button"
+                  class="p-button-rounded p-button-text"
+                  (click)="onDeleteCompetence(competence)"
+                  pTooltip="{{ 'profile.professional.competences.delete.title' | translate }}"
+                  tooltipPosition="top"
+                >
+                  <i pButtonIcon class="pi pi-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </p-card>
 
-  <!-- Feedback  -->
-  <div class="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
+  <!-- Payment history -->
+  <p-card *ngIf="!this.isViewingOtherProfile" styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
 
     <div class="d-flex flex-column gap-3 m-3">
 
-      <!-- Feedback section title -->
+      <!-- Payment history section title -->
       <div class="d-flex align-items-center gap-2 mb-3">
         <div class="mt-1">
           <h4 class="c-primary">
-            {{ 'profile.feedback.title' | translate }}
+            {{ 'profile.paymentHistory.title' | translate }}
           </h4>
         </div>
       </div>
 
-      <ng-container>
-        <app-review-input/>
-      </ng-container>
+      <!-- Payment history content -->
+
+      <app-payment-history />
+
 
     </div>
-  </div>
+  </p-card>
 
 
   <!-- Image upload dialog -->
@@ -597,7 +665,7 @@
             <i class="pi pi-search-plus"></i>
           </button>
         </div>
-        <div class="action-buttons d-flex gap-2">
+        <div class="action-buttons d-flex gap-2" *ngIf="!isViewingOtherProfile">
           <button
             pButton type="button"
             class="p-button-primary"
@@ -694,6 +762,57 @@
           (click)="onSaveLanguageProficiency()"
           [label]="'common.save' | translate"
           [disabled]="!languageProficiencyForm.valid"
+        ></button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Competence dialog -->
+  <p-dialog
+    [(visible)]="isCompetenceDialogVisible"
+    [modal]="true"
+    [header]="(editingCompetence ? 'profile.professional.competences.edit.title' : 'profile.professional.competences.add.title') | translate"
+    [style]="{ width: '24rem' }"
+    (close)="onCancelCompetence()"
+    (onHide)="onCancelCompetence()"
+  >
+    <form [formGroup]="competenceForm" class="d-flex flex-column gap-3">
+      <div class="d-flex flex-column gap-2">
+        <label for="category"
+               class="fw-semibold">{{ 'profile.professional.competences.category.label' | translate }}</label>
+        <p-treeSelect
+          id="category"
+          [options]="categoryTreeNodes"
+          formControlName="categoryId"
+          [placeholder]="'profile.professional.competences.category.placeholder' | translate"
+          [showClear]="true"
+          [appendTo]="'body'"
+          [style]="{'width':'100%'}"
+          (onNodeSelect)="onCategorySelect($event)"
+          [selectionMode]="'single'"
+          [metaKeySelection]="false"
+          [propagateSelectionUp]="false"
+          [propagateSelectionDown]="false"
+        ></p-treeSelect>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <div class="d-flex justify-content-end gap-2">
+        <button
+          pButton
+          type="button"
+          class="p-button-text"
+          (click)="onCancelCompetence()"
+          [label]="'common.cancel' | translate"
+        ></button>
+        <button
+          pButton
+          type="button"
+          class="p-button-primary"
+          (click)="onSaveCompetence()"
+          [label]="'common.save' | translate"
+          [disabled]="!competenceForm.valid"
         ></button>
       </div>
     </ng-template>

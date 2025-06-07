@@ -10,12 +10,11 @@ import { LanguageDto } from '../models/responses/LanguageDto';
 import { LanguageProficiencyDto } from '../models/responses/LanguageProficiencyDto';
 import { PageDto } from 'app/@core/models/page.dto';
 import { map } from 'rxjs/operators';
-
-export interface LanguagesQueryDto {
-  number: number;
-  size: number;
-  name?: string;
-}
+import { LanguagesQueryDto } from 'app/modules/profile/models/requests/LanguagesQuery';
+import { CompetenceSaveRequest } from 'app/modules/profile/models/requests/CompetenceSaveRequest';
+import {CursorPaginationRequest} from 'app/@core/models/cursor-pagination-request';
+import {CursorPaginationResponse} from 'app/@core/models/cursor-pagination-response';
+import {PaymentHistoryItemResponse} from 'app/modules/payments/models/payment-history-item-response';
 
 @Injectable({
   providedIn: 'root'
@@ -138,5 +137,33 @@ export class ProfileService {
         `${this.baseUrl}/${userId}/language-proficiency/${id}`,
         {withCredentials: true}
       );
+  }
+
+  addCompetence(id: number, model: CompetenceSaveRequest): Observable<BaseApiResponse<any>> {
+    return this.httpClient.post<BaseApiResponse<any>>(
+      `${this.baseUrl}/${id}/competence`,
+      model,
+      {withCredentials: true}
+    );
+  };
+
+  deleteCompetence(id: number, competenceId: number): Observable<BaseApiResponse<any>> {
+    return this.httpClient.delete<BaseApiResponse<any>>(
+      `${this.baseUrl}/${id}/competence/${competenceId}`,
+      { withCredentials: true }
+    );
+  }
+
+  loadById(userId: number): Observable<BaseApiResponse<ProfileResponse>> {
+    return this.httpClient.get<BaseApiResponse<ProfileResponse>>(`${this.baseUrl}/${userId}`, { withCredentials: true });
+  }
+
+  getPaymentsHistory(paginationRequest: CursorPaginationRequest): Observable<CursorPaginationResponse<PaymentHistoryItemResponse>> {
+    return this.httpClient.get<CursorPaginationResponse<PaymentHistoryItemResponse>>(`${this.baseUrl}/payments-history`, {
+      params: {
+        pageSize: paginationRequest.pageSize,
+        cursor: paginationRequest.cursor || ''
+      }
+    });
   }
 }

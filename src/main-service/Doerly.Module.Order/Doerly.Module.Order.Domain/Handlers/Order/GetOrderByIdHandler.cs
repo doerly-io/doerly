@@ -1,42 +1,79 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Doerly.Domain.Models;
+﻿using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.Domain.Dtos.Responses;
+using Doerly.Module.Order.Contracts.Dtos;
+using Microsoft.EntityFrameworkCore;
+using Doerly.Proxy.Profile;
+using Doerly.FileRepository;
+using FileInfo = Doerly.Module.Order.Contracts.Dtos.FileInfo;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetOrderByIdHandler : BaseOrderHandler
 {
-    public GetOrderByIdHandler(OrderDbContext dbContext) : base(dbContext)
+    private readonly IProfileModuleProxy _profileModuleProxy;
+
+    public GetOrderByIdHandler(OrderDbContext dbContext, IProfileModuleProxy profileModuleProxy,
+        IFileRepository fileRepository) : base(dbContext, fileRepository)
     {
+        _profileModuleProxy = profileModuleProxy;
     }
     public async Task<HandlerResult<GetOrderResponse>> HandleAsync(int id)
     {
-        var order = await DbContext.Orders.FindAsync(id);
-        if (order == null)
-            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("ORDER_NOT_FOUND"));
+        var order = await DbContext.Orders
+            .Select(order => new GetOrderResponse
+            {
+                Id = order.Id,
+                CategoryId = order.CategoryId,
+                Name = order.Name,
+                Description = order.Description,
+                Price = order.Price,
+                IsPriceNegotiable = order.IsPriceNegotiable,
+                PaymentKind = order.PaymentKind,
+                DueDate = order.DueDate,
+                Status = order.Status,
+                CustomerId = order.CustomerId,
+                CustomerCompletionConfirmed = order.CustomerCompletionConfirmed,
+                ExecutorId = order.ExecutorId,
+                ExecutorCompletionConfirmed = order.ExecutorCompletionConfirmed,
+                ExecutionDate = order.ExecutionDate,
+                BillId = order.BillId,
+                ExistingFiles = order.OrderFiles.Select(file => new FileInfo
+                {
+                    FilePath = file.Path,
+                    FileName = file.Name,
+                    FileSize = file.Size,
+                    FileType = file.Type
+                }),
+                CreatedDate = order.DateCreated
+            })
+            .FirstOrDefaultAsync(order => order.Id == id);
 
-        var orderDto = new GetOrderResponse
+        if (order == null)
+            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
+
+        await SetOrderFileUrls(order.ExistingFiles);
+
+        var customerProfile = await _profileModuleProxy.GetProfileAsync(order.CustomerId);
+        order.Customer = new ProfileInfo
         {
-            Id = order.Id,
-            CategoryId = order.CategoryId,
-            Name = order.Name,
-            Description = order.Description,
-            Price = order.Price,
-            PaymentKind = order.PaymentKind,
-            DueDate = order.DueDate,
-            Status = order.Status,
-            CustomerId = order.CustomerId,
-            ExecutorId = order.ExecutorId,
-            ExecutionDate = order.ExecutionDate,
-            BillId = order.BillId
+            Id = customerProfile.Value.Id,
+            FirstName = customerProfile.Value.FirstName,
+            LastName = customerProfile.Value.LastName,
+            AvatarUrl = customerProfile.Value.ImageUrl
         };
 
-        return HandlerResult.Success(orderDto);
+        if (order.ExecutorId.HasValue)
+        {
+            var executorProfile = await _profileModuleProxy.GetProfileAsync(order.ExecutorId.Value);
+            order.Executor = new ProfileInfo
+            {
+                Id = executorProfile.Value.Id,
+                FirstName = executorProfile.Value.FirstName,
+                LastName = executorProfile.Value.LastName,
+                AvatarUrl = executorProfile.Value.ImageUrl
+            };
+        }
+
+        return HandlerResult.Success(order);
     }
 }

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { OrderService } from '../../domain/order.service';
-import { FormBuilder } from '@angular/forms';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DataView } from 'primeng/dataview';
 import { Tag } from 'primeng/tag';
 import { CommonModule } from '@angular/common';
@@ -11,6 +10,10 @@ import { PaginatorModule } from 'primeng/paginator';
 import { EOrderStatus } from '../../domain/enums/order-status';
 import { Button } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ToastHelper } from 'app/@core/helpers/toast.helper';
+import { getOrderStatusSeverity } from '../../domain/enums/order-status';
+import { Avatar } from 'primeng/avatar';
 
 @Component({
   selector: 'app-orders-list',
@@ -21,7 +24,8 @@ import { TranslatePipe } from '@ngx-translate/core';
     CommonModule,
     Button,
     TranslatePipe,
-    RouterLink
+    RouterLink,
+    Avatar
   ],
   templateUrl: './orders-list.component.html',
   styleUrl: './orders-list.component.scss'
@@ -36,12 +40,14 @@ export class OrdersListComponent implements OnInit {
   totalRecords: number = 0;
   loading: boolean = true;
   returnUrl!: string;
+  EOrderStatus = EOrderStatus;
+  public getOrderStatusSeverity = getOrderStatusSeverity;
 
   constructor(private orderService: OrderService,
-                private router: Router,
-                private route: ActivatedRoute) {}
+    private toastHelper: ToastHelper,
+    private route: ActivatedRoute) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['return'];
   }
 
@@ -61,33 +67,14 @@ export class OrdersListComponent implements OnInit {
         this.totalRecords = response.value?.total || 0;
         this.loading = false;
       },
-      error: (error) => {
-        console.log(error);
-        this.loading = false;
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.toastHelper.showError('common.error', error.error.errorMessage);
+        }
+        else {
+          this.toastHelper.showError('common.error', 'common.error_occurred');
+        }
       }
     });
-  }
-
-  getOrderStatusString(status: EOrderStatus): string {
-      return EOrderStatus[status];
-  }
-
-  getOrderStatusSeverity(status: EOrderStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
-      switch (status) {
-        case EOrderStatus.Placed:
-          return 'info';
-        case EOrderStatus.InProgress:
-          return 'warn';
-        case EOrderStatus.Completed:
-          return 'success';
-        case EOrderStatus.Canceled:
-          return 'danger';
-        default:
-          return 'secondary';
-      }
-    }
-
-  navigateToOrderDetails(orderId: number): void {
-    this.router.navigate(['/ordering/order', orderId]);
   }
 }

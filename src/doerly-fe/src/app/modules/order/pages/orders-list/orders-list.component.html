@@ -1,29 +1,51 @@
-<section class="row justify-content-center">
-    <div class="d-flex justify-content-end mb-3">
-        <p-button icon="pi pi-shopping-cart" [routerLink]="'/ordering/create-order'" 
-                    label="{{ 'ordering.create_order' | translate }}"
-                    [severity]="'success'" *ngIf="canCreateOrder"/>
+<section class="order-list row justify-content-center">
+    <div *ngIf="canCreateOrder" class="d-flex justify-content-end mb-3">
+        <p-button icon="pi pi-shopping-cart" [routerLink]="'/ordering/create-order'"
+            label="{{ 'ordering.create_order' | translate }}" [severity]="'success'"/>
     </div>
-    <p-dataview [value]="orders" [paginator]="true" [rows]="10" 
-        [rowsPerPageOptions]="[10, 20, 50, 100]" [totalRecords]="totalRecords" 
-        [lazy]="true" (onLazyLoad)="loadOrders($event)" [loading]="loading" emptyMessage="{{ 'ordering.no_orders' | translate }}">
+    <p-dataview [value]="orders" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 50, 100]"
+        [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="loadOrders($event)" [loading]="loading"
+        emptyMessage="{{ 'ordering.no_orders' | translate }}">
         <ng-template #list>
-            <div *ngFor="let item of orders; let first = first">
-                <div class="order-item" (click)="navigateToOrderDetails(item.id)">
-                    <div class="order-header">
-                        <div>
-                            <div class="text-lg font-medium text-surface-900 dark:text-surface-0">{{ item.name }}</div>
+            <div *ngFor="let order of orders; let first = first">
+                <div class="order-item d-flex flex-row align-items-center">
+                    <!-- Customer avatar and name - separate from order link -->
+                    <div class="customer-avatar-block d-flex flex-column align-items-center me-3">
+                        <div class="position-relative" [routerLink]="['/profile', order.customer.id]" style="cursor: pointer;">
+                            <img *ngIf="order.customer?.avatarUrl" [src]="order.customer.avatarUrl"
+                                alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar order-list-avatar mb-1"
+                                width="56" height="56" />
+                            <p-avatar *ngIf="!order.customer?.avatarUrl" icon="pi pi-user" shape="circle" size="large"
+                                class="avatar-bg order-list-avatar mb-1"></p-avatar>
+                            <div class="profile-hover-overlay">
+                                <i class="pi pi-user"></i>
+                                <span>{{ 'profile.view.title' | translate }}</span>
+                            </div>
                         </div>
-                        <div>
-                            <span class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{ '$' + item.price }}</span>
-                        </div>
+                        <span class="customer-name text-center text-sm">
+                            {{ order.customer.firstName }}
+                        </span>
                     </div>
-                    <div class="order-footer">
-                        <div>
-                            <span class="font-medium text-secondary text-sm">{{ item.customerId }}</span>
+
+                    <!-- Order info - wrapped in router link -->
+                    <div class="order-info flex-grow-1" [routerLink]="['/ordering/order', order.id]" style="cursor: pointer;">
+                        <div class="order-header">
+                            <div>
+                                <span class="order-title">{{  order.name }}</span>
+                            </div>
+                            <div>
+                                <span>{{ order.price }} ₴</span>
+                            </div>
                         </div>
-                        <div>
-                            <p-tag [value]="getOrderStatusString(item.status)" [severity]="getOrderStatusSeverity(item.status)"></p-tag>
+                        <div class="order-footer">
+                            <div>
+                                <span>{{ 'ordering.due_date' | translate }}: </span>
+                                <span>{{ order.dueDate | date: "dd.MM.yyyy" }}</span>
+                            </div>
+                            <div>
+                                <p-tag [value]="'ordering.order_statuses.' + EOrderStatus[order.status] | translate"
+                                    [severity]="getOrderStatusSeverity(order.status)"></p-tag>
+                            </div>
                         </div>
                     </div>
                 </div>

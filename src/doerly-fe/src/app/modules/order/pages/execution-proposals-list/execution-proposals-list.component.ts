@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ExecutionProposalService } from '../../domain/execution-proposal.service';
-import { FormBuilder } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { DataView } from 'primeng/dataview';
 import { Tag } from 'primeng/tag';
 import { CommonModule } from '@angular/common';
@@ -10,6 +9,9 @@ import { PaginatorModule } from 'primeng/paginator';
 import { EExecutionProposalStatus } from '../../domain/enums/execution-proposal-status';
 import { GetExecutionProposalsWithPaginationByPredicatesRequest } from '../../models/requests/get-execution-proposals-request';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ToastHelper } from 'app/@core/helpers/toast.helper';
+import { Avatar } from 'primeng/avatar';
+import { getExecutionProposalStatusSeverity } from '../../domain/enums/execution-proposal-status';
 
 @Component({
   selector: 'app-execution-proposals-list',
@@ -18,7 +20,9 @@ import { TranslatePipe } from '@ngx-translate/core';
     Tag,
     PaginatorModule,
     CommonModule,
-    TranslatePipe
+    TranslatePipe,
+    RouterLink,
+    Avatar
   ],
   templateUrl: './execution-proposals-list.component.html',
   styleUrl: './execution-proposals-list.component.scss'
@@ -32,12 +36,14 @@ export class ExecutionProposalsListComponent implements OnInit {
   totalRecords: number = 0;
   loading: boolean = true;
   returnUrl!: string;
+  EExecutionProposalStatus = EExecutionProposalStatus;
+  public getExecutionProposalStatusSeverity = getExecutionProposalStatusSeverity;
 
   constructor(private executionProposalService: ExecutionProposalService,
-                private router: Router,
-                private route: ActivatedRoute) {}
+    private toastHelper: ToastHelper,
+    private route: ActivatedRoute) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['return'];
   }
 
@@ -58,32 +64,13 @@ export class ExecutionProposalsListComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.log(error);
-        this.loading = false;
+        if (error.status === 400) {
+          this.toastHelper.showError('common.error', error.error.errorMessage);
+        }
+        else {
+          this.toastHelper.showError('common.error', 'common.error_occurred');
+        }
       }
     });
-  }
-
-  getProposalStatusString(status: EExecutionProposalStatus): string {
-      return EExecutionProposalStatus[status];
-  }
-
-  getProposalStatusSeverity(status: EExecutionProposalStatus): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
-    switch (status) {
-      case EExecutionProposalStatus.WaitingForApproval:
-        return 'info';
-      case EExecutionProposalStatus.Accepted:
-        return 'success';
-      case EExecutionProposalStatus.Rejected:
-        return 'danger';
-      case EExecutionProposalStatus.Revoked:
-        return 'warn';
-      default:
-        return 'info';
-    }
-  }
-
-  navigateToProposalDetails(proposalId: number): void {
-    this.router.navigate(['/ordering/execution-proposal', proposalId]);
   }
 }

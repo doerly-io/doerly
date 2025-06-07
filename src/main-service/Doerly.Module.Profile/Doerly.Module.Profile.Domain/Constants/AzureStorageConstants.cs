@@ -9,5 +9,6 @@ public class AzureStorageConstants
     {
         public const string ProfileImages = "profile-images";
         public const string ProfileCvs = "profile-cvs";
+        public const string OrderImages = "order-images";
     }
 }

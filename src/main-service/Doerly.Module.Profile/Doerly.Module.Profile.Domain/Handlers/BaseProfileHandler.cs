@@ -2,6 +2,7 @@
 using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Localization;
+using Doerly.Module.Authorization.Contracts.Responses;
 using Doerly.Module.Common.DataAccess.Address;
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Module.Profile.Contracts.Dtos;
@@ -65,6 +66,90 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
         profile.Bio = dto.Bio;
         profile.CityId = dto.CityId;
         profile.LastModifiedDate = DateTime.UtcNow;
+    }
+    
+    protected async Task<List<ProfileDto>> MapCompleteProfilesToDtosAsync(
+        IEnumerable<DataAccess.Models.Profile> profiles,
+        AddressDbContext addressDbContext,
+        IFileRepository fileRepository,
+        CancellationToken cancellationToken = default,
+        IEnumerable<UserItemResponse>? profilesUsers = null)
+    {
+        var profileList = profiles.ToList();
+        if (!profileList.Any())
+            return new List<ProfileDto>();
+
+        var cityIds = profileList.Select(p => p.CityId ?? 0).Where(id => id > 0).Distinct().ToArray();
+
+        var addressesTask = GetAddressesBatchAsync(cityIds, addressDbContext, cancellationToken);
+        var fileUrlsTask = GetFileUrlsBatchAsync(profileList, fileRepository);
+
+        await Task.WhenAll(addressesTask, fileUrlsTask);
+
+        var addressMap = await addressesTask;
+        var fileUrlsMap = await fileUrlsTask;
+
+        var profileDtos = new List<ProfileDto>();
+
+        foreach (var profile in profileList)
+        {
+            var languageProficiencies = profile.LanguageProficiencies
+                .Select(lp => new LanguageProficiencyDto
+                {
+                    Id = lp.Id,
+                    Language = new LanguageDto 
+                    {
+                        Id = lp.Language.Id,
+                        Name = lp.Language.Name,
+                        Code = lp.Language.Code
+                    },
+                    Level = lp.Level
+                })
+                .ToList();
+            
+            var competences = profile.Competences
+                .Select(c => new CompetenceDto
+                {
+                    Id = c.Id,
+                    CategoryId = c.CategoryId,
+                    CategoryName = c.CategoryName
+                })
+                .ToList();
+
+            addressMap.TryGetValue(profile.CityId ?? 0, out var address);
+            fileUrlsMap.TryGetValue(profile.Id, out var urls);
+            
+            var profileUser = profilesUsers?.FirstOrDefault(u => u.UserId == profile.UserId);
+            var userInfo = profileUser != null ? new UserInfo
+            {
+                UserId = profileUser.UserId,
+                Email = profileUser.Email,
+                IsEnabled = profileUser.IsEnabled,
+                IsEmailVerified = profileUser.IsEmailVerified,
+                RoleName = profileUser.RoleName,
+                RoleId = profileUser.RoleId
+            } : null;
+            
+            profileDtos.Add(new ProfileDto
+            {
+                Id = profile.Id,
+                FirstName = profile.FirstName,
+                LastName = profile.LastName,
+                DateOfBirth = profile.DateOfBirth,
+                Sex = profile.Sex,
+                Bio = profile.Bio,
+                DateCreated = profile.DateCreated,
+                LastModifiedDate = profile.LastModifiedDate,
+                ImageUrl = urls.ImageUrl,
+                CvUrl = urls.CvUrl,
+                Address = address,
+                LanguageProficiencies = languageProficiencies,
+                Competences = competences,
+                UserInfo = userInfo
+            });
+        }
+
+        return profileDtos;
     }
     
     #endregion

@@ -1,5 +1,5 @@
-<section class="row justify-content-center">
-    <p-tabs lazy="true" [value]="`${tab}`">
+<section class="ordering-tabs row justify-content-center">
+    <p-tabs lazy="true" [value]="`${tab}`" scrollable selectOnFocus="true">
         <p-tablist class="custom-tablist">
             <p-tab value="0" class="">{{ 'ordering.execution_proposals' | translate }}</p-tab>
             <p-tab value="1">{{ 'ordering.orders' | translate }}</p-tab>

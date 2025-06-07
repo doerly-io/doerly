@@ -1,37 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Doerly.Domain.Models;
+﻿using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.Domain.Dtos.Requests;
-using Doerly.Module.Order.Domain.Dtos.Responses;
+using Doerly.Module.Order.Contracts.Dtos;
 
 using Microsoft.EntityFrameworkCore;
+using Doerly.Domain;
+using Microsoft.AspNetCore.Http;
+using Doerly.FileRepository;
+using Doerly.Module.Profile.Domain.Constants;
+using Doerly.Module.Order.DataAccess.Entities;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class UpdateOrderHandler : BaseOrderHandler
 {
-    public UpdateOrderHandler(OrderDbContext dbContext) : base(dbContext)
-    {
-    }
-    public async Task<HandlerResult> HandleAsync(int id, UpdateOrderRequest dto)
-    {
-        var order = await DbContext.Orders.Select(x => x.Id).FirstOrDefaultAsync(x => x == id);
-        if (order == 0)
-            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("ORDER_NOT_FOUND"));
+    private readonly IDoerlyRequestContext _doerlyRequestContext;
 
-        await DbContext.Orders.Where(x => x.Id == id).ExecuteUpdateAsync(setters => setters
-            .SetProperty(order => order.CategoryId, dto.CategoryId)
-            .SetProperty(order => order.Name, dto.Name)
-            .SetProperty(order => order.Description, dto.Description)
-            .SetProperty(order => order.Price, dto.Price)
-            .SetProperty(order => order.PaymentKind, dto.PaymentKind)
-            .SetProperty(order => order.DueDate, dto.DueDate));
+    public UpdateOrderHandler(OrderDbContext dbContext, IDoerlyRequestContext doerlyRequestContext,
+        IFileRepository fileRepository) : base(dbContext, fileRepository)
+    {
+        _doerlyRequestContext = doerlyRequestContext;
+    }
+
+    public async Task<HandlerResult> HandleAsync(int id, UpdateOrderRequest dto, List<IFormFile> files, List<string> existingFileNames)
+    {
+        var order = await DbContext.Orders.Include(order => order.OrderFiles)
+            .FirstOrDefaultAsync(x => x.Id == id && x.CustomerId == _doerlyRequestContext.UserId);
+
+        if (order == null)
+            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
+
+        order.CategoryId = dto.CategoryId;
+        order.Name = dto.Name;
+        order.Description = dto.Description;
+        order.Price = dto.Price;
+        order.PaymentKind = dto.PaymentKind;
+        order.DueDate = dto.DueDate;
+        order.IsPriceNegotiable = dto.IsPriceNegotiable;
+
+        foreach (var orderFile in order.OrderFiles)
+        {
+            if (!existingFileNames.Contains(orderFile.Name))
+                await DeleteOrderFileAsync(orderFile);
+        }
+
+        if (files != null && files.Count != 0)
+        {
+            foreach (var file in files)
+            {
+                var orderFile = await CreateOrderFileAsync(order.Code, file);
+                if (orderFile != null)
+                    order.OrderFiles.Add(orderFile);
+            }
+        }
+
+        await DbContext.SaveChangesAsync();
 
         return HandlerResult.Success();
+    }
+
+    private async Task DeleteOrderFileAsync(OrderFile file)
+    {
+        await DeleteOrderFileFromStorageAsync(file);
+
+        DbContext.OrderFiles.Remove(file);
     }
 }

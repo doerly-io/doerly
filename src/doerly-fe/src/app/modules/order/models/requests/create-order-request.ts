@@ -5,7 +5,7 @@ export interface CreateOrderRequest {
     name: string;
     description: string;
     price: number;
+    isPriceNegotiable: boolean;
     paymentKind: EPaymentKind;
     dueDate: Date;
-    customerId: number;
 }
