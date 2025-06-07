@@ -12,6 +12,9 @@ import { PageDto } from 'app/@core/models/page.dto';
 import { map } from 'rxjs/operators';
 import { LanguagesQueryDto } from 'app/modules/profile/models/requests/LanguagesQuery';
 import { CompetenceSaveRequest } from 'app/modules/profile/models/requests/CompetenceSaveRequest';
+import {CursorPaginationRequest} from 'app/@core/models/cursor-pagination-request';
+import {CursorPaginationResponse} from 'app/@core/models/cursor-pagination-response';
+import {PaymentHistoryItemResponse} from 'app/modules/payments/models/payment-history-item-response';
 
 @Injectable({
   providedIn: 'root'
@@ -153,5 +156,14 @@ export class ProfileService {
 
   loadById(userId: number): Observable<BaseApiResponse<ProfileResponse>> {
     return this.httpClient.get<BaseApiResponse<ProfileResponse>>(`${this.baseUrl}/${userId}`, { withCredentials: true });
+  }
+
+  getPaymentsHistory(paginationRequest: CursorPaginationRequest): Observable<CursorPaginationResponse<PaymentHistoryItemResponse>> {
+    return this.httpClient.get<CursorPaginationResponse<PaymentHistoryItemResponse>>(`${this.baseUrl}/payments-history`, {
+      params: {
+        pageSize: paginationRequest.pageSize,
+        cursor: paginationRequest.cursor || ''
+      }
+    });
   }
 }

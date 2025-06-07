@@ -6,7 +6,7 @@ namespace Doerly.Common.Settings;
 public class FrontendSettings
 {
     public const string FrontendSettingsName = nameof(FrontendSettings);
-    
+
     [Required]
-    public string[] FrontendUrls { get; set; } = Array.Empty<string>();
+    public string[]? FrontendUrls { get; set; }
 }

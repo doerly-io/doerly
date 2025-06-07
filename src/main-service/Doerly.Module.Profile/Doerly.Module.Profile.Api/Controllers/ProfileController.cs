@@ -1,13 +1,16 @@
-﻿using Doerly.DataTransferObjects.Pagination;
+﻿using Doerly.DataTransferObjects;
+using Doerly.DataTransferObjects.Pagination;
 using Doerly.Infrastructure.Api;
 using Doerly.Domain.Models;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.Domain.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Doerly.Module.Profile.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Area("profile")]
 [Route("api/[area]")]
@@ -120,4 +123,12 @@ public class ProfileController : BaseApiController
 
         return Ok(result);
     }
+    
+    [HttpGet("payments-history")]
+    public async Task<IActionResult> GetUserPayments([FromQuery] CursorPaginationRequest request)
+    {
+        var result = await ResolveHandler<SelectUserPaymentsHistory>().HandleAsync(request);
+        return Ok(result);
+    }
+    
 }

@@ -42,12 +42,5 @@ public class PaymentsController : BaseApiController
         var result = await ResolveHandler<CheckoutHandler>().HandleAsync(invoiceCreateRequest, uri);
         return Ok(result);
     }
-
     
-    [HttpGet("user")]
-    public async Task<IActionResult> GetUserPayments([FromQuery] CursorPaginationRequest request)
-    {
-        var result = await ResolveHandler<SelectUserPaymentsHandler>().HandleAsync(request);
-        return Ok(result);
-    }
 }

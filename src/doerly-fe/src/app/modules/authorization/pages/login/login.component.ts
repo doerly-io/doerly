@@ -65,7 +65,8 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     const request = this.loginForm.value as LoginRequest;
-    const rememberMe = this.loginForm.get('rememberMe')!.value != null;
+    const rememberMe = this.loginForm.get('rememberMe')!.value;
+    console.warn(`Remember me: ${rememberMe}`);
 
     this.authService.login(request).subscribe({
       next: (value) => {
@@ -78,6 +79,8 @@ export class LoginComponent implements OnInit {
         } else if (error.status === 400) {
           const errors = error.error.errors;
           setServerErrors(this.loginForm, errors);
+        } else {
+          this.toastHelper.showApiError(error, 'common.error_occurred');
         }
       }
     });

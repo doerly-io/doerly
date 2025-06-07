@@ -1,5 +1,4 @@
 using Doerly.DataTransferObjects;
-using Doerly.Domain;
 using Doerly.Module.Payments.Contracts;
 using Doerly.Module.Payments.DataAccess;
 using Microsoft.EntityFrameworkCore;
@@ -8,19 +7,12 @@ namespace Doerly.Module.Payments.Domain.Handlers;
 
 public class SelectUserPaymentsHandler : BasePaymentHandler
 {
-    private readonly IDoerlyRequestContext _requestContext;
-
-    public SelectUserPaymentsHandler(PaymentDbContext dbContext, IDoerlyRequestContext requestContext) : base(dbContext)
+    public SelectUserPaymentsHandler(PaymentDbContext dbContext) : base(dbContext)
     {
-        _requestContext = requestContext;
     }
 
-    public async Task<CursorPaginationResponse<object>> HandleAsync(CursorPaginationRequest cursorRequest)
+    public async Task<CursorPaginationResponse<PaymentHistoryItemResponse>> HandleAsync(int userId, CursorPaginationRequest cursorRequest)
     {
-        var userId = _requestContext.UserId;
-        if (userId == null)
-            throw new UnauthorizedAccessException("User is not authenticated");
-
         var userPaymentsQuery = DbContext.Payments
             .AsNoTracking()
             .Where(p => p.Bill.PayerId == userId);
@@ -54,7 +46,7 @@ public class SelectUserPaymentsHandler : BasePaymentHandler
             userPayments.RemoveAt(cursorRequest.PageSize);
         }
 
-        return new CursorPaginationResponse<object>()
+        return new CursorPaginationResponse<PaymentHistoryItemResponse>
         {
             Cursor = nextCursor,
             Items = userPayments

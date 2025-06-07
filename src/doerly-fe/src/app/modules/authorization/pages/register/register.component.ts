@@ -68,6 +68,8 @@ export class RegisterComponent implements OnInit {
       error: (error: HttpErrorResponse) => {
         if (error.error as BaseApiResponse && error.status === HttpStatusCode.Conflict) {
           this.toastHelper.showError(error.error.errorMessage, 'auth.email_exists');
+        } else {
+          this.toastHelper.showApiError(error, 'common.error_occurred');
         }
       }
     });

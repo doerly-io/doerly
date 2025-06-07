@@ -41,6 +41,6 @@ export class PaymentService {
         cursor: paginationRequest.cursor || ''
       }
     });
-
   }
+
 }

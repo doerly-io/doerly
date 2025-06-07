@@ -1,5 +1,4 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {PaymentService} from 'app/modules/payments/payment.service';
 import {CursorPaginationRequest} from 'app/@core/models/cursor-pagination-request';
 import {ToastHelper} from 'app/@core/helpers/toast.helper';
 import {CursorPaginationResponse} from 'app/@core/models/cursor-pagination-response';
@@ -15,11 +14,11 @@ import {EPaymentStatus} from 'app/modules/payments/enums/e-payment-status';
 import {Scroller} from 'primeng/scroller';
 import {PrimeTemplate} from 'primeng/api';
 import {TranslatePipe} from '@ngx-translate/core';
+import {ProfileService} from 'app/modules/profile/domain/profile.service';
 
 @Component({
   selector: 'app-payment-history',
   imports: [
-    ScrollPanel,
     NgIf,
     Button,
     DatePipe,
@@ -38,7 +37,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class PaymentHistoryComponent implements OnInit {
 
-  private readonly paymentService: PaymentService = inject(PaymentService);
+  private readonly profileService: ProfileService = inject(ProfileService);
   private readonly toastHelper: ToastHelper = inject(ToastHelper);
 
   protected readonly loading = signal(false);
@@ -61,7 +60,7 @@ export class PaymentHistoryComponent implements OnInit {
 
   loadPaymentHistory(): void {
     this.loading.set(true);
-    this.paymentService.getUserPayments(this.paginationRequest).subscribe({
+    this.profileService.getPaymentsHistory(this.paginationRequest).subscribe({
       next: (response: CursorPaginationResponse<PaymentHistoryItemResponse>) => {
         this.payments.update((value) => [...value, ...response?.items!]);
         this.paginationRequest.cursor = response?.cursor;

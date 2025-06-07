@@ -1,3 +1,4 @@
+using Doerly.DataTransferObjects;
 using Doerly.Domain.Factories;
 using Doerly.Domain.Models;
 using Doerly.Extensions;
@@ -11,6 +12,8 @@ namespace Doerly.Module.Payments.Api.ModuleWrapper;
 public interface IPaymentModuleWrapper
 {
     Task<HandlerResult<BaseCheckoutResponse>> CheckoutAsync(CheckoutRequest checkoutRequest);
+
+    Task<CursorPaginationResponse<PaymentHistoryItemResponse>> GetUserPayments(int userId, CursorPaginationRequest request);
 }
 
 public class PaymentModuleWrapper : IPaymentModuleWrapper
@@ -23,12 +26,18 @@ public class PaymentModuleWrapper : IPaymentModuleWrapper
         _handlerFactory = handlerFactory;
         _webhookUrlBuilder = webhookUrlBuilder;
     }
-    
+
     public async Task<HandlerResult<BaseCheckoutResponse>> CheckoutAsync(CheckoutRequest checkoutRequest)
     {
-        var webhookUrl = _webhookUrlBuilder.BuildWebhookUrl(nameof(WebhookController).ToControllerName(), nameof(WebhookController.FinalStatus));
+        var webhookUrl =
+            _webhookUrlBuilder.BuildWebhookUrl(nameof(WebhookController).ToControllerName(), nameof(WebhookController.FinalStatus));
         var checkoutResponse = await _handlerFactory.Get<CheckoutHandler>().HandleAsync(checkoutRequest, webhookUrl);
         return checkoutResponse;
     }
-    
+
+    public async Task<CursorPaginationResponse<PaymentHistoryItemResponse>> GetUserPayments(int userId, CursorPaginationRequest request)
+    {
+        var result = await _handlerFactory.Get<SelectUserPaymentsHandler>().HandleAsync(userId, request);
+        return result;
+    }
 }

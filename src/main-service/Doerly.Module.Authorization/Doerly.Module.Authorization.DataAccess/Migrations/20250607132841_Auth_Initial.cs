@@ -42,6 +42,7 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                     password_hash = table.Column<string>(type: "text", nullable: false),
                     password_salt = table.Column<string>(type: "text", nullable: false),
                     is_email_verified = table.Column<bool>(type: "boolean", nullable: false),
+                    is_enabled = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
                     role_id = table.Column<int>(type: "integer", nullable: true),
                     date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -94,11 +95,17 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                 .Annotation("Npgsql:IndexMethod", "hash");
 
             migrationBuilder.CreateIndex(
-                name: "ix_user_email",
+                name: "ix_user_email_is_email_verified",
                 schema: "auth",
                 table: "user",
-                column: "email",
+                columns: new[] { "email", "is_email_verified" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_user_is_enabled",
+                schema: "auth",
+                table: "user",
+                column: "is_enabled");
 
             migrationBuilder.CreateIndex(
                 name: "ix_user_role_id",
