@@ -1,10 +1,10 @@
 <div class="communication-container">
   <!-- Mobile header -->
   <div class="mobile-header" *ngIf="isMobileView()">
-    <button 
-      pButton 
-      class="p-button-text back-button" 
-      icon="pi pi-arrow-left" 
+    <button
+      pButton
+      class="p-button-text back-button"
+      icon="pi pi-arrow-left"
       (click)="onBackClick()"
       *ngIf="selectedConversationId()"
     ></button>
@@ -14,7 +14,10 @@
   <!-- Desktop view -->
   <div class="desktop-view" *ngIf="!isMobileView()">
     <div class="conversation-list-wrapper">
-      <app-conversation-list (selectedConversationId)="onConversationSelected($event)" />
+      <app-conversation-list
+        [conversationUpdates]="conversations()"
+        (selectedConversationId)="onConversationSelected($event)"
+      />
     </div>
     <div class="chat-window-wrapper">
       <app-chat-window [conversationId]="selectedConversationId()" />
@@ -24,7 +27,10 @@
   <!-- Mobile view -->
   <div class="mobile-view" *ngIf="isMobileView()">
     <div class="conversation-list-wrapper" [class.hidden]="selectedConversationId()">
-      <app-conversation-list (selectedConversationId)="onConversationSelected($event)" />
+      <app-conversation-list
+        [conversationUpdates]="conversations()"
+        (selectedConversationId)="onConversationSelected($event)"
+      />
     </div>
     <div class="chat-window-wrapper" [class.hidden]="!selectedConversationId()">
       <app-chat-window [conversationId]="selectedConversationId()" />

@@ -48,7 +48,6 @@ export class ChatWindowComponent implements AfterViewChecked {
   protected readonly userProfile = computed(() => {
     const conv = this.conversation();
     if (!conv) return null;
-
     return conv.recipient.id === this.userId ? conv.initiator : conv.recipient;
   });
 
@@ -61,10 +60,8 @@ export class ChatWindowComponent implements AfterViewChecked {
         imageUrl: null,
       };
     }
-
     const isInitiator = this.userId === conversation.initiator.id;
     const recipient = isInitiator ? conversation.recipient : conversation.initiator;
-
     return {
       id: recipient ? recipient.id : null,
       name: recipient ? `${recipient.firstName} ${recipient.lastName}` : this.translateService.instant('communication.unknown_user'),
@@ -79,15 +76,11 @@ export class ChatWindowComponent implements AfterViewChecked {
     return statusMap.get(recipientId) ?? false;
   });
 
-
   @ViewChild('messageContainer') messageContainer!: ElementRef<HTMLDivElement>;
-
   protected message = model<string>('');
   protected readonly loading = signal(true);
   protected readonly conversation = signal<ConversationResponse | null>(null);
-
   protected readonly typingUser = signal<string | null>(null);
-
   public conversationId = input<number>();
 
   constructor() {
@@ -95,7 +88,7 @@ export class ChatWindowComponent implements AfterViewChecked {
       const id = this.conversationId();
       if (id) {
         this.loadConversation(id);
-        this.communicationSignalR.startConnection(id, this.userId!);
+        this.communicationSignalR.joinConversation(id.toString());
 
         this.communicationSignalR.onMessageReceived((newMessage) => {
           this.conversation.update((conv) => {
@@ -125,14 +118,6 @@ export class ChatWindowComponent implements AfterViewChecked {
           }, 2000);
           this.scrollToBottom();
         });
-
-        // this.communicationSignalR.userStatus$.subscribe(statusMap => {
-        //   const recipientId = this.recipientInfo().id;
-        //   if (recipientId) {
-        //     this.recipientStatus.set(statusMap.get(recipientId) || false);
-        //   }
-        // });
-
       } else {
         this.conversation.set(null);
         this.loading.set(false);

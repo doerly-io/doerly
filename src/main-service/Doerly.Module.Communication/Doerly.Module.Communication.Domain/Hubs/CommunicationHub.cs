@@ -25,8 +25,10 @@ public class CommunicationHub(IHandlerFactory handlerFactory, IUserOnlineStatusH
 
         await MarkUserStatusAsync(userId, true);
         
-        var result = await handlerFactory.Get<SendMessageHandler>().HandleAsync(userId, request);
-        await Clients.Group(request.ConversationId.ToString()).ReceiveMessage(result.Value);
+        var messageId = await handlerFactory.Get<SendMessageHandler>().HandleAsync(userId, request);
+        var message = (await handlerFactory.Get<GetMessageByIdHandler>().HandleAsync(messageId.Value)).Value;
+        await Clients.Group(request.ConversationId.ToString()).ReceiveMessage(message);
+        await Clients.All.ReceiveMessage(message);
     }
     
     public async Task JoinConversation(string conversationId)
@@ -39,6 +41,17 @@ public class CommunicationHub(IHandlerFactory handlerFactory, IUserOnlineStatusH
         
         await Groups.AddToGroupAsync(Context.ConnectionId, conversationId);
         await Clients.Group(conversationId).UserJoined(conversationId);
+    }
+    
+    public async Task LeaveConversation(string conversationId)
+    {
+        var userId = int.TryParse(Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var id)
+            ? id
+            : throw new UnauthorizedAccessException();
+
+        await MarkUserStatusAsync(userId, false);
+        
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, conversationId);
     }
     
     public async Task SendTyping(string conversationId, string fullName)

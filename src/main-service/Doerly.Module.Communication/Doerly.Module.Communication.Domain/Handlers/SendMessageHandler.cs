@@ -13,19 +13,19 @@ public class SendMessageHandler(CommunicationDbContext dbContext) : BaseCommunic
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
-    public async Task<HandlerResult<MessageResponseDto>> HandleAsync(int userId, SendMessageRequest dto)
+    public async Task<HandlerResult<int>> HandleAsync(int userId, SendMessageRequest dto)
     {
         var conversation = await _dbContext.Conversations
             .FirstOrDefaultAsync(c => c.Id == dto.ConversationId);
         
         if (conversation == null)
         {
-            return HandlerResult.Failure<MessageResponseDto>(Resources.Get("Communication.ConversationNotFound"));
+            return HandlerResult.Failure<int>(Resources.Get("Communication.ConversationNotFound"));
         }
         
         if (conversation.InitiatorId != userId && conversation.RecipientId != userId)
         {
-            return HandlerResult.Failure<MessageResponseDto>(Resources.Get("Communication.UnauthorizedSender"));
+            return HandlerResult.Failure<int>(Resources.Get("Communication.UnauthorizedSender"));
         }
     
         var message = new MessageEntity
@@ -41,17 +41,7 @@ public class SendMessageHandler(CommunicationDbContext dbContext) : BaseCommunic
         _dbContext.Messages.Add(message);
         await _dbContext.SaveChangesAsync();
         
-        var response = new MessageResponseDto
-        {
-            Id = message.Id,
-            ConversationId = message.ConversationId,
-            SenderId = message.SenderId,
-            MessageContent = message.MessageContent,
-            MessageType = message.MessageType,
-            SentAt = message.SentAt,
-            Status = message.Status
-        };
-        
+        var response = message.Id;
         return HandlerResult.Success(response);
     }
 }
