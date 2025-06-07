@@ -11,6 +11,8 @@ using Doerly.Messaging;
 using Doerly.Notification.EmailSender;
 using Doerly.Proxy.Authorization;
 using Doerly.Proxy.BaseProxy;
+using Doerly.Proxy.Catalog;
+using Doerly.Proxy.Orders;
 using Doerly.Proxy.Payment;
 using Doerly.Proxy.Profile;
 using MassTransit;
@@ -52,6 +54,7 @@ builder.RegisterModule(new Doerly.Module.Profile.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Order.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Catalog.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Common.Api.ModuleInitializer());
+builder.RegisterModule(new Doerly.Module.Statistics.Api.ModuleInitializer());
 
 
 #region ModuleProxies
@@ -59,6 +62,8 @@ builder.RegisterModule(new Doerly.Module.Common.Api.ModuleInitializer());
 builder.Services.AddProxy<IPaymentModuleProxy, PaymentModuleProxy>();
 builder.Services.AddProxy<IProfileModuleProxy, ProfileModuleProxy>();
 builder.Services.AddProxy<IAuthorizationModuleProxy, AuthorizationModuleProxy>();
+builder.Services.AddProxy<IOrdersModuleProxy, OrdersModuleProxy>();
+builder.Services.AddProxy<ICatalogModuleProxy, CatalogModuleProxy>();
 
 #endregion
 
