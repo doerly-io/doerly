@@ -15,7 +15,7 @@ import { ToastHelper } from 'app/@core/helpers/toast.helper';
 import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 import { TextAccessibilityManager } from 'pdfjs-dist/types/web/text_accessibility';
 import { Textarea } from 'primeng/textarea';
-import { ErrorHandlerService } from '../../domain/error-handler.service';
+import { ErrorHandlerService } from '../../../../@core/services/error-handler.service';
 
 @Component({
   selector: 'app-edit-execution-proposal',

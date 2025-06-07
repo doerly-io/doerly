@@ -25,7 +25,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { Textarea } from 'primeng/textarea';
 import { ImageModule } from 'primeng/image';
 import { AddressSelectComponent } from "../../../../@shared/components/address-select/address-select.component";
-import { ErrorHandlerService } from '../../domain/error-handler.service';
+import { ErrorHandlerService } from '../../../../@core/services/error-handler.service';
 
 @Component({
   selector: 'app-edit-order',
@@ -50,7 +50,7 @@ import { ErrorHandlerService } from '../../domain/error-handler.service';
     Textarea,
     ImageModule,
     AddressSelectComponent
-]
+  ]
 })
 export class EditOrderComponent implements OnInit {
   orderForm!: FormGroup;
@@ -132,17 +132,13 @@ export class EditOrderComponent implements OnInit {
       cityId: ['', Validators.required]
     });
 
-    // Динамічна валідація
     this.orderForm.get('useProfileAddress')!.valueChanges.subscribe((useProfile: boolean) => {
       if (!useProfile) {
         this.orderForm.get('regionId')!.setValidators([Validators.required]);
         this.orderForm.get('cityId')!.setValidators([Validators.required]);
-        // Скидаємо значення при перемиканні
-        //this.orderForm.patchValue({ regionId: null, cityId: null });
       } else {
         this.orderForm.get('regionId')!.clearValidators();
         this.orderForm.get('cityId')!.clearValidators();
-        //this.orderForm.patchValue({ regionId: null, cityId: null });
       }
       this.orderForm.get('regionId')!.updateValueAndValidity();
       this.orderForm.get('cityId')!.updateValueAndValidity();
@@ -238,7 +234,9 @@ export class EditOrderComponent implements OnInit {
           error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
         });
     } else {
-      this.orderService.createOrder(this.orderForm.value, this.files)
+      var request = this.orderForm.value as CreateOrderRequest;
+      request.name = "dsfasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+      this.orderService.createOrder(request, this.files)
         .subscribe({
           next: (response: BaseApiResponse<CreateOrderResponse>) => {
             this.router.navigate(['/ordering/order', response.value!.id]);

@@ -14,7 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
 import { getOrderStatusSeverity } from '../../domain/enums/order-status';
 import { Avatar } from 'primeng/avatar';
-import { ErrorHandlerService } from '../../domain/error-handler.service';
+import { ErrorHandlerService } from '../../../../@core/services/error-handler.service';
 
 @Component({
   selector: 'app-orders-list',
@@ -46,7 +46,7 @@ export class OrdersListComponent implements OnInit {
 
   constructor(private orderService: OrderService,
     private route: ActivatedRoute,
-    private errorHandler: ErrorHandlerService  
+    private errorHandler: ErrorHandlerService
   ) { }
 
   ngOnInit() {

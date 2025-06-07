@@ -15,7 +15,7 @@ import { Avatar } from 'primeng/avatar';
 import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
 import { PanelModule } from 'primeng/panel';
-import { ErrorHandlerService } from '../../domain/error-handler.service';
+import { ErrorHandlerService } from '../../../../@core/services/error-handler.service';
 
 @Component({
   selector: 'app-execution-proposal-details',
@@ -39,7 +39,7 @@ export class ExecutionProposalDetailsComponent implements OnInit {
   loading: boolean = true;
   profileId: number;
   EExecutionProposalStatus = EExecutionProposalStatus;
-    public getExecutionProposalStatusSeverity = getExecutionProposalStatusSeverity;
+  public getExecutionProposalStatusSeverity = getExecutionProposalStatusSeverity;
 
   constructor(
     private route: ActivatedRoute,
