@@ -1,4 +1,4 @@
-using Doerly.Module.Communication.Contracts.Dtos.Responses;
+using Doerly.Module.Communication.Contracts.Responses;
 
 namespace Doerly.Module.Communication.Domain.Hubs;
 

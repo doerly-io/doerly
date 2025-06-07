@@ -1,6 +1,6 @@
 using Doerly.Module.Profile.Contracts.Dtos;
 
-namespace Doerly.Module.Communication.Contracts.Dtos.Responses;
+namespace Doerly.Module.Communication.Contracts.Responses;
 
 public class ConversationResponseDto
 {
