@@ -14,11 +14,10 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
 
         public async Task<HandlerResult<List<GetFilterResponse>>> HandleAsync(int categoryId)
         {
+            var parentCategoryIds = await GetAllParentCategoryIds(categoryId);
+            
             var query = DbContext.Filters
-                .Where(f => !f.Category.IsDeleted &&
-                            (f.CategoryId == categoryId ||
-                             f.Category.ParentId == categoryId ||
-                             f.Category.Parent.ParentId == categoryId))
+                .Where(f => !f.Category.IsDeleted && parentCategoryIds.Contains(f.CategoryId))
                 .Select(f => new GetFilterResponse
                 {
                     Id = f.Id,
@@ -29,10 +28,28 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
 
             var filters = await query.ToListAsync();
 
-            if (!filters.Any())
-                return HandlerResult.Failure<List<GetFilterResponse>>(Resources.Get("CategoryNotFound"));
-
             return HandlerResult.Success(filters);
+        }
+
+        private async Task<List<int>> GetAllParentCategoryIds(int categoryId)
+        {
+            var parentIds = new List<int>();
+            var currentCategoryId = (int?)categoryId;
+
+            while (currentCategoryId.HasValue)
+            {
+                parentIds.Add(currentCategoryId.Value);
+
+                var id = currentCategoryId;
+                var parentId = await DbContext.Categories
+                    .Where(c => c.Id == id.Value)
+                    .Select(c => c.ParentId)
+                    .FirstOrDefaultAsync();
+
+                currentCategoryId = parentId;
+            }
+
+            return parentIds;
         }
     }
 }

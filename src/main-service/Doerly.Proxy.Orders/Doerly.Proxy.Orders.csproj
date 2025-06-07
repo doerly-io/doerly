@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj" />
+      <ProjectReference Include="..\Doerly.Proxy.BaseProxy\Doerly.Proxy.BaseProxy.csproj" />
+    </ItemGroup>
+
+</Project>

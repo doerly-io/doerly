@@ -8,6 +8,8 @@
   <Folder Name="/ModuleProxies/">
     <Project Path="Doerly.Proxy.Authorization\Doerly.Proxy.Authorization.csproj" Type="Classic C#" />
     <Project Path="Doerly.Proxy.BaseProxy\Doerly.Proxy.BaseProxy.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Proxy.Catalog\Doerly.Proxy.Catalog.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Proxy.Orders\Doerly.Proxy.Orders.csproj" Type="Classic C#" />
     <Project Path="Doerly.Proxy.Payment\Doerly.Proxy.Payment.csproj" Type="Classic C#" />
     <Project Path="Doerly.Proxy.Profile\Doerly.Proxy.Profile.csproj" Type="Classic C#" />
   </Folder>
@@ -55,10 +57,16 @@
     <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Domain\Doerly.Module.Profile.Domain.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj" Type="Classic C#" />
   </Folder>
+  <Folder Name="/Modules/Statistics/">
+    <Project Path="Doerly.Module.Statistics.Api\Doerly.Module.Statistics.Api.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Statistics.Contracts\Doerly.Module.Statistics.Contracts.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Statistics.Domain\Doerly.Module.Statistics.Domain.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Notifications/">
     <Project Path="Doerly.Notification.EmailSender\Doerly.Notification.EmailSender.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests\Doerly.Module.Order.Tests\Doerly.Module.Order.Tests.csproj" Type="Classic C#" />
     <Project Path="tests\Doerly.EndToEndTests\Doerly.EndToEndTests.csproj" Type="Classic C#" />
     <Project Path="tests\Doerly.Module.Authorization.Tests\Doerly.Module.Authorization.Tests.csproj" Type="Classic C#" />
   </Folder>

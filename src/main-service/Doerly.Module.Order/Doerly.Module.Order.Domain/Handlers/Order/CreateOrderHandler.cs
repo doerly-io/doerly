@@ -16,6 +16,7 @@ using Doerly.Module.Order.DataAccess.Entities;
 using Doerly.Module.Order.Contracts.Messages;
 using Doerly.Messaging;
 using Doerly.Domain.Helpers;
+using Doerly.Domain.Exceptions;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 
@@ -48,7 +49,7 @@ public class CreateOrderHandler : BaseOrderHandler
             DueDate = dto.DueDate,
             Status = EOrderStatus.Placed,
             OrderFiles = orderFiles,
-            CustomerId = _doerlyRequestContext.UserId ?? throw new Exception("We are fucked!"),
+            CustomerId = _doerlyRequestContext.UserId ?? throw new DoerlyException("We are fucked!"),
         };
 
 

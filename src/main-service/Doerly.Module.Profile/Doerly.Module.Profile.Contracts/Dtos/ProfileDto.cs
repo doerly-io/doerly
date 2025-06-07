@@ -17,4 +17,5 @@ public class ProfileDto
     public ProfileAddressDto? Address { get; set; }
     public ICollection<LanguageProficiencyDto> LanguageProficiencies { get; set; } = new List<LanguageProficiencyDto>();
     public ICollection<CompetenceDto> Competences { get; set; } = new List<CompetenceDto>();
+    public UserInfo? UserInfo { get; set; }
 }

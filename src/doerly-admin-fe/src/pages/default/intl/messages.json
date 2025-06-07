@@ -3,5 +3,17 @@
   "contractors": "Contractors",
   "projects": "Projects",
   "noItems.0": "You don't have authorities to use system functionality.",
-  "settings": "Settings"
+  "ordersStatistics": "Orders Statistics",
+  "settings": "Settings",
+  "statistics": "Statistics",
+  "statistics.activityChart": "User Activity",
+  "statistics.activeUsers24h": "Active Users (24h)",
+  "statistics.activeUsers30d": "Active Users (30d)",
+  "statistics.activeUsers7d": "Active Users (7d)",
+  "statistics.chartType.byDay": "Weekly",
+  "statistics.chartType.byHour": "Today",
+  "statistics.inactiveUsers30d": "Inactive Users (30d)",
+  "statistics.newUsers30d": "New Users (30d)",
+  "statistics.totalUsers": "Total Users",
+  "userActivity": "User Activity"
 }

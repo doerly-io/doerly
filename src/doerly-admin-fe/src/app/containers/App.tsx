@@ -20,6 +20,7 @@ import PageDefault from 'pageProviders/Default';
 import PageLogin from 'pageProviders/Login';
 import PageUsers from 'pageProviders/Users';
 import PageCatalog from 'pageProviders/Catalog';
+import PageCatalogFilters from 'pageProviders/CatalogFilters';
 import PageOrders from 'pageProviders/Orders';
 import PageReporting from 'pageProviders/Reporting';
 import PageSettings from 'pageProviders/Settings';
@@ -107,6 +108,12 @@ function App() {
                         <PageCatalog/>
                       )}
                       path={`${pageURLs[pages.catalog]}`}
+                    />
+                    <Route
+                      element={(
+                        <PageCatalogFilters/>
+                      )}
+                      path={`${pageURLs[pages.catalogFilters]}`}
                     />
                     <Route
                       element={(

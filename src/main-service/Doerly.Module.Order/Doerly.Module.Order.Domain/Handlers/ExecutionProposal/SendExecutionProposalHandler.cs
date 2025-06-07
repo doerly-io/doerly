@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Doerly.Localization;
 using Doerly.Domain;
 using Doerly.Messaging;
+using Doerly.Domain.Exceptions;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class SendExecutionProposalHandler : BaseOrderHandler
@@ -42,7 +43,7 @@ public class SendExecutionProposalHandler : BaseOrderHandler
         {
             OrderId = dto.OrderId,
             Comment = dto.Comment.Trim(),
-            SenderId = _doerlyRequestContext.UserId ?? throw new Exception("We are fucked!"),
+            SenderId = _doerlyRequestContext.UserId ?? throw new DoerlyException("We are fucked!"),
             ReceiverId = dto.ReceiverId,
             Status = EExecutionProposalStatus.Pending
         };

@@ -26,7 +26,7 @@ const useOrders = () => {
   const locationSearch = useLocationSearch();
   const changePage = useChangePage();
   const pageIndex = +locationSearch.pageIndex || 0;
-  const pageSize = +locationSearch.pageSize || paginationSizes.SMALL;
+  const pageSize = +locationSearch.pageSize || 1000;
   const customerId = locationSearch.customerId || ALL;
   const executorId = locationSearch.executorId || ALL;
 

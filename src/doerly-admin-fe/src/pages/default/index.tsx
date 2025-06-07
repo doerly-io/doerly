@@ -3,7 +3,7 @@ import {
   IntlProvider as ReactIntlProvider,
 } from 'react-intl';
 
-import Default from './containers/Default';
+import Default from './containers/Statistics';
 import useLocationSearch from 'hooks/useLocationSearch';
 import getMessages from './intl';
 

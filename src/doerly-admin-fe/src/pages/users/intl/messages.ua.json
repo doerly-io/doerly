@@ -25,5 +25,17 @@
   "profile.lastModified": "Остання зміна",
   "search": "Пошук",
   "search.tooltip": "Шукати користувачів за ім'ям та прізвищем",
-  "users": "Користувачі"
+  "users": "Користувачі",
+  "label.profile.userInfo": "Інформація про користувача",
+  "label.profile.email": "Електронна пошта",
+  "label.profile.role": "Роль",
+  "label.profile.accountStatus": "Статус аккаунта",
+  "label.profile.status.enabled": "Активовано",
+  "label.profile.status.disabled": "Деактивовано",
+  "label.profile.status.emailVerified": "Верифіковано",
+  "label.profile.status.emailNotVerified": "Не верифіковано",
+  "label.profile.verificationStatus": "Статус верифікації",
+  "snackbar.successUpdateUser": "Статус користувача успішно оновлено",
+  "tooltip.disableUser": "Вимкнути користувача",
+  "tooltip.enableUser": "Увімкнути користувача"
 }

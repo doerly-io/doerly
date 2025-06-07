@@ -11,7 +11,7 @@
                 <div class="order-item d-flex flex-row align-items-center">
                     <!-- Customer avatar and name - separate from order link -->
                     <div class="customer-avatar-block d-flex flex-column align-items-center me-3">
-                        <div class="position-relative" [routerLink]="['/profile', order.customer?.id]" style="cursor: pointer;">
+                        <div class="position-relative" [routerLink]="['/profile', order.customer.id]" style="cursor: pointer;">
                             <img *ngIf="order.customer?.avatarUrl" [src]="order.customer.avatarUrl"
                                 alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar order-list-avatar mb-1"
                                 width="56" height="56" />
@@ -23,7 +23,7 @@
                             </div>
                         </div>
                         <span class="customer-name text-center text-sm">
-                            {{ order.customer?.firstName }}
+                            {{ order.customer.firstName }}
                         </span>
                     </div>
 

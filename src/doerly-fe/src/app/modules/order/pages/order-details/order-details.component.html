@@ -1,6 +1,6 @@
 <section class="order-details-container row justify-content-center">
-  <h3 class="order-title">{{'ordering.order_number' | translate: ({orderId: order?.id })}}</h3>
   <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
+  <h3 class="order-title">{{'ordering.order_number' | translate: ({orderId: order?.id })}}</h3>
     <div class="row justify-content-center">
       <div class="col-sm-12 col-md-10">
         <div *ngIf="loading" class="text-center">{{ 'ordering.loading' | translate }}</div>

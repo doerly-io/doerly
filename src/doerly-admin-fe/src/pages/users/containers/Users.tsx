@@ -29,6 +29,11 @@ import { errorTypes } from 'pages/login/hooks/useLogin';
 import IconError from 'components/icons/Error';
 import Tooltip from 'components/Tooltip';
 import HighlightText from 'components/HighlightText';
+import Chip from 'components/Chip';
+import IconButton from 'components/IconButton';
+import IconVisibility from 'components/icons/Visibility';
+import IconVisibilityOff from 'components/icons/VisibilityOff';
+import Snackbar from 'components/Snackbar';
 
 const getClasses = makeStyles<any>()((_, theme: any) => ({
   actionElement: {
@@ -117,7 +122,7 @@ const getClasses = makeStyles<any>()((_, theme: any) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: `${theme.spacing(1)}px`,
-    marginTop: `${theme.spacing(1)}px`,
+    margin: `${theme.spacing(1)}px 0`,
   },
   listItem: {
     alignItems: 'center',
@@ -134,6 +139,27 @@ const getClasses = makeStyles<any>()((_, theme: any) => ({
   sectionTitle: {
     marginBottom: `${theme.spacing(1)}px`,
     marginTop: `${theme.spacing(2)}px`,
+  },
+  statusChipDisabled: {
+    backgroundColor: theme.colors.redDark,
+    minWidth: '120px',
+  },
+  statusChipEnabled: {
+    backgroundColor: theme.colors.greenDark,
+    minWidth: '120px',
+  },
+  statusChipNotVerified: {
+    backgroundColor: theme.colors.redDark,
+    minWidth: '120px',
+  },
+  statusChipVerified: {
+    backgroundColor: theme.colors.greenDark,
+    minWidth: '120px',
+  },
+  statusContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: `${theme.spacing(1)}px`,
   },
   summaryCell: {
     flex: 1,
@@ -157,7 +183,7 @@ const ICON_SIZE = 24;
 
 const Users = () => {
   const { theme } = useTheme();
-  const { classes } = getClasses(theme);
+  const { classes, cx } = getClasses(theme);
   const { formatMessage } = useIntl();
   const isMobile = useIsMobile();
   const isSmallMobile = useIsSmallMobile();
@@ -167,9 +193,14 @@ const Users = () => {
   const {
     containerState,
     debouncedSearchText,
+    handleAccordionChange,
+    handleCloseAfterUpdateUserSuccessAlert,
     handleSearchTextChange,
+    handleToggleEnabled,
     isFetching,
+    isFetchingUpdate,
     profiles,
+    showAfterUpdateUserSuccessAlert,
   } = useUsers();
 
   const getSexLabel = (sex: ESex) => {
@@ -226,7 +257,12 @@ const Users = () => {
         <div>
           {profiles?.map((profile) => (
             <>
-              <Accordion key={profile.id}>
+              <Accordion
+                expanded={containerState.expandedAccordionIds
+                  .includes(profile.id)}
+                onChange={() => handleAccordionChange(profile.id)}
+                key={profile.id}
+              >
                 <AccordionSummary
                   expandIcon={<IconChevronDown size={ICON_SIZE}/>}
                 >
@@ -296,6 +332,148 @@ const Users = () => {
                 <AccordionDetails disablePadding>
                   <Card>
                     <CardContent>
+                      {/* Account Status */}
+                      <div className={classes.detailsContainer}>
+                        <div className={classes.detailsRow}>
+                          <div className={classes.detailsLabel}>
+                            <Typography color="secondary">
+                              <Colon>
+                                {formatMessage({
+                                  id: 'label.profile.accountStatus',
+                                })}
+                              </Colon>
+                            </Typography>
+                          </div>
+                          <div className={
+                            classes.detailsValue
+                          }>
+                            <div className={classes.statusContainer}>
+                              <Chip
+                                color={profile.userInfo.isEnabled
+                                  ? theme.colors.greenDark
+                                  : theme.colors.redDark}
+                                label={formatMessage({
+                                  id: profile.userInfo.isEnabled
+                                    ? 'label.profile.status.enabled'
+                                    : 'label.profile.status.disabled',
+                                })}
+                              />
+                              <Tooltip
+                                arrow
+                                placement="top"
+                                title={formatMessage({
+                                  id: profile.userInfo.isEnabled
+                                    ? 'tooltip.disableUser'
+                                    : 'tooltip.enableUser',
+                                })}
+                              >
+                                <IconButton
+                                  disableHoverSpace
+                                  onClick={() => handleToggleEnabled(
+                                    profile.userInfo.userId,
+                                    !profile.userInfo.isEnabled
+                                  )}
+                                >
+                                  {profile.userInfo.isEnabled ? (
+                                    <IconVisibilityOff
+                                      color={theme.colors.redDark}
+                                      size={ICON_SIZE}
+                                    />
+                                  ) : (
+                                    <IconVisibility
+                                      color={theme.colors.greenDark}
+                                      size={ICON_SIZE}
+                                    />
+                                  )}
+                                </IconButton>
+                              </Tooltip>
+                            </div>
+
+                          </div>
+                        </div>
+                        <div className={classes.detailsRow}>
+                          <div className={classes.detailsLabel}>
+                            <Typography color="secondary">
+                              <Colon>
+                                {formatMessage({
+                                  id: 'label.profile.verificationStatus',
+                                })}
+                              </Colon>
+                            </Typography>
+                          </div>
+                          <div className={
+                            classes.detailsValue
+                          }>
+                            <div className={classes.statusContainer}>
+                              <Chip
+                                color={profile.userInfo.isEmailVerified
+                                  ? theme.colors.greenDark
+                                  : theme.colors.redDark}
+                                label={formatMessage({
+                                  id: profile.userInfo.isEmailVerified
+                                    ? 'label.profile.status.emailVerified'
+                                    : 'label.profile.status.emailNotVerified',
+                                })}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <Divider color={theme.colors.cobalt} />
+
+                      {/* User Info Section */}
+                      <div className={classes.detailsContainer}>
+                        {/* Email */}
+                        <div className={isMobile
+                          ? classes.detailsRowMobile
+                          : classes.detailsRow
+                        }>
+                          <div className={classes.detailsLabel}>
+                            <Typography color="secondary">
+                              <Colon>
+                                {formatMessage({ id: 'label.profile.email' })}
+                              </Colon>
+                            </Typography>
+                          </div>
+                          <div className={isMobile
+                            ? classes.detailsValueValueMobile
+                            : classes.detailsValue
+                          }>
+                            <Typography wordBreak="break-word">
+                              {profile.userInfo.email}
+                            </Typography>
+                          </div>
+                        </div>
+
+                        {/* Role */}
+                        <Show condition={!!profile.userInfo.roleName}>
+                          <div className={isMobile
+                            ? classes.detailsRowMobile
+                            : classes.detailsRow
+                          }>
+                            <div className={classes.detailsLabel}>
+                              <Typography color="secondary">
+                                <Colon>
+                                  {formatMessage({ id: 'label.profile.role' })}
+                                </Colon>
+                              </Typography>
+                            </div>
+                            <div className={isMobile
+                              ? classes.detailsValueValueMobile
+                              : classes.detailsValue
+                            }>
+                              <Typography>
+                                {profile.userInfo.roleName}
+                              </Typography>
+                            </div>
+                          </div>
+                        </Show>
+                      </div>
+
+                      <Divider color={theme.colors.cobalt} />
+
+                      {/* Profile Details Section */}
                       <div className={classes.detailsContainer}>
                         {/* First Name */}
                         <div className={isMobile
@@ -553,7 +731,7 @@ const Users = () => {
                         <div className={classes.listContainer}>
                           {profile.languageProficiencies.map((langProf) => (
                             <div key={langProf.id} className={classes.listItem}>
-                              <Typography color="secondary">•</Typography>
+                              <Typography color="primary">•</Typography>
                               <Typography color="secondary">
                                 {/*eslint-disable-next-line max-len*/}
                                 {langProf.language.name} ({langProf.language.code})
@@ -571,7 +749,7 @@ const Users = () => {
                       <Show condition={profile.competences.length > 0}>
                         <Divider color={theme.colors.cobalt} />
                         <div className={classes.sectionTitle}>
-                          <Typography variant="subtitle" color="primary">
+                          <Typography variant="subtitle" color="secondary">
                             {formatMessage({ id: 'label.profile.competences' })}
                           </Typography>
                         </div>
@@ -581,8 +759,8 @@ const Users = () => {
                               key={competence.id}
                               className={classes.listItem
                               }>
-                              <Typography color="secondary">•</Typography>
-                              <Typography>
+                              <Typography color="primary">•</Typography>
+                              <Typography color="secondary">
                                 {competence.categoryName}
                               </Typography>
                             </div>
@@ -598,6 +776,23 @@ const Users = () => {
           ))}
         </div>
       </Show>
+
+      {/* Success Snackbar */}
+      <Snackbar
+        autoHide
+        onClose={handleCloseAfterUpdateUserSuccessAlert}
+        open={showAfterUpdateUserSuccessAlert}
+      >
+        <Card variant="success">
+          <CardContent>
+            <Typography color="success">
+              {formatMessage({
+                id: 'snackbar.successUpdateUser',
+              })}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Snackbar>
     </div>
   );
 };

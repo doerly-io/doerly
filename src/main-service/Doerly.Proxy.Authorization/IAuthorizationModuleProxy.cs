@@ -12,4 +12,7 @@ public interface IAuthorizationModuleProxy : IModuleProxy
     
     Task<HandlerResult> ChangeUserState(int userId, bool isEnabled);
     
+    Task<List<UserItemResponse>> GetUserInfoByIdsAsync(IEnumerable<int> userIds);
+    
+    Task<UserActivityStatisticsDto> GetActivityUsersStatisticsAsync();
 }
