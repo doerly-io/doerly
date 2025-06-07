@@ -5,6 +5,8 @@ namespace Doerly.Module.Payments.DataAccess.Models;
 public class Bill : BaseEntity
 {
     public int PayerId { get; set; }
+
+    public required string PayerEmail { get; set; }
     
     /// <summary>
     /// Amount to be paid by customer

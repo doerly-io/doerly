@@ -185,4 +185,13 @@ Doerly</value>
   <data name="ParentCategoryNotFound" xml:space="preserve">
     <value>Parent category not found</value>
   </data>
+  <data name="PaymentReceipt" xml:space="preserve">
+    <value>Payment receipt</value>
+  </data>
+  <data name="BillNotFound" xml:space="preserve">
+    <value>Bill not found</value>
+  </data>
+  <data name="BillAlreadyPaid" xml:space="preserve">
+    <value>Bill already paid</value>
+  </data>
 </root>

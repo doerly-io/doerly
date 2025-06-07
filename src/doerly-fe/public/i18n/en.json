@@ -221,6 +221,19 @@
         }
       }
     },
+    "paymentHistory": {
+      "title": "Payment history",
+      "subtitle": "View your payment history and details",
+      "no_payments": "No payments found",
+      "date": "Date",
+      "amount": "Amount",
+      "status": "Status",
+      "details": "Details",
+      "loading": "Loading...",
+      "errors": {
+        "load": "An error occurred while loading payment history."
+      }
+    },
     "message": {
       "save": {
         "success": "Profile has been saved successfully.",
@@ -357,6 +370,22 @@
     "files_size": "Files size",
     "files_size_limit_exceeded": "File size limit exceeded.",
     "files_size_limit": "Maximum files size is {{size}}."
+  },
+  "payments": {
+    "status": {
+      "pending": "Pending",
+      "failed": "Failed to process payment",
+      "error": "Error entering payment details",
+      "completed": "Successful",
+      "canceled": "Canceled",
+      "unknown": "Unknown status"
+    },
+    "currency": {
+      "usd": "USD",
+      "eur": "EUR",
+      "uah": "UAH"
+    },
+    "nohistory": "Payments history not found"
   },
   "common": {
     "actions": "Actions",

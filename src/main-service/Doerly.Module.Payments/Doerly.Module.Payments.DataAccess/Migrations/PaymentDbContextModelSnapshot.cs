@@ -17,7 +17,7 @@ namespace Doerly.Module.Payments.DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -55,6 +55,12 @@ namespace Doerly.Module.Payments.DataAccess.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_modified_date");
 
+                    b.Property<string>("PayerEmail")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("payer_email");
+
                     b.Property<int>("PayerId")
                         .HasColumnType("integer")
                         .HasColumnName("payer_id");
@@ -74,8 +80,8 @@ namespace Doerly.Module.Payments.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Action")
-                        .HasColumnType("integer")
+                    b.Property<byte>("Action")
+                        .HasColumnType("smallint")
                         .HasColumnName("action");
 
                     b.Property<decimal>("Amount")
@@ -86,6 +92,16 @@ namespace Doerly.Module.Payments.DataAccess.Migrations
                     b.Property<int>("BillId")
                         .HasColumnType("integer")
                         .HasColumnName("bill_id");
+
+                    b.Property<string>("CardNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("card_number");
+
+                    b.Property<string>("CheckoutUrl")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("checkout_url");
 
                     b.Property<byte>("Currency")
                         .HasColumnType("smallint")
@@ -101,9 +117,17 @@ namespace Doerly.Module.Payments.DataAccess.Migrations
                         .HasColumnType("character varying(200)")
                         .HasColumnName("description");
 
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("uuid")
+                        .HasColumnName("guid");
+
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_modified_date");
+
+                    b.Property<byte>("PaymentMethod")
+                        .HasColumnType("smallint")
+                        .HasColumnName("payment_method");
 
                     b.Property<byte>("Status")
                         .HasColumnType("smallint")
@@ -114,6 +138,13 @@ namespace Doerly.Module.Payments.DataAccess.Migrations
 
                     b.HasIndex("BillId")
                         .HasDatabaseName("ix_payment_bill_id");
+
+                    b.HasIndex("Guid")
+                        .IsUnique()
+                        .HasDatabaseName("ix_payment_guid");
+
+                    b.HasIndex("Guid", "Status")
+                        .HasDatabaseName("ix_payment_guid_status");
 
                     b.ToTable("payment", "payment");
                 });

@@ -12,6 +12,7 @@ public class BillEntityConfiguration : IEntityTypeConfiguration<Bill>
         builder.ToTable(DbConstants.Tables.Bill, DbConstants.PaymentSchema);
         builder.HasKey(x => x.Id);
         builder.Property(x => x.PayerId).IsRequired();
+        builder.Property(x => x.PayerEmail).IsRequired().HasMaxLength(50);
         builder.Property(x => x.AmountTotal).HasPrecision(18, 2);
         builder.Property(x => x.AmountPaid).HasPrecision(18, 2);
         builder.Property(x => x.Description).IsRequired().HasMaxLength(200);

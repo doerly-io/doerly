@@ -10,6 +10,7 @@
       <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
       <ProjectReference Include="..\..\Doerly.Infrastructure.Api\Doerly.Infrastructure.Api.csproj" />
       <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
+      <ProjectReference Include="..\..\Doerly.Notification.EmailSender\Doerly.Notification.EmailSender.csproj" />
       <ProjectReference Include="..\Doerly.Module.Payments.Contracts\Doerly.Module.Payments.Contracts.csproj" />
       <ProjectReference Include="..\Doerly.Module.Payments.DataAccess\Doerly.Module.Payments.DataAccess.csproj" />
       <ProjectReference Include="..\Doerly.Module.Payments.Client.LiqPay\Doerly.Module.Payments.Client.LiqPay.csproj" />

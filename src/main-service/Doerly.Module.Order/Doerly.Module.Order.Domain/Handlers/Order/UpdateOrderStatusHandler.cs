@@ -53,6 +53,7 @@ public class UpdateOrderStatusHandler : BaseOrderHandler
                         Currency = ECurrency.UAH, //hardcoded for now
                         PaymentAction = EPaymentAction.Pay,
                         ReturnUrl = dto.ReturnUrl,
+                        PayerEmail = _doerlyRequestContext.UserEmail
                     };
                     var payment = await _paymentModuleProxy.CheckoutAsync(checkoutRequest);
                     result.PaymentUrl = payment.Value.CheckoutUrl;

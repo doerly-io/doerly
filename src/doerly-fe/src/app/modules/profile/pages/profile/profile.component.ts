@@ -21,10 +21,9 @@ import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Divider } from 'primeng/divider';
 import { Observable, catchError, tap } from 'rxjs';
-import { Tree } from 'primeng/tree';
 import { TreeSelect } from 'primeng/treeselect';
 import { TreeNode } from 'primeng/api';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import * as sexVariants from '../../constants/sex';
 import { Textarea } from 'primeng/textarea';
@@ -40,11 +39,12 @@ import { ProfileRequest } from '../../models/requests/ProfileRequest';
 import { LanguageProficiencyDto } from '../../models/responses/LanguageProficiencyDto';
 import { LanguageDto } from '../../models/responses/LanguageDto';
 import { ELanguageProficiencyLevel } from '../../models/enums/ELanguageProficiencyLevel';
-import { LanguagesQueryDto } from '../../models/requests/LanguagesQuery';
 import { CategoryService } from 'app/@core/services/category.service';
 import { ICategory } from 'app/@core/models/category/category.model';
 import { CompetenceDto } from '../../models/responses/CompetenceDto';
 import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
+import {PaymentHistoryComponent} from 'app/modules/profile/components/payment-history/payment-history.component';
+import {LanguagesQueryDto} from '../../models/requests/LanguagesQuery';
 
 @Component({
   selector: 'app-profile',
@@ -69,6 +69,7 @@ import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
     Tooltip,
     AddressSelectComponent,
     NgForOf,
+    PaymentHistoryComponent,
     TreeSelect
   ],
   templateUrl: './profile.component.html',
@@ -120,14 +121,14 @@ export class ProfileComponent implements OnInit {
   isViewingOtherProfile: boolean = false;
   viewedUserId: number | null = null;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private profileService: ProfileService,
-    private toastHelper: ToastHelper,
-    private categoryService: CategoryService,
-    public pdfService: PdfService,
-    private route: ActivatedRoute,
-  ) {}
+
+  private readonly formBuilder: FormBuilder = inject(FormBuilder);
+  private readonly profileService: ProfileService = inject(ProfileService);
+  private readonly categoryService: CategoryService = inject(CategoryService);
+  private readonly toastHelper: ToastHelper = inject(ToastHelper);
+  private readonly route: ActivatedRoute = inject(ActivatedRoute);
+  public pdfService: PdfService = inject(PdfService);
+
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {

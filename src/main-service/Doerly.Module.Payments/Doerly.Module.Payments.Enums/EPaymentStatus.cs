@@ -1,6 +1,6 @@
 namespace Doerly.Module.Payments.Enums;
 
-public enum EPaymentStatus
+public enum EPaymentStatus : byte
 {
     /// <summary>
     /// The payment request has been created but not yet processed.

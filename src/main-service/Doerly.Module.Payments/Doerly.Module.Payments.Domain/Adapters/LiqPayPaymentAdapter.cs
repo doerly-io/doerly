@@ -5,8 +5,9 @@ using Doerly.Domain.Helpers;
 using Doerly.Domain.Models;
 using Doerly.Module.Payments.BaseClient;
 using Doerly.Module.Payments.Client.LiqPay;
-using Doerly.Module.Payments.Contracts.Messages;
+using Doerly.Module.Payments.Client.LiqPay.Helpers;
 using Doerly.Module.Payments.Domain.Handlers;
+using Doerly.Module.Payments.Domain.Models;
 using Doerly.Module.Payments.Enums;
 using Microsoft.Extensions.Logging;
 
@@ -35,7 +36,8 @@ public class LiqPayPaymentAdapter : IPaymentAdapter
         var isValidSignature = client.ValidateSignature(data, signature!);
         if (!isValidSignature)
         {
-            _logger.LogWarning("Failed to parse LiqPay checkout response or validate signature. Data: {data}, Signature: {signature}", data, signature);
+            _logger.LogWarning("Failed to parse LiqPay checkout response or validate signature. Data: {data}, Signature: {signature}", data,
+                signature);
             return HandlerResult.Failure("Failed to validate signature");
         }
 
@@ -48,16 +50,19 @@ public class LiqPayPaymentAdapter : IPaymentAdapter
             _logger.LogWarning("Failed to deserialize LiqPay checkout response. Data: {data}, Signature: {signature}", data, signature);
             return HandlerResult.Failure("Failed to parse checkout response");
         }
-        
+
         var liqPayCheckoutStatus = liqPayCheckoutStatusResult.Value;
-        if (!int.TryParse(liqPayCheckoutStatus.OrderId, out var billId))
+        if (!Guid.TryParse(liqPayCheckoutStatus.OrderId, out var paymentGuid))
         {
-            _logger.LogWarning("Invalid order Id in LiqPay checkout response. BillId: {BillId}", liqPayCheckoutStatus.OrderId);
+            _logger.LogWarning("Invalid order Id in LiqPay checkout response. PaymentGuid: {PaymentGuid}", liqPayCheckoutStatus.OrderId);
             return HandlerResult.Failure("Invalid order Id");
         }
 
+        var status = LiqPayMappingHelper.MapLiqPayStatusToCommonStatus(liqPayCheckoutStatus.Status);
+        var payType = LiqPayMappingHelper.MapLiqPaymentMethodToCommonType(liqPayCheckoutStatus.PaymentMethod);
+
         var paymentStatusChangedHandler = _handlerFactory.Get<PaymentStatusChangedHandler>();
-        var result = await paymentStatusChangedHandler.Handle(new PaymentStatusChangedMessage(billId, EPaymentStatus.Completed));
+        var result = await paymentStatusChangedHandler.Handle(new PaymentStatusChangedModel(paymentGuid, status, payType, liqPayCheckoutStatus.SenderCardMask));
         return result;
     }
 }

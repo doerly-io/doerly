@@ -35,6 +35,7 @@ public class RegistrationHandler : BaseAuthHandler
 
         var user = new UserEntity
         {
+            IsEnabled = true,
             Email = requestDto.Email,
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,

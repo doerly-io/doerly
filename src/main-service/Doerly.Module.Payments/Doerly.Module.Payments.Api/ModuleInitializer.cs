@@ -1,6 +1,7 @@
 using Doerly.DataAccess.Utils;
 using Doerly.Infrastructure.Api;
 using Doerly.Domain.Extensions;
+using Doerly.Messaging;
 using Doerly.Module.Payments.Api.ModuleWrapper;
 using Doerly.Module.Payments.BaseClient;
 using Doerly.Module.Payments.Client.LiqPay;
@@ -21,6 +22,7 @@ public class ModuleInitializer : IModuleInitializer
     {
         builder.Services.AddDbContext<PaymentDbContext>();
         builder.Services.RegisterHandlers(typeof(Domain.IAssemblyMarker).Assembly);
+        builder.Services.RegisterEventConsumers(typeof(Domain.IAssemblyMarker).Assembly);;
         builder.Services.AddScoped<IPaymentModuleWrapper, PaymentModuleWrapper>();
         
         var configuration = builder.Services.BuildServiceProvider().GetRequiredService<IConfiguration>();
