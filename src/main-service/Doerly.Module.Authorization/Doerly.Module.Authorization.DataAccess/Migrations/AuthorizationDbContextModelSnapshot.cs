@@ -18,7 +18,7 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("auth")
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -114,7 +114,9 @@ namespace Doerly.Module.Authorization.DataAccess.Migrations
                         .HasColumnName("is_email_verified");
 
                     b.Property<bool>("IsEnabled")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(true)
                         .HasColumnName("is_enabled");
 
                     b.Property<DateTime>("LastModifiedDate")
