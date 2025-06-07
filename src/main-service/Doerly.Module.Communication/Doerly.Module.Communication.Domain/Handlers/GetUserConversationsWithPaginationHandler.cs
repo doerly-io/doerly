@@ -55,7 +55,7 @@ public class GetUserConversationsWithPaginationHandler(CommunicationDbContext db
                 MessageType = m.MessageType,
                 SentAt = m.SentAt,
                 Status = m.Status
-            }).Last()
+            }).LastOrDefault()
         }).ToList();
         
         var result = new GetUserConversationsWithPaginationResponse

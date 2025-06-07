@@ -274,26 +274,25 @@
     "end": "End",
     "pay": "Pay"
   },
-  "communication" : {
-    "unknown_user": "Unknown user",
-    "no_messages": "No messages yet",
-
-    "user_status" : {
+  "communication": {
+    "title": "Messages",
+    "unknown_user": "Unknown User",
+    "no_messages": "No messages",
+    "no_messages_yet": "No messages yet",
+    "choose_conversation": "Choose a conversation to start messaging",
+    "conversation_not_found": "Conversation not found",
+    "user_status": {
       "online": "Online",
       "offline": "Offline"
     },
-
-    "choose_conversation": "Choose a conversation to start chatting",
-    "conversation_not_found": "Conversation not found",
-    "no_messages_yet": "No messages yet. Start chatting with other users!",
-    "typing": "Typing...",
-    "message_placeholder": "Type your message here...",
-    "send_message_before_sending": "Please type your message before sending.",
-    "error": {
-      "load_conversation": "An error occurred while loading conversation. Please try again later.",
-      "no_conversations": "No conversations found",
-      "send_message": "An error occurred while sending the message."
-    }
+    "typing": "is typing...",
+    "message_placeholder": "Type a message...",
+    "download_file": "Download file",
+    "errors": {
+      "load_conversation": "Failed to load conversation",
+      "send_message": "Failed to send message"
+    },
+    "send_message_before_sending": "Please enter a message before sending"
   },
   "common": {
     "actions": "Actions",

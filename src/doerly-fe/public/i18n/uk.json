@@ -274,26 +274,25 @@
     "end": "Завершити",
     "pay": "Оплатити"
   },
-  "communication" : {
+  "communication": {
+    "title": "Повідомлення",
     "unknown_user": "Невідомий користувач",
-    "no_messages": "Повідомлення відсутні",
-
-    "user_status" : {
+    "no_messages": "Немає повідомлень",
+    "no_messages_yet": "Повідомлень ще немає",
+    "choose_conversation": "Виберіть розмову, щоб почати спілкування",
+    "conversation_not_found": "Розмову не знайдено",
+    "user_status": {
       "online": "Онлайн",
       "offline": "Офлайн"
     },
-
-    "choose_conversation": "Оберіть розмову, щоб почати листування",
-    "conversation_not_found": "Розмову не знайдено",
-    "no_messages_yet": "Повідомлення відсутні. Почніть листування з іншими користувачами!",
-    "typing": "Друкує...",
-    "message_placeholder": "Введіть ваше повідомлення тут...",
-    "send_message_before_sending": "Будь ласка, введіть повідомлення перед відправкою.",
-    "error": {
-      "load_conversation": "Виникла помилка під час завантаження розмови. Спробуйте пізніше.",
-      "no_conversations": "Розмови не знайдено",
-      "send_message": "Виникла помилка під час відправки повідомлення."
-    }
+    "typing": "друкує...",
+    "message_placeholder": "Введіть повідомлення...",
+    "download_file": "Завантажити файл",
+    "errors": {
+      "load_conversation": "Не вдалося завантажити розмову",
+      "send_message": "Не вдалося надіслати повідомлення"
+    },
+    "send_message_before_sending": "Будь ласка, введіть повідомлення перед відправкою"
   },
   "common": {
     "actions": "Дії",

@@ -10,5 +10,5 @@ public class ConversationHeaderResponseDto
     
     public ProfileDto Recipient { get; set; }
     
-    public MessageResponseDto LastMessage { get; set; }
+    public MessageResponseDto? LastMessage { get; set; }
 }

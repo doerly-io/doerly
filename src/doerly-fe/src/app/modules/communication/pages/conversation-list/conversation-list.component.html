@@ -29,7 +29,7 @@
           {{ conversation.lastMessage.messageContent | slice: 0:50
           }}{{ conversation.lastMessage.messageContent.length > 50 ? '...' : '' }}
         </p>
-        <p *ngIf="!conversation.lastMessage" class="no-message">Повідомлень ще немає</p>
+        <p *ngIf="!conversation.lastMessage" class="no-message">{{ 'communication.no_messages_yet' | translate }}</p>
       </div>
     </div>
   </div>

@@ -35,7 +35,7 @@
           <!-- File message -->
           <div *ngIf="message.messageType === MessageType.FILE" class="file-message">
             <a [href]="message.messageContent" target="_blank" class="file-link">
-              Завантажити файл
+              {{ 'communication.download_file' | translate }}
             </a>
           </div>
           <small>{{ message.sentAt | date: 'shortTime' }}</small>
