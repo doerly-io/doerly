@@ -2,8 +2,8 @@
 using Doerly.Domain.Models;
 using Doerly.Infrastructure.Api;
 using Doerly.Localization;
-using Doerly.Module.Communication.Contracts.Dtos.Requests;
-using Doerly.Module.Communication.Contracts.Dtos.Responses;
+using Doerly.Module.Communication.Contracts.Requests;
+using Doerly.Module.Communication.Contracts.Responses;
 using Doerly.Module.Communication.Domain.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

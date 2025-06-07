@@ -1,4 +1,4 @@
-namespace Doerly.Module.Communication.Contracts.Dtos.Requests;
+namespace Doerly.Module.Communication.Contracts.Requests;
 
 public class GetConversationsWithPaginationRequest
 {

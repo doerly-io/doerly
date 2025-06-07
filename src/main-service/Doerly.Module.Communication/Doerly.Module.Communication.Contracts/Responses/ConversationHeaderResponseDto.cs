@@ -1,8 +1,8 @@
 using Doerly.Module.Profile.Contracts.Dtos;
 
-namespace Doerly.Module.Communication.Contracts.Dtos.Responses;
+namespace Doerly.Module.Communication.Contracts.Responses;
 
-public class ConversationResponseDto
+public class ConversationHeaderResponseDto
 {
     public int Id { get; set; }
     
@@ -10,5 +10,5 @@ public class ConversationResponseDto
     
     public ProfileDto Recipient { get; set; }
     
-    public List<MessageResponseDto> Messages { get; set; }
+    public MessageResponseDto? LastMessage { get; set; }
 }

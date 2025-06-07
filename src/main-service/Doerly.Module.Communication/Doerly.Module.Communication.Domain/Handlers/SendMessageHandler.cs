@@ -1,6 +1,6 @@
 using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Communication.Contracts.Dtos.Requests;
+using Doerly.Module.Communication.Contracts.Requests;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Communication.DataAccess.Entities;
 using Doerly.Module.Communication.Enums;

@@ -165,7 +165,7 @@ builder.Services.AddAzureClients(factoryBuilder => { factoryBuilder.AddBlobServi
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = redisSettings.ConnectionString;
-    options.InstanceName = "Doerly:";
+    options.InstanceName = RedisSettings.RedisInstanceName;
 });
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();

@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using Doerly.Domain.Factories;
-using Doerly.Module.Communication.Contracts.Dtos.Requests;
+using Doerly.Module.Communication.Contracts.Requests;
 using Doerly.Module.Communication.Domain.Handlers;
 using Doerly.Module.Communication.Domain.Helpers;
 using Doerly.Module.Communication.Enums;
