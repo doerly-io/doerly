@@ -309,6 +309,10 @@
     "no_execution_proposals": "Пропозиції виконання відсутні",
     "send": "Надіслати",
     "resolved_successfully": "Вирішено успішно",
+    "execution_proposal_updated": "Пропозиція виконання успішно оновлена",
+    "execution_proposal_sent": "Пропозиція виконання успішно надіслана",
+    "order_created": "Замовлення успішно створено",
+    "order_updated": "Замовлення успішно оновлено",
     "execution_proposal_details": "Деталі пропозиції виконання",
     "execution_proposal_id": "ID пропозиції виконання",
     "sender_id": "ID відправника",
@@ -371,7 +375,8 @@
     "files_count": "Файлів",
     "files_size": "Розмір файлів",
     "files_size_limit_exceeded": "Перевищено ліміт розміру файлу",
-    "files_size_limit": "Максимальний розмір файлів - {{size}}."
+    "files_size_limit": "Максимальний розмір файлів - {{size}}.",
+    "service_required": "Для створення замовлення необхідно обрати послугу"
   },
   "payments": {
     "status": {

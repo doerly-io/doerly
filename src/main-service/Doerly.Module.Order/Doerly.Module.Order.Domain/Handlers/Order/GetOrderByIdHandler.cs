@@ -26,7 +26,7 @@ public class GetOrderByIdHandler : BaseOrderHandler
             .Select(order => new GetOrderResponse
             {
                 Id = order.Id,
-                CategoryId = order.CategoryId,
+                ServiceId = order.ServiceId,
                 Name = order.Name,
                 Description = order.Description,
                 Price = order.Price,

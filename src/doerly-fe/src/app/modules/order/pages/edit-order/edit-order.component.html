@@ -10,16 +10,6 @@
           </div>
           <div class="row mb-3 mx-0 px-0">
             <div>
-              <label for="categoryId">{{ 'ordering.category_id' | translate }}</label>
-              <input pInputText formControlName="categoryId" class="w-100" id="categoryId" type="number" step="1" />
-              <small *ngIf="isInvalid(orderForm, 'categoryId')" class="input-validation-item">
-                {{ getError(orderForm, 'categoryId', 'required', 'ordering.field_required' | translate) }}
-                {{ getServersideError(orderForm, 'categoryId') }}
-              </small>
-            </div>
-          </div>
-          <div class="row mb-3 mx-0 px-0">
-            <div>
               <label for="name">{{ 'ordering.title' | translate }}</label>
               <input pInputText formControlName="name" class="w-100" id="name" maxlength="100" />
               <small *ngIf="isInvalid(orderForm, 'name')" class="input-validation-item">

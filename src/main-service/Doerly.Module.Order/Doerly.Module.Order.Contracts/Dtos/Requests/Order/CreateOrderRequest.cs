@@ -7,7 +7,7 @@ namespace Doerly.Module.Order.Contracts.Dtos;
 public class CreateOrderRequest
 {
     [Required(ErrorMessage = "FieldIsRequired")]
-    public int CategoryId { get; set; }
+    public int ServiceId { get; set; }
 
     [Required(ErrorMessage = "FieldIsRequired")]
     [MinLength(1, ErrorMessage = "FieldIsTooShort")]

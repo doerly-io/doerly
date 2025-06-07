@@ -1,6 +1,6 @@
 <section class="order-list row justify-content-center">
     <div *ngIf="canCreateOrder" class="d-flex justify-content-end mb-3">
-        <p-button icon="pi pi-shopping-cart" [routerLink]="'/ordering/create-order'"
+        <p-button icon="pi pi-shopping-cart" [routerLink]="'/ordering/create-order'" [queryParams]="{ serviceId: 1 }"
             label="{{ 'ordering.create_order' | translate }}" [severity]="'success'"/>
     </div>
     <p-dataview [value]="orders" [paginator]="true" alwaysShowPaginator="false" [rows]="10" [rowsPerPageOptions]="[10, 20, 50, 100]"
@@ -9,7 +9,6 @@
         <ng-template #list>
             <div *ngFor="let order of orders; let first = first">
                 <div class="order-item d-flex flex-row align-items-center">
-                    <!-- Customer avatar and name - separate from order link -->
                     <div class="customer-avatar-block d-flex flex-column align-items-center me-3">
                         <div class="position-relative" [routerLink]="['/profile', order.customer.id]" style="cursor: pointer;">
                             <img *ngIf="order.customer?.avatarUrl" [src]="order.customer.avatarUrl"
@@ -27,7 +26,6 @@
                         </span>
                     </div>
 
-                    <!-- Order info - wrapped in router link -->
                     <div class="order-info flex-grow-1" [routerLink]="['/ordering/order', order.id]" style="cursor: pointer;">
                         <div class="order-header">
                             <div>

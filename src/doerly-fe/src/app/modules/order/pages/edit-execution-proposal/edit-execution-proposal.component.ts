@@ -89,6 +89,7 @@ export class EditExecutionProposalComponent implements OnInit {
       };
       this.executionProposalService.updateExecutionProposal(this.proposalId!, updatedProposal).subscribe({
         next: () => {
+          this.toastHelper.showSuccess('common.success', 'ordering.execution_proposal_updated');
           this.router.navigate(['/ordering/execution-proposal', this.proposalId]);
         },
         error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
@@ -101,6 +102,7 @@ export class EditExecutionProposalComponent implements OnInit {
       };
       this.executionProposalService.sendExecutionProposal(request).subscribe({
         next: () => {
+          this.toastHelper.showSuccess('common.success', 'ordering.execution_proposal_sent');
           this.router.navigate(['/ordering'], { queryParams: { tab: 0, subTab: 1 } });
         },
         error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)

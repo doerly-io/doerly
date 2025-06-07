@@ -4,8 +4,6 @@ using Doerly.Module.Order.Enums;
 namespace Doerly.Module.Order.Contracts.Dtos;
 public class UpdateOrderRequest
 {
-    [Required(ErrorMessage = "FieldIsRequired")]
-    public int CategoryId { get; set; }
 
     [Required(ErrorMessage = "FieldIsRequired")]
     [MinLength(1, ErrorMessage = "FieldIsTooShort")]
