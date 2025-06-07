@@ -48,8 +48,6 @@ builder.Services
         options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
     });
 
-builder.Services.AddSignalR();
-
 builder.RegisterModule(new Doerly.Module.Payments.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Authorization.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Profile.Api.ModuleInitializer());
@@ -133,6 +131,7 @@ var redisSettings = redisSettingsConfiguration.Get<RedisSettings>();
 
 #endregion
 
+builder.Services.AddSignalR().AddStackExchangeRedis(redisSettings.ConnectionString);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -186,7 +185,6 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
-builder.Services.AddTransient<IFileHelper, FileHelper>();
 
 builder.Services.AddMassTransit(cfg =>
 {

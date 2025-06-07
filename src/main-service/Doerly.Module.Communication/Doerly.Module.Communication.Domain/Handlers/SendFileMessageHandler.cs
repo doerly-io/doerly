@@ -15,7 +15,6 @@ namespace Doerly.Module.Communication.Domain.Handlers;
 
 public class SendFileMessageHandler(CommunicationDbContext dbContext, 
     IFileRepository fileRepository, 
-    IFileHelper fileHelper,
     IHubContext<CommunicationHub, ICommunicationHub> communicationHub) : BaseCommunicationHandler(dbContext)
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
@@ -35,14 +34,14 @@ public class SendFileMessageHandler(CommunicationDbContext dbContext,
             return HandlerResult.Failure<MessageResponseDto>(Resources.Get("Communication.UnauthorizedSender"));
         }
         
-        var fileBytes = await fileHelper.GetFormFileBytesAsync(file);
-        if (!fileHelper.IsValidFile(file.FileName, fileBytes, CommunicationConstants.FileConstants.SupportedFileExtensions, CommunicationConstants.FileConstants.MaxFileSizeInBytes))
+        var fileBytes = await FileHelper.GetFormFileBytesAsync(file);
+        if (!FileHelper.IsValidFile(file.FileName, fileBytes, CommunicationConstants.FileConstants.SupportedFileExtensions, CommunicationConstants.FileConstants.MaxFileSizeInBytes))
         {
             return HandlerResult.Failure(Resources.Get("InvalidDocument"));
         }
     
         //TODO: change filePath to save file name
-        var filePath = $"{CommunicationConstants.FolderNames.CommunicationFiles}/{conversationId}/{Guid.NewGuid()}{fileHelper.GetFileExtension(file.FileName)}";
+        var filePath = $"{CommunicationConstants.FolderNames.CommunicationFiles}/{conversationId}/{Guid.NewGuid()}{FileHelper.GetFileExtension(file.FileName)}";
         await fileRepository.UploadFileAsync(
             CommunicationConstants.AzureStorage.FilesContainerName, 
             filePath, 
