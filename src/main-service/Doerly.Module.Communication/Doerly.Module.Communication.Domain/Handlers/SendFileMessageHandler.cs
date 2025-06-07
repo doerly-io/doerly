@@ -18,9 +18,11 @@ public class SendFileMessageHandler(CommunicationDbContext dbContext,
     IFileHelper fileHelper,
     IHubContext<CommunicationHub, ICommunicationHub> communicationHub) : BaseCommunicationHandler(dbContext)
 {
+    private readonly CommunicationDbContext _dbContext = dbContext;
+
     public async Task<HandlerResult> HandleAsync(int conversationId, int userId, IFormFile file)
     {
-        var conversation = await dbContext.Conversations
+        var conversation = await _dbContext.Conversations
             .FirstOrDefaultAsync(c => c.Id == conversationId);
         
         if (conversation == null)
@@ -52,12 +54,12 @@ public class SendFileMessageHandler(CommunicationDbContext dbContext,
             SenderId = userId,
             MessageContent = filePath,
             SentAt = DateTime.UtcNow,
-            Status = MessageStatus.Sent,
+            Status = EMessageStatus.Sent,
             MessageType = EMessageType.File
         };
     
-        dbContext.Messages.Add(message);
-        await dbContext.SaveChangesAsync();
+        _dbContext.Messages.Add(message);
+        await _dbContext.SaveChangesAsync();
         
         var response = new MessageResponseDto
         {
@@ -66,8 +68,8 @@ public class SendFileMessageHandler(CommunicationDbContext dbContext,
             SenderId = message.SenderId,
             MessageContent = await fileRepository.GetSasUrlAsync(CommunicationConstants.AzureStorage.FilesContainerName, filePath) ?? throw new InvalidOperationException(),
             SentAt = message.SentAt,
-            Status = message.Status,
-            MessageType = EMessageType.File
+            Status = message.Status.ToString(),
+            MessageType = nameof(EMessageType.File)
         };
         
         // Notify clients in the conversation about the new message

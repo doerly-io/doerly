@@ -1,8 +1,8 @@
-import {Component, effect, HostListener, inject, OnDestroy, signal} from '@angular/core';
+import {Component, HostListener, inject, OnDestroy, signal} from '@angular/core';
 import {ConversationListComponent} from '../conversation-list/conversation-list.component';
 import {ChatWindowComponent} from '../chat-window/chat-window.component';
 import {ButtonModule} from 'primeng/button';
-import {NgClass, NgIf} from '@angular/common';
+import {NgIf} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {MessageResponse} from '../../models/message-response.model';
 import {ConversationHeaderResponse} from '../../models/conversation-header-response.model';
@@ -17,7 +17,6 @@ import {JwtTokenHelper} from '../../../../@core/helpers/jwtToken.helper';
     ChatWindowComponent,
     ButtonModule,
     NgIf,
-    NgClass,
     TranslateModule
   ],
   templateUrl: './communication.component.html',

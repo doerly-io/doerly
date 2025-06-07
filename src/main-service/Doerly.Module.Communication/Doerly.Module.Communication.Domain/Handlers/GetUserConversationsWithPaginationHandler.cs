@@ -52,9 +52,9 @@ public class GetUserConversationsWithPaginationHandler(CommunicationDbContext db
                 Sender = profiles.GetValueOrDefault(m.SenderId),
                 ConversationId = m.ConversationId,
                 MessageContent = m.MessageContent,
-                MessageType = m.MessageType,
+                MessageType = m.MessageType.ToString(),
                 SentAt = m.SentAt,
-                Status = m.Status
+                Status = m.Status.ToString()
             }).Last()
         }).ToList();
         

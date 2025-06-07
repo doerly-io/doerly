@@ -11,7 +11,7 @@ public class MessageResponseDto
     
     public ConversationHeaderResponseDto Conversation { get; set; }
     
-    public EMessageType MessageType { get; set; }
+    public string MessageType { get; set; }
     
     public int SenderId { get; set; }
     
@@ -21,5 +21,5 @@ public class MessageResponseDto
     
     public DateTime SentAt { get; set; }
     
-    public MessageStatus Status { get; set; }
+    public string Status { get; set; }
 }

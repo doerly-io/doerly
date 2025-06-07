@@ -17,5 +17,5 @@ public class MessageEntity : BaseEntity
     
     public DateTime SentAt { get; set; }
     
-    public MessageStatus Status { get; set; }
+    public EMessageStatus Status { get; set; }
 }

@@ -50,28 +50,9 @@ export class ConversationListComponent implements OnInit {
     size: this.pageSize(),
   }));
 
-  private handleConversationUpdates(): void {
-    effect(() => {
-      const updates = this.conversationUpdates();
-      if (updates) {
-        this.conversations.update(currentConversations => {
-          const updatedConversations = [...currentConversations];
-          updates.forEach(updatedConv => {
-            const index = updatedConversations.findIndex(conv => conv.id === updatedConv.id);
-            if (index !== -1) {
-              updatedConversations[index] = updatedConv;
-            } else {
-              updatedConversations.push(updatedConv);
-            }
-          });
-          return updatedConversations;
-        });
-      }
-    });
-  }
-
   constructor() {
     this.handleConversationUpdates();
+    this.handleLastMessageUpdates();
   }
 
   ngOnInit(): void {
@@ -131,5 +112,42 @@ export class ConversationListComponent implements OnInit {
     }
     this.currentConversationId.set(conversationId);
     this.selectedConversationId.emit(conversationId);
+  }
+
+  private handleConversationUpdates(): void {
+    effect(() => {
+      const updates = this.conversationUpdates();
+      if (updates) {
+        this.conversations.update(currentConversations => {
+          const updatedConversations = [...currentConversations];
+          updates.forEach(updatedConv => {
+            const index = updatedConversations.findIndex(conv => conv.id === updatedConv.id);
+            if (index !== -1) {
+              updatedConversations[index] = updatedConv;
+            } else {
+              updatedConversations.push(updatedConv);
+            }
+          });
+          return updatedConversations;
+        });
+      }
+    });
+  }
+
+  private handleLastMessageUpdates(): void {
+    this.communicationSignalR.onLastMessageUpdate((message) => {
+      this.conversations.update(currentConversations => {
+        const updatedConversations = [...currentConversations];
+        const index = updatedConversations.findIndex(conv => conv.id === message.conversationId);
+        if (index !== -1) {
+          updatedConversations[index].lastMessage = message;
+          // Sort conversations by last message time
+          return updatedConversations.sort((a, b) =>
+            (b.lastMessage?.sentAt?.getTime() ?? 0) - (a.lastMessage?.sentAt?.getTime() ?? 0)
+          );
+        }
+        return updatedConversations;
+      });
+    });
   }
 }

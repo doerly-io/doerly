@@ -8,9 +8,11 @@ namespace Doerly.Module.Communication.Domain.Handlers;
 
 public class CreateConversationHandler(CommunicationDbContext dbContext) : BaseCommunicationHandler(dbContext)
 {
+    private readonly CommunicationDbContext _dbContext = dbContext;
+
     public async Task<HandlerResult<int>> HandleAsync(CreateConversationRequest dto, int initiatorId)
     {
-        var existingConversation = await dbContext.Conversations
+        var existingConversation = await _dbContext.Conversations
             .FirstOrDefaultAsync(c =>
                 (c.InitiatorId == initiatorId && c.RecipientId == dto.RecipientId) ||
                 (c.InitiatorId == dto.RecipientId && c.RecipientId == initiatorId));
@@ -26,8 +28,8 @@ public class CreateConversationHandler(CommunicationDbContext dbContext) : BaseC
             RecipientId = dto.RecipientId
         };
 
-        dbContext.Conversations.Add(conversation);
-        await dbContext.SaveChangesAsync();
+        _dbContext.Conversations.Add(conversation);
+        await _dbContext.SaveChangesAsync();
 
         return HandlerResult.Success(conversation.Id);
     }

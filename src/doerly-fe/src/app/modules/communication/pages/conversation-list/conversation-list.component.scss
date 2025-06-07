@@ -402,3 +402,25 @@
     }
   }
 }
+
+.conversation-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .message-status-icon {
+    font-size: 0.875rem;
+
+    &.pi-circle-fill {
+      color: var(--surface-400);
+    }
+
+    &.pi-check {
+      color: var(--surface-500);
+    }
+
+    &.pi-check-circle {
+      color: var(--primary-color);
+    }
+  }
+}

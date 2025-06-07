@@ -1,7 +1,6 @@
 using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Communication.Contracts.Dtos.Requests;
-using Doerly.Module.Communication.Contracts.Dtos.Responses;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Communication.DataAccess.Entities;
 using Doerly.Module.Communication.Enums;
@@ -34,7 +33,7 @@ public class SendMessageHandler(CommunicationDbContext dbContext) : BaseCommunic
             SenderId = userId,
             MessageContent = dto.MessageContent,
             SentAt = DateTime.UtcNow,
-            Status = MessageStatus.Sent,
+            Status = EMessageStatus.Sent,
             MessageType = EMessageType.Text
         };
     

@@ -24,7 +24,8 @@ import { InputText } from 'primeng/inputtext';
 import { SendMessageRequest } from '../../models/requests/send-message-request.model';
 import { Avatar } from 'primeng/avatar';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {Observable} from 'rxjs';
+import {MessageType} from '../../models/enums/messageType';
+import {MessageStatus} from '../../models/enums/message.status.enum';
 
 @Component({
   selector: 'app-chat-window',
@@ -34,7 +35,7 @@ import {Observable} from 'rxjs';
   templateUrl: './chat-window.component.html',
   styleUrls: ['./chat-window.component.scss'],
 })
-export class ChatWindowComponent implements AfterViewChecked {
+export class ChatWindowComponent {
   private readonly communicationService = inject(CommunicationService);
   private readonly jwtTokenHelper = inject(JwtTokenHelper);
   private readonly messageService = inject(MessageService);
@@ -43,6 +44,12 @@ export class ChatWindowComponent implements AfterViewChecked {
 
   private isFirstLoad = true;
   private typingTimeout: any;
+
+  private pendingReadMessages = new Set<number>();
+  private lastUnreadCount = 0;
+
+  private pendingDeliveredMessages = new Set<number>();
+  private lastUndeliveredCount = 0;
 
   private userId = this.jwtTokenHelper.getUserInfo()?.id;
   protected readonly userProfile = computed(() => {
@@ -107,6 +114,29 @@ export class ChatWindowComponent implements AfterViewChecked {
             return conv;
           });
           this.scrollToBottom();
+
+          if (newMessage.senderId !== this.userId) {
+            this.pendingDeliveredMessages.add(newMessage.id);
+            this.markMessagesAsDelivered();
+          }
+        });
+
+        this.communicationSignalR.onMessageStatusChanged((messageId, status) => {
+          this.conversation.update((conv) => {
+            if (!conv?.messages) return conv;
+            const messageIndex = conv.messages.findIndex(m => m.id === messageId);
+            if (messageIndex === -1) return conv;
+
+            const updatedMessages = [...conv.messages];
+            updatedMessages[messageIndex] = {
+              ...updatedMessages[messageIndex],
+              status
+            };
+            return { ...conv, messages: updatedMessages };
+          });
+          if (status === MessageStatus.READ) {
+            this.pendingReadMessages.add(messageId);
+          }
         });
 
         this.communicationSignalR.onUserTyping((fullName) => {
@@ -123,13 +153,39 @@ export class ChatWindowComponent implements AfterViewChecked {
         this.loading.set(false);
       }
     });
-  }
 
-  ngAfterViewChecked(): void {
-    if (this.conversation() && this.conversation()?.messages?.length && this.isFirstLoad) {
-      this.scrollToBottom();
-      this.isFirstLoad = false;
-    }
+    effect(() => {
+      const conv = this.conversation();
+      if (conv?.messages?.length) {
+        if (this.isFirstLoad) {
+          this.scrollToBottom();
+          this.isFirstLoad = false;
+        }
+
+        const undeliveredCount = conv.messages.filter(
+          msg => msg.senderId !== this.userId &&
+            msg.status !== MessageStatus.DELIVERED &&
+            msg.status !== MessageStatus.READ &&
+            !this.pendingDeliveredMessages.has(msg.id)
+        ).length;
+
+        if (undeliveredCount !== this.lastUndeliveredCount && undeliveredCount > 0) {
+          this.markMessagesAsDelivered();
+          this.lastUndeliveredCount = undeliveredCount;
+        }
+
+        const unreadCount = conv.messages.filter(
+          msg => msg.senderId !== this.userId &&
+            msg.status !== MessageStatus.READ &&
+            !this.pendingReadMessages.has(msg.id)
+        ).length;
+
+        if (unreadCount !== this.lastUnreadCount && unreadCount > 0) {
+          this.markMessagesAsRead();
+          this.lastUnreadCount = unreadCount;
+        }
+      }
+    });
   }
 
   private scrollToBottom(): void {
@@ -159,6 +215,59 @@ export class ChatWindowComponent implements AfterViewChecked {
         });
       },
     });
+  }
+
+  private markMessagesAsRead(): void {
+      const conv = this.conversation();
+      if (!conv?.messages) return;
+
+    const unreadMessages = conv.messages.filter(
+      msg => msg.senderId !== this.userId &&
+        msg.status !== MessageStatus.READ &&
+        !this.pendingReadMessages.has(msg.id)
+    );
+
+    if (unreadMessages.length === 0) return;
+
+    const messageIds = unreadMessages.map(msg => msg.id);
+    messageIds.forEach(id => this.pendingReadMessages.add(id));
+    const senderId = unreadMessages[0].senderId.toString();
+
+    this.communicationSignalR.markMessagesAsRead(messageIds, senderId)
+      .then(() => {
+        messageIds.forEach(id => this.pendingReadMessages.delete(id));
+      })
+      .catch(err => {
+        console.error('Error marking messages as read:', err);
+        messageIds.forEach(id => this.pendingReadMessages.delete(id));
+      });
+  }
+
+  private markMessagesAsDelivered(): void {
+    const conv = this.conversation();
+    if (!conv?.messages) return;
+
+    const undeliveredMessages = conv.messages.filter(
+      msg => msg.senderId !== this.userId &&
+        msg.status !== MessageStatus.DELIVERED &&
+        msg.status !== MessageStatus.READ &&
+        !this.pendingDeliveredMessages.has(msg.id)
+    );
+
+    if (undeliveredMessages.length === 0) return;
+
+    const messageIds = undeliveredMessages.map(msg => msg.id);
+    messageIds.forEach(id => this.pendingDeliveredMessages.add(id));
+    const senderId = undeliveredMessages[0].senderId.toString();
+
+    this.communicationSignalR.markMessagesAsDelivered(messageIds, senderId)
+      .then(() => {
+        messageIds.forEach(id => this.pendingDeliveredMessages.delete(id));
+      })
+      .catch(err => {
+        console.error('Error marking messages as delivered:', err);
+        messageIds.forEach(id => this.pendingDeliveredMessages.delete(id));
+      });
   }
 
   protected isOwnMessage(message: MessageResponse): boolean {
@@ -205,6 +314,7 @@ export class ChatWindowComponent implements AfterViewChecked {
     this.communicationSignalR
       .sendMessage(sendMessageRequest)
       .then(() => {
+        setTimeout(() => this.scrollToBottom(), 100);
         console.log('Message sent successfully');
       })
       .catch((err) => {
@@ -257,4 +367,7 @@ export class ChatWindowComponent implements AfterViewChecked {
 
     input.value = '';
   }
+
+  protected readonly MessageType = MessageType;
+  protected readonly MessageStatus = MessageStatus;
 }

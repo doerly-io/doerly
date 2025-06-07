@@ -1,6 +1,6 @@
 namespace Doerly.Module.Communication.Enums;
 
-public enum MessageStatus
+public enum EMessageStatus
 {
     Sent = 0,
     Delivered,

@@ -4,11 +4,16 @@ import {JwtTokenHelper} from '../../../@core/helpers/jwtToken.helper';
 import {HttpTransportType} from '@microsoft/signalr';
 import {SendMessageRequest} from '../models/requests/send-message-request.model';
 import {MessageResponse} from '../models/message-response.model';
+import {environment} from '../../../../environments/environment.development';
+import { MessageStatus } from '../models/enums/message.status.enum';
+import { ConversationHeaderResponse } from '../models/conversation-header-response.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommunicationSignalRService {
+  private baseUrl = environment.baseApiUrl.replace(/\/api$/, '') + '/communicationhub';
+
   private readonly jwtTokenHelper = inject(JwtTokenHelper);
 
   private hubConnection!: signalR.HubConnection;
@@ -18,6 +23,8 @@ export class CommunicationSignalRService {
   // Callbacks for handling events
   private typingCallback?: (fullName: string) => void;
   private messageReceivedCallback?: (message: MessageResponse) => void;
+  private messageStatusCallback?: (messageId: number, status: MessageStatus) => void;
+  private lastMessageUpdateCallback?: (message: MessageResponse) => void;
 
   get userStatusSignal() {
     return this.userStatus;
@@ -34,7 +41,7 @@ export class CommunicationSignalRService {
     const accessToken = this.jwtTokenHelper.getToken() ?? '';
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`http://localhost:5051/communicationhub`, {
+      .withUrl(this.baseUrl, {
         accessTokenFactory: () => accessToken,
         transport: HttpTransportType.WebSockets,
         skipNegotiation: true
@@ -58,6 +65,24 @@ export class CommunicationSignalRService {
       const parsedUserId = parseInt(userId);
       console.log('User status changed:', parsedUserId, isOnline);
       this.updateUserStatus(parsedUserId, isOnline);
+    });
+
+    this.hubConnection.on('MessageDelivered', (messageId: number) => {
+      if (this.messageStatusCallback) {
+        this.messageStatusCallback(messageId, MessageStatus.DELIVERED);
+      }
+    });
+
+    this.hubConnection.on('MessageRead', (messageId: number) => {
+      if (this.messageStatusCallback) {
+        this.messageStatusCallback(messageId, MessageStatus.READ);
+      }
+    });
+
+    this.hubConnection.on('UpdateLastMessage', (message: MessageResponse) => {
+      if (this.lastMessageUpdateCallback) {
+        this.lastMessageUpdateCallback(message);
+      }
     });
 
     this.hubConnection
@@ -86,8 +111,34 @@ export class CommunicationSignalRService {
     }
   }
 
+  public async markMessagesAsDelivered(messageIds: number[], senderId: string): Promise<void> {
+    if (!this.isConnected()) {
+      return Promise.reject(new Error('SignalR connection is not established'));
+    }
+
+    try {
+      return await this.hubConnection.invoke('MarkMessagesAsDelivered', messageIds, senderId);
+    } catch (err) {
+      console.error('Error marking messages as delivered:', err);
+      throw err;
+    }
+  }
+
+  public async markMessagesAsRead(messageIds: number[], senderId: string): Promise<void> {
+    if (!this.isConnected()) {
+      return Promise.reject(new Error('SignalR connection is not established'));
+    }
+
+    try {
+      return await this.hubConnection.invoke('MarkMessagesAsRead', messageIds, senderId);
+    } catch (err) {
+      console.error('Error marking messages as read:', err);
+      throw err;
+    }
+  }
+
   public async sendTyping(conversationId: number, fullName: string): Promise<void> {
-    if (this.hubConnection.state !== signalR.HubConnectionState.Connected) {
+    if (!this.isConnected()) {
       return Promise.reject(new Error('SignalR connection is not established'));
     }
 
@@ -100,7 +151,7 @@ export class CommunicationSignalRService {
   }
 
   public async sendMessage(sendMessageRequest: SendMessageRequest): Promise<void> {
-    if (this.hubConnection.state !== signalR.HubConnectionState.Connected) {
+    if (!this.isConnected()) {
       return Promise.reject(new Error('SignalR connection is not established'));
     }
 
@@ -130,5 +181,17 @@ export class CommunicationSignalRService {
 
   public onMessageReceived(callback: (message: MessageResponse) => void): void {
     this.messageReceivedCallback = callback;
+  }
+
+  public onMessageStatusChanged(callback: (messageId: number, status: MessageStatus) => void): void {
+    this.messageStatusCallback = callback;
+  }
+
+  public onLastMessageUpdate(callback: (message: MessageResponse) => void): void {
+    this.lastMessageUpdateCallback = callback;
+  }
+
+  private isConnected(): boolean {
+    return this.hubConnection.state === signalR.HubConnectionState.Connected;
   }
 }

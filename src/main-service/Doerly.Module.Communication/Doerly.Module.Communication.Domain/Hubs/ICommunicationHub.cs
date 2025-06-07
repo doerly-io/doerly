@@ -14,5 +14,13 @@ public interface ICommunicationHub
     
     Task MessageRead(int messageId, string senderId);
     
+    Task MessageDelivered(int messageId, string senderId);
+    
+    Task MarkMessagesAsRead(int[] messageIds, string senderId);
+    
+    Task MarkMessagesAsDelivered(int[] messageIds, string senderId);
+    
     Task UserStatusChanged(string userId, bool isOnline);
+
+    Task UpdateLastMessage(MessageResponseDto conversation);
 }

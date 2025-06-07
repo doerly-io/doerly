@@ -3,6 +3,7 @@ using Doerly.Domain.Factories;
 using Doerly.Module.Communication.Contracts.Dtos.Requests;
 using Doerly.Module.Communication.Domain.Handlers;
 using Doerly.Module.Communication.Domain.Helpers;
+using Doerly.Module.Communication.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
@@ -27,8 +28,24 @@ public class CommunicationHub(IHandlerFactory handlerFactory, IUserOnlineStatusH
         
         var messageId = await handlerFactory.Get<SendMessageHandler>().HandleAsync(userId, request);
         var message = (await handlerFactory.Get<GetMessageByIdHandler>().HandleAsync(messageId.Value)).Value;
+        
+        // Send message to conversation group
         await Clients.Group(request.ConversationId.ToString()).ReceiveMessage(message);
-        await Clients.All.ReceiveMessage(message);
+        
+        // Update last message for both participants
+        var participantIds = new[] { message.Conversation.Initiator.Id.ToString(), message.Conversation.Recipient.Id.ToString() };
+        await Clients.Users(participantIds).UpdateLastMessage(message);
+    }
+    
+    public async Task SendTyping(string conversationId, string fullName)
+    {
+        var userId = int.TryParse(Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var id)
+            ? id
+            : throw new UnauthorizedAccessException();
+
+        await MarkUserStatusAsync(userId, true);
+        
+        await Clients.OthersInGroup(conversationId).UserTyping(fullName);
     }
     
     public async Task JoinConversation(string conversationId)
@@ -53,8 +70,10 @@ public class CommunicationHub(IHandlerFactory handlerFactory, IUserOnlineStatusH
         
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, conversationId);
     }
-    
-    public async Task SendTyping(string conversationId, string fullName)
+
+    #region Message Status Management
+
+    public async Task MarkMessagesAsRead(int[] messageIds, string senderId)
     {
         var userId = int.TryParse(Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var id)
             ? id
@@ -62,9 +81,36 @@ public class CommunicationHub(IHandlerFactory handlerFactory, IUserOnlineStatusH
 
         await MarkUserStatusAsync(userId, true);
         
-        await Clients.OthersInGroup(conversationId).UserTyping(fullName);
+        await handlerFactory.Get<MarkMessageStatusHandler>().HandleAsync(messageIds, EMessageStatus.Read);
+        
+        // Notify about each message status change
+        foreach (var messageId in messageIds)
+        {
+            await Clients.Others.MessageRead(messageId, senderId);
+        }
     }
-    
+
+    public async Task MarkMessagesAsDelivered(int[] messageIds, string senderId)
+    {
+        var userId = int.TryParse(Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var id)
+            ? id
+            : throw new UnauthorizedAccessException();
+
+        await MarkUserStatusAsync(userId, true);
+        
+        await handlerFactory.Get<MarkMessageStatusHandler>().HandleAsync(messageIds, EMessageStatus.Delivered);
+        
+        // Notify about each message status change
+        foreach (var messageId in messageIds)
+        {
+            await Clients.Others.MessageDelivered(messageId, senderId);
+        }
+    }
+
+    #endregion
+
+    #region Connection Management
+
     public override async Task OnConnectedAsync()
     {
         var userId = int.TryParse(Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var id)
@@ -94,4 +140,6 @@ public class CommunicationHub(IHandlerFactory handlerFactory, IUserOnlineStatusH
 
         await base.OnDisconnectedAsync(exception);
     }
+
+    #endregion
 }
