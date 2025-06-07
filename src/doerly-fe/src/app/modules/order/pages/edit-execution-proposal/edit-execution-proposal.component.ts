@@ -38,6 +38,7 @@ export class EditExecutionProposalComponent implements OnInit {
   receiverId?: number;
   isEdit: boolean = false;
   loading: boolean = true;
+  commentMaxLength: number = 1000;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -76,7 +77,7 @@ export class EditExecutionProposalComponent implements OnInit {
 
   initForm(): void {
     this.proposalForm = this.formBuilder.group({
-      comment: ['', [Validators.maxLength(1000)]]
+      comment: ['', [Validators.maxLength(this.commentMaxLength)]]
     });
   }
 

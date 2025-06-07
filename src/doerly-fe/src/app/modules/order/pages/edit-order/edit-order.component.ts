@@ -67,6 +67,9 @@ export class EditOrderComponent implements OnInit {
   totalFilesSize: number = 0;
   allowedSizeForUpload: number = 0;
   addressReady: boolean = false;
+  nameMaxLength: number = 100;
+  descriptionMaxLength: number = 4000;
+  descriptionMinLength: number = 5;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -128,8 +131,8 @@ export class EditOrderComponent implements OnInit {
 
   initForm() {
     this.orderForm = this.formBuilder.group({
-      name: ['', [Validators.required, this.minimumLengthValidator(1), Validators.maxLength(100)]],
-      description: ['', [Validators.required, this.minimumLengthValidator(5), Validators.maxLength(4000)]],
+      name: ['', [Validators.required, this.minimumLengthValidator(1), Validators.maxLength(this.nameMaxLength)]],
+      description: ['', [Validators.required, this.minimumLengthValidator(this.descriptionMinLength), Validators.maxLength(this.descriptionMaxLength)]],
       price: [1, [Validators.required, Validators.min(1)]],
       paymentKind: [1, Validators.required],
       dueDate: ['', Validators.required],
