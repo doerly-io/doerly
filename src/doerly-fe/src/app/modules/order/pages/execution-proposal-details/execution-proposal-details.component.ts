@@ -15,6 +15,7 @@ import { Avatar } from 'primeng/avatar';
 import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
 import { PanelModule } from 'primeng/panel';
+import { ErrorHandlerService } from '../../domain/error-handler.service';
 
 @Component({
   selector: 'app-execution-proposal-details',
@@ -45,7 +46,8 @@ export class ExecutionProposalDetailsComponent implements OnInit {
     private router: Router,
     private executionProposalService: ExecutionProposalService,
     private toastHelper: ToastHelper,
-    private readonly jwtTokenHelper: JwtTokenHelper
+    private readonly jwtTokenHelper: JwtTokenHelper,
+    private errorHandler: ErrorHandlerService
   ) {
     this.profileId = this.jwtTokenHelper.getUserInfo()?.id ?? 0;
   }
@@ -59,10 +61,7 @@ export class ExecutionProposalDetailsComponent implements OnInit {
           this.proposal = response.value || null;
           this.loading = false;
         },
-        error: (error) => {
-          console.error(error);
-          this.loading = false;
-        }
+        error: (error) => this.errorHandler.handleApiError(error)
       });
     }
   }
@@ -81,14 +80,7 @@ export class ExecutionProposalDetailsComponent implements OnInit {
         this.toastHelper.showSuccess('common.success', 'ordering.resolved_successfully');
         this.router.navigate(['/ordering'], { queryParams: { tab: 0, subTab: 0 } });
       },
-      error: (error: HttpErrorResponse) => {
-        if (error.status === 400) {
-          this.toastHelper.showError('common.error', error.error.errorMessage);
-        }
-        else {
-          this.toastHelper.showError('common.error', 'common.error_occurred');
-        }
-      }
+      error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
     });
   }
 

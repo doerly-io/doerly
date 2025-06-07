@@ -21,7 +21,7 @@ public class OrderController : BaseApiController
         if (result.IsSuccess)
             return Ok(result);
 
-        return Ok(result);
+        return BadRequest(result);
     }
 
     [HttpGet("{id}")]

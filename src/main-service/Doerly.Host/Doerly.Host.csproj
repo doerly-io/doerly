@@ -36,7 +36,7 @@
     <ProjectReference Include="..\Doerly.Module.Common\Doerly.Module.Common.Api\Doerly.Module.Common.Api.csproj" />
     <ProjectReference Include="..\Doerly.Module.Profile\Doerly.Module.Profile.Api\Doerly.Module.Profile.Api.csproj" />
     <ProjectReference Include="..\Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj" />
-    <ProjectReference Include="..\Doerly.Module.Payments\Doerly.Module.Payments.Api\Doerly.Module.Payments.Api.csproj"/>
+    <ProjectReference Include="..\Doerly.Module.Payments\Doerly.Module.Payments.Api\Doerly.Module.Payments.Api.csproj" />
     <ProjectReference Include="..\Doerly.Module.Statistics.Api\Doerly.Module.Statistics.Api.csproj" />
     <ProjectReference Include="..\Doerly.Module.Statistics.Contracts\Doerly.Module.Statistics.Contracts.csproj" />
     <ProjectReference Include="..\Doerly.Module.Statistics.Domain\Doerly.Module.Statistics.Domain.csproj" />

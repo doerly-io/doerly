@@ -1,21 +1,22 @@
-﻿using Doerly.Domain.Handlers;
+﻿using Doerly.Domain.Exceptions;
+using Doerly.Domain.Handlers;
+using Doerly.Domain.Helpers;
 using Doerly.FileRepository;
+using Doerly.Localization;
+using Doerly.Messaging;
+using Doerly.Module.Order.Contracts.Messages;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Entities;
-
-using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
-using Microsoft.AspNetCore.Http;
-using Doerly.Module.Profile.DataAccess.Models;
-using Doerly.Module.Order.Contracts.Dtos;
-using FileInfo = Doerly.Module.Order.Contracts.Dtos.FileInfo;
-using Doerly.Module.Order.Contracts.Messages;
-using Doerly.Module.Order.Enums;
-using Doerly.Messaging;
-using Doerly.Domain.Helpers;
-using Doerly.Localization;
-using Doerly.Domain.Exceptions;
 using Doerly.Module.Order.Domain.Constants;
+using Doerly.Module.Order.Enums;
+using Doerly.Module.Profile.Contracts.Dtos;
+using Doerly.Proxy.Profile;
+
 using DoerlyDomain.Constants;
+
+using Microsoft.AspNetCore.Http;
+
+using FileInfo = Doerly.Module.Order.Contracts.Dtos.FileInfo;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 
@@ -23,6 +24,7 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
 {
     private readonly IFileRepository _fileRepository;
     private readonly IMessagePublisher _messagePublisher;
+    private readonly IProfileModuleProxy _profileModuleProxy;
 
     public BaseOrderHandler(OrderDbContext dbContext) : base(dbContext)
     { }
@@ -32,13 +34,20 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
         _fileRepository = fileRepository;
     }
 
+    public BaseOrderHandler(OrderDbContext dbContext, IFileRepository fileRepository, IProfileModuleProxy profileModuleProxy) : base(dbContext)
+    {
+        _fileRepository = fileRepository;
+        _profileModuleProxy = profileModuleProxy;
+    }
+
     public BaseOrderHandler(OrderDbContext dbContext, IMessagePublisher messagePublisher) : base(dbContext)
     {
         _messagePublisher = messagePublisher;
     }
 
-    public BaseOrderHandler(OrderDbContext dbContext, IFileRepository fileRepository, IMessagePublisher messagePublisher) : base(dbContext)
+    public BaseOrderHandler(OrderDbContext dbContext, IProfileModuleProxy profileModuleProxy, IFileRepository fileRepository, IMessagePublisher messagePublisher) : base(dbContext)
     {
+        _profileModuleProxy = profileModuleProxy;
         _fileRepository = fileRepository;
         _messagePublisher = messagePublisher;
     }
@@ -99,7 +108,7 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
             file.Path);
     }
 
-    protected async Task UploadOrderFile(string filePath, byte[] fileBytes) 
+    protected async Task UploadOrderFile(string filePath, byte[] fileBytes)
     {
         await _fileRepository.UploadFileAsync(
             AzureStorageConstants.ImagesContainerName,
@@ -117,6 +126,33 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
     {
         var message = new ExecutionProposalStatucUpdatedMessage(executionProposalId, executionProposalStatus);
         await _messagePublisher.Publish(message);
+    }
+
+    protected async Task<(int regionId, int cityId)> ManageAddress(int userId, bool useProfileAddress, int? dtoRegionId, int? dtoCityId)
+    {
+        ProfileDto profile = null;
+        int regionId = 0;
+        int cityId = 0;
+        if (useProfileAddress)
+        {
+            profile = (await _profileModuleProxy.GetProfileAsync(userId))?.Value;
+            if (profile?.Address == null)
+                throw new DoerlyException(Resources.Get("AddressIsEmpty"));
+            else
+            {
+                regionId = profile.Address.RegionId;
+                cityId = profile.Address.CityId;
+            }
+        }
+        else if (dtoRegionId == null || dtoCityId == null)
+            throw new DoerlyException(Resources.Get("AddressIsEmpty"));
+        else
+        {
+            regionId = (int)dtoRegionId;
+            cityId = (int)dtoCityId;
+        }
+
+        return (regionId, cityId);
     }
 
     private bool IsValidImage(byte[] fileBytes)

@@ -507,12 +507,15 @@ export class ProfileComponent implements OnInit {
   }
   // endregion
 
-  onAddressChange(address: { cityId: number }): void {
-    this.formProfile.patchValue({
-      address: {
-        cityId: address.cityId
-      }
+  onAddressChange(address: { cityId: number, regionId?: number }) {
+    this.formProfile.get('address')?.patchValue({
+      cityId: address.cityId,
+      regionId: address.regionId ?? null
     });
+  }
+
+  get addressFormGroup(): FormGroup {
+    return this.formProfile.get('address') as FormGroup;
   }
 
   // region Language Proficiency methods

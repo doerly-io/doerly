@@ -57,7 +57,8 @@
                         [disabled]="(!files || files.length === 0) && (!existingFiles || existingFiles.length === 0)"
                         (onClick)="onClearTemplatingUpload(clearCallback)" />
                     </div>
-                    <div class="text-secondary mt-1" [ngClass]="{'text-danger fw-bold': orderForm.errors?.['filesSizeLimitExceeded']}">
+                    <div class="text-secondary mt-1"
+                      [ngClass]="{'text-danger fw-bold': orderForm.errors?.['filesSizeLimitExceeded']}">
                       {{ 'ordering.files_size' | translate }}:
                       <b>{{ formatSize(totalFilesSize) }}</b> / <b>{{ formatSize(totalSizeLimit) }}</b>
                     </div>
@@ -165,7 +166,7 @@
                 {{ getServersideError(orderForm, 'paymentKind') }}
               </small>
             </div>
-            <div class="datepicker-container col-12 col-md-6">
+            <div class="datepicker-container col-12 col-md-6 d-flex flex-column">
               <label for="dueDate" class="w-100">{{ 'ordering.due_date' | translate }}</label>
               <p-datepicker formControlName="dueDate" class="w-100" id="dueDate" [showTime]="true" [hourFormat]="'24'"
                 [showIcon]="true" dateFormat="dd.mm.yy"
@@ -177,7 +178,25 @@
               </small>
             </div>
           </div>
-          <div class="row mx-0 px-0 mt-3">
+          <div class="row mb-3 mx-0 px-0 d-flex gap-3">
+            <div class="col align-items-center d-flex">
+              <p-checkbox formControlName="useProfileAddress" binary="true" inputId="useProfileAddress"></p-checkbox>
+              <label for="useProfileAddress" class="ms-2 mb-0">{{ 'ordering.use_profile_address' | translate }}</label>
+            </div>
+          </div>
+          <div *ngIf="addressReady && !orderForm.value.useProfileAddress" class="row mb-3 mx-0 px-0">
+            <div class="col-12 col">
+              <app-address-select [form]="orderForm" [initialRegionId]="orderForm.value.regionId"
+                [initialCityId]="orderForm.value.cityId" (addressChange)="onAddressChange($event)">
+              </app-address-select>
+              <small *ngIf="isInvalid(orderForm, 'regionId') || isInvalid(orderForm, 'cityId')"
+                class="input-validation-item">
+                {{ getError(orderForm, isInvalid(orderForm, 'regionId') ? 'regionId' : 'cityId', 'required',
+                'ordering.address_required' | translate) }}
+              </small>
+            </div>
+          </div>
+          <div class="row mx-0 mt-3">
             <button pButton pRipple type="submit" [disabled]="orderForm.invalid"
               [label]="isEdit ? ('common.save' | translate) : ('ordering.create_order' | translate)" icon="pi pi-check"
               class="w-100" [disabled]="!orderForm.valid"></button>

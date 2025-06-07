@@ -1,5 +1,5 @@
 <section class="execution-proposal-list row justify-content-center">
-    <p-dataview [value]="proposals" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 50, 100]"
+    <p-dataview [value]="proposals" [paginator]="true" alwaysShowPaginator="false" [rows]="10" [rowsPerPageOptions]="[10, 20, 50, 100]"
         [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="loadProposals($event)" [loading]="loading"
         emptyMessage="{{ 'ordering.no_execution_proposals' | translate }}">
         <ng-template #list>

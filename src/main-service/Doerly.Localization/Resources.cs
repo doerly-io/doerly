@@ -1,5 +1,7 @@
 using System.Resources;
 
+using Doerly.Domain.Helpers;
+
 namespace Doerly.Localization
 {
     public static class Resources
@@ -8,8 +10,8 @@ namespace Doerly.Localization
 
         public static string Get(string key)
         {
-            var resourceValue = ResourceManager.GetString(key);
-            return resourceValue ?? key;
+            var resourceValue = SafeExecutor.Execute(() => ResourceManager.GetString(key));
+            return resourceValue.Value ?? key;
         }
         
 

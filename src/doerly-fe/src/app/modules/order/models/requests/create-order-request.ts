@@ -6,6 +6,9 @@ export interface CreateOrderRequest {
     description: string;
     price: number;
     isPriceNegotiable: boolean;
+    useProfileAddress: boolean;
+    regionId: number;
+    cityId: number;
     paymentKind: EPaymentKind;
     dueDate: Date;
 }

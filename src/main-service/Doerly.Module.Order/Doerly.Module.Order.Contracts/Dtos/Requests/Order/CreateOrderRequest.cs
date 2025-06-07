@@ -31,4 +31,11 @@ public class CreateOrderRequest
 
     [Required(ErrorMessage = "FieldIsRequired")]
     public bool IsPriceNegotiable { get; set; }
+
+    [Required(ErrorMessage = "FieldIsRequired")]
+    public bool UseProfileAddress { get; set; }
+
+    public int? RegionId { get; set; }
+
+    public int? CityId { get; set; }
 }

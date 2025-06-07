@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.Azure;
 using Microsoft.IdentityModel.Tokens;
 using SendGrid.Extensions.DependencyInjection;
+using Doerly.Host.ExceptionHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -144,6 +145,9 @@ builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddExceptionHandler<DoerlyExceptionHandler>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 builder.Services.AddSendGrid(opt => { opt.ApiKey = sendGridSettings.ApiKey; });
 
 builder.Services.AddAzureClients(factoryBuilder =>
@@ -217,6 +221,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<RequestContextMiddleware>();
+app.UseExceptionHandler(options => { });
 
 app.MapControllers();
 

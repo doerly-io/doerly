@@ -14,6 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
 import { getOrderStatusSeverity } from '../../domain/enums/order-status';
 import { Avatar } from 'primeng/avatar';
+import { ErrorHandlerService } from '../../domain/error-handler.service';
 
 @Component({
   selector: 'app-orders-list',
@@ -44,8 +45,9 @@ export class OrdersListComponent implements OnInit {
   public getOrderStatusSeverity = getOrderStatusSeverity;
 
   constructor(private orderService: OrderService,
-    private toastHelper: ToastHelper,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private errorHandler: ErrorHandlerService  
+  ) { }
 
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['return'];
@@ -67,14 +69,7 @@ export class OrdersListComponent implements OnInit {
         this.totalRecords = response.value?.total || 0;
         this.loading = false;
       },
-      error: (error: HttpErrorResponse) => {
-        if (error.status === 400) {
-          this.toastHelper.showError('common.error', error.error.errorMessage);
-        }
-        else {
-          this.toastHelper.showError('common.error', 'common.error_occurred');
-        }
-      }
+      error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
     });
   }
 }

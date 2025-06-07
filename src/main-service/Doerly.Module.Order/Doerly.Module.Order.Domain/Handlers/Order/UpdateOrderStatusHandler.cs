@@ -46,6 +46,7 @@ public class UpdateOrderStatusHandler : BaseOrderHandler
                 {
                     var checkoutRequest = new CheckoutRequest()
                     {
+                        BillId = order.BillId,
                         AmountTotal = order.Price,
                         PayerId = order.CustomerId,
                         BillDescription = string.Empty, //hardcoded for now

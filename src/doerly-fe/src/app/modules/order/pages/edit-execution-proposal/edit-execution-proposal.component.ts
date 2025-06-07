@@ -15,6 +15,7 @@ import { ToastHelper } from 'app/@core/helpers/toast.helper';
 import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 import { TextAccessibilityManager } from 'pdfjs-dist/types/web/text_accessibility';
 import { Textarea } from 'primeng/textarea';
+import { ErrorHandlerService } from '../../domain/error-handler.service';
 
 @Component({
   selector: 'app-edit-execution-proposal',
@@ -43,7 +44,8 @@ export class EditExecutionProposalComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private executionProposalService: ExecutionProposalService,
-    private toastHelper: ToastHelper
+    private toastHelper: ToastHelper,
+    private errorHandler: ErrorHandlerService
   ) { }
 
   ngOnInit() {
@@ -63,14 +65,7 @@ export class EditExecutionProposalComponent implements OnInit {
           }
           this.loading = false;
         },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.toastHelper.showError('common.error', error.error.errorMessage);
-          }
-          else {
-            this.toastHelper.showError('common.error', 'common.error_occurred');
-          }
-        }
+        error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
       });
     } else {
       this.loading = false;
@@ -96,14 +91,7 @@ export class EditExecutionProposalComponent implements OnInit {
         next: () => {
           this.router.navigate(['/ordering/execution-proposal', this.proposalId]);
         },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.toastHelper.showError('common.error', error.error.errorMessage);
-          }
-          else {
-            this.toastHelper.showError('common.error', 'common.error_occurred');
-          }
-        }
+        error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
       });
     } else {
       const request: SendExecutionProposalRequest = {
@@ -115,14 +103,7 @@ export class EditExecutionProposalComponent implements OnInit {
         next: () => {
           this.router.navigate(['/ordering'], { queryParams: { tab: 0, subTab: 1 } });
         },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.toastHelper.showError('common.error', error.error.errorMessage);
-          }
-          else {
-            this.toastHelper.showError('common.error', 'common.error_occurred');
-          }
-        }
+        error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
       });
     }
   }
