@@ -42,11 +42,11 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     conversation_id = table.Column<int>(type: "integer", nullable: false),
-                    message_type = table.Column<int>(type: "integer", nullable: false),
+                    message_type = table.Column<byte>(type: "smallint", nullable: false),
                     sender_id = table.Column<int>(type: "integer", nullable: false),
                     message_content = table.Column<string>(type: "text", nullable: false),
                     sent_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    status = table.Column<int>(type: "integer", nullable: false),
+                    status = table.Column<byte>(type: "smallint", nullable: false),
                     date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     last_modified_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },

@@ -50,10 +50,10 @@ builder.Services
 
 builder.Services.AddSignalR();
 
-builder.RegisterModule(new Doerly.Module.Communication.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Payments.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Authorization.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Profile.Api.ModuleInitializer());
+builder.RegisterModule(new Doerly.Module.Communication.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Order.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Catalog.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Common.Api.ModuleInitializer());
@@ -262,7 +262,7 @@ foreach (var moduleInitializer in moduleInitializers)
     moduleInitializer.Configure(app, app.Environment);
 }
 
-var endpointInitializers = app.Services.GetServices<IEndpointRouteInitializer>();
+var endpointInitializers = app.Services.GetServices<ISignalrEndpointRouteInitializer>();
 foreach (var initializer in endpointInitializers)
 {
     initializer.ConfigureEndpoints(app);

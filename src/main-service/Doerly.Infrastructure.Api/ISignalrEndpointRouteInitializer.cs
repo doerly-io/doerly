@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Doerly.Infrastructure.Api;
 
-public interface IEndpointRouteInitializer
+public interface ISignalrEndpointRouteInitializer
 {
     void ConfigureEndpoints(IEndpointRouteBuilder endpoints);
 }

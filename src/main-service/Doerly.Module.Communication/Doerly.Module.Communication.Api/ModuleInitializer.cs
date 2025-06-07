@@ -15,14 +15,14 @@ using Microsoft.Extensions.Hosting;
 
 namespace Doerly.Module.Communication.Api;
 
-public class ModuleInitializer : IModuleInitializer, IEndpointRouteInitializer
+public class ModuleInitializer : IModuleInitializer, ISignalrEndpointRouteInitializer
 {
     public void ConfigureServices(IHostApplicationBuilder builder)
     {
         builder.Services.AddDbContext<CommunicationDbContext>();
         builder.Services.RegisterHandlers(typeof(IAssemblyMarker).Assembly);
         builder.Services.RegisterEventConsumers(typeof(IAssemblyMarker).Assembly);
-        builder.Services.AddSingleton<IEndpointRouteInitializer, ModuleInitializer>();
+        builder.Services.AddSingleton<ISignalrEndpointRouteInitializer, ModuleInitializer>();
         builder.Services.AddScoped<IUserOnlineStatusHelper, UserOnlineStatusHelper>();
     }
 

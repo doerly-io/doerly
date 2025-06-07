@@ -18,7 +18,7 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("communication")
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -93,8 +93,8 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
                         .HasColumnType("text")
                         .HasColumnName("message_content");
 
-                    b.Property<int>("MessageType")
-                        .HasColumnType("integer")
+                    b.Property<byte>("MessageType")
+                        .HasColumnType("smallint")
                         .HasColumnName("message_type");
 
                     b.Property<int>("SenderId")
@@ -105,8 +105,8 @@ namespace Doerly.Module.Communication.DataAccess.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("sent_at");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer")
+                    b.Property<byte>("Status")
+                        .HasColumnType("smallint")
                         .HasColumnName("status");
 
                     b.HasKey("Id")
