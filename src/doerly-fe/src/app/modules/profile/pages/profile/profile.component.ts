@@ -45,6 +45,11 @@ import { CompetenceDto } from '../../models/responses/CompetenceDto';
 import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 import {PaymentHistoryComponent} from 'app/modules/profile/components/payment-history/payment-history.component';
 import {LanguagesQueryDto} from '../../models/requests/LanguagesQuery';
+import {Toast} from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import {
+  SendMessageModalComponent
+} from '../../../communication/pages/modals/send-message-modal/send-message-modal.component';
 import { IService, ICreateServiceRequest, IUpdateServiceRequest } from '../../../catalog/models/service.model';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CatalogService } from '../../../catalog/services/catalog.service';
@@ -75,7 +80,11 @@ import { CatalogService } from '../../../catalog/services/catalog.service';
     PaymentHistoryComponent,
     TreeSelect,
     InputNumberModule,
+    TreeSelect,
+    Toast,
+    SendMessageModalComponent,
   ],
+  providers: [MessageService],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -130,6 +139,8 @@ export class ProfileComponent implements OnInit {
   editingService: IService | null = null;
   serviceForm: FormGroup;
   userId: number = 0;
+
+  showMessageDialog = false;
 
   private readonly formBuilder: FormBuilder = inject(FormBuilder);
   private readonly profileService: ProfileService = inject(ProfileService);
@@ -793,5 +804,13 @@ export class ProfileComponent implements OnInit {
         this.toastHelper.showError('common.error', 'profile.professional.services.load.error');
       }
     });
+  }
+
+  get isAuthenticated(): boolean {
+    return this.jwtTokenHelper.isLoggedIn();
+  }
+
+  get isOwnProfile(): boolean {
+    return !this.isViewingOtherProfile;
   }
 }
