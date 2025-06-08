@@ -309,6 +309,10 @@
     "no_execution_proposals": "No execution proposals",
     "send": "Send",
     "resolved_successfully": "Resolved successfully",
+    "execution_proposal_updated": "Execution proposal updated successfully",
+    "execution_proposal_sent": "Execution proposal sent successfully",
+    "order_created": "Order created successfully",
+    "order_updated": "Order updated successfully",
     "id": "Id",
     "sender_id": "Sender ID",
     "receiver_id": "Receiver ID",
@@ -372,7 +376,8 @@
     "files_count": "Files",
     "files_size": "Files size",
     "files_size_limit_exceeded": "File size limit exceeded.",
-    "files_size_limit": "Maximum files size is {{size}}."
+    "files_size_limit": "Maximum files size is {{size}}.",
+    "service_required": "Service is required for order creation"
   },
   "payments": {
     "status": {

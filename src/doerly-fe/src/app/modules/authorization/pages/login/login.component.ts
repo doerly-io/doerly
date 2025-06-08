@@ -16,6 +16,7 @@ import {PasswordInputComponent} from 'app/@components/password/password-input.co
 import {NgIf} from "@angular/common";
 import {getError, getServersideError, isInvalid, setServerErrors} from "app/@core/helpers/input-validation-helpers";
 import {ToastHelper} from 'app/@core/helpers/toast.helper';
+import { ErrorHandlerService } from 'app/@core/services/error-handler.service';
 
 @Component({
   selector: 'app-login',
@@ -46,7 +47,7 @@ export class LoginComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private tokenHelper: JwtTokenHelper,
-              private toastHelper: ToastHelper,
+              private errorHandler: ErrorHandlerService,
   ) {
   }
 
@@ -73,16 +74,7 @@ export class LoginComponent implements OnInit {
         this.tokenHelper.setToken(value.value!.accessToken, rememberMe);
         this.router.navigate([this.returnUrl]);
       },
-      error: (error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.toastHelper.showApiError(error, 'auth.incorrect_credentials');
-        } else if (error.status === 400) {
-          const errors = error.error.errors;
-          setServerErrors(this.loginForm, errors);
-        } else {
-          this.toastHelper.showApiError(error, 'common.error_occurred');
-        }
-      }
+      error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
     });
   }
 

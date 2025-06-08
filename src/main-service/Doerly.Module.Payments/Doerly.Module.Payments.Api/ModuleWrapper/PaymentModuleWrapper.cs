@@ -5,7 +5,9 @@ using Doerly.Extensions;
 using Doerly.Infrastructure.Api;
 using Doerly.Module.Payments.Api.Controllers;
 using Doerly.Module.Payments.Contracts;
+using Doerly.Module.Payments.Contracts.Responses;
 using Doerly.Module.Payments.Domain.Handlers;
+using Doerly.Module.Payments.Domain.Handlers.Metrics;
 
 namespace Doerly.Module.Payments.Api.ModuleWrapper;
 
@@ -14,6 +16,8 @@ public interface IPaymentModuleWrapper
     Task<HandlerResult<BaseCheckoutResponse>> CheckoutAsync(CheckoutRequest checkoutRequest);
 
     Task<CursorPaginationResponse<PaymentHistoryItemResponse>> GetUserPayments(int userId, CursorPaginationRequest request);
+    
+    Task<PaymentStatisticsDto> GetPaymentStatisticsAsync();
 }
 
 public class PaymentModuleWrapper : IPaymentModuleWrapper
@@ -39,5 +43,10 @@ public class PaymentModuleWrapper : IPaymentModuleWrapper
     {
         var result = await _handlerFactory.Get<SelectUserPaymentsHandler>().HandleAsync(userId, request);
         return result;
+    }
+
+    public Task<PaymentStatisticsDto> GetPaymentStatisticsAsync()
+    {
+        return _handlerFactory.Get<GetPaymentStatisticsHandler>().HandleAsync();
     }
 }

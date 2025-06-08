@@ -15,7 +15,7 @@ import { ToastHelper } from 'app/@core/helpers/toast.helper';
 import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 import { TextAccessibilityManager } from 'pdfjs-dist/types/web/text_accessibility';
 import { Textarea } from 'primeng/textarea';
-import { ErrorHandlerService } from '../../domain/error-handler.service';
+import { ErrorHandlerService } from '../../../../@core/services/error-handler.service';
 
 @Component({
   selector: 'app-edit-execution-proposal',
@@ -38,6 +38,7 @@ export class EditExecutionProposalComponent implements OnInit {
   receiverId?: number;
   isEdit: boolean = false;
   loading: boolean = true;
+  commentMaxLength: number = 1000;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -76,7 +77,7 @@ export class EditExecutionProposalComponent implements OnInit {
 
   initForm(): void {
     this.proposalForm = this.formBuilder.group({
-      comment: ['', [Validators.maxLength(1000)]]
+      comment: ['', [Validators.maxLength(this.commentMaxLength)]]
     });
   }
 
@@ -89,6 +90,7 @@ export class EditExecutionProposalComponent implements OnInit {
       };
       this.executionProposalService.updateExecutionProposal(this.proposalId!, updatedProposal).subscribe({
         next: () => {
+          this.toastHelper.showSuccess('common.success', 'ordering.execution_proposal_updated');
           this.router.navigate(['/ordering/execution-proposal', this.proposalId]);
         },
         error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
@@ -101,6 +103,7 @@ export class EditExecutionProposalComponent implements OnInit {
       };
       this.executionProposalService.sendExecutionProposal(request).subscribe({
         next: () => {
+          this.toastHelper.showSuccess('common.success', 'ordering.execution_proposal_sent');
           this.router.navigate(['/ordering'], { queryParams: { tab: 0, subTab: 1 } });
         },
         error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)

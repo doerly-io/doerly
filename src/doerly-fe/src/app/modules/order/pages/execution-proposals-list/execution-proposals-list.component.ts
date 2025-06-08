@@ -12,7 +12,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { ToastHelper } from 'app/@core/helpers/toast.helper';
 import { Avatar } from 'primeng/avatar';
 import { getExecutionProposalStatusSeverity } from '../../domain/enums/execution-proposal-status';
-import { ErrorHandlerService } from '../../domain/error-handler.service';
+import { ErrorHandlerService } from '../../../../@core/services/error-handler.service';
 
 @Component({
   selector: 'app-execution-proposals-list',

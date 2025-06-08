@@ -11,7 +11,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<OrderEntity>
     {
         builder.ToTable(DbConstants.Tables.Order, DbConstants.OrderSchema);
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.CategoryId).IsRequired();
+        builder.Property(x => x.ServiceId).IsRequired();
         builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
         builder.Property(x => x.Description).IsRequired().HasMaxLength(4000);
         builder.Property(x => x.Price).IsRequired().HasPrecision(15, 2);

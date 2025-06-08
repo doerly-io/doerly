@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from 'tss-react/mui';
 import { useIntl } from 'react-intl';
-import useIsMobile, { useIsSmallMobile } from 'hooks/useIsMobile';
+import useIsMobile, { useIsDesktop, useIsSmallMobile } from 'hooks/useIsMobile';
 import useTheme from 'hooks/useTheme';
 import Breadcrumb from 'components/Breadcrumb';
 import Breadcrumbs from 'components/Breadcrumbs';
@@ -15,10 +15,17 @@ import Select from 'components/Select';
 import MenuItem from 'components/MenuItem';
 import useStatistics, {
   CHART_TYPES,
+  PIE_CHART_TYPES,
   ChartType,
+  PieChartType,
+  getTabIcon,
 } from '../hooks/useStatistics';
 import LineChart from 'components/LineChart/LineChart';
-import Divider from 'components/Divider';
+import BarChart from 'components/BarChart/BarChart';
+import PieChart from 'components/PieChart/PieChart';
+import Tabs from 'components/Tabs';
+import Tab from 'components/Tab';
+import * as tabTypes from '../constants/tabTypes';
 
 const getClasses = makeStyles<any>()((_, theme: any) => ({
   blockContainer: {
@@ -30,7 +37,8 @@ const getClasses = makeStyles<any>()((_, theme: any) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: `${theme.spacing(2)}px`,
-    height: '400px',
+    height: '60vh',
+    overflow: 'hidden',
     width: '100%',
   },
   chartTypeSelector: {
@@ -71,14 +79,22 @@ function Statistics() {
   const { classes, cx } = getClasses(theme);
   const { formatMessage } = useIntl();
   const isMobile = useIsMobile();
+  const isDesktop = useIsDesktop();
   const isSmallMobile = useIsSmallMobile();
 
   const {
+    availableTabs,
     chartData,
     containerState,
+    handleChangeTab,
     handleChartTypeChange,
+    handlePieChartTypeChange,
     isFailed,
     isFetching,
+    paymentStatistics,
+    paymentVolumeTrendData,
+    pieChartData,
+    selectedTab,
     userActivityInfo,
   } = useStatistics();
 
@@ -106,95 +122,217 @@ function Statistics() {
 
   return (
     <div className={classes.container}>
-      <div className={classes.blockContainer}>
-        <Breadcrumbs>
-          <Breadcrumb
-            label={formatMessage({ id: 'userActivity' })}
-            variant="text"
+      <Tabs
+        onChange={(event, tab) => handleChangeTab(tab)}
+        value={selectedTab}
+      >
+        {availableTabs.map((tab: any) => (
+          <Tab
+            label={formatMessage({ id: `tab.${tab}` })}
+            icon={getTabIcon(tab)}
+            value={tab}
           />
-        </Breadcrumbs>
+        ))}
+      </Tabs>
+      <Show condition={selectedTab === tabTypes.USER_ACTIVITY}>
+        <div className={classes.blockContainer}>
+          <Breadcrumbs>
+            <Breadcrumb
+              label={formatMessage({ id: 'userActivity' })}
+              variant="text"
+            />
+          </Breadcrumbs>
 
-        <Show condition={isFetching}>
-          <Loading variant="loading" />
-        </Show>
+          <Show condition={isFetching}>
+            <Loading variant="loading" />
+          </Show>
 
-        <Show condition={!isFetching && !!userActivityInfo}>
-          <div className={cx(
-            classes.gridContainer,
-            isSmallMobile && classes.gridContainerMobile
-          )}>
-            {renderStatsCard(
-              formatMessage({ id: 'statistics.totalUsers' }),
-              userActivityInfo?.totalUsersCount || 0,
-              'primary'
-            )}
-            {renderStatsCard(
-              formatMessage({ id: 'statistics.activeUsers24h' }),
-              userActivityInfo?.activeUsersLast24Hours || 0,
-              'success'
-            )}
-            {renderStatsCard(
-              formatMessage({ id: 'statistics.activeUsers7d' }),
-              userActivityInfo?.activeUsersLast7Days || 0,
-              'success'
-            )}
-            {renderStatsCard(
-              formatMessage({ id: 'statistics.activeUsers30d' }),
-              userActivityInfo?.activeUsersLast30Days || 0,
-              'success'
-            )}
-            {renderStatsCard(
-              formatMessage({ id: 'statistics.inactiveUsers30d' }),
-              userActivityInfo?.inactiveUsersLast30Days || 0,
-              'error'
-            )}
-            {renderStatsCard(
-              formatMessage({ id: 'statistics.newUsers30d' }),
-              userActivityInfo?.newUsersLast30Days || 0,
-              'primary'
-            )}
-          </div>
+          <Show condition={!isFetching && !!userActivityInfo}>
+            <div className={cx(
+              classes.gridContainer,
+              isSmallMobile && classes.gridContainerMobile
+            )}>
+              {renderStatsCard(
+                formatMessage({ id: 'statistics.totalUsers' }),
+                userActivityInfo?.totalUsersCount || 0,
+                'primary'
+              )}
+              {renderStatsCard(
+                formatMessage({ id: 'statistics.inactiveUsers30d' }),
+                userActivityInfo?.inactiveUsersLast30Days || 0,
+                'error'
+              )}
+              {renderStatsCard(
+                formatMessage({ id: 'statistics.newUsers30d' }),
+                userActivityInfo?.newUsersLast30Days || 0,
+                'primary'
+              )}
+              {renderStatsCard(
+                formatMessage({ id: 'statistics.activeUsers24h' }),
+                userActivityInfo?.activeUsersLast24Hours || 0,
+                'success'
+              )}
+              {renderStatsCard(
+                formatMessage({ id: 'statistics.activeUsers7d' }),
+                userActivityInfo?.activeUsersLast7Days || 0,
+                'success'
+              )}
+              {renderStatsCard(
+                formatMessage({ id: 'statistics.activeUsers30d' }),
+                userActivityInfo?.activeUsersLast30Days || 0,
+                'success'
+              )}
+            </div>
 
-          <Card>
-            <CardTitle>
-              <Typography variant="title">
-                {formatMessage({ id: 'statistics.activityChart' })}
-              </Typography>
-              <div className={classes.chartTypeSelector}>
-                <Select
-                  onChange={({ target }) => handleChartTypeChange(
-                    target.value as ChartType
-                  )}
-                  value={containerState.selectedChartType}
-                >
-                  <MenuItem value={CHART_TYPES.BY_DAY}>
-                    {formatMessage({ id: 'statistics.chartType.byDay' })}
-                  </MenuItem>
-                  <MenuItem value={CHART_TYPES.BY_HOUR}>
-                    {formatMessage({ id: 'statistics.chartType.byHour' })}
-                  </MenuItem>
-                </Select>
-              </div>
-            </CardTitle>
-            <CardContent>
-              <div className={classes.chartContainer}>
-                <Show condition={!!chartData}>
-                  <LineChart data={chartData || []} />
-                </Show>
-              </div>
-            </CardContent>
-          </Card>
-        </Show>
-      </div>
-      <Divider color={theme.colors.secondary} />
-      <div className={classes.blockContainer}>
-        <Breadcrumbs>
-          <Breadcrumb
-            label={formatMessage({ id: 'ordersStatistics' })}
-            variant="text"
-          />
-        </Breadcrumbs>
-      </div>
+            <Card>
+              <CardTitle>
+                <Typography variant="title">
+                  {formatMessage({ id: 'statistics.activityChart' })}
+                </Typography>
+                <div className={classes.chartTypeSelector}>
+                  <Select
+                    onChange={({ target }) => handleChartTypeChange(
+                      target.value as ChartType
+                    )}
+                    value={containerState.selectedChartType}
+                  >
+                    <MenuItem value={CHART_TYPES.BY_DAY}>
+                      {formatMessage({ id: 'statistics.chartType.byDay' })}
+                    </MenuItem>
+                    <MenuItem value={CHART_TYPES.BY_HOUR}>
+                      {formatMessage({ id: 'statistics.chartType.byHour' })}
+                    </MenuItem>
+                  </Select>
+                </div>
+              </CardTitle>
+              <CardContent>
+                <div className={classes.chartContainer}>
+                  <Show condition={!!chartData}>
+                    <LineChart data={chartData || []} />
+                  </Show>
+                </div>
+              </CardContent>
+            </Card>
+          </Show>
+        </div>
+      </Show>
+      <Show condition={selectedTab === tabTypes.BILLS_PAYMENTS}>
+        <div className={classes.blockContainer}>
+          <Breadcrumbs>
+            <Breadcrumb
+              label={formatMessage({ id: 'ordersStatistics' })}
+              variant="text"
+            />
+          </Breadcrumbs>
+
+          <Show condition={isFetching}>
+            <Loading variant="loading" />
+          </Show>
+
+          <Show condition={!isFetching && !!paymentStatistics}>
+            <div className={cx(
+              classes.gridContainer,
+              isSmallMobile && classes.gridContainerMobile
+            )}>
+              {renderStatsCard(
+                formatMessage({ id: 'statistics.totalPaymentVolume' }),
+                paymentStatistics?.totalPaymentVolume || 0,
+                'primary'
+              )}
+              {renderStatsCard(
+                formatMessage({ id: 'statistics.averagePaymentAmount' }),
+                paymentStatistics?.averagePaymentAmount || 0,
+                'primary'
+              )}
+              {renderStatsCard(
+                formatMessage({ id: 'statistics.averageBillAmount' }),
+                paymentStatistics?.averageBillAmount || 0,
+                'primary'
+              )}
+              {renderStatsCard(
+                formatMessage({ id: 'statistics.totalOutstandingAmount' }),
+                paymentStatistics?.totalOutstandingAmount || 0,
+                'error'
+              )}
+              {renderStatsCard(
+                formatMessage({ id: 'statistics.totalOutstandingBills' }),
+                paymentStatistics?.totalOutstandingBills || 0,
+                'error'
+              )}
+
+            </div>
+
+            <div
+              className={!isDesktop
+                ? classes.gridContainerMobile
+                : classes.gridContainer}
+            >
+              <Card>
+                <CardTitle>
+                  <Typography variant="title">
+                    {formatMessage({ id: 'statistics.paymentDistribution' })}
+                  </Typography>
+                  <div className={classes.chartTypeSelector}>
+                    <Select
+                      contentMinWidth={300}
+                      onChange={({ target }) => handlePieChartTypeChange(
+                        target.value as PieChartType
+                      )}
+                      value={containerState.selectedPieChartType}
+                    >
+                      <MenuItem value={
+                        PIE_CHART_TYPES.PAYMENT_VOLUME_BY_CURRENCY}>
+                        {formatMessage({
+                          id: 'statistics.pieChartType.paymentVolumeByCurrency',
+                        })}
+                      </MenuItem>
+                      <MenuItem value={
+                        PIE_CHART_TYPES.PAYMENT_STATUS_DISTRIBUTION}>
+                        {formatMessage({
+                          id:
+                            'statistics.pieChartType.paymentStatusDistribution',
+                        })}
+                      </MenuItem>
+                      <MenuItem value={
+                        PIE_CHART_TYPES.OUTSTANDING_AMOUNT_BY_CURRENCY}
+                      >
+                        {formatMessage({
+                          id:
+                          // eslint-disable-next-line max-len
+                            'statistics.pieChartType.outstandingAmountByCurrency',
+                        })}
+                      </MenuItem>
+                    </Select>
+                  </div>
+                </CardTitle>
+                <CardContent>
+                  <div className={classes.chartContainer}>
+                    <Show condition={!!pieChartData}>
+                      <PieChart data={pieChartData || []} />
+                    </Show>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardTitle>
+                  <Typography variant="title">
+                    {formatMessage({
+                      id: 'statistics.paymentVolumeTrend' })}
+                  </Typography>
+                </CardTitle>
+                <CardContent>
+                  <div className={classes.chartContainer}>
+                    <Show condition={!!paymentVolumeTrendData}>
+                      <BarChart data={paymentVolumeTrendData || []} />
+                    </Show>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </Show>
+        </div>
+      </Show>
     </div>
   );
 }

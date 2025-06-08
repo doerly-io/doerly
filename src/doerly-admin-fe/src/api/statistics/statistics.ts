@@ -17,7 +17,19 @@ const getUsersActivity = ({
     .catch(() => onFailed());
 };
 
+const getPaymentStatistics = ({
+  onFailed,
+  onRequest,
+  onSuccess,
+}: any) => {
+  onRequest();
+  return axios.get(`${BASE_URL}${STATISTICS_SERVICE}/payment`)
+    .then(({ data }) => onSuccess(data))
+    .catch(() => onFailed());
+};
+
 const exportFunctions = {
+  getPaymentStatistics,
   getUsersActivity,
 };
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from 'tss-react/mui';
 import {
   BarChart as RechartsBarChart,
   Bar,
@@ -9,26 +8,24 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import { makeStyles } from 'tss-react/mui';
 import useTheme from 'hooks/useTheme';
 
 const getClasses = makeStyles<any>()((_, theme: any) => ({
   container: {
     height: '100%',
-    overflow: 'hidden',
     width: '100%',
   },
 }));
 
-interface IDataPoint {
-  label: string;
-  value: number;
+interface IBarChartProps {
+  data: Array<{
+    label: string;
+    value: number;
+  }>;
 }
 
-interface IProps {
-  data: IDataPoint[];
-}
-
-const BarChart = ({ data }: IProps) => {
+function BarChart({ data }: IBarChartProps) {
   const { theme } = useTheme();
   const { classes } = getClasses(theme);
 
@@ -39,39 +36,36 @@ const BarChart = ({ data }: IProps) => {
           data={data}
           margin={{
             bottom: 5,
-            left: 5,
-            right: 5,
-            top: 5,
+            left: 20,
+            right: 30,
+            top: 20,
           }}
         >
-          <CartesianGrid
-            strokeDasharray="3 3"
-            stroke={theme.colors.cobalt}
-          />
+          <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="label"
-            stroke={theme.colors.cobalt}
+            tick={{ fill: theme.typography.color.primary }}
           />
           <YAxis
-            stroke={theme.colors.cobalt}
+            tick={{ fill: theme.typography.color.primary }}
           />
           <Tooltip
             contentStyle={{
               backgroundColor: theme.card.background.paper,
-              border: `1px solid ${theme.colors.cobalt}`,
-              borderRadius: `${theme.spacing(0.5)}px`,
-              color: theme.colors.cobalt,
+              borderColor: theme.select.color.background,
+              color: theme.colors.secondary,
             }}
-            cursor={{ fill: theme.colors.cobalt + '20' }}
+            formatter={(value: number) => value.toFixed(2)}
           />
           <Bar
             dataKey="value"
             fill={theme.colors.secondary}
+            radius={[4, 4, 0, 0]}
           />
         </RechartsBarChart>
       </ResponsiveContainer>
     </div>
   );
-};
+}
 
 export default BarChart; 

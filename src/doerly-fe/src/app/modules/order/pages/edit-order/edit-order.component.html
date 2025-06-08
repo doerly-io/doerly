@@ -10,18 +10,8 @@
           </div>
           <div class="row mb-3 mx-0 px-0">
             <div>
-              <label for="categoryId">{{ 'ordering.category_id' | translate }}</label>
-              <input pInputText formControlName="categoryId" class="w-100" id="categoryId" type="number" step="1" />
-              <small *ngIf="isInvalid(orderForm, 'categoryId')" class="input-validation-item">
-                {{ getError(orderForm, 'categoryId', 'required', 'ordering.field_required' | translate) }}
-                {{ getServersideError(orderForm, 'categoryId') }}
-              </small>
-            </div>
-          </div>
-          <div class="row mb-3 mx-0 px-0">
-            <div>
               <label for="name">{{ 'ordering.title' | translate }}</label>
-              <input pInputText formControlName="name" class="w-100" id="name" maxlength="100" />
+              <input pInputText formControlName="name" class="w-100" id="name" [maxlength]="nameMaxLength" />
               <small *ngIf="isInvalid(orderForm, 'name')" class="input-validation-item">
                 {{ getError(orderForm, 'name', 'required', 'ordering.field_required' | translate) }}
                 {{ getError(orderForm, 'name', 'minimumLength', 'ordering.minimum_length' | translate: {length: 1}) }}
@@ -33,13 +23,20 @@
             <div>
               <label for="description">{{ 'ordering.description' | translate }}</label>
               <textarea pTextarea formControlName="description" rows="5" cols="30" class="w-100 p-2" id="description"
-                maxlength="4000"></textarea>
-              <small *ngIf="isInvalid(orderForm, 'description')" class="input-validation-item">
-                {{ getError(orderForm, 'description', 'required', 'ordering.field_required' | translate) }}
-                {{ getError(orderForm, 'description', 'minimumLength', 'ordering.minimum_length' | translate: {length:
-                5}) }}
-                {{ getServersideError(orderForm, 'description') }}
-              </small>
+                [maxlength]="this.descriptionMaxLength" [minlength]="this.descriptionMinLength"></textarea>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <small *ngIf="isInvalid(orderForm, 'description')" class="input-validation-item">
+                    {{ getError(orderForm, 'description', 'required', 'ordering.field_required' | translate) }}
+                    {{ getError(orderForm, 'description', 'minimumLength', 'ordering.minimum_length' | translate:
+                    {length: 5}) }}
+                    {{ getServersideError(orderForm, 'description') }}
+                  </small>
+                </div>
+                <small class="text-end text-secondary align-self-end ms-auto">
+                  {{ orderForm.get('description')?.value?.length || 0 }}/{{ descriptionMaxLength }}
+                </small>
+              </div>
             </div>
           </div>
           <div class="row mb-3 mx-0 px-0">

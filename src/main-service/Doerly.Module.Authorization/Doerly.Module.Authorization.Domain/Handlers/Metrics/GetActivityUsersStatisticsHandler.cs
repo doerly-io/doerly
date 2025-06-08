@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Authorization.Domain.Handlers.Metrics;
 
-public class GetActivityUsersStatistics : BaseHandler<AuthorizationDbContext>
+public class GetActivityUsersStatisticsHandler : BaseHandler<AuthorizationDbContext>
 {
-    public GetActivityUsersStatistics(AuthorizationDbContext dbContext) : base(dbContext)
+    public GetActivityUsersStatisticsHandler(AuthorizationDbContext dbContext) : base(dbContext)
     {
     }
     

@@ -15,5 +15,17 @@
   "statistics.inactiveUsers30d": "Inactive Users (30d)",
   "statistics.newUsers30d": "New Users (30d)",
   "statistics.totalUsers": "Total Users",
-  "userActivity": "User Activity"
+  "tab.USER_ACTIVITY": "User Activity",
+  "tab.BILLS_PAYMENTS": "Bills & Payments",
+  "userActivity": "User Activity",
+  "statistics.totalPaymentVolume": "Total Payment Volume",
+  "statistics.averagePaymentAmount": "Average Payment Amount",
+  "statistics.totalOutstandingAmount": "Total Outstanding Amount",
+  "statistics.totalOutstandingBills": "Total Outstanding Bills",
+  "statistics.averageBillAmount": "Average Bill Amount",
+  "statistics.paymentDistribution": "Payment Distribution",
+  "statistics.pieChartType.paymentVolumeByCurrency": "Payment Volume by Currency",
+  "statistics.pieChartType.paymentStatusDistribution": "Payment Status Distribution",
+  "statistics.pieChartType.outstandingAmountByCurrency": "Outstanding Amount by Currency",
+  "statistics.paymentVolumeTrend": "Payment Volume"
 }

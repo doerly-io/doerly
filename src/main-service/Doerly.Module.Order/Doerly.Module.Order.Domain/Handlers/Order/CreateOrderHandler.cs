@@ -46,7 +46,7 @@ public class CreateOrderHandler : BaseOrderHandler
 
         var order = new OrderEntity()
         {
-            CategoryId = dto.CategoryId,
+            ServiceId = dto.ServiceId,
             Name = dto.Name,
             Description = dto.Description,
             Price = dto.Price,

@@ -21,7 +21,7 @@ import { DividerModule } from 'primeng/divider';
 import { TooltipModule } from 'primeng/tooltip';
 import { ImageModule } from 'primeng/image';
 import { GalleriaModule } from 'primeng/galleria';
-import { ErrorHandlerService } from '../../domain/error-handler.service';
+import { ErrorHandlerService } from '../../../../@core/services/error-handler.service';
 
 @Component({
   selector: 'app-order-details',

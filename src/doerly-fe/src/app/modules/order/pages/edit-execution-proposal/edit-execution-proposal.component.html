@@ -10,11 +10,18 @@
           <div class="row mb-3 mx-0 px-0">
             <div>
               <label for="comment">{{ 'ordering.comment' | translate }}</label>
-              <textarea pTextarea formControlName="comment" maxlength="1000" rows="5" class="w-100 p-2"
+              <textarea pTextarea formControlName="comment" [maxlength]="commentMaxLength" rows="5" class="w-100 p-2"
                 id="comment"></textarea>
-              <small *ngIf="isInvalid(proposalForm, 'comment')" class="input-validation-item">
-                {{ getServersideError(proposalForm, 'comment') }}
-              </small>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <small *ngIf="isInvalid(proposalForm, 'comment')" class="input-validation-item">
+                    {{ getServersideError(proposalForm, 'comment') }}
+                  </small>
+                </div>
+                <small class="text-end text-secondary align-self-end ms-auto">
+                  {{ proposalForm.get('comment')?.value?.length || 0 }}/{{ commentMaxLength }}
+                </small>
+              </div>
             </div>
           </div>
           <div class="row mx-0 mt-3">
