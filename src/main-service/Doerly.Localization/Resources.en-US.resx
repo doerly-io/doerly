@@ -92,6 +92,18 @@ Doerly</value>
   <data name="EmailVerificationText" xml:space="preserve">
         <value>Thank you for signing up with DOERLY! To complete your registration, please verify your email address by clicking the link below:</value>
     </data>
+  <data name="Communication.ConversationNotFound" xml:space="preserve">
+        <value>Conversation not found</value>
+    </data>
+  <data name="Communication.MessageNotFound" xml:space="preserve">
+        <value>Message not found</value>
+    </data>
+  <data name="Communication.UnauthorizedSender" xml:space="preserve">
+        <value>The user is not a member of this conversation.</value>
+    </data>
+  <data name="Communication.CannotCreateConversationWithSelf" xml:space="preserve">
+        <value>You cannot create a conversation with yourself</value>
+    </data>
   <data name="OrderNotFound" xml:space="preserve">
         <value>Order not found</value>
      </data>

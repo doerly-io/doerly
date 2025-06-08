@@ -1,7 +1,7 @@
 import { EPaymentKind } from "../../domain/enums/payment-kind";
 
 export interface CreateOrderRequest {
-    categoryId: number;
+    serviceId: number;
     name: string;
     description: string;
     price: number;

@@ -2,6 +2,7 @@ using Doerly.DataTransferObjects;
 using Doerly.Domain.Models;
 using Doerly.Module.Payments.Api.ModuleWrapper;
 using Doerly.Module.Payments.Contracts;
+using Doerly.Module.Payments.Contracts.Responses;
 
 namespace Doerly.Proxy.Payment;
 
@@ -24,5 +25,10 @@ public class PaymentModuleProxy : IPaymentModuleProxy
     {
         var paymentsHistory = await _paymentModuleWrapper.GetUserPayments(userId, request);
         return paymentsHistory;
+    }
+
+    public Task<PaymentStatisticsDto> GetPaymentStatisticsAsync()
+    {
+        return _paymentModuleWrapper.GetPaymentStatisticsAsync();
     }
 }

@@ -1,7 +1,6 @@
 using System.Reflection;
 using Azure.Storage.Blobs;
 using Doerly.Domain.Handlers;
-using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Doerly.Domain.Extensions;

@@ -18,6 +18,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'communication',
+    loadChildren: () => import('./modules/communication/communication.routes').then(m => m.routes),
+    canActivate: [authGuard]
+  },
+  {
     path: 'ordering',
     loadChildren: () => import('./modules/order/ordering.routes').then(m => m.routes),
     canActivate: [authGuard]

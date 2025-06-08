@@ -1,0 +1,96 @@
+<div class="chat-window-container">
+  <p-progressSpinner *ngIf="loading()" styleClass="custom-spinner"></p-progressSpinner>
+
+  <div *ngIf="!loading() && !conversationId()" class="no-selection">
+    <p>{{'communication.choose_conversation' | translate}}</p>
+    <i class="pi pi-comments"></i>
+  </div>
+
+  <div *ngIf="!loading() && conversationId() && !conversation()" class="no-conversation">
+    <p>{{'communication.conversation_not_found' | translate}}</p>
+  </div>
+
+  <!-- Chat -->
+  <div *ngIf="!loading() && conversation()" class="chat-content">
+    <!-- Header -->
+    <div class="chat-header">
+      <p-avatar *ngIf="recipientInfo()?.imageUrl" [image]="recipientInfo()!.imageUrl!" shape="circle" size="large"></p-avatar>
+      <h2>{{ recipientInfo().name }}</h2>
+      <small class="status">
+        <i class="pi pi-circle-on" [ngClass]="{'online': recipientStatus(), 'offline': !recipientStatus()}"></i>
+        {{ recipientStatus() ? ('communication.user_status.online' | translate) : ('communication.user_status.offline' | translate) }}
+      </small>
+    </div>
+
+    <!-- Messages list -->
+    <div #messageContainer class="chat-messages">
+      <div
+        *ngFor="let message of conversation()!.messages; trackBy: trackByMessageId"
+        class="message"
+        [ngClass]="{'own-message': isOwnMessage(message), 'other-message': !isOwnMessage(message)}"
+      >
+        <div class="message-content">
+          <!-- Text message -->
+          <p *ngIf="message.messageType === MessageType.TEXT">{{ message.messageContent }}</p>
+          <!-- File message -->
+          <div *ngIf="message.messageType === MessageType.FILE" class="file-message">
+            <a [href]="message.messageContent" target="_blank" class="file-link">
+              {{ 'communication.download_file' | translate }}
+            </a>
+          </div>
+          <div class="message-footer" *ngIf="isOwnMessage(message)">
+            <small class="message-time">{{ message.sentAt | date:'shortTime' }}</small>
+            <span class="message-status">
+              <i *ngIf="message.status === MessageStatus.SENT" class="pi pi-send"></i>
+              <i *ngIf="message.status === MessageStatus.DELIVERED" class="pi pi-check"></i>
+              <i *ngIf="message.status === MessageStatus.READ" class="pi pi-check-circle"></i>
+          </span>
+          </div>
+        </div>
+      </div>
+      <div class="no-messages" *ngIf="!conversation()?.messages?.length">
+        <p>{{'communication.no_messages_yet' | translate}}</p>
+      </div>
+      <div class="typing-indicator" *ngIf="typingUser()">
+        <p>{{ typingUser() }} {{'communication.typing' | translate}}</p>
+      </div>
+    </div>
+
+    <!-- Input field -->
+    <div class="chat-input">
+      <input
+        pInputText
+        type="text"
+        [value]="message() || ''"
+        (input)="updateMessageText($event)"
+        (keyup.enter)="message() && sendMessage()"
+        placeholder="{{'communication.message_placeholder' | translate}}"
+        class="message-input"
+      />
+      <input
+        type="file"
+        #fileInput
+        style="display: none;"
+        (change)="onFileSelected($event)"
+      />
+      <button
+        pButton
+        type="button"
+        icon="pi pi-paperclip"
+        class="attach-button p-button-rounded"
+        (click)="fileInput.click()"
+        [disabled]="!conversationId()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        [disabled]="!message()"
+        (click)="sendMessage()"
+        icon="pi pi-send"
+        class="send-button p-button-rounded"
+      ></button>
+    </div>
+  </div>
+
+  <p-toast></p-toast>
+</div>

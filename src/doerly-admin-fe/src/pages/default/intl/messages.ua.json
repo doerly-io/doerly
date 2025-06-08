@@ -6,7 +6,7 @@
   "ordersStatistics": "Статистика замовлень",
   "settings": "Налаштування",
   "statistics": "Статистика",
-  "statistics.activityChart": "Активність користувачів",
+  "statistics.activityChart": "Остання активність користувачів",
   "statistics.activeUsers24h": "Активні користувачі (24г)",
   "statistics.activeUsers30d": "Активні користувачі (30д)",
   "statistics.activeUsers7d": "Активні користувачі (7д)",
@@ -15,5 +15,17 @@
   "statistics.inactiveUsers30d": "Неактивні користувачі (30д)",
   "statistics.newUsers30d": "Нові користувачі (30д)",
   "statistics.totalUsers": "Всього користувачів",
-  "userActivity": "Активність користувачів"
+  "tab.USER_ACTIVITY": "Активність користувачів",
+  "tab.BILLS_PAYMENTS": "Рахунки та платежі",
+  "userActivity": "Активність користувачів",
+  "statistics.totalPaymentVolume": "Загальний об'єм платежів",
+  "statistics.averagePaymentAmount": "Середня сума платежу",
+  "statistics.totalOutstandingAmount": "Загальна сума заборгованості",
+  "statistics.totalOutstandingBills": "Загальна кількість неоплачених рахунків",
+  "statistics.averageBillAmount": "Середня сума рахунку",
+  "statistics.paymentDistribution": "Розподіл платежів",
+  "statistics.pieChartType.paymentVolumeByCurrency": "Об'єм платежів за валютою",
+  "statistics.pieChartType.paymentStatusDistribution": "Розподіл за статусом платежів",
+  "statistics.pieChartType.outstandingAmountByCurrency": "Сума заборгованості за валютою",
+  "statistics.paymentVolumeTrend": "Об'єм платежів"
 }

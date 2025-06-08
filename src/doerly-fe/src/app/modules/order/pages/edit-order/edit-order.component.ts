@@ -56,6 +56,7 @@ export class EditOrderComponent implements OnInit {
   orderForm!: FormGroup;
   paymentKinds: any[] = [];
   orderId?: number;
+  serviceId?: number;
   isEdit: boolean = false;
   loading: boolean = false;
   currentDate: Date = new Date();
@@ -66,6 +67,9 @@ export class EditOrderComponent implements OnInit {
   totalFilesSize: number = 0;
   allowedSizeForUpload: number = 0;
   addressReady: boolean = false;
+  nameMaxLength: number = 100;
+  descriptionMaxLength: number = 4000;
+  descriptionMinLength: number = 5;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -80,6 +84,13 @@ export class EditOrderComponent implements OnInit {
   ngOnInit() {
     this.orderId = Number(this.route.snapshot.paramMap.get('id'));
     this.isEdit = !!this.orderId;
+
+    const serviceIdParam = this.route.snapshot.queryParamMap.get('serviceId');
+    this.serviceId = serviceIdParam ? Number(serviceIdParam) : undefined;
+    if (!this.serviceId && !this.isEdit){
+      this.toastHelper.showError('common.error', this.translate.instant('ordering.service_required'));
+      this.router.navigate(['']);
+    }
 
     this.initForm();
     this.initPaymentKinds();
@@ -120,9 +131,8 @@ export class EditOrderComponent implements OnInit {
 
   initForm() {
     this.orderForm = this.formBuilder.group({
-      categoryId: ['', Validators.required],
-      name: ['', [Validators.required, this.minimumLengthValidator(1), Validators.maxLength(100)]],
-      description: ['', [Validators.required, this.minimumLengthValidator(5), Validators.maxLength(4000)]],
+      name: ['', [Validators.required, this.minimumLengthValidator(1), Validators.maxLength(this.nameMaxLength)]],
+      description: ['', [Validators.required, this.minimumLengthValidator(this.descriptionMinLength), Validators.maxLength(this.descriptionMaxLength)]],
       price: [1, [Validators.required, Validators.min(1)]],
       paymentKind: [1, Validators.required],
       dueDate: ['', Validators.required],
@@ -229,16 +239,20 @@ export class EditOrderComponent implements OnInit {
       this.orderService.updateOrder(this.orderId!, this.orderForm.value, this.files, this.existingFiles)
         .subscribe({
           next: () => {
+            this.toastHelper.showSuccess('common.success', 'ordering.order_updated');
             this.router.navigate(['/ordering/order', this.orderId]);
           },
           error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
         });
     } else {
-      var request = this.orderForm.value as CreateOrderRequest;
-      request.name = "dsfasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
-      this.orderService.createOrder(request, this.files)
+      const createOrderRequest: CreateOrderRequest = {
+        ...this.orderForm.value,
+        serviceId: this.serviceId!,
+      };
+      this.orderService.createOrder(createOrderRequest, this.files)
         .subscribe({
           next: (response: BaseApiResponse<CreateOrderResponse>) => {
+            this.toastHelper.showSuccess('common.success', 'ordering.order_created');
             this.router.navigate(['/ordering/order', response.value!.id]);
           },
           error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)

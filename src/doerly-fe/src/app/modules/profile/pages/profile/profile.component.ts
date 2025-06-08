@@ -324,7 +324,7 @@ export class ProfileComponent implements OnInit {
   onSaveProfile(): void {
     const formValue = this.formProfile.value;
     const request : ProfileRequest = {
-      userId: formValue.id,
+      userId: this.jwtTokenHelper.getUserInfo()?.id || 0,
       firstName: formValue.firstName,
       lastName: formValue.lastName,
       patronymic: formValue.patronymic,

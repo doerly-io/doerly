@@ -36,7 +36,6 @@ public class UpdateOrderHandler : BaseOrderHandler
         if (order == null)
             return HandlerResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
 
-        order.CategoryId = dto.CategoryId;
         order.Name = dto.Name;
         order.Description = dto.Description;
         order.Price = dto.Price;

@@ -16,6 +16,11 @@ function useIsSmallMobile() {
   return screenSizeType === screenSizes.sizeTypes.xs;
 }
 
-export { useIsMobile, useIsSmallMobile };
+function useIsDesktop() {
+  const screenSizeType = useScreenSizeType();
+  return screenSizeType === screenSizes.sizeTypes.xl;
+}
+
+export { useIsMobile, useIsSmallMobile, useIsDesktop };
 
 export default useIsMobile;

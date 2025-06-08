@@ -11,7 +11,7 @@ const sizesToTypes = {
   [sizeTypes.sm]: 600,
   [sizeTypes.md]: 900,
   [sizeTypes.lg]: 1200,
-  [sizeTypes.xl]: 1536,
+  [sizeTypes.xl]: 2100,
 };
 
 const forExport = {

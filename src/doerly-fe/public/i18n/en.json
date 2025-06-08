@@ -309,6 +309,10 @@
     "no_execution_proposals": "No execution proposals",
     "send": "Send",
     "resolved_successfully": "Resolved successfully",
+    "execution_proposal_updated": "Execution proposal updated successfully",
+    "execution_proposal_sent": "Execution proposal sent successfully",
+    "order_created": "Order created successfully",
+    "order_updated": "Order updated successfully",
     "id": "Id",
     "sender_id": "Sender ID",
     "receiver_id": "Receiver ID",
@@ -372,7 +376,8 @@
     "files_count": "Files",
     "files_size": "Files size",
     "files_size_limit_exceeded": "File size limit exceeded.",
-    "files_size_limit": "Maximum files size is {{size}}."
+    "files_size_limit": "Maximum files size is {{size}}.",
+    "service_required": "Service is required for order creation"
   },
   "payments": {
     "status": {
@@ -389,6 +394,26 @@
       "uah": "UAH"
     },
     "nohistory": "Payments history not found"
+  },
+  "communication": {
+    "title": "Messages",
+    "unknown_user": "Unknown User",
+    "no_messages": "No messages",
+    "no_messages_yet": "No messages yet",
+    "choose_conversation": "Choose a conversation to start messaging",
+    "conversation_not_found": "Conversation not found",
+    "user_status": {
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "typing": "is typing...",
+    "message_placeholder": "Type a message...",
+    "download_file": "Download file",
+    "errors": {
+      "load_conversation": "Failed to load conversation",
+      "send_message": "Failed to send message"
+    },
+    "send_message_before_sending": "Please enter a message before sending"
   },
   "common": {
     "actions": "Actions",
@@ -412,6 +437,9 @@
   "pages": {
     "profile": {
       "title": "Profile"
+    },
+    "communication": {
+      "title": "Conversation"
     }
   },
   "pdf": {

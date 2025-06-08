@@ -48,10 +48,10 @@ builder.Services
         options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
     });
 
-
 builder.RegisterModule(new Doerly.Module.Payments.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Authorization.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Profile.Api.ModuleInitializer());
+builder.RegisterModule(new Doerly.Module.Communication.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Order.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Catalog.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Common.Api.ModuleInitializer());
@@ -121,8 +121,17 @@ builder.Services.AddOptions<BackendSettings>()
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
+var redisSettingsConfiguration = configuration.GetSection(RedisSettings.RedisSettingName);
+builder.Services.AddOptions<RedisSettings>()
+    .Bind(redisSettingsConfiguration)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+var redisSettings = redisSettingsConfiguration.Get<RedisSettings>();
+
 #endregion
 
+builder.Services.AddSignalR().AddStackExchangeRedis(redisSettings.ConnectionString);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -137,6 +146,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = authSettings.Audience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.SecretKey)),
             ClockSkew = TimeSpan.FromMinutes(authSettings.AccessTokenLifetime),
+        };
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) &&
+                    path.StartsWithSegments("/communicationhub"))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
         };
     });
 
@@ -153,6 +176,12 @@ builder.Services.AddSendGrid(opt => { opt.ApiKey = sendGridSettings.ApiKey; });
 builder.Services.AddAzureClients(factoryBuilder =>
 {
     factoryBuilder.AddBlobServiceClient(azureStorageSettings.ConnectionString);
+});
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = redisSettings.ConnectionString;
+    options.InstanceName = RedisSettings.RedisInstanceName;
 });
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
@@ -208,6 +237,7 @@ app.UseRequestLocalization(options =>
     options.SupportedUICultures = supportedCultures;
 });
 
+app.UseWebSockets();
 app.UseRouting();
 
 app.UseCors(policy => policy
@@ -217,7 +247,6 @@ app.UseCors(policy => policy
     .AllowAnyMethod());
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.UseMiddleware<RequestContextMiddleware>();
@@ -229,6 +258,12 @@ var moduleInitializers = app.Services.GetServices<IModuleInitializer>();
 foreach (var moduleInitializer in moduleInitializers)
 {
     moduleInitializer.Configure(app, app.Environment);
+}
+
+var endpointInitializers = app.Services.GetServices<ISignalrEndpointRouteInitializer>();
+foreach (var initializer in endpointInitializers)
+{
+    initializer.ConfigureEndpoints(app);
 }
 
 app.Run();

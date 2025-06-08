@@ -41,7 +41,7 @@ public class CreateOrderHandlerTests : BaseOrderTests
 
         var request = new CreateOrderRequest
         {
-            CategoryId = 1,
+            ServiceId = 1,
             Name = "Test Order",
             Description = "This is a test order description.",
             Price = 100.50m,
@@ -67,7 +67,7 @@ public class CreateOrderHandlerTests : BaseOrderTests
         // Arrange
         var request = new CreateOrderRequest
         {
-            CategoryId = 1,
+            ServiceId = 1,
             Name = "Test Order",
             Description = "This is a test order description.",
             Price = 100.50m,

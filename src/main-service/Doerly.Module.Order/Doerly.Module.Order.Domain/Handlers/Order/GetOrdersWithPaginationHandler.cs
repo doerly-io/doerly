@@ -40,7 +40,7 @@ public class GetOrdersWithPaginationHandler : BaseOrderHandler
         var orders = entities.Select(order => new GetOrderResponse
         {
             Id = order.Id,
-            CategoryId = order.CategoryId,
+            ServiceId = order.ServiceId,
             CustomerId = order.CustomerId,
             Customer = profileIDsDictionary.TryGetValue(order.CustomerId, out var customerProfile)
                 ? new ProfileInfo
