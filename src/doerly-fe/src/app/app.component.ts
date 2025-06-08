@@ -12,6 +12,7 @@ import {NgIf} from '@angular/common';
 import {Popover} from 'primeng/popover';
 import {AuthService} from './modules/authorization/domain/auth.service';
 import {Toast} from 'primeng/toast';
+import {CategoryDropdownComponent} from './@components/category-dropdown/category-dropdown.component';
 
 const THEME = 'theme';
 
@@ -27,7 +28,8 @@ const THEME = 'theme';
     TranslatePipe,
     NgIf,
     Popover,
-    Toast
+    Toast,
+    CategoryDropdownComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
