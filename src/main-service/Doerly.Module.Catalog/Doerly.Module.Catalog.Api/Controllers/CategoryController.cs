@@ -1,12 +1,13 @@
 ﻿using Doerly.Infrastructure.Api;
 using Doerly.Module.Catalog.Contracts.Requests;
 using Doerly.Module.Catalog.Domain.Handlers.Category;
+using Doerly.Module.Catalog.Domain.Handlers.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Doerly.Module.Catalog.Api.Controllers
 {
     [ApiController]
-    [Area("catalog")]
+    [Area("category")]
     [Route("api/[controller]")]
     public class CategoryController : BaseApiController
     {

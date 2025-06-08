@@ -219,6 +219,36 @@
         "view": {
           "subtitle": "User's competences categories"
         }
+      },
+      "services": {
+        "subtitle": "Services",
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter service name"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Enter service description"
+        },
+        "category": {
+          "label": "Category",
+          "placeholder": "Select service category"
+        },
+        "price": {
+          "label": "Price",
+          "placeholder": "Enter service price"
+        },
+        "status":{
+          "label": "Status",
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        },
+        "add": {
+          "title": "Add service"
+        },
+        "edit": {
+          "title": "Edit service"
+        }
       }
     },
     "paymentHistory": {
@@ -451,6 +481,7 @@
     "edit": "Edit",
     "delete": "Delete",
     "error_occurred": "An error occurred",
+    "categories": "Categories",
     "control": {
       "unset": "Unset"
     }

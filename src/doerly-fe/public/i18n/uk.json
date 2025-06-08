@@ -219,6 +219,36 @@
         "view": {
           "subtitle": "Категорій компетенцій та навичок, які має користувач"
         }
+      },
+      "services": {
+        "subtitle": "Послуги",
+        "name": {
+          "label": "Назва",
+          "placeholder": "Введіть ваше ім'я"
+        },
+        "description": {
+          "label": "Опис",
+          "placeholder": "Введіть опис послуги"
+        },
+        "category": {
+          "label": "Категорія",
+          "placeholder": "Оберіть категорію"
+        },
+        "price": {
+          "label": "Ціна",
+          "placeholder": "Введіть ціну послуги"
+        },
+        "status":{
+          "label": "Статус",
+          "enabled": "Увімкнено",
+          "disabled": "Вимкнено"
+        },
+        "add": {
+          "title": "Створити послугу"
+        },
+        "edit": {
+          "title": "Редагувати послугу"
+        }
       }
     },
     "paymentHistory": {
@@ -450,6 +480,7 @@
     "edit": "Редагувати",
     "delete": "Видалити",
     "error_occurred": "Виникла помилка",
+    "categories": "Категорії",
     "control": {
       "unset": "Не встановлено"
     }

@@ -11,62 +11,6 @@ namespace Doerly.Module.Catalog.Api.Controllers
     [Route("api/[controller]")]
     public class CatalogController : BaseApiController
     {
-        [HttpGet("/service/{id}")]
-        public async Task<IActionResult> GetService(int id)
-        {
-            var result = await ResolveHandler<GetServiceByIdHandler>().HandleAsync(id);
-            if (result.IsSuccess)
-                return Ok(result);
-
-            return BadRequest(result);
-        }
-
-        [HttpPost("/service/paginated")]
-        public async Task<IActionResult> GetServicesWithPagination(GetServiceWithPaginationRequest request)
-        {
-            var result = await ResolveHandler<GetServicesWithPaginationHandler>().HandleAsync(request);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
-        }
-
-
-        [HttpGet("/service")]
-        public async Task<IActionResult> GetServiceList()
-        {
-            var result = await ResolveHandler<GetServicesHandler>().HandleAsync();
-            if (result.IsSuccess)
-                return Ok(result);
-
-            return BadRequest(result);
-        }
-
-        [HttpPost("/service")]
-        public async Task<IActionResult> CreateService(CreateServiceRequest dto)
-        {
-            var result = await ResolveHandler<CreateServiceHandler>().HandleAsync(dto);
-
-            return Created();
-        }
-
-        [HttpPut("/service/{id}")]
-        public async Task<IActionResult> UpdateService(int id, UpdateServiceRequest dto)
-        {
-            var result = await ResolveHandler<UpdateServiceHandler>().HandleAsync(id, dto);
-            if (result.IsSuccess)
-                return Ok(result);
-
-            return BadRequest(result);
-        }
-
-        [HttpDelete("/service/{id}")]
-        public async Task<IActionResult> DeleteService(int id)
-        {
-            var result = await ResolveHandler<DeleteServiceHandler>().HandleAsync(id);
-            if (result.IsSuccess)
-                return Ok(result);
-
-            return BadRequest(result);
-        }
-
         [HttpGet("/filter/{id}")]
         public async Task<IActionResult> GetFiltersByCategoryId(int id)
         {

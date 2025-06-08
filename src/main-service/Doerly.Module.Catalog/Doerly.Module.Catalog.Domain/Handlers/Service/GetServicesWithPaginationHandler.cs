@@ -16,7 +16,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
         {
         }
 
-        public async Task<HandlerResult<(List<GetServiceResponse> Services, int TotalCount)>> HandleAsync(GetServiceWithPaginationRequest request)
+        public async Task<HandlerResult<GetServicesWithPaginationResponse>> HandleAsync(GetServiceWithPaginationRequest request)
         {
             var baseQuery = DbContext.Services
                 .AsNoTracking()
@@ -40,6 +40,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
 
             baseQuery = request.SortBy?.ToLower() switch
             {
+                "name_asc" => baseQuery.OrderBy(s => s.Name),
                 "name_desc" => baseQuery.OrderByDescending(s => s.Name),
                 _ => baseQuery.OrderBy(s => s.Name)
             };
@@ -63,7 +64,13 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
                 CategoryPath = GetCategoryPath(s.Category)
             }).ToList();
 
-            return HandlerResult.Success((dtos, totalCount));
+            var response = new GetServicesWithPaginationResponse
+            {
+                Total = totalCount,
+                Orders = dtos
+            };
+
+            return HandlerResult.Success(response);
         }
 
         private List<string> GetCategoryPath(CategoryEntity? category)
