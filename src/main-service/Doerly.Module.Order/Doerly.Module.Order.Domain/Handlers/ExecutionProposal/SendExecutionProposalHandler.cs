@@ -26,7 +26,7 @@ public class SendExecutionProposalHandler : BaseOrderHandler
         var userId = _doerlyRequestContext.UserId ?? throw new DoerlyException("We are fucked!");
 
         var order = await DbContext.Orders.Select(x => new { x.Id, x.CustomerId })
-            .FirstOrDefaultAsync(x => x.Id == dto.OrderId && x.CustomerId == userId);
+            .FirstOrDefaultAsync(x => x.Id == dto.OrderId && x.CustomerId != userId);
 
         if (order == null)
             return HandlerResult.Failure<SendExecutionProposalResponse>(Resources.Get("OrderNotFound"));
