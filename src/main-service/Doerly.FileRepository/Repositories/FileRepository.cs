@@ -1,17 +1,23 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Sas;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Doerly.FileRepository;
 
 /// <inheritdoc />
 public class FileRepository : IFileRepository
 {
-    private readonly TimeSpan _defaultExpiry = TimeSpan.FromHours(1);
+    private const string StorageContainerResource = "c";
+    private const string StorageBlobResource = "c";
+    private const string StorageContainerSasTokenPrefix = "StorageContainerSasToken_";
+    private static readonly TimeSpan DefaultExpiry = TimeSpan.FromHours(1);
     private readonly BlobServiceClient _blobServiceClient;
+    private readonly IMemoryCache _memoryCache;
 
-    public FileRepository(BlobServiceClient blobServiceClient)
+    public FileRepository(BlobServiceClient blobServiceClient, IMemoryCache memoryCache)
     {
         _blobServiceClient = blobServiceClient;
+        _memoryCache = memoryCache;
     }
 
     public async Task UploadFileAsync(string containerName, string fileName, byte[] fileBytes, Dictionary<string, string> blobTags)
@@ -65,7 +71,7 @@ public class FileRepository : IFileRepository
 
     public async Task<string> GetSasUrlAsync(string containerName, string fileName)
     {
-        return await GetSasUrlAsync(containerName, fileName, _defaultExpiry);
+        return await GetSasUrlAsync(containerName, fileName, DefaultExpiry);
     }
 
     public async Task<string> GetSasUrlAsync(string containerName, string fileName, TimeSpan expiry)
@@ -80,11 +86,40 @@ public class FileRepository : IFileRepository
         {
             BlobContainerName = containerName,
             BlobName = fileName,
-            Resource = "b",
+            Resource = StorageBlobResource,
             ExpiresOn = DateTimeOffset.UtcNow.Add(expiry),
         };
         sasBuilder.SetPermissions(BlobSasPermissions.Read);
         var sasUri = blobClient.GenerateSasUri(sasBuilder);
+        return sasUri.ToString();
+    }
+
+    public async Task<string> GetSasUrlToContainerAsync(string containerName, TimeSpan expiry)
+    {
+        var containerSasToken = await _memoryCache.GetOrCreateAsync(StorageContainerSasTokenPrefix + containerName, async entry =>
+        {
+            entry.AbsoluteExpirationRelativeToNow = expiry;
+            return await GenerateSasUrlToContainerAsync(containerName, expiry);
+        });
+
+        return containerSasToken;
+    }
+
+    private async Task<string> GenerateSasUrlToContainerAsync(string containerName, TimeSpan expiry)
+    {
+        var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+
+        if (!await containerClient.ExistsAsync())
+            return string.Empty;
+
+        var sasBuilder = new BlobSasBuilder
+        {
+            BlobContainerName = containerName,
+            Resource = StorageContainerResource,
+            ExpiresOn = DateTimeOffset.UtcNow.Add(expiry),
+        };
+        sasBuilder.SetPermissions(BlobSasPermissions.Read);
+        var sasUri = containerClient.GenerateSasUri(sasBuilder);
         return sasUri.ToString();
     }
 }

@@ -70,7 +70,7 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
             return null;
 
         using var memoryStream = new MemoryStream();
-        file.CopyTo(memoryStream);
+        await file.CopyToAsync(memoryStream);
         var fileBytes = memoryStream.ToArray();
 
         if (!IsValidImage(fileBytes))

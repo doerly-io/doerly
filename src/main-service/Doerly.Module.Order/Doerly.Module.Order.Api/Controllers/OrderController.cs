@@ -1,5 +1,6 @@
 ﻿using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Infrastructure.Api;
+using Doerly.Module.Order.Contracts.Dtos.Requests;
 using Doerly.Module.Order.Domain.Handlers;
 using Microsoft.AspNetCore.Mvc;
 using Doerly.Module.Order.Domain.Handlers.Order;
@@ -58,6 +59,16 @@ public class OrderController : BaseApiController
     public async Task<IActionResult> UpdateOrder(int id, UpdateOrderStatusRequest dto)
     {
         var result = await ResolveHandler<UpdateOrderStatusHandler>().HandleAsync(id, dto);
+        if (result.IsSuccess)
+            return Ok(result);
+
+        return BadRequest(result);
+    }
+    
+    [HttpPost("{orderId}/feedback")]
+    public async Task<IActionResult> AddFeedback(int orderId, [FromBody] AddOrderFeedbackRequest dto)
+    {
+        var result = await ResolveHandler<AddOrderFeedbackHandler>().HandleAsync(orderId, dto);
         if (result.IsSuccess)
             return Ok(result);
 

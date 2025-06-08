@@ -7,8 +7,10 @@ using Doerly.Proxy.Profile;
 using Doerly.FileRepository;
 using FileInfo = Doerly.Module.Order.Contracts.Dtos.FileInfo;
 using Doerly.Module.Common.DataAccess.Address;
+using Doerly.Module.Order.Contracts.Dtos.Responses;
 
 namespace Doerly.Module.Order.Domain.Handlers;
+
 public class GetOrderByIdHandler : BaseOrderHandler
 {
     private readonly IProfileModuleProxy _profileModuleProxy;
@@ -20,6 +22,7 @@ public class GetOrderByIdHandler : BaseOrderHandler
         _profileModuleProxy = profileModuleProxy;
         _addressDbContext = addressDbContext;
     }
+
     public async Task<HandlerResult<GetOrderResponse>> HandleAsync(int id)
     {
         var order = await DbContext.Orders
@@ -40,11 +43,24 @@ public class GetOrderByIdHandler : BaseOrderHandler
                 ExecutorCompletionConfirmed = order.ExecutorCompletionConfirmed,
                 ExecutionDate = order.ExecutionDate,
                 BillId = order.BillId,
+                UseProfileAddress = order.UseProfileAddress,
                 AddressInfo = new AddressInfo
                 {
                     CityId = order.CityId,
                     RegionId = order.RegionId
                 },
+                Feedback = order.Feedback != null ? new OrderFeedbackResponse
+                {
+                    UserProfile = new ProfileInfo
+                    {
+                        Id = order.Feedback != null ? order.Feedback.ReviewerUserId : -1,
+                    },
+                    FeedbackId = order.Feedback.Id,
+                    Comment = order.Feedback.Comment,
+                    Rating = order.Feedback.Rating,
+                    CreatedAt = order.Feedback.DateCreated,
+                    UpdatedAt = order.Feedback.DateCreated == order.Feedback.LastModifiedDate ? null : order.Feedback.LastModifiedDate,
+                } : null,
                 ExistingFiles = order.OrderFiles.Select(file => new FileInfo
                 {
                     FilePath = file.Path,
@@ -61,16 +77,34 @@ public class GetOrderByIdHandler : BaseOrderHandler
 
         await SetOrderFileUrls(order.ExistingFiles);
 
-        var customerProfile = await _profileModuleProxy.GetProfileAsync(order.CustomerId);
+        var profileIds = new List<int>(2) { order.CustomerId };
+        if (order.ExecutorId.HasValue)
+            profileIds.Add(order.ExecutorId.Value);
+
+        var profiles = await _profileModuleProxy.GetProfilesShortInfoWithAvatarAsync(profileIds);
+
+        var customerProfile = profiles.First(x => x.Id == order.CustomerId);
         order.Customer = new ProfileInfo
         {
-            Id = customerProfile.Value.Id,
-            FirstName = customerProfile.Value.FirstName,
-            LastName = customerProfile.Value.LastName,
-            AvatarUrl = customerProfile.Value.ImageUrl
+            Id = customerProfile.Id,
+            FirstName = customerProfile.FirstName,
+            LastName = customerProfile.LastName,
+            AvatarUrl = customerProfile.AvatarUrl
         };
-        order.UseProfileAddress = customerProfile.Value.Address?.RegionId == order.AddressInfo.RegionId
-            && customerProfile.Value.Address?.CityId == order.AddressInfo.CityId;
+
+        var reviewerProfiles = profiles
+            .Where(x => x.Id != order.Feedback?.UserProfile.Id)
+            .ToList();
+        if (order.Feedback != null)
+        {
+            order.Feedback.UserProfile = new ProfileInfo
+            {
+                Id = order.Feedback.UserProfile.Id,
+                FirstName = reviewerProfiles.First(x => x.Id == order.Feedback.UserProfile.Id).FirstName,
+                LastName = reviewerProfiles.First(x => x.Id == order.Feedback.UserProfile.Id).LastName,
+                AvatarUrl = reviewerProfiles.First(x => x.Id == order.Feedback.UserProfile.Id).AvatarUrl
+            };
+        }
 
         var address = await _addressDbContext.Cities.AsNoTracking()
             .Select(city => new AddressInfo

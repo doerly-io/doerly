@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Doerly.Module.Order.Contracts.Dtos.Responses;
 using Doerly.Module.Order.Enums;
 
 namespace Doerly.Module.Order.Contracts.Dtos;
@@ -50,4 +50,6 @@ public class GetOrderResponse
     public IEnumerable<FileInfo> ExistingFiles { get; set; }
 
     public DateTime CreatedDate { get; set; }
+    
+    public OrderFeedbackResponse? Feedback { get; set; }
 }
