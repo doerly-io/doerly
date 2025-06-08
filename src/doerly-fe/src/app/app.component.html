@@ -24,7 +24,7 @@
               routerLink="/auth/login" label="{{ 'auth.login' | translate }}"
               [severity]="'success'" *ngIf="!isLoggedIn"/>
     <p-button class="ms-1" size="small" icon="pi pi-comments" text="true" [raised]="false" [outlined]="false"
-              routerLink="/communication"
+              routerLink="/communication/conversations"
               *ngIf="isLoggedIn"
               [severity]="'success'"/>
     <p-button class="ms-2" size="small" icon="pi pi-user" [rounded]="true" [text]="true" [raised]="false"

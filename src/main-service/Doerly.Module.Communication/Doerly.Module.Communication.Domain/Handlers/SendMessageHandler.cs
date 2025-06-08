@@ -40,7 +40,6 @@ public class SendMessageHandler(CommunicationDbContext dbContext) : BaseCommunic
         _dbContext.Messages.Add(message);
         await _dbContext.SaveChangesAsync();
         
-        var response = message.Id;
-        return HandlerResult.Success(response);
+        return HandlerResult.Success(message.Id);
     }
 }
