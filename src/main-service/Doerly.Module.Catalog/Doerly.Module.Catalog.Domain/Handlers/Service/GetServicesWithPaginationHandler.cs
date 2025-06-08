@@ -27,13 +27,17 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
             var predicates = new List<Expression<Func<ServiceEntity, bool>>>();
 
             if (request.CategoryId.HasValue)
-                predicates.Add(s => s.CategoryId == request.CategoryId.Value);
+            {
+                var categoryIds = await GetAllDescendantCategoryIdsAsync(request.CategoryId.Value);
+                predicates.Add(s => categoryIds.Contains(s.CategoryId.Value));
+            }
 
             if (request.FilterValues is { Count: > 0 })
             {
                 foreach (var (filterId, value) in request.FilterValues)
                 {
-                    var fid = filterId; var val = value;
+                    var fid = filterId;
+                    var val = value;
                     predicates.Add(s => s.FilterValues.Any(fv => fv.FilterId == fid && fv.Value == val));
                 }
             }
@@ -82,6 +86,29 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
                 category = category.Parent;
             }
             return path;
+        }
+
+        private async Task<List<int>> GetAllDescendantCategoryIdsAsync(int rootCategoryId)
+        {
+            var allCategories = await DbContext.Categories
+                .AsNoTracking()
+                .Select(c => new { c.Id, c.ParentId })
+                .ToListAsync();
+
+            var result = new List<int> { rootCategoryId };
+
+            void CollectChildren(int parentId)
+            {
+                var children = allCategories.Where(c => c.ParentId == parentId).ToList();
+                foreach (var child in children)
+                {
+                    result.Add(child.Id);
+                    CollectChildren(child.Id);
+                }
+            }
+
+            CollectChildren(rootCategoryId);
+            return result;
         }
     }
 }
