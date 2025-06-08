@@ -21,5 +21,7 @@ public class OrderFeedbackConfiguration : IEntityTypeConfiguration<OrderFeedback
         
         builder.ToTable(t =>
             t.HasCheckConstraint("ck_feedback_rating_range", "\"rating\" >= 1 AND \"rating\" <= 5"));
+
+        builder.HasIndex(x => x.LastModifiedDate);
     }
 }
