@@ -68,27 +68,48 @@
                 </p>
               </div>
             </div>
-            <div
-              class="avatar-container"
-              [pTooltip]="isViewingOtherProfile ? '' : ('profile.basic.image.upload.title' | translate)"
-              tooltipPosition="top"
-            >
-              <img
-                *ngIf="isImageAvailable"
-                ngSrc="{{formProfile.get('imageUrl')?.value}}"
-                alt="{{ 'profile.basic.image.alt' | translate }}"
-                class="avatar"
-                [class.clickable]="!isViewingOtherProfile"
-                (click)="!isViewingOtherProfile && onOpenImageUploadDialog()"
-                width="120"
-                height="120"
-              />
-              <i
-                *ngIf="!isImageAvailable"
-                class="pi pi-user user-icon"
-                [class.clickable]="!isViewingOtherProfile"
-                (click)="!isViewingOtherProfile && onOpenImageUploadDialog()"
-              ></i>
+            <div class="d-flex flex-column align-items-center gap-2">
+              <div
+                class="avatar-container"
+                [pTooltip]="isViewingOtherProfile ? '' : ('profile.basic.image.upload.title' | translate)"
+                tooltipPosition="top"
+              >
+                <img
+                  *ngIf="isImageAvailable"
+                  ngSrc="{{formProfile.get('imageUrl')?.value}}"
+                  alt="{{ 'profile.basic.image.alt' | translate }}"
+                  class="avatar"
+                  [class.clickable]="!isViewingOtherProfile"
+                  (click)="!isViewingOtherProfile && onOpenImageUploadDialog()"
+                  width="120"
+                  height="120"
+                />
+                <i
+                  *ngIf="!isImageAvailable"
+                  class="pi pi-user user-icon"
+                  [class.clickable]="!isViewingOtherProfile"
+                  (click)="!isViewingOtherProfile && onOpenImageUploadDialog()"
+                ></i>
+              </div>
+              <!-- Message button -->
+              <button
+                *ngIf="isAuthenticated && !isOwnProfile"
+                pButton
+                type="button"
+                class="p-button-primary"
+                [pTooltip]="'profile.message.button.tooltip' | translate"
+                (click)="showMessageDialog = true"
+              >
+                <i class="pi pi-send me-2"></i>
+                {{ 'profile.message.button' | translate }}
+              </button>
+              <div
+                *ngIf="!isAuthenticated"
+                class="alert alert-info mb-0"
+                role="alert"
+              >
+                {{ 'profile.message.auth.required' | translate }}
+              </div>
             </div>
           </div>
           <p-divider [layout]="'horizontal'"/>
@@ -993,5 +1014,13 @@
       </div>
     </ng-template>
   </p-dialog>
+
+  <!-- Message dialog -->
+  <app-send-message-modal
+    [(visible)]="showMessageDialog"
+    [recipientId]="viewedUserId"
+  ></app-send-message-modal>
+
+  <p-toast></p-toast>
 
 </section>

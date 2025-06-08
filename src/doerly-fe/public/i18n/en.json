@@ -294,7 +294,10 @@
           "success": "Profile picture has been deleted successfully",
           "error": "An error occurred while deleting the profile picture. Please try again later"
         }
-      }
+      },
+      "button": "Send Message",
+      "button.tooltip": "Send a message to the user",
+      "auth.required": "You need to log in to send messages"
     },
     "categories": {
       "load": {
@@ -443,7 +446,25 @@
       "load_conversation": "Failed to load conversation",
       "send_message": "Failed to send message"
     },
-    "send_message_before_sending": "Please enter a message before sending"
+    "send_message_before_sending": "Please enter a message before sending",
+    "dialog": {
+      "title": "New Message",
+      "content": {
+        "label": "Message",
+        "placeholder": "Enter your message..."
+      },
+      "send": "Send"
+    },
+    "message": {
+      "success": {
+        "title": "Success",
+        "detail": "Message sent successfully"
+      },
+      "error": {
+        "title": "Error",
+        "detail": "Failed to send message"
+      }
+    }
   },
   "common": {
     "actions": "Actions",

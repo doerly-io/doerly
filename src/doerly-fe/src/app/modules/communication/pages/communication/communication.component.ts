@@ -1,4 +1,4 @@
-import {Component, HostListener, inject, OnDestroy, signal} from '@angular/core';
+import {Component, HostListener, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {ConversationListComponent} from '../conversation-list/conversation-list.component';
 import {ChatWindowComponent} from '../chat-window/chat-window.component';
 import {ButtonModule} from 'primeng/button';
@@ -8,6 +8,7 @@ import {MessageResponse} from '../../models/responses/message-response.model';
 import {ConversationHeaderResponse} from '../../models/responses/conversation-header-response.model';
 import {CommunicationSignalRService} from '../../domain/communication-signalr.service';
 import {JwtTokenHelper} from '../../../../@core/helpers/jwtToken.helper';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-communication',
@@ -22,7 +23,7 @@ import {JwtTokenHelper} from '../../../../@core/helpers/jwtToken.helper';
   templateUrl: './communication.component.html',
   styleUrl: './communication.component.scss'
 })
-export class CommunicationComponent implements OnDestroy {
+export class CommunicationComponent implements OnInit, OnDestroy {
   protected readonly selectedConversationId = signal<number | undefined>(undefined);
   protected readonly isMobileView = signal<boolean>(false);
   private readonly MOBILE_BREAKPOINT = 768;
@@ -31,6 +32,8 @@ export class CommunicationComponent implements OnDestroy {
   private readonly communicationSignalR = inject(CommunicationSignalRService);
   private readonly jwtTokenHelper = inject(JwtTokenHelper);
   private userId = this.jwtTokenHelper.getUserInfo()?.id;
+
+  private readonly route = inject(ActivatedRoute);
 
   constructor() {
     this.checkScreenSize();
@@ -87,6 +90,16 @@ export class CommunicationComponent implements OnDestroy {
 
   onBackClick() {
     this.selectedConversationId.set(undefined);
+  }
+
+  ngOnInit(): void {
+    // Підписуємось на зміни query параметрів
+    this.route.queryParams.subscribe(params => {
+      const conversationId = params['conversationId'];
+      if (conversationId) {
+        this.onConversationSelected(Number(conversationId));
+      }
+    });
   }
 
   ngOnDestroy(): void {
