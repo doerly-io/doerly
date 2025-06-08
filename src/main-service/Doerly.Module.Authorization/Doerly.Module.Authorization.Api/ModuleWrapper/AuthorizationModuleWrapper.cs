@@ -49,6 +49,6 @@ public class AuthorizationModuleWrapper : IAuthorizationModuleWrapper
 
     public async Task<UserActivityStatisticsDto> GetActivityUsersStatisticsAsync()
     {
-        return await _handlerFactory.Get<GetActivityUsersStatistics>().HandleAsync();
+        return await _handlerFactory.Get<GetActivityUsersStatisticsHandler>().HandleAsync();
     }
 }

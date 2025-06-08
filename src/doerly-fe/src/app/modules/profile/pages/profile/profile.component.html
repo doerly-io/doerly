@@ -583,7 +583,7 @@
           <span *ngIf="previewCV">{{ previewCV.name }}</span>
         </div>
       </label>
-      <input type="file" id="cvFileInput" (change)="onCVFileSelected($event)" hidden/>
+      <input type="file" id="cvFileInput" (change)="onCVFileSelected($event)" accept="application/pdf" hidden/>
     </div>
     <ng-template
       pTemplate="footer"
@@ -770,6 +770,7 @@
 
   <!-- Competence dialog -->
   <p-dialog
+    #competenceDialog
     [(visible)]="isCompetenceDialogVisible"
     [modal]="true"
     [header]="(editingCompetence ? 'profile.professional.competences.edit.title' : 'profile.professional.competences.add.title') | translate"
@@ -787,13 +788,14 @@
           formControlName="categoryId"
           [placeholder]="'profile.professional.competences.category.placeholder' | translate"
           [showClear]="true"
-          [appendTo]="'body'"
+          [appendTo]="competenceDialog"
           [style]="{'width':'100%'}"
           (onNodeSelect)="onCategorySelect($event)"
           [selectionMode]="'single'"
           [metaKeySelection]="false"
           [propagateSelectionUp]="false"
           [propagateSelectionDown]="false"
+          [filter]="true"
         ></p-treeSelect>
       </div>
     </form>

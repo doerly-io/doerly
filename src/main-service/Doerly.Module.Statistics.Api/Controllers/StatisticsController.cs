@@ -19,4 +19,12 @@ public class StatisticsController : BaseApiController
         var result = await ResolveHandler<GetActivityUsersStatisticsHandler>().HandleAsync();
         return Ok(result);
     }
+    
+    [HttpGet("payment")]
+    [ProducesResponseType<HandlerResult<PaymentStatisticsDto>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetPaymentStatistics()
+    {
+        var result = await ResolveHandler<GetPaymentStatisticsHandler>().HandleAsync();
+        return Ok(result);
+    }
 }

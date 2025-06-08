@@ -71,18 +71,18 @@ const allNavPages: any[] = [
     labelIntlId: 'orders',
     link: `${pagesURLs[pages.orders]}`,
   },
-  {
-    icon: (<IconReporting size={ICON_SIZE} />),
-    id: pages.reporting,
-    labelIntlId: 'reporting',
-    link: `${pagesURLs[pages.reporting]}`,
-  },
-  {
-    icon: (<IconSettings size={ICON_SIZE} />),
-    id: pages.settings,
-    labelIntlId: 'settings',
-    link: `${pagesURLs[pages.settings]}`,
-  },
+  // {
+  //   icon: (<IconReporting size={ICON_SIZE} />),
+  //   id: pages.reporting,
+  //   labelIntlId: 'reporting',
+  //   link: `${pagesURLs[pages.reporting]}`,
+  // },
+  // {
+  //   icon: (<IconSettings size={ICON_SIZE} />),
+  //   id: pages.settings,
+  //   labelIntlId: 'settings',
+  //   link: `${pagesURLs[pages.settings]}`,
+  // },
 ];
 
 const neededAuthoritiesToPages: { [index: string]: string | string[] } = {
