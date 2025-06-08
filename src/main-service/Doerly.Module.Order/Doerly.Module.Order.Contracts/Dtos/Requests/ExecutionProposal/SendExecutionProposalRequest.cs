@@ -8,7 +8,7 @@ public class SendExecutionProposalRequest
     public int OrderId { get; set; }
 
     [MaxLength(1000, ErrorMessage = "FieldIsTooLong")]
-    public string Comment { get; set; }
+    public string Comment { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "FieldIsRequired")]
     public int ReceiverId { get; set; }

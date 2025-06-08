@@ -5,7 +5,7 @@ namespace Doerly.Module.Order.DataAccess.Entities;
 
 public class Order : BaseEntity
 {
-    public int ServiceId { get; set; }
+    public int CategoryId { get; set; }
 
     public Guid Code { get; set; }
 

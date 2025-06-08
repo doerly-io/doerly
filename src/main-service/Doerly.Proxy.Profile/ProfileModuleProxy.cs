@@ -24,7 +24,7 @@ public class ProfileModuleProxy : IProfileModuleProxy
         var profilesResponse = _profileModuleWrapper.GetProfilesAsync(userIds);
         return profilesResponse;
     }
-
+    
     public Task<IEnumerable<ProfileShortInfoWithAvatarDto>> GetProfilesShortInfoWithAvatarAsync(IEnumerable<int> userIds)
     {
         var profilesShortResponse = _profileModuleWrapper.GetProfilesShortInfoWithAvatarAsync(userIds);

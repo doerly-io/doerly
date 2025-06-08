@@ -38,7 +38,6 @@ public class UpdateOrderHandlerTests : BaseOrderTests
             Name = "Updated Name",
             Description = "Updated Description",
             Price = order.Price + 10,
-            ServiceId = order.ServiceId,
             PaymentKind = order.PaymentKind,
             DueDate = order.DueDate.AddDays(1),
             IsPriceNegotiable = !order.IsPriceNegotiable
@@ -71,7 +70,6 @@ public class UpdateOrderHandlerTests : BaseOrderTests
             Name = "Updated Name",
             Description = "Updated Description",
             Price = order.Price + 10,
-            ServiceId = order.ServiceId,
             PaymentKind = order.PaymentKind,
             DueDate = order.DueDate.AddDays(1),
             IsPriceNegotiable = !order.IsPriceNegotiable

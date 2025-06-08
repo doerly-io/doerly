@@ -56,7 +56,8 @@ export class EditOrderComponent implements OnInit {
   orderForm!: FormGroup;
   paymentKinds: any[] = [];
   orderId?: number;
-  serviceId?: number;
+  categoryId?: number;
+  executorId?: number;
   isEdit: boolean = false;
   loading: boolean = false;
   currentDate: Date = new Date();
@@ -85,12 +86,15 @@ export class EditOrderComponent implements OnInit {
     this.orderId = Number(this.route.snapshot.paramMap.get('id'));
     this.isEdit = !!this.orderId;
 
-    const serviceIdParam = this.route.snapshot.queryParamMap.get('serviceId');
-    this.serviceId = serviceIdParam ? Number(serviceIdParam) : undefined;
-    if (!this.serviceId && !this.isEdit){
+    const categoryIdParam = this.route.snapshot.queryParamMap.get('categoryId');
+    this.categoryId = categoryIdParam ? Number(categoryIdParam) : undefined;
+    if (!this.categoryId && !this.isEdit) {
       this.toastHelper.showError('common.error', this.translate.instant('ordering.service_required'));
       this.router.navigate(['']);
     }
+
+    const executorIdParam = this.route.snapshot.queryParamMap.get('executorId');
+    this.executorId = executorIdParam ? Number(executorIdParam) : undefined;
 
     this.initForm();
     this.initPaymentKinds();
@@ -247,7 +251,8 @@ export class EditOrderComponent implements OnInit {
     } else {
       const createOrderRequest: CreateOrderRequest = {
         ...this.orderForm.value,
-        serviceId: this.serviceId!,
+        categoryId: this.categoryId!,
+        executorId: this.executorId,
       };
       this.orderService.createOrder(createOrderRequest, this.files)
         .subscribe({

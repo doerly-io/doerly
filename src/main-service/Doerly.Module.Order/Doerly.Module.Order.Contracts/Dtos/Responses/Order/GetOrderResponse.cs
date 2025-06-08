@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Doerly.Module.Order.Contracts.Dtos.Responses;
 using Doerly.Module.Order.Enums;
 
 namespace Doerly.Module.Order.Contracts.Dtos;
@@ -11,7 +5,7 @@ public class GetOrderResponse
 {
     public int Id { get; set; }
 
-    public int ServiceId { get; set; }
+    public int CategoryId { get; set; }
 
     public string Name { get; set; }
 

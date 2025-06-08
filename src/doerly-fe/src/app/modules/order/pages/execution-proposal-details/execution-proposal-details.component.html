@@ -23,7 +23,7 @@
             </span>
           </div>
 
-          <div class="execution-proposal-detail-item mb-3">
+          <div *ngIf="proposal.comment?.length! > 0" class="execution-proposal-detail-item mb-3">
             <p-panel class="field-label" header="{{ 'ordering.comment' | translate }}" class="mt-2" [toggleable]="true">
               <span>{{ proposal.comment }}</span>
             </p-panel>

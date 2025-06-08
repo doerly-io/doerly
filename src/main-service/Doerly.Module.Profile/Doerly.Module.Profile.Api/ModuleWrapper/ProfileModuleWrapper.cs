@@ -9,6 +9,7 @@ public interface IProfileModuleWrapper
 {
     Task<HandlerResult<ProfileDto>> GetProfileAsync(int userId);
     Task<HandlerResult<IEnumerable<ProfileDto>>> GetProfilesAsync(int[] userIds);
+    
     Task<IEnumerable<ProfileShortInfoWithAvatarDto>> GetProfilesShortInfoWithAvatarAsync(IEnumerable<int> userIds);
 }
     
@@ -32,7 +33,7 @@ public class ProfileModuleWrapper : IProfileModuleWrapper
         var profilesResponse = _handlerFactory.Get<GetProfilesHandler>().HandleAsync(userIds);
         return profilesResponse;
     }
-
+    
     public Task<IEnumerable<ProfileShortInfoWithAvatarDto>> GetProfilesShortInfoWithAvatarAsync(IEnumerable<int> userIds)
     {
         var profilesShortResponse = _handlerFactory.Get<GetProfilesShortInfoWithAvatars>().HandleAsync(userIds);

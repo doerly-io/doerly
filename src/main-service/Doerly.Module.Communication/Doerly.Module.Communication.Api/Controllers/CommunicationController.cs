@@ -99,7 +99,7 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
         if (!result.IsSuccess)
             return Conflict(result);
 
-        return Ok();
+        return Ok(result);
     }
     
     [HttpPost("conversations/{conversationId:int}/messages/file/send")]
@@ -118,7 +118,7 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
         // Notify the communication hub about the new file message
         await communicationHub.Clients.Group(conversationId.ToString()).ReceiveMessage(message);
 
-        return Ok();
+        return Ok(result);
     }
     
     [HttpGet("messages/{messageId:int}")]
@@ -131,6 +131,25 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
         if (!result.IsSuccess)
             return NotFound(result);
 
+        return Ok(result);
+    }
+    
+    [HttpGet("conversations/with-user/{recipientId:int}")]
+    [ProducesResponseType<HandlerResult<int?>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetConversationWithUser(int recipientId)
+    {
+        var userId = RequestContext.UserId;
+        if (!userId.HasValue || userId.Value == 0)
+            return Unauthorized();
+
+        var initiatorId = userId.Value;
+
+        if (initiatorId == recipientId)
+        {
+            return BadRequest(HandlerResult.Failure<int?>(Resources.Get("Communication.CannotCheckConversationWithSelf")));
+        }
+
+        var result = await ResolveHandler<CheckConversationExistsHandler>().HandleAsync(initiatorId, recipientId);
         return Ok(result);
     }
 }

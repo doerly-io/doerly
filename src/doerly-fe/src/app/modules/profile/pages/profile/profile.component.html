@@ -68,27 +68,48 @@
                 </p>
               </div>
             </div>
-            <div
-              class="avatar-container"
-              [pTooltip]="isViewingOtherProfile ? '' : ('profile.basic.image.upload.title' | translate)"
-              tooltipPosition="top"
-            >
-              <img
-                *ngIf="isImageAvailable"
-                ngSrc="{{formProfile.get('imageUrl')?.value}}"
-                alt="{{ 'profile.basic.image.alt' | translate }}"
-                class="avatar"
-                [class.clickable]="!isViewingOtherProfile"
-                (click)="!isViewingOtherProfile && onOpenImageUploadDialog()"
-                width="120"
-                height="120"
-              />
-              <i
-                *ngIf="!isImageAvailable"
-                class="pi pi-user user-icon"
-                [class.clickable]="!isViewingOtherProfile"
-                (click)="!isViewingOtherProfile && onOpenImageUploadDialog()"
-              ></i>
+            <div class="d-flex flex-column align-items-center gap-2">
+              <div
+                class="avatar-container"
+                [pTooltip]="isViewingOtherProfile ? '' : ('profile.basic.image.upload.title' | translate)"
+                tooltipPosition="top"
+              >
+                <img
+                  *ngIf="isImageAvailable"
+                  ngSrc="{{formProfile.get('imageUrl')?.value}}"
+                  alt="{{ 'profile.basic.image.alt' | translate }}"
+                  class="avatar"
+                  [class.clickable]="!isViewingOtherProfile"
+                  (click)="!isViewingOtherProfile && onOpenImageUploadDialog()"
+                  width="120"
+                  height="120"
+                />
+                <i
+                  *ngIf="!isImageAvailable"
+                  class="pi pi-user user-icon"
+                  [class.clickable]="!isViewingOtherProfile"
+                  (click)="!isViewingOtherProfile && onOpenImageUploadDialog()"
+                ></i>
+              </div>
+              <!-- Message button -->
+              <button
+                *ngIf="isAuthenticated && !isOwnProfile"
+                pButton
+                type="button"
+                class="p-button-primary"
+                [pTooltip]="'profile.message.button.tooltip' | translate"
+                (click)="showMessageDialog = true"
+              >
+                <i class="pi pi-send me-2"></i>
+                {{ 'profile.message.button' | translate }}
+              </button>
+              <div
+                *ngIf="!isAuthenticated"
+                class="alert alert-info mb-0"
+                role="alert"
+              >
+                {{ 'profile.message.auth.required' | translate }}
+              </div>
             </div>
           </div>
           <p-divider [layout]="'horizontal'"/>
@@ -476,6 +497,94 @@
         </div>
       </div>
 
+      <p-divider [layout]="'horizontal'"/>
+
+      <!-- Services section -->
+      <div class="d-flex flex-column gap-4">
+        <div class="d-flex justify-content-between align-items-center gap-5">
+          <!-- Services title and subtitle -->
+          <div>
+            <span class="fw-normal">
+              {{ (isViewingOtherProfile ? 'profile.professional.services.view.subtitle' : 'profile.professional.services.subtitle') | translate }}
+            </span>
+          </div>
+
+          <!-- Services actions -->
+          <div class="d-flex gap-2" *ngIf="!isViewingOtherProfile">
+            <button
+              pButton type="button"
+              class="p-button-rounded p-button-text"
+              (click)="onAddService()"
+              pTooltip="{{ 'profile.professional.services.add.title' | translate }}"
+              tooltipPosition="top"
+            >
+              <i pButtonIcon class="pi pi-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Services list -->
+        <div *ngIf="services?.length"
+          class="d-flex flex-column gap-2 border border-color-primary rounded-2 p-2">
+          <!-- Table header -->
+          <div
+            class="d-flex justify-content-between align-items-center pt-1 pb-3 border-bottom border-1 border-color-primary">
+            <div class="d-flex gap-3" style="width: 30%">
+              <p class="fw-semibold fs-7">{{ 'profile.professional.services.name.label' | translate }}</p>
+            </div>
+            <div style="width: 30%">
+              <p class="fw-semibold fs-7">{{ 'profile.professional.services.category.label' | translate }}</p>
+            </div>
+            <div style="width: 20%">
+              <p class="fw-semibold fs-7">{{ 'profile.professional.services.status.label' | translate }}</p>
+            </div>
+            <div style="width: 20%" class="d-flex justify-content-end pe-3" *ngIf="!isViewingOtherProfile">
+              <p class="fw-semibold fs-7">{{ 'common.actions' | translate }}</p>
+            </div>
+          </div>
+
+          <!-- Table rows -->
+          <div *ngFor="let service of services"
+               class="d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex gap-3" style="width: 30%">
+                <p class="fw-normal fs-7">{{ service.name }}</p>
+              </div>
+              <div style="width: 30%">
+                <p class="fw-normal fs-7">{{ service.categoryName }}</p>
+              </div>
+              <div style="width: 20%">
+                <p class="fw-normal fs-7">
+                  <span [class]="service.isEnabled ? 'text-success' : 'text-danger'">
+                    {{ (service.isEnabled ? 'profile.professional.services.status.enabled' : 'profile.professional.services.status.disabled') | translate }}
+                  </span>
+                </p>
+              </div>
+              <div style="width: 20%" class="d-flex justify-content-end gap-2" *ngIf="!isViewingOtherProfile">
+                <button
+                  pButton type="button"
+                  class="p-button-rounded p-button-text"
+                  (click)="onEditService(service)"
+                  pTooltip="{{ 'profile.professional.services.edit.title' | translate }}"
+                  tooltipPosition="top"
+                >
+                  <i pButtonIcon class="pi pi-pencil"></i>
+                </button>
+                <button
+                  pButton type="button"
+                  class="p-button-rounded p-button-text"
+                  (click)="onDeleteService(service)"
+                  pTooltip="{{ 'profile.professional.services.delete.title' | translate }}"
+                  tooltipPosition="top"
+                >
+                  <i pButtonIcon class="pi pi-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </p-card>
 
@@ -820,5 +929,98 @@
       </div>
     </ng-template>
   </p-dialog>
+
+  <!-- Service dialog -->
+  <p-dialog
+    [(visible)]="isServiceDialogVisible"
+    [modal]="true"
+    [header]="(editingService ? 'profile.professional.services.edit.title' : 'profile.professional.services.add.title') | translate"
+    [style]="{ width: '24rem' }"
+    (close)="onCancelService()"
+    (onHide)="onCancelService()"
+  >
+    <form [formGroup]="serviceForm" class="d-flex flex-column gap-3">
+      <div class="d-flex flex-column gap-2">
+        <label for="serviceName" class="fw-semibold">{{ 'profile.professional.services.name.label' | translate }}</label>
+        <input
+          id="serviceName"
+          type="text"
+          pInputText
+          formControlName="name"
+          [placeholder]="'profile.professional.services.name.placeholder' | translate"
+        />
+      </div>
+
+      <div class="d-flex flex-column gap-2">
+        <label for="serviceDescription" class="fw-semibold">{{ 'profile.professional.services.description.label' | translate }}</label>
+        <textarea
+          id="serviceDescription"
+          pTextarea
+          formControlName="description"
+          [rows]="3"
+          [placeholder]="'profile.professional.services.description.placeholder' | translate"
+          autoResize
+        ></textarea>
+      </div>
+
+      <div class="d-flex flex-column gap-2">
+        <label for="serviceCategory" class="fw-semibold">{{ 'profile.professional.services.category.label' | translate }}</label>
+        <p-treeSelect
+          id="serviceCategory"
+          [options]="categoryTreeNodes"
+          formControlName="categoryId"
+          [placeholder]="'profile.professional.services.category.placeholder' | translate"
+          [showClear]="true"
+          [appendTo]="'body'"
+          [style]="{'width':'100%'}"
+          (onNodeSelect)="onServiceCategorySelect($event)"
+          [selectionMode]="'single'"
+          [metaKeySelection]="false"
+          [propagateSelectionUp]="false"
+          [propagateSelectionDown]="false"
+        ></p-treeSelect>
+      </div>
+
+      <div class="d-flex flex-column gap-2">
+        <label for="servicePrice" class="fw-semibold">{{ 'profile.professional.services.price.label' | translate }}</label>
+        <p-inputNumber
+          id="servicePrice"
+          formControlName="price"
+          [style]="{'width':'100%'}"
+          mode="decimal"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+        ></p-inputNumber>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <div class="d-flex justify-content-end gap-2">
+        <button
+          pButton
+          type="button"
+          class="p-button-text"
+          (click)="onCancelService()"
+          [label]="'common.cancel' | translate"
+        ></button>
+        <button
+          pButton
+          type="button"
+          class="p-button-primary"
+          (click)="onSaveService()"
+          [label]="'common.save' | translate"
+          [disabled]="!serviceForm.valid"
+        ></button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Message dialog -->
+  <app-send-message-modal
+    [(visible)]="showMessageDialog"
+    [recipientId]="viewedUserId"
+  ></app-send-message-modal>
+
+  <p-toast></p-toast>
 
 </section>

@@ -1,5 +1,6 @@
 ﻿using Doerly.Domain;
 using Doerly.Module.Order.Enums;
+
 using System.ComponentModel.DataAnnotations;
 
 namespace Doerly.Module.Order.Contracts.Dtos;
@@ -7,7 +8,7 @@ namespace Doerly.Module.Order.Contracts.Dtos;
 public class CreateOrderRequest
 {
     [Required(ErrorMessage = "FieldIsRequired")]
-    public int ServiceId { get; set; }
+    public int CategoryId { get; set; }
 
     [Required(ErrorMessage = "FieldIsRequired")]
     [MinLength(1, ErrorMessage = "FieldIsTooShort")]
@@ -38,4 +39,6 @@ public class CreateOrderRequest
     public int? RegionId { get; set; }
 
     public int? CityId { get; set; }
+
+    public int? ExecutorId { get; set; }
 }

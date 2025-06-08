@@ -1,0 +1,92 @@
+.catalog-container {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.services-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sorting-section {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.service-card {
+  background: var(--surface-card);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: 2px solid var(--p-primary-color, #2196f3);
+  transition: transform 0.2s, border-color 0.2s;
+  color: #000;
+
+  &:hover {
+    transform: translateY(-4px);
+    border-color: #000;
+  }
+
+  img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .service-info {
+    padding: 1rem;
+
+    h3 {
+      margin: 0;
+      color: #000;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0.5rem 0;
+      color: #000;
+      font-size: 0.95rem;
+    }
+
+    .service-price {
+      color: #000;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .catalog-container {
+    flex-direction: column;
+  }
+
+  .services-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+}
+
+/* Dark theme overrides */
+:host-context(.my-app-dark) .service-card {
+  background: #1a1a1a;
+  border-color: var(--p-green-400);
+  color: var(--p-green-400);
+}
+:host-context(.my-app-dark) .service-card .service-info h3,
+:host-context(.my-app-dark) .service-card .service-info p,
+:host-context(.my-app-dark) .service-card .service-info .service-price {
+  color: var(--p-green-400);
+}
+:host-context(.my-app-dark) .service-card:hover {
+  border-color: var(--p-green-400);
+} 

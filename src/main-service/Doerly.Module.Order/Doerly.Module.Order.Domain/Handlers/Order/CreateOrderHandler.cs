@@ -46,7 +46,7 @@ public class CreateOrderHandler : BaseOrderHandler
 
         var order = new OrderEntity()
         {
-            ServiceId = dto.ServiceId,
+            CategoryId = dto.CategoryId,
             Name = dto.Name,
             Description = dto.Description,
             Price = dto.Price,
@@ -67,6 +67,20 @@ public class CreateOrderHandler : BaseOrderHandler
         {
             Id = order.Id
         };
+
+        if (dto.ExecutorId.HasValue)
+        {
+            try
+            {
+                await SendExecutionProposal(new SendExecutionProposalRequest
+                {
+                    OrderId = order.Id,
+                    ReceiverId = dto.ExecutorId.Value
+                }, userId);
+            }
+            catch (Exception ex)
+            {}
+        }
 
         await PublishOrderStatusUpdatedEventAsync(order.Id, order.Status);
 

@@ -89,6 +89,10 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("bill_id");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer")
+                        .HasColumnName("category_id");
+
                     b.Property<int>("CityId")
                         .HasColumnType("integer")
                         .HasColumnName("city_id");
@@ -159,13 +163,13 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("region_id");
 
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("integer")
-                        .HasColumnName("service_id");
-
                     b.Property<byte>("Status")
                         .HasColumnType("smallint")
                         .HasColumnName("status");
+
+                    b.Property<bool>("UseProfileAddress")
+                        .HasColumnType("boolean")
+                        .HasColumnName("use_profile_address");
 
                     b.HasKey("Id")
                         .HasName("pk_order");
