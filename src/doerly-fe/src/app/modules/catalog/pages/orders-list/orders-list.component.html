@@ -28,7 +28,7 @@
                         </span>
                     </div>
 
-                    <div class="order-info flex-grow-1" [routerLink]="['/ordering/order', order.id]"
+                    <div class="order-info flex-grow-1" [routerLink]="['/ordering/order', order.orderId]"
                         style="cursor: pointer;">
                         <div class="order-header">
                             <div>
@@ -42,10 +42,6 @@
                             <div>
                                 <span>{{ 'ordering.due_date' | translate }}: </span>
                                 <span>{{ order.dueDate | date: "dd.MM.yyyy" }}</span>
-                            </div>
-                            <div>
-                                <p-tag [value]="'ordering.order_statuses.' + EOrderStatus[order.status] | translate"
-                                    [severity]="getOrderStatusSeverity(order.status)"></p-tag>
                             </div>
                         </div>
                     </div>

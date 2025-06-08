@@ -13,12 +13,15 @@ import { EOrderStatus, getOrderStatusSeverity } from 'app/modules/order/domain/e
 import { OrderService } from 'app/modules/order/domain/order.service';
 import { GetOrdersWithPaginationByPredicatesRequest } from 'app/modules/order/models/requests/get-orders-request';
 import { GetOrderResponse } from 'app/modules/order/models/responses/get-order-response';
+import { BaseApiResponse } from 'app/@core/models/base-api-response';
+import { GetOrdersWithFiltrationResponse, OrderModel } from '../../models/get-orders-with-filtration-response.model';
+import { OrdersService } from '../../services/orders.service';
+import { GetOrdersWithFiltrationRequest } from '../../models/get-orders-with-filtration-request.model';
 
 @Component({
   selector: 'app-orders-list',
   imports: [
     DataView,
-    Tag,
     PaginatorModule,
     CommonModule,
     Button,
@@ -35,7 +38,7 @@ export class OrdersListComponent implements OnInit {
   @Input() executorId?: number | null;
   @Input() canCreateOrder: boolean = false;
 
-  orders: GetOrderResponse[] = [];
+  orders: OrderModel[] = [];
   totalRecords: number = 0;
   categoryId?: number;
   loading: boolean = true;
@@ -49,7 +52,7 @@ export class OrdersListComponent implements OnInit {
     totalCount: 0
   };
 
-  constructor(private orderService: OrderService,
+  constructor(private ordersService: OrdersService,
     private route: ActivatedRoute,
     private errorHandler: ErrorHandlerService
   ) { }
@@ -66,18 +69,19 @@ export class OrdersListComponent implements OnInit {
 
   loadOrders() {
     this.loading = true;
-    const request: GetOrdersWithPaginationByPredicatesRequest = {
+    const request: GetOrdersWithFiltrationRequest = {
       pageInfo: {
         number: this.pagination.pageNumber + 1,
         size: this.pagination.pageSize
       },
-      customerId: this.customerId,
-      executorId: this.executorId
+      categoryId: this.categoryId!,
+      isOrderByPrice: false,
+      isDescending: false,
     };
-    this.orderService.getOrdersWithPagination(request).subscribe({
-      next: (response) => {
-        this.orders = response.value?.orders || [];
-        this.totalRecords = response.value?.total || 0;
+    this.ordersService.getOrdersWithPagination(request).subscribe({
+      next: (response: BaseApiResponse<GetOrdersWithFiltrationResponse>) => {
+        this.orders = response.value?.items || [];
+        this.totalRecords = response.value?.count || 0;
         this.loading = false;
       },
       error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)

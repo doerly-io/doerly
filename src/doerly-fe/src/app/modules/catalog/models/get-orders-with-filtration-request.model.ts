@@ -1,7 +1,7 @@
 export interface GetOrdersWithFiltrationRequest {
     pageInfo: {
-        pageNumber: number;
-        pageSize: number;
+        number: number;
+        size: number;
     };
     categoryId: number;
     isOrderByPrice: boolean;
