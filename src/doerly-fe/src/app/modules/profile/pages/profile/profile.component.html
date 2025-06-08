@@ -891,21 +891,23 @@
       <div class="d-flex flex-column gap-2">
         <label for="category"
                class="fw-semibold">{{ 'profile.professional.competences.category.label' | translate }}</label>
-        <p-treeSelect
+        <p-dropdown
           id="category"
           [options]="categoryTreeNodes"
           formControlName="categoryId"
+          optionLabel="label"
+          optionValue="key"
           [placeholder]="'profile.professional.competences.category.placeholder' | translate"
           [showClear]="true"
           [appendTo]="competenceDialog"
           [style]="{'width':'100%'}"
-          (onNodeSelect)="onCategorySelect($event)"
-          [selectionMode]="'single'"
-          [metaKeySelection]="false"
-          [propagateSelectionUp]="false"
-          [propagateSelectionDown]="false"
+          (onChange)="onCategorySelect($event)"
           [filter]="true"
-        ></p-treeSelect>
+          [autoDisplayFirst]="false"
+          [autoZIndex]="true"
+          [baseZIndex]="1000"
+          [editable]="false"
+        ></p-dropdown>
       </div>
     </form>
 
@@ -932,6 +934,7 @@
 
   <!-- Service dialog -->
   <p-dialog
+    #serviceDialog
     [(visible)]="isServiceDialogVisible"
     [modal]="true"
     [header]="(editingService ? 'profile.professional.services.edit.title' : 'profile.professional.services.add.title') | translate"
@@ -965,20 +968,23 @@
 
       <div class="d-flex flex-column gap-2">
         <label for="serviceCategory" class="fw-semibold">{{ 'profile.professional.services.category.label' | translate }}</label>
-        <p-treeSelect
+        <p-dropdown
           id="serviceCategory"
           [options]="categoryTreeNodes"
           formControlName="categoryId"
+          optionLabel="label"
+          optionValue="key"
           [placeholder]="'profile.professional.services.category.placeholder' | translate"
           [showClear]="true"
-          [appendTo]="'body'"
+          [appendTo]="serviceDialog"
           [style]="{'width':'100%'}"
-          (onNodeSelect)="onServiceCategorySelect($event)"
-          [selectionMode]="'single'"
-          [metaKeySelection]="false"
-          [propagateSelectionUp]="false"
-          [propagateSelectionDown]="false"
-        ></p-treeSelect>
+          (onChange)="onServiceCategorySelect($event)"
+          [filter]="true"
+          [autoDisplayFirst]="false"
+          [autoZIndex]="true"
+          [baseZIndex]="1000"
+          [editable]="false"
+        ></p-dropdown>
       </div>
 
       <div class="d-flex flex-column gap-2">
