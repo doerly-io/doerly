@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Doerly.Module.Order.Contracts.Dtos.Requests;
 
-public class AddOrderFeedbackRequest
+public class OrderFeedbackRequest
 {
     [Range(1, 5)]
     public required int Rating { get; set; }

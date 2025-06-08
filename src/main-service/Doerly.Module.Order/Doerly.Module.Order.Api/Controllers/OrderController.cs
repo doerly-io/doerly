@@ -44,9 +44,10 @@ public class OrderController : BaseApiController
 
         return BadRequest(result);
     }
-        
+
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateOrder([FromRoute] int id, [FromForm] UpdateOrderRequest dto, [FromForm] List<IFormFile>? files, [FromForm] List<string>? existingFileNames)
+    public async Task<IActionResult> UpdateOrder([FromRoute] int id, [FromForm] UpdateOrderRequest dto, [FromForm] List<IFormFile>? files,
+        [FromForm] List<string>? existingFileNames)
     {
         var result = await ResolveHandler<UpdateOrderHandler>().HandleAsync(id, dto, files, existingFileNames);
         if (result.IsSuccess)
@@ -64,11 +65,21 @@ public class OrderController : BaseApiController
 
         return BadRequest(result);
     }
-    
+
     [HttpPost("{orderId}/feedback")]
-    public async Task<IActionResult> AddFeedback(int orderId, [FromBody] AddOrderFeedbackRequest dto)
+    public async Task<IActionResult> AddFeedback(int orderId, [FromBody] OrderFeedbackRequest dto)
     {
         var result = await ResolveHandler<AddOrderFeedbackHandler>().HandleAsync(orderId, dto);
+        if (result.IsSuccess)
+            return Ok(result);
+
+        return BadRequest(result);
+    }
+
+    [HttpPut("{orderId}/feedback/{feedbackId}")]
+    public async Task<IActionResult> UpdateFeedback(int orderId, int feedbackId, [FromBody] OrderFeedbackRequest dto)
+    {
+        var result = await ResolveHandler<UpdatedOrderFeedbackHandler>().HandleAsync(orderId, feedbackId, dto);
         if (result.IsSuccess)
             return Ok(result);
 

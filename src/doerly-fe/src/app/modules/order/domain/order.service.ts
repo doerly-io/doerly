@@ -73,4 +73,8 @@ export class OrderService {
   createOrderFeedback(orderId: number, createFeedbackRequest: CreateFeedbackRequest): Observable<BaseApiResponse<void>> {
     return this.httpClient.post<BaseApiResponse<void>>(`${this.baseUrl}/${orderId}/feedback`, createFeedbackRequest);
   }
+
+  updateOrderFeedback(orderId: number, feedbackId: number, createFeedbackRequest: CreateFeedbackRequest): Observable<BaseApiResponse<void>> {
+    return this.httpClient.put<BaseApiResponse<void>>(`${this.baseUrl}/${orderId}/feedback/${feedbackId}`, createFeedbackRequest);
+  }
 }

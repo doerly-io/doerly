@@ -1,20 +1,21 @@
 #rating {
-  scale: 1.1;
-  padding-left: 3cap;
+  scale: 1.25;
+  padding-left: 1.1cap;
+  //padding-left: 3cap;
 }
-
-@media (max-width: 1200px) {
-  #rating {
-    scale: 1.1;
-    padding-left: 1.9cap;
-
-  }
-}
-
-@media (max-width: 400px) {
-  #rating {
-    scale: 1.1;
-    padding-left: 1.5cap;
-
-  }
-}
+//
+//@media (max-width: 1200px) {
+//  #rating {
+//    scale: 1.1;
+//    padding-left: 1.9cap;
+//
+//  }
+//}
+//
+//@media (max-width: 400px) {
+//  #rating {
+//    scale: 1.1;
+//    padding-left: 1.5cap;
+//
+//  }
+//}

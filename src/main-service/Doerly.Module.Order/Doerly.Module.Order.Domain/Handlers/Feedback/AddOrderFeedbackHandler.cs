@@ -16,7 +16,7 @@ public class AddOrderFeedbackHandler : BaseOrderHandler
         _doerlyRequestContext = doerlyRequestContext;
     }
 
-    public async Task<HandlerResult> HandleAsync(int orderId, AddOrderFeedbackRequest request)
+    public async Task<HandlerResult> HandleAsync(int orderId, OrderFeedbackRequest request)
     {
         var orderExists = await DbContext.Orders.AnyAsync(o => o.Id == orderId);
         if (!orderExists)
