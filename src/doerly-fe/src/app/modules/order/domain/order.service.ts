@@ -12,6 +12,7 @@ import { CreateOrderResponse } from "../models/responses/create-order-response";
 import { UpdateOrderStatusRequest } from "../models/requests/update-order-status-request";
 import { UpdateOrderStatusResponse } from "../models/responses/update-order-status-response";
 import { FileInfoModel } from "../models/responses/file-info-model";
+import {CreateFeedbackRequest} from 'app/modules/order/models/requests/feedback/create-feedback-request';
 
 @Injectable({
   providedIn: 'root'
@@ -67,5 +68,9 @@ export class OrderService {
 
   updateOrderStatus(id: number, model: UpdateOrderStatusRequest): Observable<BaseApiResponse<UpdateOrderStatusResponse>> {
     return this.httpClient.put<BaseApiResponse<UpdateOrderStatusResponse>>(`${this.baseUrl}/status/${id}`, model);
+  }
+
+  createOrderFeedback(orderId: number, createFeedbackRequest: CreateFeedbackRequest): Observable<BaseApiResponse<void>> {
+    return this.httpClient.post<BaseApiResponse<void>>(`${this.baseUrl}/${orderId}/feedback`, createFeedbackRequest);
   }
 }

@@ -8,7 +8,7 @@ namespace Doerly.FileRepository;
 public class FileRepository : IFileRepository
 {
     private const string StorageContainerResource = "c";
-    private const string StorageBlobResource = "c";
+    private const string StorageBlobResource = "b";
     private const string StorageContainerSasTokenPrefix = "StorageContainerSasToken_";
     private static readonly TimeSpan DefaultExpiry = TimeSpan.FromHours(1);
     private readonly BlobServiceClient _blobServiceClient;

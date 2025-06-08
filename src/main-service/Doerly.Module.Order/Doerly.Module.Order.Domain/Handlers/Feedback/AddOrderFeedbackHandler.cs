@@ -1,3 +1,4 @@
+using Doerly.Domain;
 using Doerly.Domain.Models;
 using Doerly.Module.Order.Contracts.Dtos.Requests;
 using Doerly.Module.Order.DataAccess;
@@ -8,8 +9,11 @@ namespace Doerly.Module.Order.Domain.Handlers;
 
 public class AddOrderFeedbackHandler : BaseOrderHandler
 {
-    public AddOrderFeedbackHandler(OrderDbContext dbContext) : base(dbContext)
+    private readonly IDoerlyRequestContext _doerlyRequestContext;
+
+    public AddOrderFeedbackHandler(OrderDbContext dbContext, IDoerlyRequestContext doerlyRequestContext) : base(dbContext)
     {
+        _doerlyRequestContext = doerlyRequestContext;
     }
 
     public async Task<HandlerResult> HandleAsync(int orderId, AddOrderFeedbackRequest request)
@@ -22,7 +26,8 @@ public class AddOrderFeedbackHandler : BaseOrderHandler
         {
             Comment = request.Comment,
             Rating = request.Rating,
-            OrderId = orderId
+            OrderId = orderId,
+            ReviewerUserId = _doerlyRequestContext.UserId ?? -1
         };
         
         DbContext.OrderFeedbacks.Add(feedback);

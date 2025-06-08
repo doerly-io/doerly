@@ -78,8 +78,8 @@ public class GetOrderByIdHandler : BaseOrderHandler
         await SetOrderFileUrls(order.ExistingFiles);
 
         var profileIds = new List<int>(2) { order.CustomerId };
-        if (order.ExecutorId.HasValue)
-            profileIds.Add(order.ExecutorId.Value);
+        if (order.Feedback?.UserProfile is { Id: > 0 })
+            profileIds.Add(order.Feedback.UserProfile.Id);
 
         var profiles = await _profileModuleProxy.GetProfilesShortInfoWithAvatarAsync(profileIds);
 
@@ -92,17 +92,16 @@ public class GetOrderByIdHandler : BaseOrderHandler
             AvatarUrl = customerProfile.AvatarUrl
         };
 
-        var reviewerProfiles = profiles
-            .Where(x => x.Id != order.Feedback?.UserProfile.Id)
-            .ToList();
-        if (order.Feedback != null)
+        var reviewerProfile = profiles
+            .FirstOrDefault(x => x.UserId == order.Feedback?.UserProfile.Id);
+        if (order.Feedback != null && reviewerProfile != null)
         {
             order.Feedback.UserProfile = new ProfileInfo
             {
                 Id = order.Feedback.UserProfile.Id,
-                FirstName = reviewerProfiles.First(x => x.Id == order.Feedback.UserProfile.Id).FirstName,
-                LastName = reviewerProfiles.First(x => x.Id == order.Feedback.UserProfile.Id).LastName,
-                AvatarUrl = reviewerProfiles.First(x => x.Id == order.Feedback.UserProfile.Id).AvatarUrl
+                FirstName = reviewerProfile.FirstName,
+                LastName = reviewerProfile.LastName,
+                AvatarUrl = reviewerProfile.AvatarUrl
             };
         }
 

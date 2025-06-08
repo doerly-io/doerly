@@ -412,6 +412,10 @@
     "files_size_limit": "Maximum files size is {{size}}.",
     "service_required": "Service is required for order creation"
   },
+  "feedback" : {
+    "title": "Feedback",
+    "submit": "Submit Feedback"
+  },
   "payments": {
     "status": {
       "pending": "Pending",
