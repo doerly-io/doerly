@@ -8,4 +8,6 @@ public interface IProfileModuleProxy : IModuleProxy
 {
     Task<HandlerResult<ProfileDto>> GetProfileAsync(int userId);
     Task<HandlerResult<IEnumerable<ProfileDto>>> GetProfilesAsync(int[] userIds);
+    Task<IEnumerable<ProfileShortInfoWithAvatarDto>> GetProfilesShortInfoWithAvatarAsync(IEnumerable<int> userIds);
+
 }
