@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Doerly.DataTransferObjects.Pagination;
 using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Module.Order.DataAccess;
+using Doerly.Module.Order.Enums;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,7 @@ public class SelectOrdersWithFilterAndPaginationHandler : BaseOrderHandler
     {
         var predicates = new List<Expression<Func<DataAccess.Entities.Order, bool>>>();
 
-        predicates.Add(o => o.CategoryId == dto.CategoryId);
+        predicates.Add(o => o.CategoryId == dto.CategoryId && o.Status == EOrderStatus.Placed);
 
         if (dto.RegionId.HasValue)
             predicates.Add(o => o.RegionId == dto.RegionId);

@@ -8,7 +8,7 @@
 
           <!-- Фото профілю та ім'я по центру -->
           <div class="d-flex flex-column align-items-center mb-4">
-            <div class="avatar-container position-relative" [routerLink]="['/profile', proposal.senderId === profileId ? proposal.receiver?.id : proposal.sender?.id]" style="cursor: pointer;" pTooltip="{{ 'ordering.view_profile' | translate }}" tooltipPosition="top">
+            <div class="avatar-container position-relative" [routerLink]="['/profile', proposal.senderId === profileId ? proposal.receiver?.id : proposal.sender?.id]" style="cursor: pointer;">
               <img *ngIf="profileAvatarUrl" [src]="profileAvatarUrl" alt="{{ 'profile.basic.image.alt' | translate }}"
                 class="avatar proposal-profile-avatar" width="120" height="120" />
               <p-avatar *ngIf="!profileAvatarUrl" icon="pi pi-user" shape="circle" size="xlarge"

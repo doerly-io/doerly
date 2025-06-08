@@ -38,7 +38,6 @@ import {FeedbackInputComponent} from 'app/@components/feedback-input/feedback-in
     Tag,
     AvatarModule,
     DividerModule,
-    TooltipModule,
     NgOptimizedImage,
     ImageModule,
     GalleriaModule,

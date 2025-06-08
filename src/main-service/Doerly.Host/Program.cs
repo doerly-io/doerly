@@ -199,6 +199,8 @@ builder.Services.AddMassTransit(cfg =>
 
 builder.Services.AddScoped<IDoerlyRequestContext, DoerlyRequestContext>();
 
+builder.Services.AddMemoryCache();
+
 
 var app = builder.Build();
 
