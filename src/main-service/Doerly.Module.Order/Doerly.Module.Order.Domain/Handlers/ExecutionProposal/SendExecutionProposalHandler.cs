@@ -23,7 +23,11 @@ public class SendExecutionProposalHandler : BaseOrderHandler
 
     public async Task<HandlerResult<SendExecutionProposalResponse>> HandleAsync(SendExecutionProposalRequest dto)
     {
-        var order = await DbContext.Orders.Select(x => new { x.Id, x.CustomerId }).FirstOrDefaultAsync(x => x.Id == dto.OrderId);
+        var userId = _doerlyRequestContext.UserId ?? throw new DoerlyException("We are fucked!");
+
+        var order = await DbContext.Orders.Select(x => new { x.Id, x.CustomerId })
+            .FirstOrDefaultAsync(x => x.Id == dto.OrderId && x.CustomerId == userId);
+
         if (order == null)
             return HandlerResult.Failure<SendExecutionProposalResponse>(Resources.Get("OrderNotFound"));
 
@@ -32,32 +36,13 @@ public class SendExecutionProposalHandler : BaseOrderHandler
          * but if sender is executor (not a customer) then check if the sender already sent a proposal to the receiver
          */
         var existingExecutionProposal = await DbContext.ExecutionProposals
-            .FirstOrDefaultAsync(x => x.OrderId == dto.OrderId && 
+            .FirstOrDefaultAsync(x => x.OrderId == dto.OrderId &&
                 ((x.SenderId == order.CustomerId && x.ReceiverId == dto.ReceiverId) ||
-                (x.SenderId != order.CustomerId && x.SenderId == _doerlyRequestContext.UserId)));
+                (x.SenderId != order.CustomerId && x.SenderId == userId)));
 
         if (existingExecutionProposal != null)
             return HandlerResult.Failure<SendExecutionProposalResponse>(Resources.Get("ExecutionProposalAlreadySent"));
 
-        var executionProposal = new ExecutionProposal()
-        {
-            OrderId = dto.OrderId,
-            Comment = dto.Comment.Trim(),
-            SenderId = _doerlyRequestContext.UserId ?? throw new DoerlyException("We are fucked!"),
-            ReceiverId = dto.ReceiverId,
-            Status = EExecutionProposalStatus.Pending
-        };
-
-        DbContext.ExecutionProposals.Add(executionProposal);
-        await DbContext.SaveChangesAsync();
-
-        await PublishExecutionProposalStatusUpdatedEventAsync(executionProposal.Id, executionProposal.Status);
-
-        var result = new SendExecutionProposalResponse()
-        {
-            Id = executionProposal.Id
-        };
-
-        return HandlerResult.Success(result);
+        return await SendExecutionProposal(dto, userId);
     }
 }

@@ -1,9 +1,11 @@
 ﻿using Doerly.Domain.Exceptions;
 using Doerly.Domain.Handlers;
 using Doerly.Domain.Helpers;
+using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Localization;
 using Doerly.Messaging;
+using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Module.Order.Contracts.Messages;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Entities;
@@ -15,7 +17,9 @@ using Doerly.Proxy.Profile;
 using DoerlyDomain.Constants;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
+using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
 using FileInfo = Doerly.Module.Order.Contracts.Dtos.FileInfo;
 
 namespace Doerly.Module.Order.Domain.Handlers;
@@ -153,6 +157,33 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
         }
 
         return (regionId, cityId);
+    }
+
+    protected async Task<HandlerResult<SendExecutionProposalResponse>> SendExecutionProposal(SendExecutionProposalRequest dto, int userId)
+    {
+        if (dto.ReceiverId == userId)
+            throw new DoerlyException(Resources.Get("InvalidUserForProposal"));
+
+        var executionProposal = new ExecutionProposal()
+        {
+            OrderId = dto.OrderId,
+            Comment = dto.Comment.Trim(),
+            SenderId = userId,
+            ReceiverId = dto.ReceiverId,
+            Status = EExecutionProposalStatus.Pending
+        };
+
+        DbContext.ExecutionProposals.Add(executionProposal);
+        await DbContext.SaveChangesAsync();
+
+        await PublishExecutionProposalStatusUpdatedEventAsync(executionProposal.Id, executionProposal.Status);
+
+        var result = new SendExecutionProposalResponse()
+        {
+            Id = executionProposal.Id
+        };
+
+        return HandlerResult.Success(result);
     }
 
     private bool IsValidImage(byte[] fileBytes)

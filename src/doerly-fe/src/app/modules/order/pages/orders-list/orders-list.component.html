@@ -1,6 +1,6 @@
 <section class="order-list row justify-content-center">
     <div *ngIf="canCreateOrder" class="d-flex justify-content-end mb-3">
-        <p-button icon="pi pi-shopping-cart" [routerLink]="'/ordering/create-order'" [queryParams]="{ serviceId: 1 }"
+        <p-button icon="pi pi-shopping-cart" [routerLink]="'/ordering/create-order'" [queryParams]="{ categoryId: 1, executorId: 2 }"
             label="{{ 'ordering.create_order' | translate }}" [severity]="'success'"/>
     </div>
     <p-dataview [value]="orders" [paginator]="true" alwaysShowPaginator="false" [rows]="10" [rowsPerPageOptions]="[10, 20, 50, 100]"
