@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>annotations</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Doerly.Infrastructure.Api\Doerly.Infrastructure.Api.csproj" />
+      <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Communication.Contracts\Doerly.Module.Communication.Contracts.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Communication.DataAccess\Doerly.Module.Communication.DataAccess.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Communication.Domain\Doerly.Module.Communication.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

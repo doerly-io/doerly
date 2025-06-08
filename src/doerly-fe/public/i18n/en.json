@@ -395,6 +395,26 @@
     },
     "nohistory": "Payments history not found"
   },
+  "communication": {
+    "title": "Messages",
+    "unknown_user": "Unknown User",
+    "no_messages": "No messages",
+    "no_messages_yet": "No messages yet",
+    "choose_conversation": "Choose a conversation to start messaging",
+    "conversation_not_found": "Conversation not found",
+    "user_status": {
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "typing": "is typing...",
+    "message_placeholder": "Type a message...",
+    "download_file": "Download file",
+    "errors": {
+      "load_conversation": "Failed to load conversation",
+      "send_message": "Failed to send message"
+    },
+    "send_message_before_sending": "Please enter a message before sending"
+  },
   "common": {
     "actions": "Actions",
     "cancel": "Cancel",
@@ -417,6 +437,9 @@
   "pages": {
     "profile": {
       "title": "Profile"
+    },
+    "communication": {
+      "title": "Conversation"
     }
   },
   "pdf": {

@@ -32,6 +32,13 @@
     <Project Path="Doerly.Module.Common\Doerly.Module.Common.Api\Doerly.Module.Common.Api.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Common\Doerly.Module.Common.DataAccess\Doerly.Module.Common.DataAccess.csproj" Type="Classic C#" />
   </Folder>
+  <Folder Name="/Modules/Communication/">
+    <Project Path="Doerly.Module.Communication\Doerly.Module.Communication.Api\Doerly.Module.Communication.Api.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Communication\Doerly.Module.Communication.Contracts\Doerly.Module.Communication.Contracts.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Communication\Doerly.Module.Communication.DataAccess\Doerly.Module.Communication.DataAccess.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Communication\Doerly.Module.Communication.Domain\Doerly.Module.Communication.Domain.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Communication\Doerly.Module.Communication.Enums\Doerly.Module.Communication.Enums.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Modules/Orders/">
     <Project Path="Doerly.Module.Order/Doerly.Module.Order.Contracts\Doerly.Module.Order.Contracts.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Order/Doerly.Module.Order.Enums\Doerly.Module.Order.Enums.csproj" Type="Classic C#" />

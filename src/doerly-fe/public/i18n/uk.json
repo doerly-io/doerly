@@ -394,6 +394,26 @@
     },
     "nohistory": "Відсутня історія оплат"
   },
+  "communication": {
+    "title": "Повідомлення",
+    "unknown_user": "Невідомий користувач",
+    "no_messages": "Немає повідомлень",
+    "no_messages_yet": "Повідомлень ще немає",
+    "choose_conversation": "Виберіть розмову, щоб почати спілкування",
+    "conversation_not_found": "Розмову не знайдено",
+    "user_status": {
+      "online": "Онлайн",
+      "offline": "Офлайн"
+    },
+    "typing": "друкує...",
+    "message_placeholder": "Введіть повідомлення...",
+    "download_file": "Завантажити файл",
+    "errors": {
+      "load_conversation": "Не вдалося завантажити розмову",
+      "send_message": "Не вдалося надіслати повідомлення"
+    },
+    "send_message_before_sending": "Будь ласка, введіть повідомлення перед відправкою"
+  },
   "common": {
     "actions": "Дії",
     "cancel": "Скасувати",
@@ -416,6 +436,9 @@
   "pages": {
     "profile": {
       "title": "Профіль"
+    },
+    "communication": {
+      "title": "Листування"
     }
   },
   "pdf": {

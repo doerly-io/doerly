@@ -191,6 +191,18 @@ Doerly</value>
   <data name="BioTooLong" xml:space="preserve">
         <value>Інформація про себе занадто довга</value>
     </data>
+    <data name="Communication.ConversationNotFound" xml:space="preserve">
+        <value>Бесіду не знайдено</value>
+    </data>
+    <data name="Communication.MessageNotFound" xml:space="preserve">
+        <value>Повідомлення не знайдено</value>
+    </data>
+    <data name="Communication.UnauthorizedSender" xml:space="preserve">
+        <value>Користувач не є учасником цієї бесіди</value>
+    </data>
+    <data name="Communication.CannotCreateConversationWithSelf" xml:space="preserve">
+        <value>Не можна створити бесіду з самим собою</value>
+    </data>
   <data name="OrderNotFound" xml:space="preserve">
         <value>Замовлення не знайдено</value>
     </data>

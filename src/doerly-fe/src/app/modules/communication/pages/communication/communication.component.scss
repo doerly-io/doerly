@@ -1,0 +1,130 @@
+.communication-container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--p-surface-ground);
+  position: relative;
+  overflow: hidden;
+}
+
+// Mobile header
+.mobile-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--p-surface-card);
+  border-bottom: 1px solid var(--p-surface-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .back-button {
+    margin-right: 1rem;
+    color: var(--p-surface-700);
+    
+    &:hover {
+      color: var(--p-primary-color);
+    }
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--p-surface-900);
+  }
+}
+
+// Desktop view
+.desktop-view {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+
+  .conversation-list-wrapper {
+    width: 400px;
+    min-width: 300px;
+    max-width: 30%;
+    border-right: 1px solid var(--p-surface-border);
+    background-color: var(--p-surface-card);
+  }
+
+  .chat-window-wrapper {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+// Mobile view
+.mobile-view {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+
+  .conversation-list-wrapper,
+  .chat-window-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease-in-out;
+    background-color: var(--p-surface-ground);
+
+    &.hidden {
+      transform: translateX(100%);
+    }
+  }
+
+  .conversation-list-wrapper {
+    transform: translateX(0);
+    
+    &.hidden {
+      transform: translateX(-100%);
+    }
+  }
+}
+
+// Dark theme
+:host-context(.my-app-dark) {
+  .mobile-header {
+    background-color: var(--p-surface-800);
+    border-bottom-color: var(--p-surface-700);
+
+    h2 {
+      color: var(--p-surface-0);
+    }
+
+    .back-button {
+      color: var(--p-surface-400);
+      
+      &:hover {
+        color: var(--p-primary-400);
+      }
+    }
+  }
+
+  .desktop-view {
+    .conversation-list-wrapper {
+      background-color: var(--p-surface-800);
+      border-right-color: var(--p-surface-700);
+    }
+  }
+}
+
+// Media queries
+@media screen and (max-width: 768px) {
+  .communication-container {
+    height: calc(100vh - 60px); // Adjust for mobile header
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .mobile-header {
+    padding: 0.75rem;
+    
+    h2 {
+      font-size: 1.1rem;
+    }
+  }
+}

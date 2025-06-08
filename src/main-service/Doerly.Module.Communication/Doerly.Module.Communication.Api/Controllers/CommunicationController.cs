@@ -1,0 +1,136 @@
+﻿using Doerly.DataTransferObjects.Pagination;
+using Doerly.Domain.Models;
+using Doerly.Infrastructure.Api;
+using Doerly.Localization;
+using Doerly.Module.Communication.Api.Hubs;
+using Doerly.Module.Communication.Contracts.Requests;
+using Doerly.Module.Communication.Contracts.Responses;
+using Doerly.Module.Communication.Domain.Handlers;
+using Doerly.Module.Communication.Domain.Hubs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+
+namespace Doerly.Module.Communication.Api.Controllers;
+
+[Authorize]
+[ApiController]
+[Area("communication")]
+[Route("api/[area]")]
+public class CommunicationController(IHubContext<CommunicationHub, ICommunicationHub> communicationHub) : BaseApiController
+{
+    [HttpGet("conversations")]
+    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetConversations([FromQuery] GetConversationsWithPaginationRequest dto)
+    {
+        var useId = RequestContext.UserId;
+        if (!useId.HasValue || useId.Value == 0)
+            return Unauthorized();
+
+        var userId = useId.Value;
+
+        var pagination = new GetEntitiesWithPaginationRequest()
+        {
+            PageInfo = new PageInfo()
+            {
+                Number = dto.PageNumber,
+                Size = dto.PageSize
+            }
+        };
+        var result = await ResolveHandler<GetUserConversationsWithPaginationHandler>().HandleAsync(userId, pagination);
+
+        if (!result.IsSuccess)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+    
+    [HttpGet("conversations/{conversationId:int}")]
+    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetConversationById(int conversationId)
+    {
+        var result = await ResolveHandler<GetConversationByIdHandler>().HandleAsync(conversationId);
+
+        if (!result.IsSuccess)
+            return NotFound(result);
+        
+
+        return Ok(result);
+    }
+    
+    [HttpPost("conversations")]
+    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> CreateConversation([FromBody] CreateConversationRequest request)
+    {
+        var userId = RequestContext.UserId;
+        if (!userId.HasValue || userId.Value == 0)
+            return Unauthorized();
+
+        var initiatorId = userId.Value;
+
+        if (initiatorId == request.RecipientId)
+        {
+            return BadRequest(HandlerResult.Failure<ConversationResponse>(Resources.Get("Communication.CannotCreateConversationWithSelf")));
+        }
+        
+        var result = await ResolveHandler<CreateConversationHandler>().HandleAsync(request, initiatorId);
+
+        if (!result.IsSuccess)
+            return Conflict(result);
+
+        return Ok(result);
+    }
+    
+    [HttpPost("messages/send")]
+    [ProducesResponseType<HandlerResult<SendMessageRequest>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> SendMessage(SendMessageRequest request)
+    {
+        var useId = RequestContext.UserId;
+        if (!useId.HasValue || useId.Value == 0)
+            return Unauthorized();
+
+        var userId = useId.Value;
+        
+        var result = await ResolveHandler<SendMessageHandler>().HandleAsync(userId, request);
+        
+        if (!result.IsSuccess)
+            return Conflict(result);
+
+        return Ok();
+    }
+    
+    [HttpPost("conversations/{conversationId:int}/messages/file/send")]
+    [ProducesResponseType<HandlerResult<SendMessageRequest>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> SendFileMessage(int conversationId, [FromForm] SendFileMessageRequest request)
+    {
+        var useId = RequestContext.UserId;
+        if (!useId.HasValue || useId.Value == 0)
+            return Unauthorized();
+
+        var userId = useId.Value;
+        
+        var result = await ResolveHandler<SendFileMessageHandler>().HandleAsync(conversationId, userId, request.File);
+        var message = (await ResolveHandler<GetMessageByIdHandler>().HandleAsync(result.Value)).Value;
+
+        // Notify the communication hub about the new file message
+        await communicationHub.Clients.Group(conversationId.ToString()).ReceiveMessage(message);
+
+        return Ok();
+    }
+    
+    [HttpGet("messages/{messageId:int}")]
+    [ProducesResponseType<HandlerResult<MessageResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<HandlerResult<MessageResponse>>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetMessage(int messageId)
+    {
+        var result = await ResolveHandler<GetMessageByIdHandler>().HandleAsync(messageId);
+        
+        if (!result.IsSuccess)
+            return NotFound(result);
+
+        return Ok(result);
+    }
+}
