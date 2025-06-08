@@ -21,7 +21,7 @@ public class OrdersModuleWrapper : IOrdersModuleWrapper
 
     public async Task<BasePaginationResponse<GetOrdersWithPaginationAndFilterResponse>> GetOrdersWithPaginationAsync(GetOrderWithFilterAndPaginationRequest request)
     {
-        var ordersResponse = await _handlerFactory.Get<SelectOrdersWIthFilterAndPaginationHandler>().HandleAsync(request);
+        var ordersResponse = await _handlerFactory.Get<SelectOrdersWithFilterAndPaginationHandler>().HandleAsync(request);
         return ordersResponse;
     }
 }

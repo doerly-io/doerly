@@ -15,6 +15,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
     <ProjectReference Include="..\..\Doerly.Localization\Doerly.Localization.csproj" />
+    <ProjectReference Include="..\..\Doerly.Module.Order\Doerly.Module.Order.Contracts\Doerly.Module.Order.Contracts.csproj" />
+    <ProjectReference Include="..\..\Doerly.Proxy.Orders\Doerly.Proxy.Orders.csproj" />
     <ProjectReference Include="..\Doerly.Module.Catalog.Contracts\Doerly.Module.Catalog.Contracts.csproj" />
     <ProjectReference Include="..\Doerly.Module.Catalog.DataAccess\Doerly.Module.Catalog.DataAccess.csproj" />
     <ProjectReference Include="..\Doerly.Module.Catalog.Enums\Doerly.Module.Catalog.Enums.csproj" />

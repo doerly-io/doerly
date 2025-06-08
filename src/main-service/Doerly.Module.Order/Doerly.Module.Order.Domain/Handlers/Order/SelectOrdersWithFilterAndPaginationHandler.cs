@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Order.Domain.Handlers.Order;
 
-public class SelectOrdersWIthFilterAndPaginationHandler : BaseOrderHandler
+public class SelectOrdersWithFilterAndPaginationHandler : BaseOrderHandler
 {
     private readonly IProfileModuleProxy _profileModuleProxy;
 
-    public SelectOrdersWIthFilterAndPaginationHandler(
+    public SelectOrdersWithFilterAndPaginationHandler(
         OrderDbContext dbContext,
         IProfileModuleProxy profileModuleProxy
     ) : base(dbContext)
