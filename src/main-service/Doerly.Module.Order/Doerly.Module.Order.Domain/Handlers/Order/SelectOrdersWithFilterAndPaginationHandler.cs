@@ -4,7 +4,6 @@ using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Proxy.Profile;
-using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Order.Domain.Handlers.Order;
 
@@ -25,7 +24,7 @@ public class SelectOrdersWithFilterAndPaginationHandler : BaseOrderHandler
     {
         var predicates = new List<Expression<Func<DataAccess.Entities.Order, bool>>>();
 
-        predicates.Add(o => dto.Categories.Contains(o.CategoryId));
+        predicates.Add(o => o.CategoryId == dto.CategoryId);
 
         if (dto.RegionId.HasValue)
             predicates.Add(o => o.RegionId == dto.RegionId);

@@ -5,11 +5,11 @@ using Doerly.Proxy.Orders;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Orders;
 
-public class SelectOrdersWIthFilterAndPaginationHandler : BaseHandler
+public class SelectOrdersWithFilterAndPaginationHandler : BaseHandler
 {
     private readonly IOrdersModuleProxy _ordersModuleProxy;
 
-    public SelectOrdersWIthFilterAndPaginationHandler(IOrdersModuleProxy ordersModuleProxy)
+    public SelectOrdersWithFilterAndPaginationHandler(IOrdersModuleProxy ordersModuleProxy)
     {
         _ordersModuleProxy = ordersModuleProxy;
     }

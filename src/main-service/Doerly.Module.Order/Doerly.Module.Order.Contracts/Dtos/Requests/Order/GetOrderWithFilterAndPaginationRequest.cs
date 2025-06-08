@@ -4,7 +4,7 @@ namespace Doerly.Module.Order.Contracts.Dtos;
 
 public class GetOrderWithFilterAndPaginationRequest : GetEntitiesWithPaginationRequest
 {
-    public IEnumerable<int> Categories { get; set; }
+    public int? CategoryId { get; set; }
     
     public bool IsOrderByPrice { get; set; }
 

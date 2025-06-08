@@ -1,7 +1,6 @@
 using Doerly.DataTransferObjects.Pagination;
 using Doerly.Infrastructure.Api;
 using Doerly.Module.Order.Contracts.Dtos;
-using Doerly.Module.Order.Domain.Handlers.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +17,7 @@ public class OrdersController : BaseApiController
     [ProducesResponseType<BasePaginationResponse<GetOrdersWithPaginationAndFilterResponse>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetOrdersWithPagination([FromQuery] GetOrderWithFilterAndPaginationRequest request)
     {
-        var result = await ResolveHandler<SelectOrdersWithFilterAndPaginationHandler>().HandleAsync(request);
+        var result = await ResolveHandler<Domain.Handlers.Orders.SelectOrdersWithFilterAndPaginationHandler>().HandleAsync(request);
         return Ok(result);
     }
 }
