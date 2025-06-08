@@ -21,8 +21,8 @@ namespace Doerly.Module.Communication.Api.Controllers;
 public class CommunicationController(IHubContext<CommunicationHub, ICommunicationHub> communicationHub) : BaseApiController
 {
     [HttpGet("conversations")]
-    [ProducesResponseType<HandlerResult<ConversationResponseDto>>(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult<ConversationResponseDto>>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetConversations([FromQuery] GetConversationsWithPaginationRequest dto)
     {
         var userId = GetUserId();
@@ -46,8 +46,8 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
     }
     
     [HttpGet("conversations/{conversationId:int}")]
-    [ProducesResponseType<HandlerResult<ConversationResponseDto>>(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult<ConversationResponseDto>>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetConversationById(int conversationId)
     {
         var result = await ResolveHandler<GetConversationByIdHandler>().HandleAsync(conversationId);
@@ -60,7 +60,7 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
     }
     
     [HttpPost("conversations")]
-    [ProducesResponseType<HandlerResult<ConversationResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateConversation([FromBody] CreateConversationRequest request)
     {
         var initiatorId = GetUserId();
@@ -69,7 +69,7 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
 
         if (initiatorId == request.RecipientId)
         {
-            return BadRequest(HandlerResult.Failure<ConversationResponseDto>(Resources.Get("Communication.CannotCreateConversationWithSelf")));
+            return BadRequest(HandlerResult.Failure<ConversationResponse>(Resources.Get("Communication.CannotCreateConversationWithSelf")));
         }
         
         var result = await ResolveHandler<CreateConversationHandler>().HandleAsync(request, initiatorId);
@@ -114,8 +114,8 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
     }
     
     [HttpGet("messages/{messageId:int}")]
-    [ProducesResponseType<HandlerResult<MessageResponseDto>>(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult<MessageResponseDto>>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<HandlerResult<MessageResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<HandlerResult<MessageResponse>>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetMessage(int messageId)
     {
         var result = await ResolveHandler<GetMessageByIdHandler>().HandleAsync(messageId);

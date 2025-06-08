@@ -3,13 +3,13 @@ using Doerly.Module.Profile.Contracts.Dtos;
 
 namespace Doerly.Module.Communication.Contracts.Responses;
 
-public class MessageResponseDto
+public class MessageResponse
 {
     public int Id { get; set; }
     
     public int ConversationId { get; set; }
     
-    public ConversationHeaderResponseDto Conversation { get; set; }
+    public ConversationHeaderResponse Conversation { get; set; }
     
     public EMessageType MessageType { get; set; }
     

@@ -3,10 +3,10 @@ import * as signalR from '@microsoft/signalr';
 import {JwtTokenHelper} from '../../../@core/helpers/jwtToken.helper';
 import {HttpTransportType} from '@microsoft/signalr';
 import {SendMessageRequest} from '../models/requests/send-message-request.model';
-import {MessageResponse} from '../models/message-response.model';
+import {MessageResponse} from '../models/responses/message-response.model';
 import {environment} from '../../../../environments/environment.development';
 import { MessageStatus } from '../models/enums/message.status.enum';
-import { ConversationHeaderResponse } from '../models/conversation-header-response.model';
+import { ConversationHeaderResponse } from '../models/responses/conversation-header-response.model';
 
 @Injectable({
   providedIn: 'root'

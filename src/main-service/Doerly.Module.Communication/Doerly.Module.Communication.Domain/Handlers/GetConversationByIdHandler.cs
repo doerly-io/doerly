@@ -15,7 +15,7 @@ public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfi
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
-    public async Task<HandlerResult<ConversationResponseDto>> HandleAsync(int conversationId)
+    public async Task<HandlerResult<ConversationResponse>> HandleAsync(int conversationId)
     {
         var conversation = await _dbContext.Conversations
             .Where(c => c.Id == conversationId)
@@ -35,7 +35,7 @@ public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfi
                 
         if (conversation == null)
         {
-            return HandlerResult.Failure<ConversationResponseDto>(Resources.Get("Communication.ConversationNotFound"));
+            return HandlerResult.Failure<ConversationResponse>(Resources.Get("Communication.ConversationNotFound"));
         }
         
         var participantsIds = conversation.ParticipantIds;
@@ -46,7 +46,7 @@ public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfi
             profiles[participantId] = profile;
         }
         
-        var messageDtos = await Task.WhenAll(conversation.Messages.Select(async m => new MessageResponseDto
+        var messageDtos = await Task.WhenAll(conversation.Messages.Select(async m => new MessageResponse
         {
             Id = m.Id,
             SenderId = m.SenderId,
@@ -61,7 +61,7 @@ public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfi
             Status = m.Status
         }));
         
-        var conversationResponseDto =  new ConversationResponseDto()
+        var conversationResponseDto =  new ConversationResponse()
         {
             Id = conversation.Id,
             Initiator = profiles.GetValueOrDefault(conversation.InitiatorId),

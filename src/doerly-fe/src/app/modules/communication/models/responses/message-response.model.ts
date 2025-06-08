@@ -1,6 +1,6 @@
-import {MessageType} from './enums/messageType';
-import {MessageStatus} from './enums/message.status.enum';
-import {ProfileResponse} from '../../profile/models/responses/ProfileResponse';
+import {MessageType} from '../enums/messageType';
+import {MessageStatus} from '../enums/message.status.enum';
+import {ProfileResponse} from '../../../profile/models/responses/ProfileResponse';
 import {ConversationHeaderResponse} from './conversation-header-response.model';
 
 export interface MessageResponse {

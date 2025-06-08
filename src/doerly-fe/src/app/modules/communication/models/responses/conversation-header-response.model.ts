@@ -1,4 +1,4 @@
-import {ProfileResponse} from '../../profile/models/responses/ProfileResponse';
+import {ProfileResponse} from '../../../profile/models/responses/ProfileResponse';
 import {MessageResponse} from './message-response.model';
 
 export interface ConversationHeaderResponse {

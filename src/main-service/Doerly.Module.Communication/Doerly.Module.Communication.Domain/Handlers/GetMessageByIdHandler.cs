@@ -15,7 +15,7 @@ public class GetMessageByIdHandler(CommunicationDbContext dbContext, IProfileMod
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
-    public async Task<HandlerResult<MessageResponseDto>> HandleAsync(int messageId)
+    public async Task<HandlerResult<MessageResponse>> HandleAsync(int messageId)
     {
         var message = await _dbContext.Messages
             .AsNoTracking()
@@ -24,7 +24,7 @@ public class GetMessageByIdHandler(CommunicationDbContext dbContext, IProfileMod
             .FirstOrDefaultAsync();
 
         if (message == null)
-            return HandlerResult.Failure<MessageResponseDto>(Resources.Get("Communication.MessageNotFound"));
+            return HandlerResult.Failure<MessageResponse>(Resources.Get("Communication.MessageNotFound"));
         
         var profiles = new Dictionary<int, ProfileDto>();
         foreach (var userId in message.Conversation.ParticipantIds)
@@ -46,12 +46,12 @@ public class GetMessageByIdHandler(CommunicationDbContext dbContext, IProfileMod
             ) ?? throw new InvalidOperationException("Failed to generate file URL");
         }
 
-        var messageDto = new MessageResponseDto()
+        var messageDto = new MessageResponse()
         {
             Id = message.Id,
             SenderId = message.SenderId,
             ConversationId = message.ConversationId,
-            Conversation = new ConversationHeaderResponseDto
+            Conversation = new ConversationHeaderResponse
             {
                 Id = message.Conversation.Id,
                 Initiator = profiles.GetValueOrDefault(message.Conversation.InitiatorId),

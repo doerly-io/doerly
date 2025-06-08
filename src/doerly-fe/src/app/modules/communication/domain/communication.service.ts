@@ -5,7 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {GetConversationResponse} from '../models/responses/get-conversation-response.model';
 import {PageInfo} from '../../../@core/models/page-info';
-import {ConversationResponse} from '../models/conversation-response.model';
+import {ConversationResponse} from '../models/responses/conversation-response.model';
 
 
 @Injectable({

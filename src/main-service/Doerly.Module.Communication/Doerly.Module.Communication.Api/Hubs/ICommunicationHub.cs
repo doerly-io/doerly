@@ -6,7 +6,7 @@ public interface ICommunicationHub
 {
     Task UserJoined(string conversationId);
 
-    Task ReceiveMessage(MessageResponseDto message);
+    Task ReceiveMessage(MessageResponse message);
 
     Task LeaveConversation(string conversationId);
 
@@ -22,5 +22,5 @@ public interface ICommunicationHub
     
     Task UserStatusChanged(string userId, bool isOnline);
 
-    Task UpdateLastMessage(MessageResponseDto conversation);
+    Task UpdateLastMessage(MessageResponse conversation);
 }

@@ -2,7 +2,7 @@ using Doerly.Module.Profile.Contracts.Dtos;
 
 namespace Doerly.Module.Communication.Contracts.Responses;
 
-public class ConversationResponseDto
+public class ConversationResponse
 {
     public int Id { get; set; }
     
@@ -10,5 +10,5 @@ public class ConversationResponseDto
     
     public ProfileDto Recipient { get; set; }
     
-    public List<MessageResponseDto> Messages { get; set; }
+    public List<MessageResponse> Messages { get; set; }
 }

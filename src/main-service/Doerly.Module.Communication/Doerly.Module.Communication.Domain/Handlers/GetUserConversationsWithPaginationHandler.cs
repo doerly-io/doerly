@@ -40,12 +40,12 @@ public class GetUserConversationsWithPaginationHandler(CommunicationDbContext db
         }
         
         var conversationHeaderResponseDtos = conversations
-            .Select(c => new ConversationHeaderResponseDto
+            .Select(c => new ConversationHeaderResponse
         {
             Id = c.Id,
             Initiator = profiles.GetValueOrDefault(c.InitiatorId),
             Recipient = profiles.GetValueOrDefault(c.RecipientId),
-            LastMessage = c.Messages.Select(m => new MessageResponseDto()
+            LastMessage = c.Messages.Select(m => new MessageResponse()
             {
                 Id = m.Id,
                 SenderId = m.SenderId,
