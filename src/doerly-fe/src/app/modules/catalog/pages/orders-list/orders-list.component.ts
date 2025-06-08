@@ -14,9 +14,10 @@ import { OrderService } from 'app/modules/order/domain/order.service';
 import { GetOrdersWithPaginationByPredicatesRequest } from 'app/modules/order/models/requests/get-orders-request';
 import { GetOrderResponse } from 'app/modules/order/models/responses/get-order-response';
 import { BaseApiResponse } from 'app/@core/models/base-api-response';
-import { GetOrdersWithFiltrationResponse, OrderModel } from '../../models/get-orders-with-filtration-response.model';
+import { GetOrdersWithFiltrationResponse } from '../../models/get-orders-with-filtration-response.model';
 import { OrdersService } from '../../services/orders.service';
 import { GetOrdersWithFiltrationRequest } from '../../models/get-orders-with-filtration-request.model';
+import { BasePaginationResponse } from 'app/@core/models/base-pagination-response';
 
 @Component({
   selector: 'app-orders-list',
@@ -38,7 +39,7 @@ export class OrdersListComponent implements OnInit {
   @Input() executorId?: number | null;
   @Input() canCreateOrder: boolean = false;
 
-  orders: OrderModel[] = [];
+  orders: GetOrdersWithFiltrationResponse[] = [];
   totalRecords: number = 0;
   categoryId?: number;
   loading: boolean = true;
@@ -79,9 +80,9 @@ export class OrdersListComponent implements OnInit {
       isDescending: false,
     };
     this.ordersService.getOrdersWithPagination(request).subscribe({
-      next: (response: BaseApiResponse<GetOrdersWithFiltrationResponse>) => {
-        this.orders = response.value?.items || [];
-        this.totalRecords = response.value?.count || 0;
+      next: (response: BasePaginationResponse<GetOrdersWithFiltrationResponse>) => {
+        this.orders = response?.items || [];
+        this.totalRecords = response?.count || 0;
         this.loading = false;
       },
       error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)

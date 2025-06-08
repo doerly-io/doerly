@@ -6,6 +6,8 @@ import { IService, ICreateServiceRequest, IUpdateServiceRequest, IServiceRespons
 import { GetOrdersWithFiltrationRequest } from '../models/get-orders-with-filtration-request.model';
 import { GetOrdersWithFiltrationResponse } from '../models/get-orders-with-filtration-response.model';
 import { BaseApiResponse } from 'app/@core/models/base-api-response';
+import { CursorPaginationResponse } from 'app/@core/models/cursor-pagination-response';
+import { BasePaginationResponse } from 'app/@core/models/base-pagination-response';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +16,7 @@ export class OrdersService {
     private baseUrl = environment.baseApiUrl + '/catalog/orders';
     private readonly http = inject(HttpClient);
 
-    getOrdersWithPagination(model: GetOrdersWithFiltrationRequest): Observable<BaseApiResponse<GetOrdersWithFiltrationResponse>> {
+    getOrdersWithPagination(model: GetOrdersWithFiltrationRequest): Observable<BasePaginationResponse<GetOrdersWithFiltrationResponse>> {
         let params = new HttpParams();
 
         // Flatten pageInfo
@@ -28,7 +30,7 @@ export class OrdersService {
                 params = params.set(key, value as string);
             }
         });
-        return this.http.get<BaseApiResponse<GetOrdersWithFiltrationResponse>>(
+        return this.http.get<BasePaginationResponse<GetOrdersWithFiltrationResponse>>(
             `${this.baseUrl}/get-orders-with-pagination`,
             { params }
         );

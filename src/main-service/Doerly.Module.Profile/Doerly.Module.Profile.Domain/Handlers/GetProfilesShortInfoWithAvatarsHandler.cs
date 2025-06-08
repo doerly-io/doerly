@@ -29,6 +29,7 @@ public class GetProfilesShortInfoWithAvatars(ProfileDbContext dbContext, IFileRe
     private async Task UpdateAvatarUrlsAsync(IEnumerable<ProfileShortInfoWithAvatarDto> profiles)
     {
         var tasks = profiles
+            .Where(x => !string.IsNullOrEmpty(x.AvatarUrl))
             .Select(async p =>
             {
                 p.AvatarUrl = await fileRepository.GetSasUrlAsync(AzureStorageConstants.ImagesContainerName, p.AvatarUrl);
