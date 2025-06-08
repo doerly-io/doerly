@@ -4,6 +4,7 @@ using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Proxy.Profile;
+using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Order.Domain.Handlers.Order;
 
