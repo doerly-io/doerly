@@ -104,13 +104,15 @@ export class SendMessageModalComponent {
     this.isLoading = true;
     const messageContent = this.messageForm.get('messageContent')?.value;
 
+    let conversationId: number | null;
+
     firstValueFrom(this.communicationService.getConversationWithUser(this.recipientId))
       .then(existingConversationResult => {
         if (!existingConversationResult.isSuccess) {
           throw new Error(existingConversationResult.errorMessage ?? this.translate.instant('communication.message.error.detail'));
         }
 
-        const conversationId = existingConversationResult.value;
+        conversationId = existingConversationResult.value;
         if (conversationId) {
           return conversationId;
         }
@@ -120,12 +122,16 @@ export class SendMessageModalComponent {
             if (!newConversationResult.isSuccess) {
               throw new Error(newConversationResult.errorMessage ?? this.translate.instant('communication.message.error.detail'));
             }
-            return newConversationResult.value;
+            conversationId = newConversationResult.value;
+            return conversationId;
           });
       })
-      .then(conversationId => {
+      .then(() => {
+        if (!conversationId) {
+          throw new Error(this.translate.instant('communication.message.error.no_conversation'));
+        }
         return firstValueFrom(this.communicationService.sendMessage({
-          conversationId : conversationId!,
+          conversationId: conversationId!,
           messageContent: messageContent
         }));
       })
@@ -143,7 +149,7 @@ export class SendMessageModalComponent {
         this.visible = false;
         this.messageForm.reset();
         this.router.navigate(['/communication/conversations'], {
-          queryParams: { conversationId: messageResult.value }
+          queryParams: { conversationId: conversationId }
         });
       })
       .catch(error => {
