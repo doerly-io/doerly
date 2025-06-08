@@ -45,6 +45,9 @@ import { CompetenceDto } from '../../models/responses/CompetenceDto';
 import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 import {PaymentHistoryComponent} from 'app/modules/profile/components/payment-history/payment-history.component';
 import {LanguagesQueryDto} from '../../models/requests/LanguagesQuery';
+import { IService, ICreateServiceRequest, IUpdateServiceRequest } from '../../../catalog/models/service.model';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { CatalogService } from '../../../catalog/services/catalog.service';
 
 @Component({
   selector: 'app-profile',
@@ -70,7 +73,8 @@ import {LanguagesQueryDto} from '../../models/requests/LanguagesQuery';
     AddressSelectComponent,
     NgForOf,
     PaymentHistoryComponent,
-    TreeSelect
+    TreeSelect,
+    InputNumberModule,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
@@ -121,6 +125,11 @@ export class ProfileComponent implements OnInit {
   isViewingOtherProfile: boolean = false;
   viewedUserId: number | null = null;
 
+  services: IService[] = [];
+  isServiceDialogVisible = false;
+  editingService: IService | null = null;
+  serviceForm: FormGroup;
+  userId: number = 0;
 
   private readonly formBuilder: FormBuilder = inject(FormBuilder);
   private readonly profileService: ProfileService = inject(ProfileService);
@@ -128,7 +137,18 @@ export class ProfileComponent implements OnInit {
   private readonly toastHelper: ToastHelper = inject(ToastHelper);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   public pdfService: PdfService = inject(PdfService);
+  private readonly catalogService: CatalogService = inject(CatalogService);
 
+  constructor(
+    private fb: FormBuilder,
+  ) {
+    this.serviceForm = this.fb.group({
+      name: ['', Validators.required],
+      description: [''],
+      categoryId: [null, Validators.required],
+      price: [null],
+    });
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -138,12 +158,15 @@ export class ProfileComponent implements OnInit {
         const tokenUserId = this.jwtTokenHelper.getUserInfo()?.id;
         this.isViewingOtherProfile = this.viewedUserId !== tokenUserId;
         this.isEdit = false; // Disable editing for other profiles
+        this.userId = this.viewedUserId;
       } else {
         this.viewedUserId = null;
         this.isViewingOtherProfile = false;
+        this.userId = this.jwtTokenHelper.getUserInfo()?.id || 0;
       }
       this.onInitForm();
       this.onLoadProfile();
+      this.loadServices();
     });
 
     this.sexOptions = [
@@ -647,5 +670,128 @@ export class ProfileComponent implements OnInit {
         categoryName: selectedNode.label
       });
     }
+  }
+
+  onAddService() {
+    this.editingService = null;
+    this.serviceForm.reset();
+    this.isServiceDialogVisible = true;
+  }
+
+  onEditService(service: IService) {
+    this.editingService = service;
+    this.serviceForm.patchValue({
+      name: service.name,
+      description: service.description,
+      categoryId: service.categoryId.toString(),
+      price: service.price,
+    });
+    this.isServiceDialogVisible = true;
+  }
+
+  onDeleteService(service: IService) {
+    this.handleProfileOperation(
+      this.catalogService.deleteService(service.id),
+      'profile.professional.services.delete.success',
+      'profile.professional.services.delete.error',
+      () => {
+        this.services = this.services.filter(s => s.id !== service.id);
+      }
+    );
+  }
+
+  onCancelService() {
+    this.isServiceDialogVisible = false;
+    this.editingService = null;
+    this.serviceForm.reset();
+  }
+
+  onServiceCategorySelect(event: any): void {
+    if (event.node) {
+      const selectedNode = event.node;
+      this.serviceForm.patchValue({
+        categoryId: selectedNode.key
+      });
+      // Close the dropdown by clicking outside
+      setTimeout(() => {
+        const overlay = document.querySelector('.p-treeselect-panel');
+        if (overlay) {
+          (overlay as HTMLElement).style.display = 'none';
+        }
+      }, 100);
+    }
+  }
+
+  onSaveService() {
+    if (this.serviceForm.valid) {
+      const formValue = this.serviceForm.value;
+      if (this.editingService) {
+        // Update existing service
+        const updateRequest: IUpdateServiceRequest = {
+          name: formValue.name,
+          description: formValue.description || '',
+          categoryId: Number(formValue.categoryId),
+          price: formValue.price || 0,
+          isEnabled: true,
+          filterValues: this.editingService.filterValues || {}
+        };
+
+        console.log('Sending update service request:', updateRequest);
+        this.catalogService.updateService(this.editingService.id, updateRequest).subscribe({
+          next: (response) => {
+            console.log('Update service response:', response);
+            this.loadServices();
+            this.isServiceDialogVisible = false;
+            this.editingService = null;
+            this.serviceForm.reset();
+          },
+          error: (error: Error) => {
+            console.error('Error updating service:', error);
+          }
+        });
+      } else {
+        // Create new service
+        const createRequest: ICreateServiceRequest = {
+          name: formValue.name,
+          description: formValue.description || '',
+          categoryId: Number(formValue.categoryId),
+          userId: this.jwtTokenHelper.getUserInfo()?.id || 0,
+          price: formValue.price || 0,
+          filterValues: {}
+        };
+
+        console.log('Sending create service request:', createRequest);
+        this.catalogService.createService(createRequest).subscribe({
+          next: (response) => {
+            console.log('Create service response:', response);
+            this.loadServices();
+            this.isServiceDialogVisible = false;
+            this.serviceForm.reset();
+          },
+          error: (error: Error) => {
+            console.error('Error creating service:', error);
+          }
+        });
+      }
+    }
+  }
+
+  loadServices() {
+    const userId = this.isViewingOtherProfile ? this.viewedUserId : this.jwtTokenHelper.getUserInfo()?.id;
+    if (!userId) return;
+
+    console.log('Loading services for user:', userId);
+    this.catalogService.getServicesByUserId(userId).subscribe({
+      next: (response) => {
+        console.log('Load services response:', response);
+        if (response.isSuccess && response.value) {
+          this.services = response.value;
+        }
+      },
+      error: (error: Error) => {
+        console.error('Error loading services:', error);
+        this.toastHelper.showError('common.error', 'profile.professional.services.load.error');
+      }
+    });
   }
 }

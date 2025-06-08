@@ -1,6 +1,7 @@
 import {Routes} from '@angular/router';
 import {authGuard} from './@core/guards/auth.guard';
 import {NotFoundPageComponent} from 'app/shared-pages/not-found-page/not-found-page.component';
+import { CATALOG_ROUTES } from './modules/catalog/catalog.routes';
 
 export const routes: Routes = [
   {
@@ -26,6 +27,10 @@ export const routes: Routes = [
     path: 'ordering',
     loadChildren: () => import('./modules/order/ordering.routes').then(m => m.routes),
     canActivate: [authGuard]
+  },
+  {
+    path: 'catalog',
+    children: CATALOG_ROUTES
   },
   {
     path: '404-page',

@@ -1,0 +1,32 @@
+<div class="catalog-container">
+  <div class="services-section">
+    <div class="sorting-section">
+      <p-dropdown
+        [options]="sortOptions"
+        [(ngModel)]="selectedSort"
+        (onChange)="onSortChange($event)"
+        [style]="{'width':'200px'}"
+        placeholder="{{ 'catalog.sort' | translate }}">
+      </p-dropdown>
+    </div>
+
+    <div class="services-grid">
+      <div *ngFor="let service of services" class="service-card">
+        <div class="service-info">
+          <h3>{{service.name}}</h3>
+          <p>{{service.description}}</p>
+          <div class="service-price">{{service.price | currency}}</div>
+        </div>
+      </div>
+    </div>
+
+    <p-paginator
+      [rows]="pagination.pageSize"
+      [totalRecords]="pagination.totalCount"
+      [first]="pagination.pageNumber * pagination.pageSize"
+      (onPageChange)="onPageChange($event)"
+      [rowsPerPageOptions]="[12, 24, 36]"
+      [alwaysShow]="false">
+    </p-paginator>
+  </div>
+</div> 
