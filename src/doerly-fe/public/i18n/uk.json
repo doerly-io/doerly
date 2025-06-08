@@ -465,6 +465,9 @@
       }
     }
   },
+  "catalog": {
+    "services": "Послуги"
+  },
   "common": {
     "actions": "Дії",
     "cancel": "Скасувати",

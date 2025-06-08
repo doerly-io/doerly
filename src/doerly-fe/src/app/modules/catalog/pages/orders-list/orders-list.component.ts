@@ -1,19 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { OrderService } from '../../domain/order.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { DataView } from 'primeng/dataview';
-import { Tag } from 'primeng/tag';
 import { CommonModule } from '@angular/common';
-import { GetOrdersWithPaginationByPredicatesRequest } from '../../models/requests/get-orders-request';
-import { GetOrderResponse } from '../../models/responses/get-order-response';
-import { PaginatorModule } from 'primeng/paginator';
-import { EOrderStatus } from '../../domain/enums/order-status';
-import { Button } from 'primeng/button';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { HttpErrorResponse } from '@angular/common/http';
-import { getOrderStatusSeverity } from '../../domain/enums/order-status';
 import { Avatar } from 'primeng/avatar';
-import { ErrorHandlerService } from '../../../../@core/services/error-handler.service';
+import { Button } from 'primeng/button';
+import { PaginatorModule } from 'primeng/paginator';
+import { Tag } from 'primeng/tag';
+import { DataView } from 'primeng/dataview';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorHandlerService } from 'app/@core/services/error-handler.service';
+import { EOrderStatus, getOrderStatusSeverity } from 'app/modules/order/domain/enums/order-status';
+import { OrderService } from 'app/modules/order/domain/order.service';
+import { GetOrdersWithPaginationByPredicatesRequest } from 'app/modules/order/models/requests/get-orders-request';
+import { GetOrderResponse } from 'app/modules/order/models/responses/get-order-response';
 
 @Component({
   selector: 'app-orders-list',
@@ -38,10 +37,17 @@ export class OrdersListComponent implements OnInit {
 
   orders: GetOrderResponse[] = [];
   totalRecords: number = 0;
+  categoryId?: number;
   loading: boolean = true;
   returnUrl!: string;
   EOrderStatus = EOrderStatus;
   public getOrderStatusSeverity = getOrderStatusSeverity;
+
+  pagination = {
+    pageNumber: 0,
+    pageSize: 12,
+    totalCount: 0
+  };
 
   constructor(private orderService: OrderService,
     private route: ActivatedRoute,
@@ -50,14 +56,20 @@ export class OrdersListComponent implements OnInit {
 
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['return'];
+
+    this.route.params.subscribe(params => {
+      this.categoryId = params['categoryId'] ? +params['categoryId'] : undefined;
+      this.pagination.pageNumber = 0;
+      this.loadOrders();
+    });
   }
 
-  loadOrders(event: any) {
+  loadOrders() {
     this.loading = true;
     const request: GetOrdersWithPaginationByPredicatesRequest = {
       pageInfo: {
-        number: event.first / event.rows + 1,
-        size: event.rows
+        number: this.pagination.pageNumber + 1,
+        size: this.pagination.pageSize
       },
       customerId: this.customerId,
       executorId: this.executorId

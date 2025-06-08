@@ -37,7 +37,6 @@ import { ErrorHandlerService } from '../../../../@core/services/error-handler.se
     Tag,
     AvatarModule,
     DividerModule,
-    TooltipModule,
     NgOptimizedImage,
     ImageModule,
     GalleriaModule

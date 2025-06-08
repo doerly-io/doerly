@@ -466,6 +466,9 @@
       }
     }
   },
+  "catalog":{
+    "services": "Services"
+  },
   "common": {
     "actions": "Actions",
     "cancel": "Cancel",
