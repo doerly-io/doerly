@@ -25,9 +25,11 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
     [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetConversations([FromQuery] GetConversationsWithPaginationRequest dto)
     {
-        var userId = GetUserId();
-        if(userId == 0)
+        var useId = RequestContext.UserId;
+        if (!useId.HasValue || useId.Value == 0)
             return Unauthorized();
+
+        var userId = useId.Value;
 
         var pagination = new GetEntitiesWithPaginationRequest()
         {
@@ -63,9 +65,11 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
     [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateConversation([FromBody] CreateConversationRequest request)
     {
-        var initiatorId = GetUserId();
-        if(initiatorId == 0)
+        var userId = RequestContext.UserId;
+        if (!userId.HasValue || userId.Value == 0)
             return Unauthorized();
+
+        var initiatorId = userId.Value;
 
         if (initiatorId == request.RecipientId)
         {
@@ -84,9 +88,11 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
     [ProducesResponseType<HandlerResult<SendMessageRequest>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> SendMessage(SendMessageRequest request)
     {
-        var userId = GetUserId();
-        if(userId == 0)
+        var useId = RequestContext.UserId;
+        if (!useId.HasValue || useId.Value == 0)
             return Unauthorized();
+
+        var userId = useId.Value;
         
         var result = await ResolveHandler<SendMessageHandler>().HandleAsync(userId, request);
         
@@ -100,9 +106,11 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
     [ProducesResponseType<HandlerResult<SendMessageRequest>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> SendFileMessage(int conversationId, [FromForm] SendFileMessageRequest request)
     {
-        var userId = GetUserId();
-        if(userId == 0)
+        var useId = RequestContext.UserId;
+        if (!useId.HasValue || useId.Value == 0)
             return Unauthorized();
+
+        var userId = useId.Value;
         
         var result = await ResolveHandler<SendFileMessageHandler>().HandleAsync(conversationId, userId, request.File);
         var message = (await ResolveHandler<GetMessageByIdHandler>().HandleAsync(result.Value)).Value;

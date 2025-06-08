@@ -4,8 +4,8 @@ import {ChatWindowComponent} from '../chat-window/chat-window.component';
 import {ButtonModule} from 'primeng/button';
 import {NgIf} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
-import {MessageResponse} from '../../models/message-response.model';
-import {ConversationHeaderResponse} from '../../models/conversation-header-response.model';
+import {MessageResponse} from '../../models/responses/message-response.model';
+import {ConversationHeaderResponse} from '../../models/responses/conversation-header-response.model';
 import {CommunicationSignalRService} from '../../domain/communication-signalr.service';
 import {JwtTokenHelper} from '../../../../@core/helpers/jwtToken.helper';
 

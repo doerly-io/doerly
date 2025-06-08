@@ -1,4 +1,4 @@
-import {ConversationHeaderResponse} from '../conversation-header-response.model';
+import {ConversationHeaderResponse} from './conversation-header-response.model';
 
 export interface GetConversationResponse {
   total: number;

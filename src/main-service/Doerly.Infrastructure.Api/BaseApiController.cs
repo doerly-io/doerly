@@ -45,18 +45,4 @@ public class BaseApiController : ControllerBase
         file.CopyTo(stream);
         return stream.ToArray();
     }
-    
-    [NonAction]
-    protected int GetUserId()
-    {
-        var identity = HttpContext.User.Identity as ClaimsIdentity;
-        var userIdClaim = identity?.FindFirst(ClaimTypes.NameIdentifier);
-
-        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
-        {
-            throw new UnauthorizedAccessException();
-        }
-
-        return userId;
-    }
 }

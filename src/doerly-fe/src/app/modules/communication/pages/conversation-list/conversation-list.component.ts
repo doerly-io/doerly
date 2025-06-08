@@ -7,7 +7,7 @@ import { MessageService } from 'primeng/api';
 import { CommunicationService } from '../../domain/communication.service';
 import { CommunicationSignalRService } from '../../domain/communication-signalr.service';
 import {PageInfo} from '../../../../@core/models/page-info';
-import {ConversationHeaderResponse} from '../../models/conversation-header-response.model';
+import {ConversationHeaderResponse} from '../../models/responses/conversation-header-response.model';
 import {JwtTokenHelper} from '../../../../@core/helpers/jwtToken.helper';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 
