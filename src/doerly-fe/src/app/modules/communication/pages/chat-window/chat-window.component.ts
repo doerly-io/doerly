@@ -347,8 +347,8 @@ export class ChatWindowComponent {
     }
 
     this.communicationService.uploadFile(conversationId, file).subscribe({
-      next: (response) => {
-        console.log('File uploaded successfully:', response);
+      next: () => {
+        console.log('File uploaded successfully:');
         this.messageService.add({
           severity: 'success',
           summary: 'Успіх',

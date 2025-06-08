@@ -2,12 +2,15 @@
 using Doerly.Domain.Models;
 using Doerly.Infrastructure.Api;
 using Doerly.Localization;
+using Doerly.Module.Communication.Api.Hubs;
 using Doerly.Module.Communication.Contracts.Requests;
 using Doerly.Module.Communication.Contracts.Responses;
 using Doerly.Module.Communication.Domain.Handlers;
+using Doerly.Module.Communication.Domain.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Doerly.Module.Communication.Api.Controllers;
 
@@ -15,7 +18,7 @@ namespace Doerly.Module.Communication.Api.Controllers;
 [ApiController]
 [Area("communication")]
 [Route("api/[area]")]
-public class CommunicationController : BaseApiController
+public class CommunicationController(IHubContext<CommunicationHub, ICommunicationHub> communicationHub) : BaseApiController
 {
     [HttpGet("conversations")]
     [ProducesResponseType<HandlerResult<ConversationResponseDto>>(StatusCodes.Status200OK)]
@@ -102,9 +105,10 @@ public class CommunicationController : BaseApiController
             return Unauthorized();
         
         var result = await ResolveHandler<SendFileMessageHandler>().HandleAsync(conversationId, userId, request.File);
-        
-        if (!result.IsSuccess)
-            return Conflict(result);
+        var message = (await ResolveHandler<GetMessageByIdHandler>().HandleAsync(result.Value)).Value;
+
+        // Notify the communication hub about the new file message
+        await communicationHub.Clients.Group(conversationId.ToString()).ReceiveMessage(message);
 
         return Ok();
     }

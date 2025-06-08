@@ -3,11 +3,12 @@ using Doerly.Domain.Factories;
 using Doerly.Module.Communication.Contracts.Requests;
 using Doerly.Module.Communication.Domain.Handlers;
 using Doerly.Module.Communication.Domain.Helpers;
+using Doerly.Module.Communication.Domain.Hubs;
 using Doerly.Module.Communication.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Doerly.Module.Communication.Domain.Hubs;
+namespace Doerly.Module.Communication.Api.Hubs;
 
 [Authorize]
 public class CommunicationHub(IHandlerFactory handlerFactory, IUserOnlineStatusHelper userOnlineStatusHelper) : Hub<ICommunicationHub>
