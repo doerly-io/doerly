@@ -203,6 +203,12 @@ Doerly</value>
     <data name="Communication.CannotCreateConversationWithSelf" xml:space="preserve">
         <value>Не можна створити бесіду з самим собою</value>
     </data>
+  <data name="Communication.MessageContentCannotBeEmpty" xml:space="preserve">
+        <value>Вміст повідомлення не може бути порожнім</value>
+    </data>
+  <data name="Communication.FileCannotBeEmpty" xml:space="preserve">
+    <value>Файл не може бути порожнім</value>
+  </data>
   <data name="OrderNotFound" xml:space="preserve">
         <value>Замовлення не знайдено</value>
     </data>
