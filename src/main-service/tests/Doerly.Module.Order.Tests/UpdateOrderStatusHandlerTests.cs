@@ -1,6 +1,6 @@
 using Doerly.Domain;
 using Doerly.Messaging;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
+using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.Domain.Handlers.Order;
 using Doerly.Module.Order.Enums;
 using Doerly.Proxy.Payment;

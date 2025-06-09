@@ -1,9 +1,10 @@
 using System.Linq.Expressions;
 using Doerly.DataTransferObjects.Pagination;
-using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Module.Order.DataAccess;
+using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.DataTransferObjects;
 using Doerly.Module.Order.Enums;
-using Doerly.Module.Profile.Contracts.Dtos;
+using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 

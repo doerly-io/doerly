@@ -1,6 +1,6 @@
 ﻿using Doerly.DataTransferObjects.Pagination;
 
-namespace Doerly.Module.Order.DataTransferObjects.Dtos;
+namespace Doerly.Module.Order.DataTransferObjects.Requests;
 public class GetExecutionProposalsWithPaginationRequest : GetEntitiesWithPaginationRequest
 {
     public int? ReceiverId { get; set; }

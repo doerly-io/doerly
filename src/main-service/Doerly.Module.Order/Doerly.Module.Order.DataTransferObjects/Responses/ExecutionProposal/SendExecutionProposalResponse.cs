@@ -1,4 +1,4 @@
-﻿namespace Doerly.Module.Order.DataTransferObjects.Dtos;
+﻿namespace Doerly.Module.Order.DataTransferObjects;
 public class SendExecutionProposalResponse
 {
     public int Id { get; set; }

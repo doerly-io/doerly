@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Doerly.Module.Order.DataTransferObjects.Dtos;
+﻿namespace Doerly.Module.Order.DataTransferObjects;
 public class AddressInfo
 {
     public int RegionId { get; set; }

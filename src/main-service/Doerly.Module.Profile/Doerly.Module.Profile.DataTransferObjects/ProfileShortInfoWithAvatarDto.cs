@@ -1,4 +1,4 @@
-namespace Doerly.Module.Profile.Contracts.Dtos;
+namespace Doerly.Module.Profile.DataTransferObjects;
 
 public class ProfileShortInfoWithAvatarDto : ProfileShortInfoDto
 {

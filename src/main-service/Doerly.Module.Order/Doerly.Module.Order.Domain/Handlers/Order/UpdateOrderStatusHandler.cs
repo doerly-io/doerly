@@ -2,11 +2,12 @@
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Enums;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
 using Doerly.Module.Payments.Enums;
 using Doerly.Proxy.Payment;
 using Doerly.Domain;
 using Doerly.Messaging;
+using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.DataTransferObjects;
 using Doerly.Module.Payments.DataTransferObjects;
 
 namespace Doerly.Module.Order.Domain.Handlers.Order;

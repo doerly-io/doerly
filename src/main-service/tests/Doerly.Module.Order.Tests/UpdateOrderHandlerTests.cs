@@ -2,7 +2,7 @@
 using Doerly.Module.Order.Domain.Handlers;
 using Doerly.Domain;
 using Doerly.FileRepository;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
+using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Proxy.Profile;
 
 namespace Doerly.Module.Order.Tests;

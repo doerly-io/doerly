@@ -1,5 +1,6 @@
 ﻿using Doerly.Domain.Exceptions;
 using Doerly.Domain.Handlers;
+using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Helpers;
 using Doerly.Localization;
@@ -7,6 +8,8 @@ using Doerly.Messaging;
 using Doerly.Module.Order.DataTransferObjects.Messages;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Entities;
+using Doerly.Module.Order.DataTransferObjects;
+using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.Domain.Constants;
 using Doerly.Module.Order.Enums;
 using Doerly.Module.Profile.DataTransferObjects;
@@ -14,7 +17,7 @@ using Doerly.Proxy.Profile;
 using DoerlyDomain.Constants;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using FileInfo = Doerly.Module.Order.DataTransferObjects.Dtos.FileInfo;
+using FileInfo = Doerly.Module.Order.DataTransferObjects.FileInfo;
 using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
 
 namespace Doerly.Module.Order.Domain.Handlers;
@@ -26,14 +29,16 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
     private readonly IProfileModuleProxy _profileModuleProxy;
 
     public BaseOrderHandler(OrderDbContext dbContext) : base(dbContext)
-    { }
+    {
+    }
 
     public BaseOrderHandler(OrderDbContext dbContext, IFileRepository fileRepository) : base(dbContext)
     {
         _fileRepository = fileRepository;
     }
 
-    public BaseOrderHandler(OrderDbContext dbContext, IFileRepository fileRepository, IProfileModuleProxy profileModuleProxy) : base(dbContext)
+    public BaseOrderHandler(OrderDbContext dbContext, IFileRepository fileRepository, IProfileModuleProxy profileModuleProxy) :
+        base(dbContext)
     {
         _fileRepository = fileRepository;
         _profileModuleProxy = profileModuleProxy;
@@ -44,7 +49,8 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
         _messagePublisher = messagePublisher;
     }
 
-    public BaseOrderHandler(OrderDbContext dbContext, IProfileModuleProxy profileModuleProxy, IFileRepository fileRepository, IMessagePublisher messagePublisher) : base(dbContext)
+    public BaseOrderHandler(OrderDbContext dbContext, IProfileModuleProxy profileModuleProxy, IFileRepository fileRepository,
+        IMessagePublisher messagePublisher) : base(dbContext)
     {
         _profileModuleProxy = profileModuleProxy;
         _fileRepository = fileRepository;
@@ -60,6 +66,7 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
             if (orderFile != null)
                 orderFiles.Add(orderFile);
         }
+
         return orderFiles;
     }
 
@@ -93,8 +100,8 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
         foreach (var file in files)
         {
             var fileUrl = await _fileRepository.GetSasUrlAsync(
-                                AzureStorageConstants.ImagesContainerName,
-                                file.FilePath);
+                AzureStorageConstants.ImagesContainerName,
+                file.FilePath);
             if (!string.IsNullOrWhiteSpace(fileUrl))
                 file.FilePath = fileUrl;
         }
@@ -121,7 +128,8 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
         await _messagePublisher.Publish(message);
     }
 
-    protected async Task PublishExecutionProposalStatusUpdatedEventAsync(int executionProposalId, EExecutionProposalStatus executionProposalStatus)
+    protected async Task PublishExecutionProposalStatusUpdatedEventAsync(int executionProposalId,
+        EExecutionProposalStatus executionProposalStatus)
     {
         var message = new ExecutionProposalStatucUpdatedMessage(executionProposalId, executionProposalStatus);
         await _messagePublisher.Publish(message);
@@ -178,7 +186,7 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
             Id = executionProposal.Id
         };
 
-        return HandlerResult.Success(result);
+        return OperationResult.Success(result);
     }
 
     private bool IsValidImage(byte[] fileBytes)

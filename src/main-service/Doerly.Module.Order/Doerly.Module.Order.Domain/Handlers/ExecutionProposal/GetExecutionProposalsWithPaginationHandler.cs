@@ -3,13 +3,13 @@ using Doerly.Domain.Models;
 using Doerly.Extensions;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Entities;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
-
 using Microsoft.EntityFrameworkCore;
 using Doerly.Proxy.Profile;
 using Doerly.Domain;
 using MassTransit.Transports;
 using Doerly.Localization;
+using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.DataTransferObjects;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetExecutionProposalsWithPaginationHandler : BaseOrderHandler

@@ -1,4 +1,7 @@
+using Doerly.DataTransferObjects.Pagination;
 using Doerly.Module.Order.Contracts;
+using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.DataTransferObjects;
 
 namespace Doerly.Proxy.Orders;
 

@@ -1,7 +1,7 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
 using Doerly.Module.Order.DataAccess;
+using Doerly.Module.Order.DataTransferObjects;
 using Doerly.Module.Order.Enums;
 using Microsoft.EntityFrameworkCore;
 

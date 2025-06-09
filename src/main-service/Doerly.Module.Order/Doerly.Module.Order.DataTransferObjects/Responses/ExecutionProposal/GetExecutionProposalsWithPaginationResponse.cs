@@ -1,4 +1,4 @@
-﻿namespace Doerly.Module.Order.DataTransferObjects.Dtos;
+﻿namespace Doerly.Module.Order.DataTransferObjects;
 public class GetExecutionProposalsWithPaginationResponse
 {
     public int Total { get; set; }

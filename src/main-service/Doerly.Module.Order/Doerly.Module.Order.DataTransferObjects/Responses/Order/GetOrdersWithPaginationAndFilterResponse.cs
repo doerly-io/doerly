@@ -1,4 +1,4 @@
-namespace Doerly.Module.Order.Contracts.Dtos;
+namespace Doerly.Module.Order.DataTransferObjects;
 
 public class GetOrdersWithPaginationAndFilterResponse
 {

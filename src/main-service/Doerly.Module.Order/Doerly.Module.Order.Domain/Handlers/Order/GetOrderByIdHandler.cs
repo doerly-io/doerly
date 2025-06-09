@@ -1,12 +1,12 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Doerly.Proxy.Profile;
 using Doerly.FileRepository;
-using FileInfo = Doerly.Module.Order.DataTransferObjects.Dtos.FileInfo;
+using FileInfo = Doerly.Module.Order.DataTransferObjects.FileInfo;
 using Doerly.Module.Common.DataAccess.Address;
+using Doerly.Module.Order.DataTransferObjects;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetOrderByIdHandler : BaseOrderHandler

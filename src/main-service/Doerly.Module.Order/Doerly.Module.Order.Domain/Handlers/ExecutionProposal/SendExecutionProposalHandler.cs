@@ -2,13 +2,13 @@
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Enums;
 using Doerly.Module.Order.DataAccess.Entities;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
-
 using Microsoft.EntityFrameworkCore;
 using Doerly.Localization;
 using Doerly.Domain;
 using Doerly.Messaging;
 using Doerly.Domain.Exceptions;
+using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.DataTransferObjects;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class SendExecutionProposalHandler : BaseOrderHandler

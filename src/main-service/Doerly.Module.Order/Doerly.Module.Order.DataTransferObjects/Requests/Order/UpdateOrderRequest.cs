@@ -1,14 +1,9 @@
-﻿using Doerly.Domain;
+﻿using System.ComponentModel.DataAnnotations;
 using Doerly.Module.Order.Enums;
 
-using System.ComponentModel.DataAnnotations;
-
-namespace Doerly.Module.Order.DataTransferObjects.Dtos;
-
-public class CreateOrderRequest
+namespace Doerly.Module.Order.DataTransferObjects.Requests;
+public class UpdateOrderRequest
 {
-    [Required(ErrorMessage = "FieldIsRequired")]
-    public int CategoryId { get; set; }
 
     [Required(ErrorMessage = "FieldIsRequired")]
     [MinLength(1, ErrorMessage = "FieldIsTooShort")]
@@ -33,12 +28,9 @@ public class CreateOrderRequest
     [Required(ErrorMessage = "FieldIsRequired")]
     public bool IsPriceNegotiable { get; set; }
 
-    [Required(ErrorMessage = "FieldIsRequired")]
     public bool UseProfileAddress { get; set; }
 
     public int? RegionId { get; set; }
 
     public int? CityId { get; set; }
-
-    public int? ExecutorId { get; set; }
 }

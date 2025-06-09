@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using Doerly.Module.Order.DataTransferObjects;
 using Doerly.Module.Order.Enums;
 
-namespace Doerly.Module.Order.DataTransferObjects.Dtos;
+namespace Doerly.Module.Order.DataTransferObjects;
 public class GetExecutionProposalResponse
 {
     public int Id { get; set; }

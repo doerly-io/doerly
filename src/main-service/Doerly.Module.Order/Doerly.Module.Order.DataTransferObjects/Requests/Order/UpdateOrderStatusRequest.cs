@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
-using Doerly.Domain;
 using Doerly.Module.Order.Enums;
 
-namespace Doerly.Module.Order.DataTransferObjects.Dtos;
+namespace Doerly.Module.Order.DataTransferObjects.Requests;
 public class UpdateOrderStatusRequest
 {
     [Required(ErrorMessage = "FieldIsRequired")]

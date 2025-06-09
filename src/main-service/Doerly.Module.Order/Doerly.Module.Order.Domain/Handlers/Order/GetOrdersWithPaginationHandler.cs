@@ -1,10 +1,10 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Module.Order.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
 using Doerly.Extensions;
 using System.Linq.Expressions;
-
+using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.DataTransferObjects;
 using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
 using Doerly.Proxy.Profile;
 

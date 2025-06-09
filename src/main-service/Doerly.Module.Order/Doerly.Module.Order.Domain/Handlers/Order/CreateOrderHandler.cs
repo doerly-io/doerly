@@ -1,7 +1,6 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Enums;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
 using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
 using Doerly.Domain;
 using Doerly.FileRepository;
@@ -9,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Doerly.Module.Order.DataAccess.Entities;
 using Doerly.Messaging;
 using Doerly.Domain.Exceptions;
+using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.DataTransferObjects;
 using Doerly.Proxy.Profile;
 
 namespace Doerly.Module.Order.Domain.Handlers;

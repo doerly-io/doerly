@@ -1,6 +1,6 @@
 using Doerly.DataTransferObjects.Pagination;
 
-namespace Doerly.Module.Order.Contracts.Dtos;
+namespace Doerly.Module.Order.DataTransferObjects.Requests;
 
 public class GetOrderWithFilterAndPaginationRequest : GetEntitiesWithPaginationRequest
 {
