@@ -22,9 +22,7 @@ import {TooltipModule} from 'primeng/tooltip';
 import {ImageModule} from 'primeng/image';
 import {GalleriaModule} from 'primeng/galleria';
 import {ErrorHandlerService} from 'app/@core/services/error-handler.service';
-import {
-  FeedbackInputComponent
-} from 'app/modules/order/components/order/components/feedback-input/feedback-input.component';
+import {FeedbackInputComponent} from 'app/modules/order/components/feedback-input/feedback-input.component';
 
 @Component({
   selector: 'app-order-details',
@@ -44,6 +42,7 @@ import {
     NgOptimizedImage,
     ImageModule,
     GalleriaModule,
+    FeedbackInputComponent,
     FeedbackInputComponent
   ]
 })
@@ -108,6 +107,10 @@ export class OrderDetailsComponent implements OnInit {
 
   protected get canEdit(): boolean {
     return this.order?.status === EOrderStatus.Placed && this.order?.customerId === this.profileId;
+  }
+
+  protected get canEditFeedback() : boolean {
+    return this.order?.status === EOrderStatus.Completed && this.order?.customerId === this.profileId;
   }
 
   get canCancel(): boolean {

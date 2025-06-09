@@ -414,7 +414,10 @@
   "feedback" : {
     "title": "Відгук",
     "submit" : "Залишити відгук",
-    "feedback_updated": "Відгук успішно оновлено"
+    "delete": "Видалити відгук",
+    "feedback_created": "Відгук успішно створено",
+    "feedback_updated": "Відгук успішно оновлено",
+    "feedback_deleted": "Відгук успішно видалено"
   },
   "payments": {
     "status": {
@@ -491,7 +494,8 @@
     "categories": "Категорії",
     "control": {
       "unset": "Не встановлено"
-    }
+    },
+    "edited": "Ред."
   },
   "pages": {
     "profile": {

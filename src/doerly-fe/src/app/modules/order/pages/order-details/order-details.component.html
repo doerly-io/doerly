@@ -162,5 +162,5 @@
     </div>
   </p-card>
 
-  <app-feedback-input [orderId]="this.order?.id" [isReadonly]="!canEdit" [feedback]="this.order?.feedback" class="mt-4"></app-feedback-input>
+  <app-feedback-input *ngIf="order?.status == EOrderStatus.Completed && (this.order?.feedback || canEditFeedback)" [orderId]="this.order?.id" [canEdit]="canEditFeedback" [feedback]="this.order?.feedback" class="mt-4"></app-feedback-input>
 </section>
