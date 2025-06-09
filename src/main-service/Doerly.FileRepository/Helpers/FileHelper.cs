@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http;
-
 namespace Doerly.FileRepository;
 
 public static class FileHelper
@@ -51,17 +49,6 @@ public static class FileHelper
         return fileExt == detectedExt;
     }
 
-    /// <summary>
-    /// Converts an <see cref="IFormFile"/> to a byte array.
-    /// </summary>
-    /// <param name="file">The uploaded form file.</param>
-    /// <returns>The file content as a byte array.</returns>
-    public static async Task<byte[]> GetFormFileBytesAsync(IFormFile file)
-    {
-        using var stream = new MemoryStream();
-        await file.CopyToAsync(stream);
-        return stream.ToArray();
-    }
 
     /// <summary>
     /// Gets the file extension (with dot) from the given file name.

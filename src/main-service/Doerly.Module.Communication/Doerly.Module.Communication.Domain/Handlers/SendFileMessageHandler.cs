@@ -16,7 +16,7 @@ public class SendFileMessageHandler(CommunicationDbContext dbContext,
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
-    public async Task<OperationResult<int>> HandleAsync(int conversationId, int userId, IFormFile file)
+    public async Task<OperationResult<int>> HandleAsync(int conversationId, int userId, byte[] fileBytes, string fileName)
     {
         var conversation = await _dbContext.Conversations
             .FirstOrDefaultAsync(c => c.Id == conversationId);
@@ -31,14 +31,13 @@ public class SendFileMessageHandler(CommunicationDbContext dbContext,
             return OperationResult.Failure<int>(Resources.Get("Communication.UnauthorizedSender"));
         }
         
-        var fileBytes = await FileHelper.GetFormFileBytesAsync(file);
-        if (!FileHelper.IsValidFile(file.FileName, fileBytes, CommunicationConstants.FileConstants.SupportedFileExtensions, CommunicationConstants.FileConstants.MaxFileSizeInBytes))
+        if (!FileHelper.IsValidFile(fileName, fileBytes, CommunicationConstants.FileConstants.SupportedFileExtensions, CommunicationConstants.FileConstants.MaxFileSizeInBytes))
         {
             return OperationResult.Failure<int>(Resources.Get("InvalidDocument"));
         }
     
         //TODO: change filePath to save file name
-        var filePath = $"{CommunicationConstants.FolderNames.CommunicationFiles}/{conversationId}/{Guid.NewGuid()}{FileHelper.GetFileExtension(file.FileName)}";
+        var filePath = $"{CommunicationConstants.FolderNames.CommunicationFiles}/{conversationId}/{Guid.NewGuid()}{FileHelper.GetFileExtension(fileName)}";
         await fileRepository.UploadFileAsync(
             CommunicationConstants.AzureStorage.FilesContainerName, 
             filePath, 

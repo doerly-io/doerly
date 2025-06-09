@@ -104,15 +104,16 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
     
     [HttpPost("conversations/{conversationId:int}/messages/file/send")]
     [ProducesResponseType<OperationResult<SendMessageRequest>>(StatusCodes.Status200OK)]
-    public async Task<IActionResult> SendFileMessage(int conversationId, [FromForm] SendFileMessageRequest request)
+    public async Task<IActionResult> SendFileMessage(int conversationId, [FromForm] IFormFile imageFile)
     {
         var useId = RequestContext.UserId;
         if (!useId.HasValue || useId.Value == 0)
             return Unauthorized();
 
         var userId = useId.Value;
-        
-        var result = await ResolveHandler<SendFileMessageHandler>().HandleAsync(conversationId, userId, request.File);
+
+        var fileBytes = GetFormFileBytes(imageFile);
+        var result = await ResolveHandler<SendFileMessageHandler>().HandleAsync(conversationId, userId, fileBytes, imageFile.FileName);
         var message = (await ResolveHandler<GetMessageByIdHandler>().HandleAsync(result.Value)).Value;
 
         // Notify the communication hub about the new file message
