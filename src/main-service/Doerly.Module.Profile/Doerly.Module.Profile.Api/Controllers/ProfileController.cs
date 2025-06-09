@@ -131,4 +131,11 @@ public class ProfileController : BaseApiController
         return Ok(result);
     }
     
+    // [HttpGet("{userId:int}/feedbacks")]
+    // public async Task<IActionResult> GetUserFeedbacks([FromRoute] int userId, [FromQuery] CursorPaginationRequest request)
+    // {
+    //     var result = await ResolveHandler<SelectUserFeedbacksHandler>().GetFeedbacksAsync(userId, request);
+    //     return Ok(result);
+    // }
+    
 }

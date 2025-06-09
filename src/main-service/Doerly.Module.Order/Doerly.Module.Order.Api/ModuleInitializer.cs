@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Doerly.DataAccess.Utils;
 using Doerly.Module.Order.Domain;
 using Doerly.Messaging;
-using Doerly.Module.Order.Contracts;
 
 namespace Doerly.Module.Order.Api;
 
@@ -19,7 +18,6 @@ public class ModuleInitializer : IModuleInitializer
         builder.Services.AddDbContext<OrderDbContext>();
         builder.Services.RegisterHandlers(typeof(IAssemblyMarker).Assembly);
         builder.Services.RegisterEventConsumers(typeof(IAssemblyMarker).Assembly);
-        builder.Services.AddScoped<IOrdersModuleWrapper, OrdersModuleWrapper>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -78,9 +78,7 @@ import { CatalogService } from '../../../catalog/services/catalog.service';
     AddressSelectComponent,
     NgForOf,
     PaymentHistoryComponent,
-    TreeSelect,
     InputNumberModule,
-    TreeSelect,
     Toast,
     SendMessageModalComponent,
   ],
@@ -149,6 +147,9 @@ export class ProfileComponent implements OnInit {
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   public pdfService: PdfService = inject(PdfService);
   private readonly catalogService: CatalogService = inject(CatalogService);
+
+  @ViewChild('competenceDialog') competenceDialog: any;
+  @ViewChild('serviceDialog') serviceDialog: any;
 
   constructor(
     private fb: FormBuilder,
@@ -254,21 +255,40 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         this.categories = response.value || [];
         this.categoryTreeNodes = this.convertCategoriesToTreeNodes(this.categories);
+        if (!Array.isArray(this.categoryTreeNodes)) {
+          this.categoryTreeNodes = [];
+        }
       },
       error: (error) => {
         this.handleError(error, 'profile.professional.competences.categories.load.error');
+        this.categoryTreeNodes = [];
       }
     });
   }
 
-  private convertCategoriesToTreeNodes(categories: ICategory[]): TreeNode[] {
-    return categories.map(category => ({
-      key: category.id.toString(),
-      label: category.name,
-      data: category,
-      children: category.children ? this.convertCategoriesToTreeNodes(category.children) : undefined,
-      selectable: true
-    }));
+  private convertCategoriesToTreeNodes(categories: ICategory[]): any[] {
+    if (!Array.isArray(categories)) {
+      return [];
+    }
+    
+    const flattenCategories = (cats: ICategory[], parentPath: string = ''): any[] => {
+      return cats.reduce((acc: any[], category) => {
+        const currentPath = parentPath ? `${parentPath} > ${category.name}` : category.name;
+        acc.push({
+          key: category.id.toString(),
+          label: currentPath,
+          data: category
+        });
+        
+        if (category.children && category.children.length > 0) {
+          acc.push(...flattenCategories(category.children, currentPath));
+        }
+        
+        return acc;
+      }, []);
+    };
+
+    return flattenCategories(categories);
   }
 
   onLanguageSearch(event: { filter: string }): void {
@@ -674,12 +694,14 @@ export class ProfileComponent implements OnInit {
   }
 
   onCategorySelect(event: any): void {
-    if (event.node) {
-      const selectedNode = event.node;
-      this.competenceForm.patchValue({
-        categoryId: selectedNode.key,
-        categoryName: selectedNode.label
-      });
+    if (event.value) {
+      const selectedCategory = this.categoryTreeNodes.find(cat => cat.key === event.value);
+      if (selectedCategory) {
+        this.competenceForm.patchValue({
+          categoryId: selectedCategory.key,
+          categoryName: selectedCategory.label
+        });
+      }
     }
   }
 
@@ -694,7 +716,7 @@ export class ProfileComponent implements OnInit {
     this.serviceForm.patchValue({
       name: service.name,
       description: service.description,
-      categoryId: service.categoryId.toString(),
+      categoryId: service.categoryId?.toString(),
       price: service.price,
     });
     this.isServiceDialogVisible = true;
@@ -718,18 +740,13 @@ export class ProfileComponent implements OnInit {
   }
 
   onServiceCategorySelect(event: any): void {
-    if (event.node) {
-      const selectedNode = event.node;
-      this.serviceForm.patchValue({
-        categoryId: selectedNode.key
-      });
-      // Close the dropdown by clicking outside
-      setTimeout(() => {
-        const overlay = document.querySelector('.p-treeselect-panel');
-        if (overlay) {
-          (overlay as HTMLElement).style.display = 'none';
-        }
-      }, 100);
+    if (event.value) {
+      const selectedCategory = this.categoryTreeNodes.find(cat => cat.key === event.value);
+      if (selectedCategory) {
+        this.serviceForm.patchValue({
+          categoryId: selectedCategory.key
+        });
+      }
     }
   }
 
@@ -747,17 +764,16 @@ export class ProfileComponent implements OnInit {
           filterValues: this.editingService.filterValues || {}
         };
 
-        console.log('Sending update service request:', updateRequest);
         this.catalogService.updateService(this.editingService.id, updateRequest).subscribe({
           next: (response) => {
-            console.log('Update service response:', response);
+            this.toastHelper.showSuccess('common.success', 'profile.professional.services.update.success');
             this.loadServices();
             this.isServiceDialogVisible = false;
             this.editingService = null;
             this.serviceForm.reset();
           },
           error: (error: Error) => {
-            console.error('Error updating service:', error);
+            this.toastHelper.showError('common.error', 'profile.professional.services.update.error');
           }
         });
       } else {
@@ -771,16 +787,15 @@ export class ProfileComponent implements OnInit {
           filterValues: {}
         };
 
-        console.log('Sending create service request:', createRequest);
         this.catalogService.createService(createRequest).subscribe({
           next: (response) => {
-            console.log('Create service response:', response);
+            this.toastHelper.showSuccess('common.success', 'profile.professional.services.create.success');
             this.loadServices();
             this.isServiceDialogVisible = false;
             this.serviceForm.reset();
           },
           error: (error: Error) => {
-            console.error('Error creating service:', error);
+            this.toastHelper.showError('common.error', 'profile.professional.services.create.error');
           }
         });
       }

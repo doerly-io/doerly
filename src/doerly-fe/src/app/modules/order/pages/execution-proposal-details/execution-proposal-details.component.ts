@@ -29,7 +29,6 @@ import { ErrorHandlerService } from '../../../../@core/services/error-handler.se
     TranslatePipe,
     RouterLink,
     Avatar,
-    Tooltip,
     Tag,
     PanelModule
   ]

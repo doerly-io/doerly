@@ -1,6 +1,6 @@
 using Doerly.DataTransferObjects.Pagination;
 using Doerly.Domain.Models;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
+using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.Domain.Handlers;
 using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Proxy.Profile;

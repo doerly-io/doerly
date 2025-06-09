@@ -1,10 +1,9 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
-
 using Microsoft.EntityFrameworkCore;
 using Doerly.Domain;
+using Doerly.Module.Order.DataTransferObjects.Requests;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class UpdateExecutionProposalHandler : BaseOrderHandler

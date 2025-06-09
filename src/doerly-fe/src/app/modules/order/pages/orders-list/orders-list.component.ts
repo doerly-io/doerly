@@ -11,7 +11,6 @@ import { EOrderStatus } from '../../domain/enums/order-status';
 import { Button } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ToastHelper } from 'app/@core/helpers/toast.helper';
 import { getOrderStatusSeverity } from '../../domain/enums/order-status';
 import { Avatar } from 'primeng/avatar';
 import { ErrorHandlerService } from '../../../../@core/services/error-handler.service';

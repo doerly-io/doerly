@@ -212,7 +212,7 @@ const useStatistics = () => {
     if (!selectedTab) {
       handleChangeTab(DEFAULT_TAB);
     }
-  }, []);
+  }, [selectedTab]);
 
   useEffect(() => {
     componentDidMount.current = true;

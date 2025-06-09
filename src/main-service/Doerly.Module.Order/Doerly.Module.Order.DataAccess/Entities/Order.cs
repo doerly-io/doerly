@@ -5,7 +5,7 @@ namespace Doerly.Module.Order.DataAccess.Entities;
 
 public class Order : BaseEntity
 {
-    public int ServiceId { get; set; }
+    public int CategoryId { get; set; }
 
     public Guid Code { get; set; }
 
@@ -39,7 +39,11 @@ public class Order : BaseEntity
 
     public int CityId { get; set; }
 
+    public bool UseProfileAddress { get; set; }
+
     public virtual ICollection<OrderFile> OrderFiles { get; set; } = [];
 
     public virtual ICollection<ExecutionProposal> ExecutionProposals { get; set; }
+    
+    public virtual OrderFeedback? Feedback { get; set; }
 }

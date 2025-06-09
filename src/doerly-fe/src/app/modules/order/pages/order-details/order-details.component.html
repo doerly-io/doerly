@@ -9,7 +9,7 @@
           <!-- Фото замовника по центру -->
           <div class="d-flex flex-column align-items-center mb-4">
             <div class="avatar-container position-relative" [routerLink]="['/profile', order.customer.id]"
-              style="cursor: pointer;" pTooltip="{{ 'ordering.view_profile' | translate }}" tooltipPosition="top">
+              style="cursor: pointer;">
               <img *ngIf="order.customer.avatarUrl" [src]="order.customer.avatarUrl"
                 alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar" width="120" height="120" />
               <p-avatar *ngIf="!order.customer.avatarUrl" icon="pi pi-user" shape="circle" size="xlarge"
@@ -113,16 +113,17 @@
             <div *ngIf="order.executorId"
               class="d-flex flex-row align-items-center mb-2 mb-md-0 executor-profile-container w-100">
               <div class="avatar-container me-3 d-flex flex-column align-items-center position-relative"
-                [routerLink]="['/profile', order.executor?.id]" style="cursor: pointer;"
-                pTooltip="{{ 'ordering.view_profile' | translate }}" tooltipPosition="top">
+                [routerLink]="['/profile', order.executor?.id]" style="cursor: pointer;">
                 <span class="field-label">{{ 'ordering.executor' | translate }}:</span>
-                <img *ngIf="order.executor?.avatarUrl" ngSrc="{{order.executor?.avatarUrl}}"
-                  alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar" width="120" height="120" />
-                <p-avatar *ngIf="!order.executor?.avatarUrl" icon="pi pi-user" shape="circle" size="xlarge"
-                  class="avatar-bg executor-avatar"></p-avatar>
-                <div class="profile-hover-overlay">
-                  <i class="pi pi-user"></i>
-                  <span>{{ 'profile.view.title' | translate }}</span>
+                <div class="position-relative">
+                  <img *ngIf="order.executor?.avatarUrl" ngSrc="{{order.executor?.avatarUrl}}"
+                    alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar" width="120" height="120" />
+                  <p-avatar *ngIf="!order.executor?.avatarUrl" icon="pi pi-user" shape="circle" size="xlarge"
+                    class="avatar-bg executor-avatar"></p-avatar>
+                  <div class="profile-hover-overlay">
+                    <i class="pi pi-user"></i>
+                    <span>{{ 'profile.view.title' | translate }}</span>
+                  </div>
                 </div>
                 <span *ngIf="order.executor" class="executor-name mt-2">
                   {{ order.executor.firstName }} {{ order.executor.lastName }}
@@ -160,4 +161,6 @@
       </div>
     </div>
   </p-card>
+
+  <app-feedback-input [orderId]="this.order?.id" [isReadonly]="!canEdit" [feedback]="this.order?.feedback" class="mt-4"></app-feedback-input>
 </section>

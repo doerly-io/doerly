@@ -7,7 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj" />
+      <ProjectReference Include="..\Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Order\Doerly.Module.Order.DataTransferObjects\Doerly.Module.Order.DataTransferObjects.csproj" />
       <ProjectReference Include="..\Doerly.Proxy.BaseProxy\Doerly.Proxy.BaseProxy.csproj" />
     </ItemGroup>
 

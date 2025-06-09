@@ -1,0 +1,34 @@
+using Doerly.Domain.Factories;
+using Doerly.Domain.Models;
+using Doerly.Module.Profile.DataTransferObjects;
+using Doerly.Module.Profile.Domain.Handlers;
+
+namespace Doerly.Proxy.Profile;
+
+public class ProfileModuleProxy : IProfileModuleProxy
+{
+    private readonly IHandlerFactory _handlerFactory;
+    
+    public ProfileModuleProxy(IHandlerFactory handlerFactory)
+    {
+        _handlerFactory = handlerFactory;
+    }
+    
+    public Task<OperationResult<ProfileDto>> GetProfileAsync(int userId)
+    {
+        var profileResponse = _handlerFactory.Get<GetProfileHandler>().HandleAsync(userId);
+        return profileResponse;
+    }
+
+    public Task<OperationResult<IEnumerable<ProfileDto>>> GetProfilesAsync(int[] userIds)
+    {
+        var profilesResponse = _handlerFactory.Get<GetProfilesHandler>().HandleAsync(userIds);
+        return profilesResponse;
+    }
+    
+    public Task<IEnumerable<ProfileShortInfoWithAvatarDto>> GetProfilesShortInfoWithAvatarAsync(IEnumerable<int> userIds)
+    {
+        var profilesShortResponse = _handlerFactory.Get<GetProfilesShortInfoWithAvatars>().HandleAsync(userIds);
+        return profilesShortResponse;
+    }
+}

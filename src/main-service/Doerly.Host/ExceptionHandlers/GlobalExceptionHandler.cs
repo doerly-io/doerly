@@ -23,12 +23,12 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
             "Exception occurred: {Message}",
             exception.Message);
 
-        var handlerResult = new OperationResult<object>(false, exception.Message);
+        var OperationResult = new OperationResult<object>(false, exception.Message);
 
         httpContext.Response.StatusCode = 500;
 
         await httpContext.Response
-            .WriteAsJsonAsync(handlerResult, cancellationToken);
+            .WriteAsJsonAsync(OperationResult, cancellationToken);
 
         return true;
     }

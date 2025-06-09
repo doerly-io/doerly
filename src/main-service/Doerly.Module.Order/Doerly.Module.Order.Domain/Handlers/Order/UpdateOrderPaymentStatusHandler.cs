@@ -1,11 +1,12 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
 using Doerly.Module.Order.DataAccess;
+using Doerly.Module.Order.DataTransferObjects;
+using Doerly.Module.Order.DataTransferObjects.Responses;
 using Doerly.Module.Order.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace Doerly.Module.Order.Domain.Handlers.Order;
+namespace Doerly.Module.Order.Domain.Handlers;
 public class UpdateOrderPaymentStatusHandler : BaseOrderHandler
 {
     public UpdateOrderPaymentStatusHandler(OrderDbContext dbContext) : base(dbContext)
