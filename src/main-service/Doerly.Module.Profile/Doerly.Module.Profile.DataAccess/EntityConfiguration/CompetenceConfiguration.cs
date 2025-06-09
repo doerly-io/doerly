@@ -13,6 +13,7 @@ public class CompetenceConfiguration : IEntityTypeConfiguration<Competence>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.CategoryId).IsRequired();
         builder.Property(x => x.CategoryName).IsRequired().HasMaxLength(100);
+        builder.Property(x => x.Rating).HasPrecision(3, 2);
         
         builder.HasOne(x => x.Profile)
             .WithMany(p => p.Competences)
@@ -21,5 +22,9 @@ public class CompetenceConfiguration : IEntityTypeConfiguration<Competence>
             .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasIndex(x => new { x.ProfileId, x.CategoryId }).IsUnique();
+        builder.HasIndex(x => x.Rating);
+        
+        builder.ToTable(t =>
+            t.HasCheckConstraint("ck_competence_rating_range", "\"rating\" >= 1 AND \"rating\" <= 5"));
     }
 }

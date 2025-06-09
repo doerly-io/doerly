@@ -17,6 +17,12 @@ public class ProfileConfiguration : IEntityTypeConfiguration<Models.Profile>
         builder.Property(x => x.ImagePath).HasMaxLength(300);
         builder.Property(x => x.CvPath).HasMaxLength(300);
         builder.Property(x => x.CityId);
+        builder.Property(x => x.Rating).HasPrecision(3, 2);
+        
         builder.HasIndex(x => x.UserId).IsUnique();
+        builder.HasIndex(x => x.Rating);
+        
+        builder.ToTable(t =>
+            t.HasCheckConstraint("ck_profile_rating_range", "\"rating\" >= 1 AND \"rating\" <= 5"));
     }
 }
