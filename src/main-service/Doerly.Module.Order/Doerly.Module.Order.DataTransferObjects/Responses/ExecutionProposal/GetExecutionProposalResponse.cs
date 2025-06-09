@@ -1,7 +1,6 @@
-﻿using Doerly.Module.Order.DataTransferObjects;
-using Doerly.Module.Order.Enums;
+﻿using Doerly.Module.Order.Enums;
 
-namespace Doerly.Module.Order.DataTransferObjects;
+namespace Doerly.Module.Order.DataTransferObjects.Responses;
 public class GetExecutionProposalResponse
 {
     public int Id { get; set; }

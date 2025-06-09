@@ -1,4 +1,4 @@
-﻿namespace Doerly.Module.Order.DataTransferObjects;
+﻿namespace Doerly.Module.Order.DataTransferObjects.Responses;
 
 public class CreateOrderResponse
 {

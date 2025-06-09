@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Doerly.Module.Order.Contracts.Dtos.Requests;
+namespace Doerly.Module.Order.DataTransferObjects.Requests;
 
 public class OrderFeedbackRequest
 {

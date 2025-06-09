@@ -1,7 +1,7 @@
 ﻿using Doerly.Domain;
 using Doerly.Domain.Factories;
 using Doerly.Messaging;
-using Doerly.Module.Order.Domain.Handlers.Order;
+using Doerly.Module.Order.Domain.Handlers;
 using Doerly.Module.Payments.DataTransferObjects.Messages;
 using MassTransit;
 using Microsoft.Extensions.Logging;

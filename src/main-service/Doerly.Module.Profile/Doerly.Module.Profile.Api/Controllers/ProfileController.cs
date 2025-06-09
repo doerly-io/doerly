@@ -134,7 +134,7 @@ public class ProfileController : BaseApiController
     // [HttpGet("{userId:int}/feedbacks")]
     // public async Task<IActionResult> GetUserFeedbacks([FromRoute] int userId, [FromQuery] CursorPaginationRequest request)
     // {
-    //     var result = await ResolveHandler<SelectUserFeedbacksHandler>().HandleAsync(userId, request);
+    //     var result = await ResolveHandler<SelectUserFeedbacksHandler>().GetFeedbacksAsync(userId, request);
     //     return Ok(result);
     // }
     

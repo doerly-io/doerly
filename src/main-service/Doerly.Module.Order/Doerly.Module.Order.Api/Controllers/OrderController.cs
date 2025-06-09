@@ -2,7 +2,6 @@
 using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.Domain.Handlers;
 using Microsoft.AspNetCore.Mvc;
-using Doerly.Module.Order.Domain.Handlers.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 

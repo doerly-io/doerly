@@ -5,6 +5,7 @@ using Doerly.Extensions;
 using System.Linq.Expressions;
 using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.DataTransferObjects;
+using Doerly.Module.Order.DataTransferObjects.Responses;
 using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
 using Doerly.Proxy.Profile;
 

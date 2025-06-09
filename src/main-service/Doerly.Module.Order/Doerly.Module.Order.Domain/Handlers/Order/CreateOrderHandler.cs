@@ -10,6 +10,7 @@ using Doerly.Messaging;
 using Doerly.Domain.Exceptions;
 using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.DataTransferObjects;
+using Doerly.Module.Order.DataTransferObjects.Responses;
 using Doerly.Proxy.Profile;
 
 namespace Doerly.Module.Order.Domain.Handlers;

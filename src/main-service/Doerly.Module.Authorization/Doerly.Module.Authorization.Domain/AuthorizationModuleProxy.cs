@@ -3,14 +3,15 @@ using Doerly.Domain.Factories;
 using Doerly.Domain.Models;
 using Doerly.Module.Authorization.DataTransferObjects.Responses;
 using Doerly.Module.Authorization.Domain.Handlers;
+using Doerly.Proxy.Authorization;
 
-namespace Doerly.Module.Authorization.Contracts;
+namespace Doerly.Module.Authorization.Domain;
 
-public class AuthorizationModuleWrapper : IAuthorizationModuleWrapper
+public class AuthorizationModuleProxy : IAuthorizationModuleProxy
 {
     private readonly IHandlerFactory _handlerFactory;
 
-    public AuthorizationModuleWrapper(IHandlerFactory handlerFactory)
+    public AuthorizationModuleProxy(IHandlerFactory handlerFactory)
     {
         _handlerFactory = handlerFactory;
     }

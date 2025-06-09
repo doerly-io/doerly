@@ -2,20 +2,18 @@ using Doerly.Domain.Factories;
 using Doerly.Domain.Models;
 using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Module.Profile.Domain.Handlers;
-using Doerly.Proxy.Profile;
 
-namespace Doerly.Module.Profile.Api.ModuleWrapper;
+namespace Doerly.Proxy.Profile;
 
-   
-public class ProfileModuleWrapper : IProfileModuleWrapper
+public class ProfileModuleProxy : IProfileModuleProxy
 {
     private readonly IHandlerFactory _handlerFactory;
-
-    public ProfileModuleWrapper(IHandlerFactory handlerFactory)
+    
+    public ProfileModuleProxy(IHandlerFactory handlerFactory)
     {
         _handlerFactory = handlerFactory;
     }
-
+    
     public Task<OperationResult<ProfileDto>> GetProfileAsync(int userId)
     {
         var profileResponse = _handlerFactory.Get<GetProfileHandler>().HandleAsync(userId);

@@ -1,8 +1,8 @@
 using Doerly.Domain;
 using Doerly.Domain.Models;
-using Doerly.Module.Order.Contracts.Dtos.Requests;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Entities;
+using Doerly.Module.Order.DataTransferObjects.Requests;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Order.Domain.Handlers;
@@ -16,11 +16,11 @@ public class AddOrderFeedbackHandler : BaseOrderHandler
         _doerlyRequestContext = doerlyRequestContext;
     }
 
-    public async Task<HandlerResult> HandleAsync(int orderId, OrderFeedbackRequest request)
+    public async Task<OperationResult> HandleAsync(int orderId, OrderFeedbackRequest request)
     {
         var orderExists = await DbContext.Orders.AnyAsync(o => o.Id == orderId);
         if (!orderExists)
-            return HandlerResult.Failure("ORDER_NOT_FOUND");
+            return OperationResult.Failure("ORDER_NOT_FOUND");
 
         var feedback = new OrderFeedback
         {
@@ -33,6 +33,6 @@ public class AddOrderFeedbackHandler : BaseOrderHandler
         DbContext.OrderFeedbacks.Add(feedback);
         await DbContext.SaveChangesAsync();
         
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

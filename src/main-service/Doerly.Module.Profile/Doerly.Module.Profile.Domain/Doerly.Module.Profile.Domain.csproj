@@ -18,6 +18,7 @@
         <ProjectReference Include="..\..\Doerly.Proxy.Authorization\Doerly.Proxy.Authorization.csproj" />
         <ProjectReference Include="..\..\Doerly.Proxy.Orders\Doerly.Proxy.Orders.csproj" />
         <ProjectReference Include="..\..\Doerly.Proxy.Payment\Doerly.Proxy.Payment.csproj" />
+        <ProjectReference Include="..\..\Doerly.Proxy.Profile\Doerly.Proxy.Profile.csproj" />
         <ProjectReference Include="..\Doerly.Module.Profile.DataTransferObjects\Doerly.Module.Profile.DataTransferObjects.csproj" />
         <ProjectReference Include="..\Doerly.Module.Profile.DataAccess\Doerly.Module.Profile.DataAccess.csproj" />
         <ProjectReference Include="..\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj" />

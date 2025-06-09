@@ -4,9 +4,10 @@ using Doerly.Module.Order.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Doerly.Proxy.Profile;
 using Doerly.FileRepository;
-using FileInfo = Doerly.Module.Order.DataTransferObjects.FileInfo;
+using FileInfo = Doerly.Module.Order.DataTransferObjects.Responses.FileInfo;
 using Doerly.Module.Common.DataAccess.Address;
 using Doerly.Module.Order.DataTransferObjects;
+using Doerly.Module.Order.DataTransferObjects.Responses;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 

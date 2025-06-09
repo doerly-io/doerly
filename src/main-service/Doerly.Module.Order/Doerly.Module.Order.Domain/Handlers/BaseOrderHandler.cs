@@ -8,17 +8,15 @@ using Doerly.Messaging;
 using Doerly.Module.Order.DataTransferObjects.Messages;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Entities;
-using Doerly.Module.Order.DataTransferObjects;
 using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.DataTransferObjects.Responses;
 using Doerly.Module.Order.Domain.Constants;
 using Doerly.Module.Order.Enums;
 using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Proxy.Profile;
 using DoerlyDomain.Constants;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using FileInfo = Doerly.Module.Order.DataTransferObjects.FileInfo;
-using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
+using FileInfo = Doerly.Module.Order.DataTransferObjects.Responses.FileInfo;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 

@@ -1,7 +1,7 @@
 using Doerly.DataTransferObjects;
-using Doerly.Module.Order.Contracts.Dtos;
-using Doerly.Module.Order.Contracts.Dtos.Responses;
 using Doerly.Module.Order.DataAccess;
+using Doerly.Module.Order.DataTransferObjects;
+using Doerly.Module.Order.DataTransferObjects.Responses;
 using Doerly.Module.Order.Enums;
 using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;

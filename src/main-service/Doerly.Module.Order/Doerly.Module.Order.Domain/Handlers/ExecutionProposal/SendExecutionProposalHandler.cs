@@ -9,6 +9,7 @@ using Doerly.Messaging;
 using Doerly.Domain.Exceptions;
 using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.DataTransferObjects;
+using Doerly.Module.Order.DataTransferObjects.Responses;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class SendExecutionProposalHandler : BaseOrderHandler
