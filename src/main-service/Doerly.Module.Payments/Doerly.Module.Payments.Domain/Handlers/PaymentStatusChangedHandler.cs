@@ -1,7 +1,7 @@
 using Doerly.Domain;
 using Doerly.Domain.Models;
 using Doerly.Messaging;
-using Doerly.Module.Payments.Contracts.Messages;
+using Doerly.Module.Payments.DataTransferObjects.Messages;
 using Doerly.Module.Payments.DataAccess;
 using Doerly.Module.Payments.Domain.Models;
 using Doerly.Module.Payments.Enums;
@@ -28,7 +28,7 @@ public class PaymentStatusChangedHandler : BasePaymentHandler
         _logger = logger;
     }
 
-    public async Task<HandlerResult> Handle(PaymentStatusChangedModel model)
+    public async Task<OperationResult> Handle(PaymentStatusChangedModel model)
     {
         var payment = await DbContext.Payments
             .Include(x => x.Bill)
@@ -37,7 +37,7 @@ public class PaymentStatusChangedHandler : BasePaymentHandler
         if (payment == null)
         {
             _logger.LogWarning("Pending payment not found for PaymentGuid: {PaymentGuid}", model.PaymentGuid);
-            return HandlerResult.Failure("Payment not found");
+            return OperationResult.Failure("Payment not found");
         }
 
         payment.Status = model.Status;
@@ -48,7 +48,7 @@ public class PaymentStatusChangedHandler : BasePaymentHandler
 
         await PublishPaymentStatusChangedEvent(payment.BillId, payment.Guid, model.Status);
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 
     private async Task PublishPaymentStatusChangedEvent(int billId, Guid paymentGuid, EPaymentStatus status)

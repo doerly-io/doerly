@@ -1,6 +1,5 @@
-﻿using Doerly.Module.Order.Contracts.Dtos;
-using Doerly.Infrastructure.Api;
-using Doerly.Module.Order.Contracts.Dtos.Requests;
+﻿using Doerly.Infrastructure.Api;
+using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.Domain.Handlers;
 using Microsoft.AspNetCore.Mvc;
 using Doerly.Module.Order.Domain.Handlers.Order;

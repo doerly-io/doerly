@@ -5,7 +5,7 @@ using Doerly.Module.Authorization.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Doerly.Module.Authorization.Domain.Handlers.Users;
+namespace Doerly.Module.Authorization.Domain.Handlers;
 
 public class ChangeUserStateHandler : BaseAuthHandler
 {
@@ -14,17 +14,17 @@ public class ChangeUserStateHandler : BaseAuthHandler
     {
     }
 
-    public async Task<HandlerResult> HandleAsync(int userId, bool isEnabled)
+    public async Task<OperationResult> HandleAsync(int userId, bool isEnabled)
     {
         var userExists = await DbContext.Users.AnyAsync(x => x.Id == userId);
         if (!userExists)
-            return HandlerResult.Failure(Resources.Get("UserNotFound"));
+            return OperationResult.Failure(Resources.Get("UserNotFound"));
 
         await DbContext.Users
             .Where(x => x.Id == userId)
             .ExecuteUpdateAsync(calls =>
                 calls.SetProperty(x => x.IsEnabled, isEnabled));
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

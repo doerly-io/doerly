@@ -16,7 +16,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
         {
         }
 
-        public async Task<HandlerResult<GetServicesWithPaginationResponse>> HandleAsync(GetServiceWithPaginationRequest request)
+        public async Task<OperationResult<GetServicesWithPaginationResponse>> HandleAsync(GetServiceWithPaginationRequest request)
         {
             var baseQuery = DbContext.Services
                 .AsNoTracking()
@@ -74,7 +74,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
                 Orders = dtos
             };
 
-            return HandlerResult.Success(response);
+            return OperationResult.Success(response);
         }
 
         private List<string> GetCategoryPath(CategoryEntity? category)

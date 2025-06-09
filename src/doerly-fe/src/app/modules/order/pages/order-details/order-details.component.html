@@ -115,13 +115,15 @@
               <div class="avatar-container me-3 d-flex flex-column align-items-center position-relative"
                 [routerLink]="['/profile', order.executor?.id]" style="cursor: pointer;">
                 <span class="field-label">{{ 'ordering.executor' | translate }}:</span>
-                <img *ngIf="order.executor?.avatarUrl" ngSrc="{{order.executor?.avatarUrl}}"
-                  alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar" width="120" height="120" />
-                <p-avatar *ngIf="!order.executor?.avatarUrl" icon="pi pi-user" shape="circle" size="xlarge"
-                  class="avatar-bg executor-avatar"></p-avatar>
-                <div class="profile-hover-overlay">
-                  <i class="pi pi-user"></i>
-                  <span>{{ 'profile.view.title' | translate }}</span>
+                <div class="position-relative">
+                  <img *ngIf="order.executor?.avatarUrl" ngSrc="{{order.executor?.avatarUrl}}"
+                    alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar" width="120" height="120" />
+                  <p-avatar *ngIf="!order.executor?.avatarUrl" icon="pi pi-user" shape="circle" size="xlarge"
+                    class="avatar-bg executor-avatar"></p-avatar>
+                  <div class="profile-hover-overlay">
+                    <i class="pi pi-user"></i>
+                    <span>{{ 'profile.view.title' | translate }}</span>
+                  </div>
                 </div>
                 <span *ngIf="order.executor" class="executor-name mt-2">
                   {{ order.executor.firstName }} {{ order.executor.lastName }}

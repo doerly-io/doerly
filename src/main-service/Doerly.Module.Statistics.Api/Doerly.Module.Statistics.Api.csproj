@@ -8,7 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Doerly.Infrastructure.Api\Doerly.Infrastructure.Api.csproj" />
-      <ProjectReference Include="..\Doerly.Module.Statistics.Contracts\Doerly.Module.Statistics.Contracts.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Statistics.DataTransferObjects\Doerly.Module.Statistics.DataTransferObjects.csproj" />
       <ProjectReference Include="..\Doerly.Module.Statistics.Domain\Doerly.Module.Statistics.Domain.csproj" />
     </ItemGroup>
 

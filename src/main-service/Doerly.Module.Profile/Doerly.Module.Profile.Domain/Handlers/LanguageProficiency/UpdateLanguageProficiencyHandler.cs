@@ -1,14 +1,14 @@
 using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
+using Doerly.Module.Profile.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
 
 public class UpdateLanguageProficiencyHandler(ProfileDbContext dbContext) : BaseProfileHandler(dbContext)
 {
-    public async Task<HandlerResult> HandleAsync(
+    public async Task<OperationResult> HandleAsync(
         int userId, 
         int proficiencyId, 
         LanguageProficiencySaveDto dto, 
@@ -24,7 +24,7 @@ public class UpdateLanguageProficiencyHandler(ProfileDbContext dbContext) : Base
             .FirstOrDefaultAsync(lp => lp.ProfileId == profile!.Id && lp.Id == proficiencyId, cancellationToken);
 
         if (proficiency == null)
-            return HandlerResult.Failure(Resources.Get("LanguageProficiencyNotFound"));
+            return OperationResult.Failure(Resources.Get("LanguageProficiencyNotFound"));
 
         if (proficiency.LanguageId != dto.LanguageId)
         {
@@ -43,7 +43,7 @@ public class UpdateLanguageProficiencyHandler(ProfileDbContext dbContext) : Base
         proficiency.Level = dto.Level;
         await DbContext.SaveChangesAsync(cancellationToken);
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 
 }

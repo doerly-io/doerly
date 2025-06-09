@@ -1,11 +1,11 @@
 ﻿using Doerly.DataTransferObjects.Pagination;
 using Doerly.Domain.Handlers;
 using Doerly.Extensions;
-using Doerly.Module.Authorization.Contracts.Responses;
+using Doerly.Module.Authorization.DataTransferObjects.Responses;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Module.Authorization.DataAccess.Entities;
 
-namespace Doerly.Module.Authorization.Domain.Handlers.Users;
+namespace Doerly.Module.Authorization.Domain.Handlers;
 
 public class SelectUsersHandler : BaseHandler
 {

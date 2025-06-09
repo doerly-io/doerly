@@ -1,14 +1,14 @@
 using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
+using Doerly.Module.Profile.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
 
 public class CreateCompetenceHandler(ProfileDbContext dbContext) : BaseProfileHandler(dbContext)
 {
-    public async Task<HandlerResult> HandleAsync(int userId, CompetenceSaveDto dto, CancellationToken cancellationToken = default)
+    public async Task<OperationResult> HandleAsync(int userId, CompetenceSaveDto dto, CancellationToken cancellationToken = default)
     {
         var profileResult = await GetProfileByUserIdAsync(userId, cancellationToken);
         
@@ -20,7 +20,7 @@ public class CreateCompetenceHandler(ProfileDbContext dbContext) : BaseProfileHa
             .AnyAsync(c => c.ProfileId == profile.Id && c.CategoryId == dto.CategoryId, cancellationToken);
         
         if (isCompetenceExists)
-            return HandlerResult.Failure(Resources.Get("CompetenceAlreadyExists"));
+            return OperationResult.Failure(Resources.Get("CompetenceAlreadyExists"));
         
         var newCompetence = new DataAccess.Models.Competence
         {
@@ -31,6 +31,6 @@ public class CreateCompetenceHandler(ProfileDbContext dbContext) : BaseProfileHa
         
         DbContext.Competences.Add(newCompetence);
         await DbContext.SaveChangesAsync(cancellationToken);
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

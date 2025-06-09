@@ -1,5 +1,6 @@
 using Doerly.Domain.Models;
-using Doerly.Module.Profile.Contracts.Dtos;
+using Doerly.Module.Profile.Api.ModuleWrapper;
+using Doerly.Module.Profile.DataTransferObjects;
 
 namespace Doerly.Proxy.Profile;
 
@@ -12,13 +13,13 @@ public class ProfileModuleProxy : IProfileModuleProxy
         _profileModuleWrapper = profileModuleWrapper;
     }
     
-    public Task<HandlerResult<ProfileDto>> GetProfileAsync(int userId)
+    public Task<OperationResult<ProfileDto>> GetProfileAsync(int userId)
     {
         var profileResponse = _profileModuleWrapper.GetProfileAsync(userId);
         return profileResponse;
     }
 
-    public Task<HandlerResult<IEnumerable<ProfileDto>>> GetProfilesAsync(int[] userIds)
+    public Task<OperationResult<IEnumerable<ProfileDto>>> GetProfilesAsync(int[] userIds)
     {
         var profilesResponse = _profileModuleWrapper.GetProfilesAsync(userIds);
         return profilesResponse;

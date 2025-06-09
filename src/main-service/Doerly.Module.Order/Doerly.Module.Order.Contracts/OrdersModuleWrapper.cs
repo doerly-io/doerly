@@ -1,0 +1,31 @@
+using Doerly.DataTransferObjects;
+using Doerly.DataTransferObjects.Pagination;
+using Doerly.Domain.Factories;
+using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.DataTransferObjects;
+using Doerly.Module.Order.Domain.Handlers.Order;
+using Doerly.Proxy.Orders;
+
+namespace Doerly.Module.Order.Contracts;
+
+public class OrdersModuleWrapper : IOrdersModuleWrapper
+{
+    private readonly IHandlerFactory _handlerFactory;
+
+    public OrdersModuleWrapper(IHandlerFactory handlerFactory)
+    {
+        _handlerFactory = handlerFactory;
+    }
+
+    public async Task<BasePaginationResponse<GetOrdersWithPaginationAndFilterResponse>> GetOrdersWithPaginationAsync(GetOrderWithFilterAndPaginationRequest request)
+    {
+        var ordersResponse = await _handlerFactory.Get<SelectOrdersWithFilterAndPaginationHandler>().HandleAsync(request);
+        return ordersResponse;
+    }
+
+    public Task<CursorPaginationResponse<OrderFeedbackResponse>> HandleAsync(int userId, CursorPaginationRequest request)
+    {
+        var feedbacksResponse = _handlerFactory.Get<SelectUserFeedbacksHandler>().HandleAsync(userId, request);
+        return feedbacksResponse;
+    }
+}

@@ -6,11 +6,11 @@ namespace Doerly.Module.Profile.Domain.Handlers;
 
 public class DeleteLanguageHandler(ProfileDbContext dbContext) : BaseProfileHandler(dbContext)
 {
-    public async Task<HandlerResult> HandleAsync(int id)
+    public async Task<OperationResult> HandleAsync(int id)
     {
         await DbContext.Languages
             .Where(x => x.Id == id)
             .ExecuteDeleteAsync();
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

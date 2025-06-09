@@ -8,6 +8,7 @@
     <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
     <ProjectReference Include="..\..\Doerly.Infrastructure.Api\Doerly.Infrastructure.Api.csproj" />
     <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
+    <ProjectReference Include="..\Doerly.Module.Authorization.Contracts\Doerly.Module.Authorization.Contracts.csproj" />
     <ProjectReference Include="..\Doerly.Module.Authorization.Domain\Doerly.Module.Authorization.Domain.csproj" />
     <ProjectReference Include="..\Doerly.Module.Authorization.DataAccess\Doerly.Module.Authorization.DataAccess.csproj" />
   </ItemGroup>

@@ -3,7 +3,7 @@ using Doerly.Domain.Factories;
 using Doerly.Domain.Models;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Localization;
-using Doerly.Module.Authorization.Contracts.Requests;
+using Doerly.Module.Authorization.DataTransferObjects.Requests;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -22,7 +22,7 @@ public class ResetPasswordHandler : BaseAuthHandler
         _handlerFactory = handlerFactory;
     }
 
-    public async Task<HandlerResult> HandleAsync(ResetPasswordRequestDto requestDto)
+    public async Task<OperationResult> HandleAsync(ResetPasswordRequestDto requestDto)
     {
         var tokenBytes = Convert.FromBase64String(requestDto.Token);
         var hashedToken = GetResetTokenHash(tokenBytes);
@@ -32,17 +32,17 @@ public class ResetPasswordHandler : BaseAuthHandler
             .FirstOrDefaultAsync(x => x.User.Email == requestDto.Email && x.Value == hashedToken);
 
         if (resetToken == null)
-            return HandlerResult.Failure(Resources.Get("ValidTokenNotFound"));
+            return OperationResult.Failure(Resources.Get("ValidTokenNotFound"));
 
         if (resetToken.DateCreated.AddMinutes(AuthOptions.Value.PasswordResetTokenLifetime) < DateTime.UtcNow)
         {
             await DbContext.Tokens.Where(x => x.Guid == resetToken.Guid).ExecuteDeleteAsync();
-            return HandlerResult.Failure(Resources.Get("ValidTokenNotFound"));
+            return OperationResult.Failure(Resources.Get("ValidTokenNotFound"));
         }
 
         var user = await DbContext.Users.FirstOrDefaultAsync(x => x.Id == resetToken.UserId);
         if (user == null)
-            return HandlerResult.Failure(Resources.Get("UserNotFound"));
+            return OperationResult.Failure(Resources.Get("UserNotFound"));
 
         var updatePasswordResult = await _handlerFactory.Get<UpdateUserPasswordHandler>().HandleAsync(user, requestDto.Password);
         if (updatePasswordResult.IsSuccess)

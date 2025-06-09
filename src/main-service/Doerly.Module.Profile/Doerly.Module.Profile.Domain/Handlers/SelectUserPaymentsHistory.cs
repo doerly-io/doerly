@@ -1,7 +1,7 @@
 using Doerly.DataTransferObjects;
 using Doerly.Domain;
 using Doerly.Domain.Handlers;
-using Doerly.Module.Payments.Contracts;
+using Doerly.Module.Payments.DataTransferObjects;
 using Doerly.Proxy.Payment;
 
 namespace Doerly.Module.Profile.Domain.Handlers;

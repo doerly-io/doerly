@@ -1,7 +1,8 @@
 using Doerly.DataTransferObjects.Pagination;
 using Doerly.Infrastructure.Api;
 using Doerly.Module.Catalog.Domain.Handlers.Orders;
-using Doerly.Module.Order.Contracts.Dtos;
+using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.DataTransferObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

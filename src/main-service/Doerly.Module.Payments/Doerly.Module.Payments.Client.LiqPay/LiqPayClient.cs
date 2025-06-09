@@ -5,7 +5,7 @@ using Doerly.Domain.Models;
 using Doerly.Module.Payments.BaseClient;
 using Doerly.Module.Payments.Client.LiqPay.Client;
 using Doerly.Module.Payments.Client.LiqPay.Internal;
-using Doerly.Module.Payments.Contracts;
+using Doerly.Module.Payments.DataTransferObjects;
 using Doerly.Module.Payments.Enums;
 
 namespace Doerly.Module.Payments.Client.LiqPay;
@@ -28,7 +28,7 @@ public class LiqPayClient : IBasePaymentClient
         ArgumentException.ThrowIfNullOrEmpty(privateKey);
     }
 
-    public async Task<HandlerResult<BaseCheckoutResponse>> Checkout(CheckoutModel checkoutModel)
+    public async Task<OperationResult<BaseCheckoutResponse>> Checkout(CheckoutModel checkoutModel)
     {
         try
         {
@@ -45,11 +45,11 @@ public class LiqPayClient : IBasePaymentClient
                 Aggregator = EPaymentAggregator.LiqPay
             };
             
-            return HandlerResult.Success(result);
+            return OperationResult.Success(result);
         }
         catch (Exception e)
         {
-            return HandlerResult.Failure<BaseCheckoutResponse>(e.Message);
+            return OperationResult.Failure<BaseCheckoutResponse>(e.Message);
         }
     }
 

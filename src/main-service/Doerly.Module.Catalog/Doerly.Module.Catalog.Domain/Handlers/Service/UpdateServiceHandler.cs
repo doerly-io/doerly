@@ -13,19 +13,19 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
         { 
         }
 
-        public async Task<HandlerResult> HandleAsync(int id, UpdateServiceRequest request)
+        public async Task<OperationResult> HandleAsync(int id, UpdateServiceRequest request)
         {
             var service = await DbContext.Services
                 .Include(s => s.FilterValues)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             if (service == null || service.IsDeleted)
-                return HandlerResult.Failure(Resources.Get("ServiceNotFound"));
+                return OperationResult.Failure(Resources.Get("ServiceNotFound"));
 
             var categoryExists = await DbContext.Categories
                 .AnyAsync(c => c.Id == request.CategoryId && !c.IsDeleted);
             if (!categoryExists)
-                return HandlerResult.Failure(Resources.Get("CategoryNotFound"));
+                return OperationResult.Failure(Resources.Get("CategoryNotFound"));
 
             service.Name = request.Name;
             service.Description = request.Description;
@@ -58,7 +58,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
             }
 
             await DbContext.SaveChangesAsync();
-            return HandlerResult.Success();
+            return OperationResult.Success();
         }
     }
 }

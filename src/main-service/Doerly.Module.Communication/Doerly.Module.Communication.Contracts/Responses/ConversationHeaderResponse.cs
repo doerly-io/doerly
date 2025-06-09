@@ -1,4 +1,4 @@
-using Doerly.Module.Profile.Contracts.Dtos;
+using Doerly.Module.Profile.DataTransferObjects;
 
 namespace Doerly.Module.Communication.Contracts.Responses;
 

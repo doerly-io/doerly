@@ -28,7 +28,7 @@ public class RequestPasswordResetHandler : BaseAuthHandler
         _frontedOptions = frontedOptions;
     }
 
-    public async Task<HandlerResult> HandleAsync(string email)
+    public async Task<OperationResult> HandleAsync(string email)
     {
         var userId = await DbContext.Users
             .Where(x => x.Email == email)
@@ -37,7 +37,7 @@ public class RequestPasswordResetHandler : BaseAuthHandler
 
         //if the user does not exist, we still need to show generic message to the user for security reasons
         if (userId == null)
-            return HandlerResult.Success();
+            return OperationResult.Success();
 
         var token = GetResetToken();
         var resetToken = new TokenEntity
@@ -64,6 +64,6 @@ public class RequestPasswordResetHandler : BaseAuthHandler
         if (!result.IsSuccess)
             throw new DoerlyException(result.ErrorMessage);
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

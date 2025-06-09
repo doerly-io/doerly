@@ -1,7 +1,5 @@
-using Doerly.DataTransferObjects;
 using Doerly.Infrastructure.Api;
-using Doerly.Extensions;
-using Doerly.Module.Payments.Contracts;
+using Doerly.Module.Payments.DataTransferObjects;
 using Doerly.Module.Payments.Domain.Handlers;
 using Doerly.Module.Payments.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -38,9 +36,8 @@ public class PaymentsController : BaseApiController
             PayerEmail = RequestContext.UserEmail
         };
 
-        var uri = _webhookUrlBuilder.BuildWebhookUrl(nameof(WebhookController).ToControllerName(), nameof(WebhookController.FinalStatus));
+        var uri = _webhookUrlBuilder.BuildWebhookUrl("/api/payments/Webhook/liqpay/final-status");
         var result = await ResolveHandler<CheckoutHandler>().HandleAsync(invoiceCreateRequest, uri);
         return Ok(result);
     }
-    
 }

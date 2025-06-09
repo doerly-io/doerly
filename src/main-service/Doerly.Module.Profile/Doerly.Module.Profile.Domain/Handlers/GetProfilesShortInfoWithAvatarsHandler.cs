@@ -1,6 +1,6 @@
 using Doerly.FileRepository;
-using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
+using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Module.Profile.Domain.Constants;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,10 +1,10 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Proxy.Profile;
 using Doerly.Module.Order.DataAccess.Entities;
 using Doerly.Domain;
+using Doerly.Module.Order.DataTransferObjects;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetExecutionProposalByIdHandler : BaseOrderHandler
@@ -17,12 +17,12 @@ public class GetExecutionProposalByIdHandler : BaseOrderHandler
         _doerlyRequestContext = doerlyRequestContext;
     }
 
-    public async Task<HandlerResult<GetExecutionProposalResponse>> HandleAsync(int id)
+    public async Task<OperationResult<GetExecutionProposalResponse>> HandleAsync(int id)
     {
         var executionProposal = await DbContext.ExecutionProposals.FindAsync(id);
 
         if (executionProposal == null)
-            return HandlerResult.Failure<GetExecutionProposalResponse>(Resources.Get("ExecutionProposalNotFound"));
+            return OperationResult.Failure<GetExecutionProposalResponse>(Resources.Get("ExecutionProposalNotFound"));
 
         int profileId;
         if (_doerlyRequestContext.UserId == executionProposal.SenderId)
@@ -63,6 +63,6 @@ public class GetExecutionProposalByIdHandler : BaseOrderHandler
             DateCreated = executionProposal.DateCreated
         };
 
-        return HandlerResult.Success(result);
+        return OperationResult.Success(result);
     }
 }

@@ -1,7 +1,8 @@
 using Doerly.DataTransferObjects;
 using Doerly.Domain.Models;
 using Doerly.Module.Payments.Contracts;
-using Doerly.Module.Payments.Contracts.Responses;
+using Doerly.Module.Payments.DataTransferObjects;
+using Doerly.Module.Payments.DataTransferObjects.Responses;
 
 namespace Doerly.Proxy.Payment;
 
@@ -14,7 +15,7 @@ public class PaymentModuleProxy : IPaymentModuleProxy
         _paymentModuleWrapper = paymentModuleWrapper;
     }
 
-    public async Task<HandlerResult<BaseCheckoutResponse>> CheckoutAsync(CheckoutRequest checkoutRequest)
+    public async Task<OperationResult<BaseCheckoutResponse>> CheckoutAsync(CheckoutRequest checkoutRequest)
     {
         var checkoutResponse = await _paymentModuleWrapper.CheckoutAsync(checkoutRequest);
         return checkoutResponse;

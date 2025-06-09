@@ -1,20 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>annotations</Nullable>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Doerly.DataAccess\Doerly.DataAccess.csproj" />
-    <ProjectReference Include="..\Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj" />
-    <ProjectReference Include="..\Doerly.Extensions\Doerly.Extensions.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.24.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="MassTransit" Version="8.4.1" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.9" />
-  </ItemGroup>
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>annotations</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Doerly.DataAccess\Doerly.DataAccess.csproj"/>
+        <ProjectReference Include="..\Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj"/>
+        <ProjectReference Include="..\Doerly.Extensions\Doerly.Extensions.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Azure.Storage.Blobs" Version="12.24.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0"/>
+        <PackageReference Include="MassTransit" Version="8.4.1"/>
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.9"/>
+    </ItemGroup>
+    
 </Project>

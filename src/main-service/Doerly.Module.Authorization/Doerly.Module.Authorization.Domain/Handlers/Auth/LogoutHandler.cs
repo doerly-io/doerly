@@ -14,17 +14,17 @@ public class LogoutHandler : BaseAuthHandler
     {
     }
 
-    public async Task<HandlerResult> HandleAsync(string refreshToken)
+    public async Task<OperationResult> HandleAsync(string refreshToken)
     {
         var tokenBytes = Encoding.UTF8.GetBytes(refreshToken);
         var hashedToken = GetResetTokenHash(tokenBytes);
         var resetTokenEntity = await DbContext.Tokens.FirstOrDefaultAsync(x => x.Value == hashedToken);
         if (resetTokenEntity == null)
-            return HandlerResult.Failure(Resources.Get("UserNotFound"));
+            return OperationResult.Failure(Resources.Get("UserNotFound"));
 
         DbContext.Tokens.Remove(resetTokenEntity);
         await DbContext.SaveChangesAsync();
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

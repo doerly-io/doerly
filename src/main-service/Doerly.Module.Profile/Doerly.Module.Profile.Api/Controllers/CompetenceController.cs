@@ -1,6 +1,6 @@
 using Doerly.Domain.Models;
 using Doerly.Infrastructure.Api;
-using Doerly.Module.Profile.Contracts.Dtos;
+using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Module.Profile.Domain.Handlers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +13,8 @@ namespace Doerly.Module.Profile.Api.Controllers;
 public class CompetenceController : BaseApiController
 {
     [HttpPost]
-    [ProducesResponseType<HandlerResult<int>>(StatusCodes.Status201Created)]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<OperationResult<int>>(StatusCodes.Status201Created)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> AddCompetence(int userId, CompetenceSaveDto dto)
     {
         var result = await ResolveHandler<CreateCompetenceHandler>().HandleAsync(userId, dto);
@@ -25,8 +25,8 @@ public class CompetenceController : BaseApiController
     }
     
     [HttpDelete("{competenceId:int}")]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status200OK)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteCompetence(int userId, int competenceId)
     {
         var result = await ResolveHandler<DeleteCompetenceHandler>().HandleAsync(userId, competenceId);

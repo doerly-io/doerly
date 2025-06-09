@@ -2,7 +2,7 @@ using Doerly.Domain;
 using Doerly.Domain.Factories;
 using Doerly.Messaging;
 using Doerly.Module.Authorization.Domain.Handlers;
-using Doerly.Module.Authorization.Contracts.Messages;
+using Doerly.Module.Authorization.DataTransferObjects.Messages;
 using MassTransit;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

@@ -3,9 +3,10 @@ using Doerly.Domain.Exceptions;
 using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Localization;
-using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Entities;
+using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.DataTransferObjects;
 using Doerly.Proxy.Profile;
 
 using Microsoft.AspNetCore.Http;
@@ -22,7 +23,7 @@ public class UpdateOrderHandler : BaseOrderHandler
         _doerlyRequestContext = doerlyRequestContext;
     }
 
-    public async Task<HandlerResult> HandleAsync(int id, UpdateOrderRequest dto, List<IFormFile> files, List<string> existingFileNames)
+    public async Task<OperationResult> HandleAsync(int id, UpdateOrderRequest dto, List<IFormFile> files, List<string> existingFileNames)
     {
         var userId = _doerlyRequestContext.UserId ?? throw new DoerlyException("We are fucked!");
 
@@ -32,7 +33,7 @@ public class UpdateOrderHandler : BaseOrderHandler
             .FirstOrDefaultAsync(x => x.Id == id && x.CustomerId == userId);
 
         if (order == null)
-            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
+            return OperationResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
 
         order.Name = dto.Name;
         order.Description = dto.Description;
@@ -61,7 +62,7 @@ public class UpdateOrderHandler : BaseOrderHandler
 
         await DbContext.SaveChangesAsync();
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 
     private async Task DeleteOrderFileAsync(OrderFile file)

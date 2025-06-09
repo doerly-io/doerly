@@ -2,11 +2,10 @@
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Enums;
-using Doerly.Module.Order.Contracts.Dtos;
-
 using Microsoft.EntityFrameworkCore;
 using Doerly.Domain;
 using Doerly.Messaging;
+using Doerly.Module.Order.DataTransferObjects.Requests;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class ResolveExecutionProposalHandler : BaseOrderHandler
@@ -18,20 +17,20 @@ public class ResolveExecutionProposalHandler : BaseOrderHandler
         _doerlyRequestContext = doerlyRequestContext;
     }
 
-    public async Task<HandlerResult> HandleAsync(int id, ResolveExecutionProposalRequest dto)
+    public async Task<OperationResult> HandleAsync(int id, ResolveExecutionProposalRequest dto)
     {
         var executionProposal = await DbContext.ExecutionProposals.FirstOrDefaultAsync(x => x.Id == id && 
             (x.SenderId == _doerlyRequestContext.UserId || x.ReceiverId == _doerlyRequestContext.UserId));
 
         if (executionProposal == null)
-            return HandlerResult.Failure(Resources.Get("ExecutionProposalNotFound"));
+            return OperationResult.Failure(Resources.Get("ExecutionProposalNotFound"));
 
         executionProposal.Status = dto.Status;
         if (executionProposal.Status == EExecutionProposalStatus.Accepted)
         {
             var order = await DbContext.Orders.FindAsync(executionProposal.OrderId);
             if (order == null)
-                return HandlerResult.Failure(Resources.Get("OrderNotFound"));
+                return OperationResult.Failure(Resources.Get("OrderNotFound"));
 
             order.Status = EOrderStatus.InProgress;
             if (order.CustomerId == executionProposal.ReceiverId)
@@ -51,6 +50,6 @@ public class ResolveExecutionProposalHandler : BaseOrderHandler
 
         await PublishExecutionProposalStatusUpdatedEventAsync(executionProposal.Id, executionProposal.Status);
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

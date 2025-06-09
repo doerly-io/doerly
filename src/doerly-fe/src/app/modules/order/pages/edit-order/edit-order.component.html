@@ -136,8 +136,8 @@
           <div class="row mb-3 mx-0 px-0">
             <div class="col-6">
               <label for="price">{{ 'ordering.price' | translate }}</label>
-              <input pInputText formControlName="price" class="w-100" id="price" type="number" min="1"
-                max="9999999999999.99" step="0.01" />
+              <p-inputnumber formControlName="price" class="w-100" id="price" mode="decimal" min="1"
+                max="9999999999999.99" step="0.01" minFractionDigits="2" maxFractionDigits="2"></p-inputnumber>
               <small *ngIf="isInvalid(orderForm, 'price')" class="input-validation-item">
                 {{ getError(orderForm, 'price', 'required', 'ordering.field_required' | translate) }}
                 {{ getError(orderForm, 'price', 'min', 'ordering.price_min' | translate) }}

@@ -1,7 +1,7 @@
 using Doerly.Domain.Factories;
-using Doerly.Domain.Helpers;
+using Doerly.Helpers;
 using Doerly.Localization;
-using Doerly.Module.Payments.Contracts.Messages;
+using Doerly.Module.Payments.DataTransferObjects.Messages;
 using Doerly.Module.Payments.DataAccess;
 using Doerly.Notification.EmailSender;
 using Microsoft.EntityFrameworkCore;

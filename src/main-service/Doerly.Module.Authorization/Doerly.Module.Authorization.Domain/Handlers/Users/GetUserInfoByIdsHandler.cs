@@ -1,10 +1,10 @@
 using Doerly.Domain.Handlers;
 using Doerly.Domain.Models;
-using Doerly.Module.Authorization.Contracts.Responses;
+using Doerly.Module.Authorization.DataTransferObjects.Responses;
 using Doerly.Module.Authorization.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
-namespace Doerly.Module.Authorization.Domain.Handlers.Users;
+namespace Doerly.Module.Authorization.Domain.Handlers;
 
 public class GetUserInfoByIdsHandler: BaseHandler
 {

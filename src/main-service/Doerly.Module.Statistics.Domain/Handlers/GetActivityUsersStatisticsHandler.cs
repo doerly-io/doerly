@@ -1,6 +1,6 @@
 using Doerly.Domain.Handlers;
 using Doerly.Domain.Models;
-using Doerly.Module.Statistics.Contracts.Dtos;
+using Doerly.Module.Statistics.DataTransferObjects;
 using Doerly.Proxy.Authorization;
 using MassTransit.Initializers;
 
@@ -15,7 +15,7 @@ public class GetActivityUsersStatisticsHandler : BaseHandler
         _authorizationModuleProxy = authorizationModuleProxy;
     }
 
-    public async Task<HandlerResult<UserActivityStatisticsDto>> HandleAsync()
+    public async Task<OperationResult<UserActivityStatisticsDto>> HandleAsync()
     {
         var statistics = await _authorizationModuleProxy
             .GetActivityUsersStatisticsAsync()
@@ -31,6 +31,6 @@ public class GetActivityUsersStatisticsHandler : BaseHandler
                 NewUsersLast30Days = x.NewUsersLast30Days
             });
 
-        return HandlerResult.Success(statistics);
+        return OperationResult.Success(statistics);
     }
 }

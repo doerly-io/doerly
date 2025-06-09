@@ -26,6 +26,8 @@ import { Textarea } from 'primeng/textarea';
 import { ImageModule } from 'primeng/image';
 import { AddressSelectComponent } from "../../../../@shared/components/address-select/address-select.component";
 import { ErrorHandlerService } from '../../../../@core/services/error-handler.service';
+import { InputNumber } from 'primeng/inputnumber';
+import { I18nHelperService } from 'app/@core/helpers/i18n.helper.service';
 
 @Component({
   selector: 'app-edit-order',
@@ -49,7 +51,8 @@ import { ErrorHandlerService } from '../../../../@core/services/error-handler.se
     Tooltip,
     Textarea,
     ImageModule,
-    AddressSelectComponent
+    AddressSelectComponent,
+    InputNumber
   ]
 })
 export class EditOrderComponent implements OnInit {
@@ -79,7 +82,8 @@ export class EditOrderComponent implements OnInit {
     private orderService: OrderService,
     private translate: TranslateService,
     private toastHelper: ToastHelper,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService,
+    public i18nHelperService: I18nHelperService
   ) { }
 
   ngOnInit() {
@@ -90,7 +94,7 @@ export class EditOrderComponent implements OnInit {
     this.categoryId = categoryIdParam ? Number(categoryIdParam) : undefined;
     if (!this.categoryId && !this.isEdit) {
       this.toastHelper.showError('common.error', this.translate.instant('ordering.service_required'));
-      this.router.navigate(['']);
+      this.router.navigate(['404-page']);
     }
 
     const executorIdParam = this.route.snapshot.queryParamMap.get('executorId');

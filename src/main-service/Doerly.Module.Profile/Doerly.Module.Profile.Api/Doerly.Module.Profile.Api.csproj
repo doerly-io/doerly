@@ -11,6 +11,7 @@
       <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
       <ProjectReference Include="..\..\Doerly.Proxy.Profile\Doerly.Proxy.Profile.csproj" />
       <ProjectReference Include="..\Doerly.Module.Profile.Contracts\Doerly.Module.Profile.Contracts.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Profile.DataTransferObjects\Doerly.Module.Profile.DataTransferObjects.csproj" />
       <ProjectReference Include="..\Doerly.Module.Profile.DataAccess\Doerly.Module.Profile.DataAccess.csproj" />
       <ProjectReference Include="..\Doerly.Module.Profile.Domain\Doerly.Module.Profile.Domain.csproj" />
     </ItemGroup>

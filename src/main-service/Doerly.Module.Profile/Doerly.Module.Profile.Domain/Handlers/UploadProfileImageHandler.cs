@@ -1,10 +1,9 @@
-using Doerly.Domain.Helpers;
 using Doerly.Domain.Models;
 using Doerly.FileRepository;
+using Doerly.Helpers;
 using Doerly.Localization;
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Module.Profile.Domain.Constants;
-using Doerly.Module.Profile.Domain.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
@@ -18,17 +17,17 @@ public class UploadProfileImageHandler : BaseProfileHandler
         _fileRepository = fileRepository;
     }
 
-    public async Task<HandlerResult> HandleAsync(int userId, byte[] fileBytes, CancellationToken cancellationToken = default)
+    public async Task<OperationResult> HandleAsync(int userId, byte[] fileBytes, CancellationToken cancellationToken = default)
     {
         if (!ImageValidationHelper.IsValidImage(fileBytes, out var fileExtension))
-            return HandlerResult.Failure(Resources.Get("InvalidImage"));
+            return OperationResult.Failure(Resources.Get("InvalidImage"));
 
         var profile = await DbContext.Profiles
             .Select(x => new { x.UserId, x.ImagePath })
             .FirstOrDefaultAsync(x => x.UserId == userId, cancellationToken);
         
         if (profile == null)
-            return HandlerResult.Failure(Resources.Get("ProfileNotFound"));
+            return OperationResult.Failure(Resources.Get("ProfileNotFound"));
     
         var imageName = Guid.NewGuid().ToString();
         var imagePath = $"{AzureStorageConstants.FolderNames.ProfileImages}/{imageName}{fileExtension}";
@@ -56,6 +55,6 @@ public class UploadProfileImageHandler : BaseProfileHandler
                         .SetProperty(b => b.LastModifiedDate, DateTime.UtcNow),
                 cancellationToken);
     
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

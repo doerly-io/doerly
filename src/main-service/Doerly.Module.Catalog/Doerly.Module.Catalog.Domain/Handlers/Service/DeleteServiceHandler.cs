@@ -11,7 +11,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
         {
         }
 
-        public async Task<HandlerResult> HandleAsync(int id)
+        public async Task<OperationResult> HandleAsync(int id)
         {
             var updatedCount = await DbContext.Services
                 .Where(s => s.Id == id)
@@ -19,9 +19,9 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
                     .SetProperty(s => s.IsDeleted, true));
 
             if (updatedCount == 0)
-                return HandlerResult.Failure(Resources.Get("ServiceNotFound"));
+                return OperationResult.Failure(Resources.Get("ServiceNotFound"));
 
-            return HandlerResult.Success();
+            return OperationResult.Success();
         }
 
     }

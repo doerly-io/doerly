@@ -1,7 +1,6 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Enums;
-using Doerly.Module.Order.Contracts.Dtos;
 using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
 using Doerly.Domain;
 using Doerly.FileRepository;
@@ -9,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Doerly.Module.Order.DataAccess.Entities;
 using Doerly.Messaging;
 using Doerly.Domain.Exceptions;
+using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.DataTransferObjects;
 using Doerly.Proxy.Profile;
 
 namespace Doerly.Module.Order.Domain.Handlers;
@@ -23,7 +24,7 @@ public class CreateOrderHandler : BaseOrderHandler
         _doerlyRequestContext = doerlyRequestContext;
     }
 
-    public async Task<HandlerResult<CreateOrderResponse>> HandleAsync(CreateOrderRequest dto, List<IFormFile> files)
+    public async Task<OperationResult<CreateOrderResponse>> HandleAsync(CreateOrderRequest dto, List<IFormFile> files)
     {
         var userId = _doerlyRequestContext.UserId ?? throw new DoerlyException("We are fucked!");
 
@@ -75,6 +76,6 @@ public class CreateOrderHandler : BaseOrderHandler
 
         await PublishOrderStatusUpdatedEventAsync(order.Id, order.Status);
 
-        return HandlerResult.Success(result);
+        return OperationResult.Success(result);
     }
 }

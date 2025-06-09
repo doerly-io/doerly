@@ -13,7 +13,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Category
         {
         }
 
-        public async Task<HandlerResult<GetCategoryResponse>> HandleAsync(int id)
+        public async Task<OperationResult<GetCategoryResponse>> HandleAsync(int id)
         {
             var allCategories = await DbContext.Categories
                 .AsNoTracking()
@@ -21,7 +21,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Category
 
             var category = allCategories.FirstOrDefault(c => c.Id == id);
             if (category == null)
-                return HandlerResult.Failure<GetCategoryResponse>(Resources.Get("CategoryNotFound"));
+                return OperationResult.Failure<GetCategoryResponse>(Resources.Get("CategoryNotFound"));
 
             var lookup = allCategories.ToLookup(c => c.ParentId);
 
@@ -40,7 +40,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Category
 
             var categoryDto = BuildTree(category);
 
-            return HandlerResult.Success(categoryDto);
+            return OperationResult.Success(categoryDto);
         }
     }
 }

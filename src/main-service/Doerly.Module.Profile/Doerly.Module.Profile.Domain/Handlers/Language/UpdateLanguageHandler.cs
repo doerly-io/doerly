@@ -1,12 +1,12 @@
 using Doerly.Domain.Models;
-using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
+using Doerly.Module.Profile.DataTransferObjects;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
 
 public class UpdateLanguageHandler(ProfileDbContext dbContext) : BaseProfileHandler(dbContext)
 {
-    public async Task<HandlerResult> HandleAsync(int id, LanguageSaveDto dto, CancellationToken cancellationToken = default)
+    public async Task<OperationResult> HandleAsync(int id, LanguageSaveDto dto, CancellationToken cancellationToken = default)
     {
         var result = await GetLanguageByIdAsync(id, cancellationToken);
         
@@ -25,6 +25,6 @@ public class UpdateLanguageHandler(ProfileDbContext dbContext) : BaseProfileHand
         
         await DbContext.SaveChangesAsync();
         
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

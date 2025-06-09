@@ -5,7 +5,7 @@ using Doerly.Module.Communication.Contracts.Responses;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Communication.Domain.Constants;
 using Doerly.Module.Communication.Enums;
-using Doerly.Module.Profile.Contracts.Dtos;
+using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +15,7 @@ public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfi
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
-    public async Task<HandlerResult<ConversationResponse>> HandleAsync(int conversationId)
+    public async Task<OperationResult<ConversationResponse>> HandleAsync(int conversationId)
     {
         var conversation = await _dbContext.Conversations
             .Where(c => c.Id == conversationId)
@@ -35,7 +35,7 @@ public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfi
                 
         if (conversation == null)
         {
-            return HandlerResult.Failure<ConversationResponse>(Resources.Get("Communication.ConversationNotFound"));
+            return OperationResult.Failure<ConversationResponse>(Resources.Get("Communication.ConversationNotFound"));
         }
         
         var participantsIds = conversation.ParticipantIds;
@@ -69,6 +69,6 @@ public class GetConversationByIdHandler(CommunicationDbContext dbContext, IProfi
             Messages = messageDtos.ToList()
         };
 
-        return HandlerResult.Success(conversationResponseDto);
+        return OperationResult.Success(conversationResponseDto);
     }
 }

@@ -1,10 +1,8 @@
 using Doerly.DataTransferObjects.Pagination;
 using Doerly.Domain.Models;
-using Doerly.Module.Order.Contracts.Dtos;
-using Doerly.Module.Order.DataAccess.Entities;
+using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.Domain.Handlers;
-using Doerly.Module.Order.Domain.Handlers.Order;
-using Doerly.Module.Profile.Contracts.Dtos;
+using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Proxy.Profile;
 
 using Moq;
@@ -41,7 +39,7 @@ public class GetOrdersWithPaginationHandlerTests : BaseOrderTests
 
         _profileModuleProxyMock
             .Setup(x => x.GetProfilesAsync(It.IsAny<int[]>()))
-            .ReturnsAsync(HandlerResult.Success((IEnumerable<ProfileDto>)profileDtos));
+            .ReturnsAsync(OperationResult.Success((IEnumerable<ProfileDto>)profileDtos));
 
         var request = new GetOrdersWithPaginationRequest
         {

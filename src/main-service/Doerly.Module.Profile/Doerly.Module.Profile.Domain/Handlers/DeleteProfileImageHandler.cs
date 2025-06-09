@@ -16,17 +16,17 @@ public class DeleteProfileImageHandler : BaseProfileHandler
         _fileRepository = fileRepository;
     }
     
-    public async Task<HandlerResult> HandleAsync(int userId, CancellationToken cancellationToken = default)
+    public async Task<OperationResult> HandleAsync(int userId, CancellationToken cancellationToken = default)
     {
         var profile = await DbContext.Profiles
             .Select(x => new { x.UserId, x.ImagePath })
             .FirstOrDefaultAsync(x => x.UserId == userId, cancellationToken);
         
         if (profile == null)
-            return HandlerResult.Failure(Resources.Get("ProfileNotFound"));
+            return OperationResult.Failure(Resources.Get("ProfileNotFound"));
     
         if (string.IsNullOrEmpty(profile.ImagePath))
-            return HandlerResult.Success();
+            return OperationResult.Success();
 
         var fileDeleteTask = _fileRepository.DeleteFileIfExistsAsync(
             AzureStorageConstants.ImagesContainerName, 
@@ -40,7 +40,7 @@ public class DeleteProfileImageHandler : BaseProfileHandler
             
         await Task.WhenAll(fileDeleteTask, dbUpdateTask);
     
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
     
 }

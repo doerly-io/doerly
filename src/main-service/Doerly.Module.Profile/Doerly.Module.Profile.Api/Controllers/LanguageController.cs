@@ -1,7 +1,7 @@
 using Doerly.DataTransferObjects.Pagination;
 using Doerly.Domain.Models;
 using Doerly.Infrastructure.Api;
-using Doerly.Module.Profile.Contracts.Dtos;
+using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Module.Profile.Domain.Handlers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ namespace Doerly.Module.Profile.Api.Controllers;
 public class LanguageController : BaseApiController
 {
     [HttpPost("list")]
-    [ProducesResponseType<HandlerResult<PageDto<LanguageDto>>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<OperationResult<PageDto<LanguageDto>>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetLanguages(LanguagesQueryDto dto)
     {
         var result = await ResolveHandler<GetLanguagesHandler>().HandleAsync(dto);
@@ -22,8 +22,8 @@ public class LanguageController : BaseApiController
     }
     
     [HttpPost]
-    [ProducesResponseType<HandlerResult<int>>(StatusCodes.Status201Created)]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<OperationResult<int>>(StatusCodes.Status201Created)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateLanguage(LanguageSaveDto dto)
     {
         var result = await ResolveHandler<CreateLanguageHandler>().HandleAsync(dto);
@@ -35,8 +35,8 @@ public class LanguageController : BaseApiController
     
     
     [HttpPut("{id:int}")]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status404NotFound)] 
+    [ProducesResponseType<OperationResult>(StatusCodes.Status200OK)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status404NotFound)] 
     public async Task<IActionResult> UpdateLanguage(int id, LanguageSaveDto dto)
     {
         var result = await ResolveHandler<UpdateLanguageHandler>().HandleAsync(id, dto);
@@ -47,8 +47,8 @@ public class LanguageController : BaseApiController
     }
     
     [HttpDelete("{id:int}")]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status200OK)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteLanguage(int id)
     {
         var result = await ResolveHandler<DeleteLanguageHandler>().HandleAsync(id);

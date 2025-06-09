@@ -1,6 +1,5 @@
 using System.Resources;
-
-using Doerly.Domain.Helpers;
+using Doerly.Common.Helpers;
 
 namespace Doerly.Localization
 {

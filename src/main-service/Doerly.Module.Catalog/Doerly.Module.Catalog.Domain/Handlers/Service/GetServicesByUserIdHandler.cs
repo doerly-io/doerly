@@ -12,7 +12,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
         {
         }
 
-        public async Task<HandlerResult<List<GetServiceResponse>>> HandleAsync(int userId)
+        public async Task<OperationResult<List<GetServiceResponse>>> HandleAsync(int userId)
         {
             var services = await DbContext.Services
                 .AsNoTracking()
@@ -41,7 +41,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
                 CategoryPath = GetCategoryPath(categoryDict, s.CategoryId)
             }).ToList();
 
-            return HandlerResult.Success(result);
+            return OperationResult.Success(result);
         }
 
         private List<string> GetCategoryPath(Dictionary<int, CategoryEntity> categoryDict, int? categoryId)
