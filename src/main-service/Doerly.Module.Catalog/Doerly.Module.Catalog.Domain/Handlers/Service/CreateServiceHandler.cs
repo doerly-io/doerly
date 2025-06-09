@@ -31,19 +31,19 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
                 IsEnabled = true,
             };
 
-            var filterIds = await DbContext.Filters
+            var validFilterIds = await DbContext.Filters
                 .Where(f => f.CategoryId == request.CategoryId)
                 .Select(f => f.Id)
-                .ToListAsync();
+                .ToHashSetAsync();
 
-            foreach (var filterId in filterIds)
+            foreach (var filter in request.FilterValues)
             {
-                if (request.FilterValues.TryGetValue(filterId, out var value))
+                if (validFilterIds.Contains(filter.FilterId))
                 {
                     service.FilterValues.Add(new ServiceFilterValue
                     {
-                        FilterId = filterId,
-                        Value = value
+                        FilterId = filter.FilterId,
+                        Value = filter.Value
                     });
                 }
             }

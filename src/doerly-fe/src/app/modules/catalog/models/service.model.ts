@@ -1,16 +1,21 @@
+export interface IFilterValueRequest {
+    filterId: number;
+    value: string;
+}
+
 export interface IService {
     id: number;
     name: string;
-    description: string;
+    description?: string;
     categoryId: number;
-    categoryName: string;
+    categoryName?: string;
     userId: number;
-    price: number;
+    price?: number;
     categoryPath: string[];
     isEnabled: boolean;
     isDeleted: boolean;
     imageUrl?: string;
-    filterValues: { [key: number]: string };
+    filterValues: IFilterValueRequest[];
 }
 
 export interface IServiceResponse {
@@ -21,20 +26,20 @@ export interface IServiceResponse {
 
 export interface ICreateServiceRequest {
     name: string;
-    description: string;
+    description?: string;
     categoryId: number;
     userId: number;
-    price: number;
-    filterValues: { [key: number]: string };
+    price?: number;
+    filterValues: IFilterValueRequest[];
 }
 
 export interface IUpdateServiceRequest {
     name: string;
-    description: string;
+    description?: string;
     categoryId: number;
-    price: number;
+    price?: number;
     isEnabled: boolean;
-    filterValues: { [key: number]: string };
+    filterValues: IFilterValueRequest[];
 }
 
 export interface IPaginatedServiceResponse {

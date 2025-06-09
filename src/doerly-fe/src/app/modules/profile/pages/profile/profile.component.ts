@@ -9,7 +9,8 @@ import {
   FormBuilder,
   FormGroup, FormsModule,
   ReactiveFormsModule,
-  Validators
+  Validators,
+  FormControl
 } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProfileService } from '../../domain/profile.service';
@@ -24,6 +25,9 @@ import { Observable, catchError, tap } from 'rxjs';
 import { TreeSelect } from 'primeng/treeselect';
 import { TreeNode } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
+import { CheckboxModule } from 'primeng/checkbox';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 import * as sexVariants from '../../constants/sex';
 import { Textarea } from 'primeng/textarea';
@@ -50,9 +54,10 @@ import { MessageService } from 'primeng/api';
 import {
   SendMessageModalComponent
 } from '../../../communication/pages/modals/send-message-modal/send-message-modal.component';
-import { IService, ICreateServiceRequest, IUpdateServiceRequest } from '../../../catalog/models/service.model';
+import { IService, ICreateServiceRequest, IUpdateServiceRequest, IFilterValueRequest } from '../../../catalog/models/service.model';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CatalogService } from '../../../catalog/services/catalog.service';
+import { IFilter, EFilterType } from '../../../catalog/models/filter.model';
 
 @Component({
   selector: 'app-profile',
@@ -81,6 +86,9 @@ import { CatalogService } from '../../../catalog/services/catalog.service';
     InputNumberModule,
     Toast,
     SendMessageModalComponent,
+    CheckboxModule,
+    RadioButtonModule,
+    MultiSelectModule
   ],
   providers: [MessageService],
   templateUrl: './profile.component.html',
@@ -151,6 +159,9 @@ export class ProfileComponent implements OnInit {
   @ViewChild('competenceDialog') competenceDialog: any;
   @ViewChild('serviceDialog') serviceDialog: any;
 
+  categoryFilters: IFilter[] = [];
+  private filterValuesMap: { [key: number]: string[] } = {};
+
   constructor(
     private fb: FormBuilder,
   ) {
@@ -158,7 +169,8 @@ export class ProfileComponent implements OnInit {
       name: ['', Validators.required],
       description: [''],
       categoryId: [null, Validators.required],
-      price: [null],
+      price: [null, Validators.required],
+      filterValues: this.fb.group({})
     });
   }
 
@@ -708,6 +720,16 @@ export class ProfileComponent implements OnInit {
   onAddService() {
     this.editingService = null;
     this.serviceForm.reset();
+    // Reset filter values and category filters
+    this.filterValuesMap = {};
+    this.categoryFilters = [];
+    // Clear filter form controls
+    const filterValuesGroup = this.serviceForm.get('filterValues') as FormGroup;
+    if (filterValuesGroup) {
+      Object.keys(filterValuesGroup.controls).forEach(key => {
+        filterValuesGroup.removeControl(key);
+      });
+    }
     this.isServiceDialogVisible = true;
   }
 
@@ -719,6 +741,18 @@ export class ProfileComponent implements OnInit {
       categoryId: service.categoryId?.toString(),
       price: service.price,
     });
+    
+    // Load category filters and set values
+    this.loadCategoryFilters(service.categoryId);
+    
+    // Set filter values from service
+    service.filterValues.forEach(filterValue => {
+      const filterId = filterValue.filterId;
+      if (filterValue.value) {
+        this.filterValuesMap[filterId] = [filterValue.value];
+      }
+    });
+    
     this.isServiceDialogVisible = true;
   }
 
@@ -737,6 +771,16 @@ export class ProfileComponent implements OnInit {
     this.isServiceDialogVisible = false;
     this.editingService = null;
     this.serviceForm.reset();
+    // Reset filter values and category filters
+    this.filterValuesMap = {};
+    this.categoryFilters = [];
+    // Clear filter form controls
+    const filterValuesGroup = this.serviceForm.get('filterValues') as FormGroup;
+    if (filterValuesGroup) {
+      Object.keys(filterValuesGroup.controls).forEach(key => {
+        filterValuesGroup.removeControl(key);
+      });
+    }
   }
 
   onServiceCategorySelect(event: any): void {
@@ -746,6 +790,159 @@ export class ProfileComponent implements OnInit {
         this.serviceForm.patchValue({
           categoryId: selectedCategory.key
         });
+        this.loadCategoryFilters(Number(selectedCategory.key));
+        // Reset filter values when category changes
+        this.filterValuesMap = {};
+      }
+    }
+  }
+
+  private loadCategoryFilters(categoryId: number): void {
+    this.catalogService.getFiltersByCategoryId(categoryId).subscribe({
+      next: (response) => {
+        if (response.isSuccess && response.value) {
+          this.categoryFilters = response.value;
+          this.updateFilterFormControls();
+        }
+      },
+      error: (error) => {
+        this.toastHelper.showError('common.error', 'profile.professional.services.filters.load.error');
+      }
+    });
+  }
+
+  private updateFilterFormControls(): void {
+    const filterValuesGroup = this.serviceForm.get('filterValues') as FormGroup;
+    
+    // Clear existing controls
+    Object.keys(filterValuesGroup.controls).forEach(key => {
+      filterValuesGroup.removeControl(key);
+    });
+
+    // Add controls for each filter
+    this.categoryFilters.forEach(filter => {
+      if (filter.type === 4) {
+        // For boolean checkbox - initialize with false
+        filterValuesGroup.addControl(filter.id.toString(), new FormControl(false));
+      } else {
+        filterValuesGroup.addControl(filter.id.toString(), new FormControl([]));
+      }
+    });
+
+    // If editing existing service, set values
+    if (this.editingService) {
+      this.editingService.filterValues.forEach(filterValue => {
+        const key = filterValue.filterId.toString();
+        const filter = this.categoryFilters.find(f => f.id === filterValue.filterId);
+        
+        if (filter) {
+          if (filter.type === 1 || filter.type === 2) {
+            // For checkbox and dropdown - add to array
+            const currentValues = filterValuesGroup.get(key)?.value || [];
+            filterValuesGroup.get(key)?.setValue([...currentValues, filterValue.value]);
+            this.filterValuesMap[filter.id] = [...(this.filterValuesMap[filter.id] || []), filterValue.value];
+          } else if (filter.type === 4) {
+            // For boolean checkbox - convert string to boolean
+            const boolValue = filterValue.value.toLowerCase() === 'true';
+            filterValuesGroup.get(key)?.setValue(boolValue);
+            this.filterValuesMap[filter.id] = [filterValue.value];
+          } else {
+            // For price - set single value
+            filterValuesGroup.get(key)?.setValue(filterValue.value);
+            this.filterValuesMap[filter.id] = [filterValue.value];
+          }
+        }
+      });
+    }
+  }
+
+  onFilterValueChange(event: any, filterId: number): void {
+    const filter = this.categoryFilters.find(f => f.id === filterId);
+    if (!filter) return;
+
+    const control = this.serviceForm.get('filterValues')?.get(filterId.toString());
+    if (!control) return;
+
+    if (filter.type === 1 || filter.type === 2) {
+      // For checkbox and dropdown - update array
+      const values = Array.isArray(event.value) ? event.value : [];
+      this.filterValuesMap[filterId] = values;
+    } else if (filter.type === 3) {
+      // For price - ensure it's a valid number
+      const numValue = Number(event.value);
+      if (!isNaN(numValue)) {
+        this.filterValuesMap[filterId] = [numValue.toString()];
+      }
+    } else if (filter.type === 4) {
+      // For boolean checkbox - convert to string
+      const boolValue = event.checked;
+      this.filterValuesMap[filterId] = [boolValue.toString()];
+    }
+  }
+
+  onAddCheckboxValue(filterId: number, value: string): void {
+    if (!value.trim()) return;
+    if (!this.filterValuesMap[filterId]) {
+      this.filterValuesMap[filterId] = [];
+    }
+    if (!this.filterValuesMap[filterId].includes(value)) {
+      this.filterValuesMap[filterId].push(value);
+      const control = this.serviceForm.get('filterValues')?.get(filterId.toString());
+      if (control) {
+        control.setValue([...this.filterValuesMap[filterId]]);
+      }
+    }
+  }
+
+  onRemoveCheckboxValue(filterId: number, value: string): void {
+    if (this.filterValuesMap[filterId]) {
+      this.filterValuesMap[filterId] = this.filterValuesMap[filterId].filter(v => v !== value);
+      const control = this.serviceForm.get('filterValues')?.get(filterId.toString());
+      if (control) {
+        control.setValue([...this.filterValuesMap[filterId]]);
+      }
+    }
+  }
+
+  onAddDropdownValue(filterId: number, value: string): void {
+    if (!value.trim()) return;
+    if (!this.filterValuesMap[filterId]) {
+      this.filterValuesMap[filterId] = [];
+    }
+    if (!this.filterValuesMap[filterId].includes(value)) {
+      this.filterValuesMap[filterId].push(value);
+      const control = this.serviceForm.get('filterValues')?.get(filterId.toString());
+      if (control) {
+        control.setValue([...this.filterValuesMap[filterId]]);
+      }
+    }
+  }
+
+  onRemoveDropdownValue(filterId: number, value: string): void {
+    if (this.filterValuesMap[filterId]) {
+      this.filterValuesMap[filterId] = this.filterValuesMap[filterId].filter(v => v !== value);
+      const control = this.serviceForm.get('filterValues')?.get(filterId.toString());
+      if (control) {
+        control.setValue([...this.filterValuesMap[filterId]]);
+      }
+    }
+  }
+
+  onAddRadioValue(filterId: number, value: string): void {
+    if (!value.trim()) return;
+    this.filterValuesMap[filterId] = [value];
+    const control = this.serviceForm.get('filterValues')?.get(filterId.toString());
+    if (control) {
+      control.setValue(value);
+    }
+  }
+
+  onRemoveRadioValue(filterId: number, value: string): void {
+    if (this.filterValuesMap[filterId]) {
+      this.filterValuesMap[filterId] = [];
+      const control = this.serviceForm.get('filterValues')?.get(filterId.toString());
+      if (control) {
+        control.setValue('');
       }
     }
   }
@@ -753,6 +950,40 @@ export class ProfileComponent implements OnInit {
   onSaveService() {
     if (this.serviceForm.valid) {
       const formValue = this.serviceForm.value;
+      const filterValues: IFilterValueRequest[] = [];
+      
+      // Convert filter values to the required format
+      Object.entries(formValue.filterValues).forEach(([key, value]) => {
+        const filter = this.categoryFilters.find(f => f.id.toString() === key);
+        if (filter && value !== null && value !== undefined) {
+          if (filter.type === 1 || filter.type === 2) {
+            // For checkbox and dropdown - send each value separately
+            const values = Array.isArray(value) ? value : [];
+            values.forEach(val => {
+              filterValues.push({
+                filterId: parseInt(key),
+                value: val
+              });
+            });
+          } else if (filter.type === 3) {
+            // For price - ensure it's a valid number
+            const numValue = Number(value);
+            if (!isNaN(numValue)) {
+              filterValues.push({
+                filterId: parseInt(key),
+                value: numValue.toString()
+              });
+            }
+          } else if (filter.type === 4) {
+            // For boolean checkbox - convert to string
+            filterValues.push({
+              filterId: parseInt(key),
+              value: value.toString()
+            });
+          }
+        }
+      });
+
       if (this.editingService) {
         // Update existing service
         const updateRequest: IUpdateServiceRequest = {
@@ -761,8 +992,13 @@ export class ProfileComponent implements OnInit {
           categoryId: Number(formValue.categoryId),
           price: formValue.price || 0,
           isEnabled: true,
-          filterValues: this.editingService.filterValues || {}
+          filterValues: filterValues
         };
+
+        console.log('Update Service Request:', {
+          ...updateRequest,
+          filterValues: JSON.stringify(filterValues, null, 2)
+        });
 
         this.catalogService.updateService(this.editingService.id, updateRequest).subscribe({
           next: (response) => {
@@ -784,8 +1020,13 @@ export class ProfileComponent implements OnInit {
           categoryId: Number(formValue.categoryId),
           userId: this.jwtTokenHelper.getUserInfo()?.id || 0,
           price: formValue.price || 0,
-          filterValues: {}
+          filterValues: filterValues
         };
+
+        console.log('Create Service Request:', {
+          ...createRequest,
+          filterValues: JSON.stringify(filterValues, null, 2)
+        });
 
         this.catalogService.createService(createRequest).subscribe({
           next: (response) => {
@@ -827,5 +1068,10 @@ export class ProfileComponent implements OnInit {
 
   get isOwnProfile(): boolean {
     return !this.isViewingOtherProfile;
+  }
+
+  // Add these methods to handle filter values
+  getFilterValues(filterId: number): string[] {
+    return this.filterValuesMap[filterId] || [];
   }
 }
