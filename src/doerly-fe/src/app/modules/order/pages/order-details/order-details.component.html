@@ -1,6 +1,6 @@
 <section class="order-details-container row justify-content-center">
   <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
-    <h3 class="order-title">{{'ordering.order_number' | translate: ({orderId: order?.id })}}</h3>
+    <h3 class="order-title">{{ 'ordering.order_number' | translate: ({orderId: order?.id}) }}</h3>
     <div class="row justify-content-center">
       <div class="col-sm-12 col-md-10">
         <div *ngIf="loading" class="text-center">{{ 'ordering.loading' | translate }}</div>
@@ -9,11 +9,11 @@
           <!-- Фото замовника по центру -->
           <div class="d-flex flex-column align-items-center mb-4">
             <div class="avatar-container position-relative" [routerLink]="['/profile', order.customer.id]"
-              style="cursor: pointer;">
+                 style="cursor: pointer;">
               <img *ngIf="order.customer.avatarUrl" [src]="order.customer.avatarUrl"
-                alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar" width="120" height="120" />
+                   alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar" width="120" height="120"/>
               <p-avatar *ngIf="!order.customer.avatarUrl" icon="pi pi-user" shape="circle" size="xlarge"
-                class="avatar"></p-avatar>
+                        class="avatar"></p-avatar>
               <div class="profile-hover-overlay">
                 <i class="pi pi-user"></i>
                 <span>{{ 'profile.view.title' | translate }}</span>
@@ -46,10 +46,10 @@
                       <i class="pi pi-search"></i>
                     </ng-template>
                     <ng-template #image>
-                      <img [alt]="file.fileName" [src]="file.filePath" class="file-image" width="250" />
+                      <img [alt]="file.fileName" [src]="file.filePath" class="file-image" width="250"/>
                     </ng-template>
                     <ng-template #preview let-style="style" let-previewCallback="previewCallback">
-                      <img [alt]="file.fileName" [src]="file.filePath" class="file-image-preview" [style]="style" />
+                      <img [alt]="file.fileName" [src]="file.filePath" class="file-image-preview" [style]="style"/>
                     </ng-template>
                   </p-image>
                 </div>
@@ -64,19 +64,19 @@
               <span class="ms-2">{{ order.price }} ₴</span>
             </div>
             <p-tag *ngIf="order.isPriceNegotiable" severity="secondary" class="ms-2"
-              [value]="'ordering.price_negotiable' | translate">
+                   [value]="'ordering.price_negotiable' | translate">
             </p-tag>
           </div>
 
-          <p-divider />
+          <p-divider/>
 
           <!-- Адреса -->
           <div *ngIf="order.addressInfo" class="mb-3">
             <div>
               <span class="field-label">{{ 'ordering.address' | translate }}:</span>
-              <span class="ms-2">{{order.addressInfo.regionName + ', ' + order.addressInfo.cityName}}</span>
+              <span class="ms-2">{{ order.addressInfo.regionName + ', ' + order.addressInfo.cityName }}</span>
             </div>
-            <p-divider />
+            <p-divider/>
           </div>
 
 
@@ -86,7 +86,7 @@
             <span class="ms-2">{{ 'ordering.payment_kinds.' + EPaymentKind[order.paymentKind] | translate }}</span>
           </div>
 
-          <p-divider />
+          <p-divider/>
 
           <!-- Дата розміщення, термін виконання та дата виконання -->
           <div class="mb-3 dates-row">
@@ -106,20 +106,20 @@
             </ng-container>
           </div>
 
-          <p-divider />
+          <p-divider/>
 
           <!-- Виконавець та статус -->
           <div class="row-responsive justify-content-between align-items-center mb-3">
             <div *ngIf="order.executorId"
-              class="d-flex flex-row align-items-center mb-2 mb-md-0 executor-profile-container w-100">
+                 class="d-flex flex-row align-items-center mb-2 mb-md-0 executor-profile-container w-100">
               <div class="avatar-container me-3 d-flex flex-column align-items-center position-relative"
-                [routerLink]="['/profile', order.executor?.id]" style="cursor: pointer;">
+                   [routerLink]="['/profile', order.executor?.id]" style="cursor: pointer;">
                 <span class="field-label">{{ 'ordering.executor' | translate }}:</span>
                 <div class="position-relative">
                   <img *ngIf="order.executor?.avatarUrl" ngSrc="{{order.executor?.avatarUrl}}"
-                    alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar" width="120" height="120" />
+                       alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar" width="120" height="120"/>
                   <p-avatar *ngIf="!order.executor?.avatarUrl" icon="pi pi-user" shape="circle" size="xlarge"
-                    class="avatar-bg executor-avatar"></p-avatar>
+                            class="avatar-bg executor-avatar"></p-avatar>
                   <div class="profile-hover-overlay">
                     <i class="pi pi-user"></i>
                     <span>{{ 'profile.view.title' | translate }}</span>
@@ -131,14 +131,14 @@
               </div>
               <div class="ms-auto d-flex align-items-center">
                 <p-tag [value]="'ordering.order_statuses.' + EOrderStatus[order.status] | translate"
-                  [severity]="getOrderStatusSeverity(order.status)">
+                       [severity]="getOrderStatusSeverity(order.status)">
                 </p-tag>
               </div>
             </div>
             <!-- Якщо немає виконавця, але статус має бути -->
             <div *ngIf="!order.executorId" class="w-100 d-flex justify-content-end">
               <p-tag [value]="'ordering.order_statuses.' + EOrderStatus[order.status] | translate"
-                [severity]="getOrderStatusSeverity(order.status)">
+                     [severity]="getOrderStatusSeverity(order.status)">
               </p-tag>
             </div>
           </div>
@@ -146,21 +146,31 @@
           <!-- Кнопки дій -->
           <div class="action-buttons d-flex justify-content-center mb-3">
             <p-button *ngIf="canSendProposal" [routerLink]="'/ordering/send-execution-proposal'"
-              [queryParams]="{ orderId: order.id, receiverId: order.customerId }"
-              label="{{ 'ordering.send_execution_proposal' | translate }}" [severity]="'success'" />
+                      [queryParams]="{ orderId: order.id, receiverId: order.customerId }"
+                      label="{{ 'ordering.send_execution_proposal' | translate }}" [severity]="'success'"/>
             <p-button *ngIf="canEdit" [routerLink]="['/ordering/edit-order', order.id]"
-              label="{{ 'common.edit' | translate }}" icon="pi pi-pencil" class="me-2"></p-button>
+                      label="{{ 'common.edit' | translate }}" icon="pi pi-pencil" class="me-2"></p-button>
             <p-button *ngIf="canCancel" label="{{ 'ordering.cancel' | translate }}" icon="pi pi-times" severity="danger"
-              (click)="updateOrderStatus(EOrderStatus.Canceled)"></p-button>
+                      (click)="updateOrderStatus(EOrderStatus.Canceled)"></p-button>
             <p-button *ngIf="canEnd" label="{{ 'ordering.end' | translate }}" icon="pi pi-check" severity="success"
-              (click)="updateOrderStatus(EOrderStatus.Completed)"></p-button>
+                      (click)="updateOrderStatus(EOrderStatus.Completed)"></p-button>
             <p-button *ngIf="canPay" label="{{ 'ordering.pay' | translate }}" icon="pi pi-money-bill" severity="success"
-              (click)="updateOrderStatus(EOrderStatus.Completed)"></p-button>
+                      (click)="updateOrderStatus(EOrderStatus.Completed)"></p-button>
           </div>
         </div>
       </div>
     </div>
   </p-card>
 
-  <app-feedback-input *ngIf="order?.status == EOrderStatus.Completed && (this.order?.feedback || canEditFeedback)" [orderId]="this.order?.id" [canEdit]="canEditFeedback" [feedback]="this.order?.feedback" class="mt-4"></app-feedback-input>
+  <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
+    <div class="mb-3">
+      <div class="col-12">
+        <h3 class="text-center">{{ 'feedback.title' | translate }}</h3>
+      </div>
+    </div>
+
+    <app-feedback-input *ngIf="order?.status == EOrderStatus.Completed && (this.order?.feedback || canEditFeedback)"
+                        [orderId]="this.order?.id" [canEdit]="canEditFeedback" [feedback]="this.order?.feedback"
+                        class="mt-4" />
+    </p-card>
 </section>

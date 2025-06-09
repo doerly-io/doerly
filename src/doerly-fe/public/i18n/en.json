@@ -414,6 +414,8 @@
   },
   "feedback": {
     "title": "Feedback",
+    "history": "Feedback history",
+    "nohistory": "No feedback history found",
     "submit": "Submit Feedback",
     "delete": "Delete Feedback",
     "feedback_created": "Feedback has been created successfully",
@@ -496,7 +498,8 @@
     "control": {
       "unset": "Unset"
     },
-    "edited": "Ed."
+    "edited": "Ed.",
+    "loadMore": "Load more"
   },
   "pages": {
     "profile": {

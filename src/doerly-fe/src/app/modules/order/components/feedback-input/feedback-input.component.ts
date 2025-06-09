@@ -45,6 +45,8 @@ export class FeedbackInputComponent implements OnInit {
 
     protected isReadonlyMode = signal<boolean>(false);
 
+    public isHistoryView = input<boolean>(false);
+
     feedbackForm!: FormGroup;
 
     @Input()

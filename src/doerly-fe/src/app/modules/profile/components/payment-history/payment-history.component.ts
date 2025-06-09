@@ -42,7 +42,7 @@ export class PaymentHistoryComponent implements OnInit {
 
   protected readonly loading = signal(false);
 
-  public payments = signal<PaymentHistoryItemResponse[]>([]);
+  protected payments = signal<PaymentHistoryItemResponse[]>([]);
   protected hasMorePayments = signal<boolean>(false);
 
   private paginationRequest: CursorPaginationRequest = {

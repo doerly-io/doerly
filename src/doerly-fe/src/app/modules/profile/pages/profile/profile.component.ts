@@ -53,6 +53,7 @@ import {
 import { IService, ICreateServiceRequest, IUpdateServiceRequest } from '../../../catalog/models/service.model';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CatalogService } from '../../../catalog/services/catalog.service';
+import {FeedbackHistoryComponent} from 'app/modules/profile/components/feedback-history/feedback-history.component';
 
 @Component({
   selector: 'app-profile',
@@ -81,6 +82,7 @@ import { CatalogService } from '../../../catalog/services/catalog.service';
     InputNumberModule,
     Toast,
     SendMessageModalComponent,
+    FeedbackHistoryComponent,
   ],
   providers: [MessageService],
   templateUrl: './profile.component.html',
@@ -270,7 +272,7 @@ export class ProfileComponent implements OnInit {
     if (!Array.isArray(categories)) {
       return [];
     }
-    
+
     const flattenCategories = (cats: ICategory[], parentPath: string = ''): any[] => {
       return cats.reduce((acc: any[], category) => {
         const currentPath = parentPath ? `${parentPath} > ${category.name}` : category.name;
@@ -279,11 +281,11 @@ export class ProfileComponent implements OnInit {
           label: currentPath,
           data: category
         });
-        
+
         if (category.children && category.children.length > 0) {
           acc.push(...flattenCategories(category.children, currentPath));
         }
-        
+
         return acc;
       }, []);
     };

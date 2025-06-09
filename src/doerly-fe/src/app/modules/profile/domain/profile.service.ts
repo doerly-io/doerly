@@ -3,18 +3,19 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {BaseApiResponse} from 'app/@core/models/base-api-response';
 import {environment} from 'environments/environment.development';
-import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
-import { ProfileResponse } from '../models/responses/ProfileResponse';
-import { ProfileRequest } from '../models/requests/ProfileRequest';
-import { LanguageDto } from '../models/responses/LanguageDto';
-import { LanguageProficiencyDto } from '../models/responses/LanguageProficiencyDto';
-import { PageDto } from 'app/@core/models/page.dto';
-import { map } from 'rxjs/operators';
-import { LanguagesQueryDto } from 'app/modules/profile/models/requests/LanguagesQuery';
-import { CompetenceSaveRequest } from 'app/modules/profile/models/requests/CompetenceSaveRequest';
+import {JwtTokenHelper} from 'app/@core/helpers/jwtToken.helper';
+import {ProfileResponse} from '../models/responses/ProfileResponse';
+import {ProfileRequest} from '../models/requests/ProfileRequest';
+import {LanguageDto} from '../models/responses/LanguageDto';
+import {LanguageProficiencyDto} from '../models/responses/LanguageProficiencyDto';
+import {PageDto} from 'app/@core/models/page.dto';
+import {map} from 'rxjs/operators';
+import {LanguagesQueryDto} from 'app/modules/profile/models/requests/LanguagesQuery';
+import {CompetenceSaveRequest} from 'app/modules/profile/models/requests/CompetenceSaveRequest';
 import {CursorPaginationRequest} from 'app/@core/models/cursor-pagination-request';
 import {CursorPaginationResponse} from 'app/@core/models/cursor-pagination-response';
 import {PaymentHistoryItemResponse} from 'app/modules/payments/models/payment-history-item-response';
+import {OrderFeedbackResponse} from 'app/modules/order/models/responses/feedback/order-feedback-response';
 
 @Injectable({
   providedIn: 'root'
@@ -118,7 +119,10 @@ export class ProfileService {
       );
   }
 
-  updateLanguageProficiency(id: number, dto: { languageId: number; level: number }): Observable<LanguageProficiencyDto> {
+  updateLanguageProficiency(id: number, dto: {
+    languageId: number;
+    level: number
+  }): Observable<LanguageProficiencyDto> {
     const userId = this.jwtTokenHelper.getUserInfo()?.id;
     return this
       .httpClient
@@ -150,16 +154,25 @@ export class ProfileService {
   deleteCompetence(id: number, competenceId: number): Observable<BaseApiResponse<any>> {
     return this.httpClient.delete<BaseApiResponse<any>>(
       `${this.baseUrl}/${id}/competence/${competenceId}`,
-      { withCredentials: true }
+      {withCredentials: true}
     );
   }
 
   loadById(userId: number): Observable<BaseApiResponse<ProfileResponse>> {
-    return this.httpClient.get<BaseApiResponse<ProfileResponse>>(`${this.baseUrl}/${userId}`, { withCredentials: true });
+    return this.httpClient.get<BaseApiResponse<ProfileResponse>>(`${this.baseUrl}/${userId}`, {withCredentials: true});
   }
 
   getPaymentsHistory(paginationRequest: CursorPaginationRequest): Observable<CursorPaginationResponse<PaymentHistoryItemResponse>> {
     return this.httpClient.get<CursorPaginationResponse<PaymentHistoryItemResponse>>(`${this.baseUrl}/payments-history`, {
+      params: {
+        pageSize: paginationRequest.pageSize,
+        cursor: paginationRequest.cursor || ''
+      }
+    });
+  }
+
+  getFeedbacksHistory(userId: number, paginationRequest: CursorPaginationRequest): Observable<CursorPaginationResponse<OrderFeedbackResponse>> {
+    return this.httpClient.get<CursorPaginationResponse<OrderFeedbackResponse>>(`${this.baseUrl}/${userId}/feedbacks`, {
       params: {
         pageSize: paginationRequest.pageSize,
         cursor: paginationRequest.cursor || ''

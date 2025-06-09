@@ -1,0 +1,25 @@
+<p-virtual-scroller *ngIf="feedbacks().length !== 0"
+                    [items]="feedbacks()"
+                    [itemSize]="80"
+                    [style]="{ width: '100%', height: '450px' }"
+                    [lazy]="false"
+>
+  <ng-template pTemplate="item" let-feedback>
+    <p-panel [styleClass]="'mb-3 pt-3'" [showHeader]="false" [style]="{ borderRadius: '8px' }">
+      <app-feedback-input [canEdit]="false" [feedback]="feedback" [isHistoryView]="true"/>
+    </p-panel>
+  </ng-template>
+
+</p-virtual-scroller>
+
+<div class="d-flex justify-content-center">
+  <p-button *ngIf="hasMoreFeedbacks()" (click)="loadMoreClicked()" class="load-more-btn"
+            [severity]="'secondary'">
+    {{ 'common.loadMore' | translate }}
+  </p-button>
+</div>
+
+<div class="row m-3 d-flex justify-content-center" *ngIf="feedbacks().length === 0">
+  <p>{{ 'feedback.nohistory' | translate }}</p>
+</div>
+
