@@ -10,6 +10,7 @@ using MassTransit.Transports;
 using Doerly.Localization;
 using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.DataTransferObjects;
+using Doerly.Module.Order.DataTransferObjects.Responses;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetExecutionProposalsWithPaginationHandler : BaseOrderHandler

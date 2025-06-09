@@ -238,7 +238,7 @@
           "label": "Price",
           "placeholder": "Enter service price"
         },
-        "status":{
+        "status": {
           "label": "Status",
           "enabled": "Enabled",
           "disabled": "Disabled"
@@ -309,7 +309,7 @@
     "orders": "Orders",
     "my_orders": "My orders",
     "order": "Order",
-    "execution_proposals":  "Execution proposals",
+    "execution_proposals": "Execution proposals",
     "received_proposals": "Received proposals",
     "sent_proposals": "Sent proposals",
     "placed_orders": "Placed orders",
@@ -412,6 +412,11 @@
     "files_size_limit": "Maximum files size is {{size}}.",
     "service_required": "Service is required for order creation"
   },
+  "feedback": {
+    "title": "Feedback",
+    "submit": "Submit Feedback",
+    "feedback_updated": "Feedback has been updated successfully"
+  },
   "payments": {
     "status": {
       "pending": "Pending",
@@ -466,7 +471,7 @@
       }
     }
   },
-  "catalog":{
+  "catalog": {
     "services": "Services"
   },
   "common": {

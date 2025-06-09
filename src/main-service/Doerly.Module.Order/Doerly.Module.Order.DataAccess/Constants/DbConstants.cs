@@ -9,5 +9,6 @@ internal class DbConstants
         internal const string Order = "order";
         internal const string OrderFile = "order_file";
         internal const string ExecutionProposal = "execution_proposal";
+        internal const string OrderFeedback = "order_feedback";
     }
 }

@@ -161,4 +161,6 @@
       </div>
     </div>
   </p-card>
+
+  <app-feedback-input [orderId]="this.order?.id" [isReadonly]="!canEdit" [feedback]="this.order?.feedback" class="mt-4"></app-feedback-input>
 </section>

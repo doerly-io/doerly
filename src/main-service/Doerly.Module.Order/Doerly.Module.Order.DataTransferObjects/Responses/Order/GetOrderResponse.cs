@@ -1,8 +1,6 @@
-﻿using Doerly.Module.Order.DataTransferObjects;
 using Doerly.Module.Order.Enums;
-using FileInfo = Doerly.Module.Order.DataTransferObjects.FileInfo;
 
-namespace Doerly.Module.Order.DataTransferObjects;
+namespace Doerly.Module.Order.DataTransferObjects.Responses;
 public class GetOrderResponse
 {
     public int Id { get; set; }
@@ -46,4 +44,6 @@ public class GetOrderResponse
     public IEnumerable<FileInfo> ExistingFiles { get; set; }
 
     public DateTime CreatedDate { get; set; }
+    
+    public OrderFeedbackResponse? Feedback { get; set; }
 }

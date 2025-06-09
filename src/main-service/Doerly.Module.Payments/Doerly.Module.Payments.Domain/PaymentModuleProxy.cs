@@ -6,15 +6,14 @@ using Doerly.Module.Payments.DataTransferObjects;
 using Doerly.Module.Payments.DataTransferObjects.Responses;
 using Doerly.Module.Payments.Domain.Handlers;
 
+namespace Doerly.Proxy.Payment;
 
-namespace Doerly.Module.Payments.Contracts;
-
-public class PaymentModuleWrapper : IPaymentModuleWrapper
+public class PaymentModuleProxy : IPaymentModuleProxy
 {
     private readonly IHandlerFactory _handlerFactory;
     private readonly WebhookUrlBuilder _webhookUrlBuilder;
 
-    public PaymentModuleWrapper(IHandlerFactory handlerFactory, WebhookUrlBuilder webhookUrlBuilder)
+    public PaymentModuleProxy(IHandlerFactory handlerFactory, WebhookUrlBuilder webhookUrlBuilder)
     {
         _handlerFactory = handlerFactory;
         _webhookUrlBuilder = webhookUrlBuilder;

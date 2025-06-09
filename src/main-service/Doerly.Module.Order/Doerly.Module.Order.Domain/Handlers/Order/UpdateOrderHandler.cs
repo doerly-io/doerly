@@ -7,6 +7,7 @@ using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Entities;
 using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.DataTransferObjects;
+using Doerly.Module.Order.DataTransferObjects.Responses;
 using Doerly.Proxy.Profile;
 
 using Microsoft.AspNetCore.Http;

@@ -58,4 +58,6 @@ public interface IFileRepository
     /// </summary>
     Task<string> GetSasUrlAsync(string containerName, string fileName, TimeSpan expiry);
 
+    Task<string> GetSasUrlToContainerAsync(string containerName, TimeSpan expiry);
+
 }

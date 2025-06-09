@@ -44,4 +44,6 @@ public class Order : BaseEntity
     public virtual ICollection<OrderFile> OrderFiles { get; set; } = [];
 
     public virtual ICollection<ExecutionProposal> ExecutionProposals { get; set; }
+    
+    public virtual OrderFeedback? Feedback { get; set; }
 }

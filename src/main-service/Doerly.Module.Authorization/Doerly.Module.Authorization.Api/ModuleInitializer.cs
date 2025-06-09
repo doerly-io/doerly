@@ -3,7 +3,6 @@ using Doerly.Module.Authorization.DataAccess;
 using Doerly.Infrastructure.Api;
 using Doerly.DataAccess.Utils;
 using Doerly.Messaging;
-using Doerly.Module.Authorization.Contracts;
 using Doerly.Module.Authorization.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +18,6 @@ public class ModuleInitializer : IModuleInitializer
         builder.Services.AddDbContext<AuthorizationDbContext>();
         builder.Services.RegisterHandlers(typeof(IAssemblyMarker).Assembly);
         builder.Services.RegisterEventConsumers(typeof(IAssemblyMarker).Assembly);
-        builder.Services.AddScoped<IAuthorizationModuleWrapper, AuthorizationModuleWrapper>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,6 +1,5 @@
 using System.Globalization;
 using System.Text;
-
 using Doerly.Common.Settings;
 using Doerly.Domain;
 using Doerly.Domain.Factories;
@@ -11,6 +10,9 @@ using Doerly.Host.ModelBinders.FloatingPoint;
 using Doerly.Infrastructure.Api;
 using Doerly.Localization;
 using Doerly.Messaging;
+using Doerly.Module.Authorization.Domain;
+using Doerly.Module.Catalog.Domain;
+using Doerly.Module.Order.Domain;
 using Doerly.Notification.EmailSender;
 using Doerly.Proxy.Authorization;
 using Doerly.Proxy.BaseProxy;
@@ -18,9 +20,7 @@ using Doerly.Proxy.Catalog;
 using Doerly.Proxy.Orders;
 using Doerly.Proxy.Payment;
 using Doerly.Proxy.Profile;
-
 using MassTransit;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;

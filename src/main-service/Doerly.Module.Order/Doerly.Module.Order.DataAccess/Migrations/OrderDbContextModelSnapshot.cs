@@ -177,6 +177,56 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                     b.ToTable("order", "order");
                 });
 
+            modelBuilder.Entity("Doerly.Module.Order.DataAccess.Entities.OrderFeedback", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("comment");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_created");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer")
+                        .HasColumnName("order_id");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("integer")
+                        .HasColumnName("rating");
+
+                    b.Property<int>("ReviewerUserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("reviewer_user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_order_feedback");
+
+                    b.HasIndex("LastModifiedDate")
+                        .HasDatabaseName("ix_order_feedback_last_modified_date");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_order_feedback_order_id");
+
+                    b.ToTable("order_feedback", "order", t =>
+                        {
+                            t.HasCheckConstraint("ck_feedback_rating_range", "\"rating\" >= 1 AND \"rating\" <= 5");
+                        });
+                });
+
             modelBuilder.Entity("Doerly.Module.Order.DataAccess.Entities.OrderFile", b =>
                 {
                     b.Property<int>("Id")
@@ -241,6 +291,18 @@ namespace Doerly.Module.Order.DataAccess.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("Doerly.Module.Order.DataAccess.Entities.OrderFeedback", b =>
+                {
+                    b.HasOne("Doerly.Module.Order.DataAccess.Entities.Order", "Order")
+                        .WithOne("Feedback")
+                        .HasForeignKey("Doerly.Module.Order.DataAccess.Entities.OrderFeedback", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_order_feedback_order_order_id");
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("Doerly.Module.Order.DataAccess.Entities.OrderFile", b =>
                 {
                     b.HasOne("Doerly.Module.Order.DataAccess.Entities.Order", "Order")
@@ -256,6 +318,8 @@ namespace Doerly.Module.Order.DataAccess.Migrations
             modelBuilder.Entity("Doerly.Module.Order.DataAccess.Entities.Order", b =>
                 {
                     b.Navigation("ExecutionProposals");
+
+                    b.Navigation("Feedback");
 
                     b.Navigation("OrderFiles");
                 });
