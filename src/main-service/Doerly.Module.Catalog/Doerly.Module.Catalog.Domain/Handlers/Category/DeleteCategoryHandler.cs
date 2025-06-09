@@ -7,14 +7,14 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Category
     {
         public DeleteCategoryHandler(CatalogDbContext dbContext) : base(dbContext) { }
 
-        public async Task<HandlerResult> HandleAsync(int id)
+        public async Task<OperationResult> HandleAsync(int id)
         {
             var category = await DbContext.Categories.FindAsync(id);
             category.IsDeleted = true;
 
             await DbContext.SaveChangesAsync();
 
-            return HandlerResult.Success();
+            return OperationResult.Success();
         }
     }
 }

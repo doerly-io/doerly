@@ -1,6 +1,4 @@
-using Doerly.DataTransferObjects.Pagination;
-using Doerly.Module.Order.Api.ModuleWrapper;
-using Doerly.Module.Order.Contracts.Dtos;
+using Doerly.Module.Order.Contracts;
 
 namespace Doerly.Proxy.Orders;
 
@@ -19,4 +17,6 @@ public class OrdersModuleProxy : IOrdersModuleProxy
         var ordersResponse = await _ordersModuleWrapper.GetOrdersWithPaginationAsync(request);
         return ordersResponse;
     }
+    
+    
 }

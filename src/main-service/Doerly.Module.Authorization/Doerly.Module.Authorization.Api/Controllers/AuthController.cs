@@ -3,9 +3,9 @@ using Doerly.Infrastructure.Api;
 using Doerly.Domain.Models;
 using Doerly.Messaging;
 using Doerly.Module.Authorization.Api.Constants;
-using Doerly.Module.Authorization.Contracts.Messages;
-using Doerly.Module.Authorization.Contracts.Requests;
-using Doerly.Module.Authorization.Contracts.Responses;
+using Doerly.Module.Authorization.DataTransferObjects.Messages;
+using Doerly.Module.Authorization.DataTransferObjects.Requests;
+using Doerly.Module.Authorization.DataTransferObjects.Responses;
 using Doerly.Module.Authorization.Domain.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,8 +18,8 @@ namespace Doerly.Module.Authorization.Api.Controllers;
 public class AuthController(IMessagePublisher messagePublisher) : BaseApiController
 {
     [HttpPost("login")]
-    [ProducesResponseType<HandlerResult<LoginResponseDto>>(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult<LoginResponseDto>>(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<OperationResult<LoginResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<OperationResult<LoginResponseDto>>(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login(LoginRequestDto requestDto)
     {
         var result = await ResolveHandler<LoginHandler>().HandleAsync(requestDto);
@@ -28,7 +28,7 @@ public class AuthController(IMessagePublisher messagePublisher) : BaseApiControl
 
         SetHttpCookie(AuthConstants.RefreshTokenCookieName, result.Value.refreshToken);
 
-        return Ok(HandlerResult.Success(result.Value.resultDto));
+        return Ok(OperationResult.Success(result.Value.resultDto));
     }
 
     [HttpPost("register")]
@@ -44,8 +44,8 @@ public class AuthController(IMessagePublisher messagePublisher) : BaseApiControl
     }
 
     [HttpGet("refresh")]
-    [ProducesResponseType<HandlerResult<LoginResponseDto>>(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult<LoginResponseDto>>(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<OperationResult<LoginResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<OperationResult<LoginResponseDto>>(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Refresh()
     {
         var refreshToken = Request.Cookies[AuthConstants.RefreshTokenCookieName];
@@ -60,7 +60,7 @@ public class AuthController(IMessagePublisher messagePublisher) : BaseApiControl
 
         SetHttpCookie(AuthConstants.RefreshTokenCookieName, result.Value.refreshToken);
 
-        return Ok(HandlerResult.Success(result.Value.resultDto));
+        return Ok(OperationResult.Success(result.Value.resultDto));
     }
 
     [Authorize]
@@ -82,7 +82,7 @@ public class AuthController(IMessagePublisher messagePublisher) : BaseApiControl
     //ToDo: enable ratelimiting
     [HttpGet("password-reset/{email}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RequestPasswordReset([EmailAddress(ErrorMessage = "InvalidEmailFormatInput")] string email)
     {
         await messagePublisher.Publish(new PasswordResetRequestMessage(email));
@@ -92,7 +92,7 @@ public class AuthController(IMessagePublisher messagePublisher) : BaseApiControl
     //ToDo: enable ratelimiting
     [HttpPost("password-reset")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> PasswordReset(ResetPasswordRequestDto requestDto)
     {
         var result = await ResolveHandler<ResetPasswordHandler>().HandleAsync(requestDto);
@@ -105,7 +105,7 @@ public class AuthController(IMessagePublisher messagePublisher) : BaseApiControl
     //ToDo: enable ratelimiting
     [HttpGet("email-verification")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> EmailVerification([FromQuery] string token, [FromQuery] string email)
     {
         var result = await ResolveHandler<EmailVerificationHandler>().HandleAsync(token, email);

@@ -21,8 +21,8 @@ namespace Doerly.Module.Communication.Api.Controllers;
 public class CommunicationController(IHubContext<CommunicationHub, ICommunicationHub> communicationHub) : BaseApiController
 {
     [HttpGet("conversations")]
-    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<OperationResult<ConversationResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<OperationResult<ConversationResponse>>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetConversations([FromQuery] GetConversationsWithPaginationRequest dto)
     {
         var useId = RequestContext.UserId;
@@ -48,8 +48,8 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
     }
     
     [HttpGet("conversations/{conversationId:int}")]
-    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<OperationResult<ConversationResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<OperationResult<ConversationResponse>>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetConversationById(int conversationId)
     {
         var result = await ResolveHandler<GetConversationByIdHandler>().HandleAsync(conversationId);
@@ -62,7 +62,7 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
     }
     
     [HttpPost("conversations")]
-    [ProducesResponseType<HandlerResult<ConversationResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<OperationResult<ConversationResponse>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateConversation([FromBody] CreateConversationRequest request)
     {
         var userId = RequestContext.UserId;
@@ -73,7 +73,7 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
 
         if (initiatorId == request.RecipientId)
         {
-            return BadRequest(HandlerResult.Failure<ConversationResponse>(Resources.Get("Communication.CannotCreateConversationWithSelf")));
+            return BadRequest(OperationResult.Failure<ConversationResponse>(Resources.Get("Communication.CannotCreateConversationWithSelf")));
         }
         
         var result = await ResolveHandler<CreateConversationHandler>().HandleAsync(request, initiatorId);
@@ -85,7 +85,7 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
     }
     
     [HttpPost("messages/send")]
-    [ProducesResponseType<HandlerResult<SendMessageRequest>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<OperationResult<SendMessageRequest>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> SendMessage(SendMessageRequest request)
     {
         var useId = RequestContext.UserId;
@@ -103,16 +103,17 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
     }
     
     [HttpPost("conversations/{conversationId:int}/messages/file/send")]
-    [ProducesResponseType<HandlerResult<SendMessageRequest>>(StatusCodes.Status200OK)]
-    public async Task<IActionResult> SendFileMessage(int conversationId, [FromForm] SendFileMessageRequest request)
+    [ProducesResponseType<OperationResult<SendMessageRequest>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> SendFileMessage(int conversationId, [FromForm] IFormFile imageFile)
     {
         var useId = RequestContext.UserId;
         if (!useId.HasValue || useId.Value == 0)
             return Unauthorized();
 
         var userId = useId.Value;
-        
-        var result = await ResolveHandler<SendFileMessageHandler>().HandleAsync(conversationId, userId, request.File);
+
+        var fileBytes = GetFormFileBytes(imageFile);
+        var result = await ResolveHandler<SendFileMessageHandler>().HandleAsync(conversationId, userId, fileBytes, imageFile.FileName);
         var message = (await ResolveHandler<GetMessageByIdHandler>().HandleAsync(result.Value)).Value;
 
         // Notify the communication hub about the new file message
@@ -122,8 +123,8 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
     }
     
     [HttpGet("messages/{messageId:int}")]
-    [ProducesResponseType<HandlerResult<MessageResponse>>(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult<MessageResponse>>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<OperationResult<MessageResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<OperationResult<MessageResponse>>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetMessage(int messageId)
     {
         var result = await ResolveHandler<GetMessageByIdHandler>().HandleAsync(messageId);
@@ -135,7 +136,7 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
     }
     
     [HttpGet("conversations/with-user/{recipientId:int}")]
-    [ProducesResponseType<HandlerResult<int?>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<OperationResult<int?>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetConversationWithUser(int recipientId)
     {
         var userId = RequestContext.UserId;
@@ -146,7 +147,7 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
 
         if (initiatorId == recipientId)
         {
-            return BadRequest(HandlerResult.Failure<int?>(Resources.Get("Communication.CannotCheckConversationWithSelf")));
+            return BadRequest(OperationResult.Failure<int?>(Resources.Get("Communication.CannotCheckConversationWithSelf")));
         }
 
         var result = await ResolveHandler<CheckConversationExistsHandler>().HandleAsync(initiatorId, recipientId);

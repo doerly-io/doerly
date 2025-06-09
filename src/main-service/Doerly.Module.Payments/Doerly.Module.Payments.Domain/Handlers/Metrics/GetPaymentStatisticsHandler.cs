@@ -1,11 +1,11 @@
 using Doerly.Domain.Handlers;
-using Doerly.Module.Payments.Contracts.Responses;
+using Doerly.Module.Payments.DataTransferObjects.Responses;
 using Doerly.Module.Payments.DataAccess;
 using Doerly.Module.Payments.DataAccess.Models;
 using Doerly.Module.Payments.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace Doerly.Module.Payments.Domain.Handlers.Metrics;
+namespace Doerly.Module.Payments.Domain.Handlers;
 
 public class GetPaymentStatisticsHandler : BaseHandler<PaymentDbContext>
 {

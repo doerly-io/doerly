@@ -11,16 +11,16 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
         {
         }
 
-        public async Task<HandlerResult> HandleAsync(int id)
+        public async Task<OperationResult> HandleAsync(int id)
         {
             var deletedCount = await DbContext.Filters
                 .Where(f => f.Id == id)
                 .ExecuteDeleteAsync();
 
             if (deletedCount == 0)
-                return HandlerResult.Failure(Resources.Get("FilterNotFound"));
+                return OperationResult.Failure(Resources.Get("FilterNotFound"));
 
-            return HandlerResult.Success();
+            return OperationResult.Success();
         }
     }
 }

@@ -17,14 +17,14 @@ public class MarkMessageStatusHandler(CommunicationDbContext dbContext) : BaseCo
         
         if (message == null)
         {
-            HandlerResult.Failure<int>(Resources.Get("Communication.MessageNotFound"));
+            OperationResult.Failure<int>(Resources.Get("Communication.MessageNotFound"));
             return;
         }
         
         message.Status = status;
         await _dbContext.SaveChangesAsync();
 
-        HandlerResult.Success();
+        OperationResult.Success();
     }
 
     public async Task HandleAsync(int[] messageIds, EMessageStatus status)
@@ -35,7 +35,7 @@ public class MarkMessageStatusHandler(CommunicationDbContext dbContext) : BaseCo
 
         if (!messages.Any())
         {
-            HandlerResult.Failure<int>(Resources.Get("Communication.MessageNotFound"));
+            OperationResult.Failure<int>(Resources.Get("Communication.MessageNotFound"));
             return;
         }
 
@@ -45,6 +45,6 @@ public class MarkMessageStatusHandler(CommunicationDbContext dbContext) : BaseCo
         }
 
         await _dbContext.SaveChangesAsync();
-        HandlerResult.Success();
+        OperationResult.Success();
     }
 }

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Doerly.Module.Order.Domain.Handlers.Order;
-using Doerly.Module.Order.Contracts.Dtos;
-using Moq;
+﻿using Moq;
 using Doerly.Module.Order.Domain.Handlers;
 using Doerly.Domain;
 using Doerly.FileRepository;
+using Doerly.Module.Order.DataTransferObjects.Dtos;
 using Doerly.Proxy.Profile;
 
 namespace Doerly.Module.Order.Tests;

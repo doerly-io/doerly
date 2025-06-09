@@ -13,7 +13,7 @@ public class EmailVerificationHandler : BaseAuthHandler
     {
     }
 
-    public async Task<HandlerResult> HandleAsync(string token, string email)
+    public async Task<OperationResult> HandleAsync(string token, string email)
     {
         var tokenBytes = Convert.FromBase64String(token);
         var tokenHash = GetResetTokenHash(tokenBytes);
@@ -24,12 +24,12 @@ public class EmailVerificationHandler : BaseAuthHandler
             .FirstOrDefaultAsync();
 
         if (tokenEntity == null)
-            return HandlerResult.Failure("Invalid token");
+            return OperationResult.Failure("Invalid token");
 
         tokenEntity.User.IsEmailVerified = true;
         DbContext.Tokens.Remove(tokenEntity);
         await DbContext.SaveChangesAsync();
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

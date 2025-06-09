@@ -28,7 +28,7 @@ public class AddressController : BaseApiController
             })
             .ToListAsync();
 
-        return Ok(HandlerResult.Success(regions));
+        return Ok(OperationResult.Success(regions));
     }
     
     [HttpGet("regions/{regionId}/cities")]
@@ -43,7 +43,7 @@ public class AddressController : BaseApiController
             })
             .ToListAsync();
 
-        return Ok(HandlerResult.Success(cities));
+        return Ok(OperationResult.Success(cities));
     }
     
     [HttpGet("regions/{regionId}/cities/{cityId}")]
@@ -65,7 +65,7 @@ public class AddressController : BaseApiController
             return NotFound();
         }
 
-        return Ok(HandlerResult.Success(city));
+        return Ok(OperationResult.Success(city));
     }
 
     [HttpGet("regions/{regionId}/cities/{cityId}/streets")]
@@ -81,6 +81,6 @@ public class AddressController : BaseApiController
             })
             .ToListAsync();
 
-        return Ok(HandlerResult.Success(streets));
+        return Ok(OperationResult.Success(streets));
     }
 } 

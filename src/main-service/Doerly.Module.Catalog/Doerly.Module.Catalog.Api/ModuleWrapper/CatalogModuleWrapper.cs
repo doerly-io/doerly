@@ -1,11 +1,7 @@
 using Doerly.Domain.Factories;
+using Doerly.Proxy.Catalog;
 
 namespace Doerly.Module.Catalog.Api.ModuleWrapper;
-
-public interface ICatalogModuleWrapper
-{
-    
-}
 
 public class CatalogModuleWrapper : ICatalogModuleWrapper
 {

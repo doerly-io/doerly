@@ -1,7 +1,7 @@
 using Doerly.Domain;
 using Doerly.Domain.Factories;
 using Doerly.Messaging;
-using Doerly.Module.Payments.Contracts.Messages;
+using Doerly.Module.Payments.DataTransferObjects.Messages;
 using Doerly.Module.Payments.Domain.Handlers;
 using Doerly.Module.Payments.Domain.Models;
 using MassTransit;

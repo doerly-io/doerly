@@ -12,13 +12,13 @@ public class UpdateUserPasswordHandler : BaseAuthHandler
     {
     }
 
-    public async Task<HandlerResult> HandleAsync(UserEntity userEntity, string password)
+    public async Task<OperationResult> HandleAsync(UserEntity userEntity, string password)
     {
         var (passwordHash, passwordSalt) = GetPasswordHash(password);
         userEntity.PasswordHash = passwordHash;
         userEntity.PasswordSalt = passwordSalt;
         await DbContext.SaveChangesAsync();
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

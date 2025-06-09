@@ -23,7 +23,7 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
             "Exception occurred: {Message}",
             exception.Message);
 
-        var handlerResult = new HandlerResult<object>(false, exception.Message);
+        var handlerResult = new OperationResult<object>(false, exception.Message);
 
         httpContext.Response.StatusCode = 500;
 

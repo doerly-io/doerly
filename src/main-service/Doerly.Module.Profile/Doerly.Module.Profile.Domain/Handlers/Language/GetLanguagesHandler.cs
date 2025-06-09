@@ -2,16 +2,16 @@ using System.Linq.Expressions;
 using Doerly.DataTransferObjects.Pagination;
 using Doerly.Domain.Models;
 using Doerly.Extensions;
-using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Module.Profile.DataAccess.Models;
+using Doerly.Module.Profile.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
 
 public class GetLanguagesHandler(ProfileDbContext dbContext) : BaseProfileHandler(dbContext)
 {
-    public async Task<HandlerResult<PageDto<LanguageDto>>> HandleAsync(LanguagesQueryDto dto, CancellationToken cancellationToken = default)
+    public async Task<OperationResult<PageDto<LanguageDto>>> HandleAsync(LanguagesQueryDto dto, CancellationToken cancellationToken = default)
     {
         var predicates = new List<Expression<Func<Language, bool>>>();
         
@@ -44,6 +44,6 @@ public class GetLanguagesHandler(ProfileDbContext dbContext) : BaseProfileHandle
             List = languageDtos
         };
         
-        return HandlerResult.Success(result);
+        return OperationResult.Success(result);
     }
 }

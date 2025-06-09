@@ -11,7 +11,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Category
         {
         }
 
-        public async Task<HandlerResult<List<GetCategoryResponse>>> HandleAsync()
+        public async Task<OperationResult<List<GetCategoryResponse>>> HandleAsync()
         {
             var allCategories = await DbContext.Categories
                 .AsNoTracking()
@@ -36,7 +36,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Category
 
             var rootCategories = BuildTree(null);
 
-            return HandlerResult.Success(rootCategories);
+            return OperationResult.Success(rootCategories);
         }
     }
 }

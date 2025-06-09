@@ -2,7 +2,7 @@
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Enums;
 using Doerly.Module.Order.DataAccess.Entities;
-using Doerly.Module.Order.Contracts.Dtos;
+using Doerly.Module.Order.DataTransferObjects.Dtos;
 
 using Microsoft.EntityFrameworkCore;
 using Doerly.Localization;
@@ -21,7 +21,7 @@ public class SendExecutionProposalHandler : BaseOrderHandler
         _doerlyRequestContext = doerlyRequestContext;
     }
 
-    public async Task<HandlerResult<SendExecutionProposalResponse>> HandleAsync(SendExecutionProposalRequest dto)
+    public async Task<OperationResult<SendExecutionProposalResponse>> HandleAsync(SendExecutionProposalRequest dto)
     {
         var userId = _doerlyRequestContext.UserId ?? throw new DoerlyException("We are fucked!");
 
@@ -29,7 +29,7 @@ public class SendExecutionProposalHandler : BaseOrderHandler
             .FirstOrDefaultAsync(x => x.Id == dto.OrderId && x.CustomerId != userId);
 
         if (order == null)
-            return HandlerResult.Failure<SendExecutionProposalResponse>(Resources.Get("OrderNotFound"));
+            return OperationResult.Failure<SendExecutionProposalResponse>(Resources.Get("OrderNotFound"));
 
         /* firstly check if sender is a customer and then check if the receiver already got a proposal 
          * (simply checking receiver won't work because if receiver is a customer then there might be several proposals for him),
@@ -41,7 +41,7 @@ public class SendExecutionProposalHandler : BaseOrderHandler
                 (x.SenderId != order.CustomerId && x.SenderId == userId)));
 
         if (existingExecutionProposal != null)
-            return HandlerResult.Failure<SendExecutionProposalResponse>(Resources.Get("ExecutionProposalAlreadySent"));
+            return OperationResult.Failure<SendExecutionProposalResponse>(Resources.Get("ExecutionProposalAlreadySent"));
 
         return await SendExecutionProposal(dto, userId);
     }

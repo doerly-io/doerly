@@ -2,12 +2,12 @@
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Enums;
-using Doerly.Module.Order.Contracts.Dtos;
-using Doerly.Module.Payments.Contracts;
+using Doerly.Module.Order.DataTransferObjects.Dtos;
 using Doerly.Module.Payments.Enums;
 using Doerly.Proxy.Payment;
 using Doerly.Domain;
 using Doerly.Messaging;
+using Doerly.Module.Payments.DataTransferObjects;
 
 namespace Doerly.Module.Order.Domain.Handlers.Order;
 public class UpdateOrderStatusHandler : BaseOrderHandler
@@ -22,11 +22,11 @@ public class UpdateOrderStatusHandler : BaseOrderHandler
         _doerlyRequestContext = doerlyRequestContext;
     }
 
-    public async Task<HandlerResult<UpdateOrderStatusResponse>> HandleAsync(int id, UpdateOrderStatusRequest dto)
+    public async Task<OperationResult<UpdateOrderStatusResponse>> HandleAsync(int id, UpdateOrderStatusRequest dto)
     {
         var order = await DbContext.Orders.FindAsync(id);
         if (order == null)
-            return HandlerResult.Failure<UpdateOrderStatusResponse>(Resources.Get("OrderNotFound"));
+            return OperationResult.Failure<UpdateOrderStatusResponse>(Resources.Get("OrderNotFound"));
 
         /* the logic of the order status change is as follows:
          * the customer can change order's status to canceled when it is placed
@@ -93,6 +93,6 @@ public class UpdateOrderStatusHandler : BaseOrderHandler
 
         await PublishOrderStatusUpdatedEventAsync(order.Id, order.Status);
 
-        return HandlerResult.Success(result);
+        return OperationResult.Success(result);
     }
 }

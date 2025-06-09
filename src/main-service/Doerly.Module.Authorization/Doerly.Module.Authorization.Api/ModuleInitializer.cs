@@ -3,7 +3,7 @@ using Doerly.Module.Authorization.DataAccess;
 using Doerly.Infrastructure.Api;
 using Doerly.DataAccess.Utils;
 using Doerly.Messaging;
-using Doerly.Module.Authorization.Api.ModuleWrapper;
+using Doerly.Module.Authorization.Contracts;
 using Doerly.Module.Authorization.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

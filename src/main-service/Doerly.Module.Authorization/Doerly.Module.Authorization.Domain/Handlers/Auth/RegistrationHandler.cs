@@ -4,8 +4,8 @@ using Doerly.Module.Authorization.DataAccess;
 using Doerly.Localization;
 using Doerly.Messaging;
 using Doerly.Module.Authorization.DataAccess.Entities;
-using Doerly.Module.Authorization.Contracts.Messages;
-using Doerly.Module.Authorization.Contracts.Requests;
+using Doerly.Module.Authorization.DataTransferObjects.Messages;
+using Doerly.Module.Authorization.DataTransferObjects.Requests;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -25,11 +25,11 @@ public class RegistrationHandler : BaseAuthHandler
         _messagePublisher = messagePublisher;
     }
 
-    public async Task<HandlerResult> HandleAsync(RegisterRequestDto requestDto)
+    public async Task<OperationResult> HandleAsync(RegisterRequestDto requestDto)
     {
         var userExist = DbContext.Users.AsNoTracking().Any(x => x.Email == requestDto.Email);
         if (userExist)
-            return HandlerResult.Failure(Resources.Get("UserAlreadyExist"));
+            return OperationResult.Failure(Resources.Get("UserAlreadyExist"));
 
         var (passwordHash, passwordSalt) = GetPasswordHash(requestDto.Password);
 
@@ -46,7 +46,7 @@ public class RegistrationHandler : BaseAuthHandler
 
         await PublishUserRegisteredEventAsync(user.Id, user.Email, requestDto.FirstName, requestDto.LastName);
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 
     private async Task PublishUserRegisteredEventAsync(int userId, string email, string firstName, string lastName)

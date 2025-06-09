@@ -8,10 +8,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
+    <ProjectReference Include="..\..\Doerly.FileRepository\Doerly.FileRepository.csproj" />
     <ProjectReference Include="..\..\Doerly.Localization\Doerly.Localization.csproj" />
+    <ProjectReference Include="..\..\Doerly.Module.Common\Doerly.Module.Common.DataAccess\Doerly.Module.Common.DataAccess.csproj" />
     <ProjectReference Include="..\..\Doerly.Proxy.Payment\Doerly.Proxy.Payment.csproj" />
     <ProjectReference Include="..\..\Doerly.Proxy.Profile\Doerly.Proxy.Profile.csproj" />
-    <ProjectReference Include="..\Doerly.Module.Order.Contracts\Doerly.Module.Order.Contracts.csproj" />
+    <ProjectReference Include="..\Doerly.Module.Order.DataTransferObjects\Doerly.Module.Order.DataTransferObjects.csproj" />
     <ProjectReference Include="..\Doerly.Module.Order.DataAccess\Doerly.Module.Order.DataAccess.csproj" />
   </ItemGroup>
 

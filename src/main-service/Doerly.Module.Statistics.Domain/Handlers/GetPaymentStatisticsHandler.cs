@@ -1,6 +1,6 @@
 using Doerly.Domain.Handlers;
 using Doerly.Domain.Models;
-using Doerly.Module.Statistics.Contracts.Dtos;
+using Doerly.Module.Statistics.DataTransferObjects;
 using Doerly.Proxy.Payment;
 using MassTransit.Initializers;
 
@@ -15,7 +15,7 @@ public class GetPaymentStatisticsHandler : BaseHandler
         _paymentModuleProxy = paymentModuleProxy;
     }
     
-    public async Task<HandlerResult<PaymentStatisticsDto>> HandleAsync()
+    public async Task<OperationResult<PaymentStatisticsDto>> HandleAsync()
     {
         var statistics = await _paymentModuleProxy
             .GetPaymentStatisticsAsync()
@@ -31,6 +31,6 @@ public class GetPaymentStatisticsHandler : BaseHandler
                 AverageBillAmount = x.AverageBillAmount,
                 OutstandingAmountByCurrency = x.OutstandingAmountByCurrency
             });
-        return HandlerResult.Success(statistics);
+        return OperationResult.Success(statistics);
     }
 }

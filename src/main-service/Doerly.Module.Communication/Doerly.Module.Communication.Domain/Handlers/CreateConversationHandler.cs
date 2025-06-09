@@ -10,7 +10,7 @@ public class CreateConversationHandler(CommunicationDbContext dbContext) : BaseC
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
-    public async Task<HandlerResult<int>> HandleAsync(CreateConversationRequest dto, int initiatorId)
+    public async Task<OperationResult<int>> HandleAsync(CreateConversationRequest dto, int initiatorId)
     {
         var existingConversation = await _dbContext.Conversations
             .FirstOrDefaultAsync(c =>
@@ -19,7 +19,7 @@ public class CreateConversationHandler(CommunicationDbContext dbContext) : BaseC
 
         if (existingConversation != null)
         {
-            return HandlerResult.Success(existingConversation.Id);
+            return OperationResult.Success(existingConversation.Id);
         }
 
         var conversation = new ConversationEntity
@@ -31,6 +31,6 @@ public class CreateConversationHandler(CommunicationDbContext dbContext) : BaseC
         _dbContext.Conversations.Add(conversation);
         await _dbContext.SaveChangesAsync();
 
-        return HandlerResult.Success(conversation.Id);
+        return OperationResult.Success(conversation.Id);
     }
 }

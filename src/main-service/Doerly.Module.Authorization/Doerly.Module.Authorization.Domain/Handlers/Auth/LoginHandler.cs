@@ -4,8 +4,8 @@ using Doerly.Common.Settings;
 using Doerly.Domain.Models;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Localization;
-using Doerly.Module.Authorization.Contracts.Requests;
-using Doerly.Module.Authorization.Contracts.Responses;
+using Doerly.Module.Authorization.DataTransferObjects.Requests;
+using Doerly.Module.Authorization.DataTransferObjects.Responses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -17,7 +17,7 @@ public class LoginHandler : BaseAuthHandler
     {
     }
 
-    public async Task<HandlerResult<(LoginResponseDto resultDto, string refreshToken)>> HandleAsync(LoginRequestDto requestDto)
+    public async Task<OperationResult<(LoginResponseDto resultDto, string refreshToken)>> HandleAsync(LoginRequestDto requestDto)
     {
         var user = await DbContext.Users
             .AsNoTracking()
@@ -34,10 +34,10 @@ public class LoginHandler : BaseAuthHandler
             .FirstOrDefaultAsync();
 
         if (user == null)
-            return HandlerResult.Failure<(LoginResponseDto, string)>(Resources.Get("UserNotFound"));
+            return OperationResult.Failure<(LoginResponseDto, string)>(Resources.Get("UserNotFound"));
 
         if (!VerifyPasswordHash(requestDto.Password, user.PasswordHash, user.PasswordSalt))
-            return HandlerResult.Failure<(LoginResponseDto, string)>(Resources.Get("InvalidPassword"));
+            return OperationResult.Failure<(LoginResponseDto, string)>(Resources.Get("InvalidPassword"));
 
         var accessToken = CreateAccessToken(user.Id, user.Email, user.RoleName);
         var refreshTokenValue = GetResetToken();
@@ -49,7 +49,7 @@ public class LoginHandler : BaseAuthHandler
             UserEmail = user.Email
         };
 
-        return HandlerResult.Success((loginResultDto, refreshTokenValue.originalToken));
+        return OperationResult.Success((loginResultDto, refreshTokenValue.originalToken));
     }
 
     private bool VerifyPasswordHash(string password, string passwordHash, string passwordSalt)

@@ -11,13 +11,13 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Category
     {
         public CreateCategoryHandler(CatalogDbContext dbContext) : base(dbContext) { }
 
-        public async Task<HandlerResult<int>> HandleAsync(CreateCategoryRequest request)
+        public async Task<OperationResult<int>> HandleAsync(CreateCategoryRequest request)
         {
             if (request.ParentId.HasValue)
             {
                 var parentExists = await DbContext.Categories.AnyAsync(c => c.Id == request.ParentId);
                 if (!parentExists)
-                    return HandlerResult.Failure<int>(Resources.Get("ParentCategoryNotFound"));
+                    return OperationResult.Failure<int>(Resources.Get("ParentCategoryNotFound"));
             }
 
             var category = new CategoryEntity
@@ -31,7 +31,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Category
             DbContext.Categories.Add(category);
             await DbContext.SaveChangesAsync();
 
-            return HandlerResult.Success(category.Id);
+            return OperationResult.Success(category.Id);
         }
     }
 

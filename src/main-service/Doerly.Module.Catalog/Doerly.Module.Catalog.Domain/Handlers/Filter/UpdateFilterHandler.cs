@@ -12,23 +12,23 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
         {
         }
 
-        public async Task<HandlerResult> HandleAsync(int id, UpdateFilterRequest request)
+        public async Task<OperationResult> HandleAsync(int id, UpdateFilterRequest request)
         {
             var filter = await DbContext.Filters.FindAsync(id);
             if (filter == null)
-                return HandlerResult.Failure(Resources.Get("FilterNotFound"));
+                return OperationResult.Failure(Resources.Get("FilterNotFound"));
 
             var categoryExists = await DbContext.Categories
                     .AnyAsync(c => c.Id == request.CategoryId && !c.IsDeleted);
             if (!categoryExists)
-                return HandlerResult.Failure(Resources.Get("CategoryNotFound"));
+                return OperationResult.Failure(Resources.Get("CategoryNotFound"));
 
             filter.Name = request.Name;
             filter.Type = request.Type;
             filter.CategoryId = request.CategoryId;
 
             await DbContext.SaveChangesAsync();
-            return HandlerResult.Success();
+            return OperationResult.Success();
         }
     }
 }

@@ -2,21 +2,21 @@
 using Doerly.FileRepository;
 using Doerly.Localization;
 using Doerly.Module.Common.DataAccess.Address;
-using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
+using Doerly.Module.Profile.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
 
 public class GetProfileHandler(ProfileDbContext dbContext, AddressDbContext addressDbContext, IFileRepository fileRepository) : BaseProfileHandler(dbContext)
 {
-    public async Task<HandlerResult<ProfileDto>> HandleAsync(int userId, CancellationToken cancellationToken = default)
+    public async Task<OperationResult<ProfileDto>> HandleAsync(int userId, CancellationToken cancellationToken = default)
     {
         var profile = await GetCompleteProfileQuery()
             .FirstOrDefaultAsync(p => p.UserId == userId, cancellationToken);
 
         if (profile == null)
-            return HandlerResult.Failure<ProfileDto>(Resources.Get("ProfileNotFound"));
+            return OperationResult.Failure<ProfileDto>(Resources.Get("ProfileNotFound"));
         
         var languageProficiencies = profile.LanguageProficiencies
             .Select(lp => new LanguageProficiencyDto
@@ -78,6 +78,6 @@ public class GetProfileHandler(ProfileDbContext dbContext, AddressDbContext addr
             Competences = competences
         };
 
-        return HandlerResult.Success(profileDto);
+        return OperationResult.Success(profileDto);
     }
 }

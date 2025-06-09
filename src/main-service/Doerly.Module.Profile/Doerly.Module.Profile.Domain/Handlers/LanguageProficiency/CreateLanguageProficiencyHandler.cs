@@ -1,13 +1,13 @@
 using Doerly.Domain.Models;
-using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Module.Profile.DataAccess.Models;
+using Doerly.Module.Profile.DataTransferObjects;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
 
 public class CreateLanguageProficiencyHandler(ProfileDbContext dbContext) : BaseProfileHandler(dbContext) 
 {
-    public async Task<HandlerResult> HandleAsync(int userId, LanguageProficiencySaveDto dto, CancellationToken cancellationToken = default)
+    public async Task<OperationResult> HandleAsync(int userId, LanguageProficiencySaveDto dto, CancellationToken cancellationToken = default)
     {
         var profileResult = await GetProfileByUserIdAsync(userId, cancellationToken);
         
@@ -33,7 +33,7 @@ public class CreateLanguageProficiencyHandler(ProfileDbContext dbContext) : Base
         
         DbContext.LanguageProficiencies.Add(newLanguageProficiency);
         await DbContext.SaveChangesAsync(cancellationToken);
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
     
 }

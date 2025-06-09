@@ -1,6 +1,6 @@
 using Doerly.Domain.Models;
 using Doerly.Module.Payments.BaseClient;
-using Doerly.Module.Payments.Contracts;
+using Doerly.Module.Payments.DataTransferObjects;
 using Doerly.Module.Payments.DataAccess;
 using Doerly.Module.Payments.DataAccess.Models;
 using Doerly.Module.Payments.Enums;
@@ -30,7 +30,7 @@ public class CheckoutHandler : BasePaymentHandler
     /// 3. If no pending payment exists, check if the bill exists and is not already paid.
     /// 4. If the billId is not provided, create a new bill with the provided amount and description.
     /// </summary>
-    public async Task<HandlerResult<BaseCheckoutResponse>> HandleAsync(CheckoutRequest checkoutRequest, Uri webhookUrl)
+    public async Task<OperationResult<BaseCheckoutResponse>> HandleAsync(CheckoutRequest checkoutRequest, Uri webhookUrl)
     {
         Bill bill;
 
@@ -43,7 +43,7 @@ public class CheckoutHandler : BasePaymentHandler
 
             if (!string.IsNullOrEmpty(existingPendingPayment?.CheckoutUrl))
             {
-                return HandlerResult.Success(new BaseCheckoutResponse
+                return OperationResult.Success(new BaseCheckoutResponse
                 {
                     CheckoutUrl = existingPendingPayment.CheckoutUrl,
                     BillId = checkoutRequest.BillId.Value,
@@ -57,11 +57,11 @@ public class CheckoutHandler : BasePaymentHandler
             if (bill == null)
             {
                 _logger.LogError("Bill with Id {BillId} not found", checkoutRequest.BillId);
-                return HandlerResult.Failure<BaseCheckoutResponse>("BillNotFound");
+                return OperationResult.Failure<BaseCheckoutResponse>("BillNotFound");
             }
 
             if (bill.AmountPaid != bill.AmountTotal)
-                return HandlerResult.Failure<BaseCheckoutResponse>("BillAlreadyPaid");
+                return OperationResult.Failure<BaseCheckoutResponse>("BillAlreadyPaid");
         }
         else
         {
@@ -94,7 +94,7 @@ public class CheckoutHandler : BasePaymentHandler
         {
             _logger.LogError("Checkout request failed, CheckoutRequestError: {CheckoutRequestError}",
                 checkoutResult.ErrorMessage);
-            return HandlerResult.Failure<BaseCheckoutResponse>("FailedToCreateCheckout");
+            return OperationResult.Failure<BaseCheckoutResponse>("FailedToCreateCheckout");
         }
 
         var payment = new Payment
@@ -112,7 +112,7 @@ public class CheckoutHandler : BasePaymentHandler
         DbContext.Payments.Add(payment);
         await DbContext.SaveChangesAsync();
 
-        return HandlerResult.Success(new BaseCheckoutResponse
+        return OperationResult.Success(new BaseCheckoutResponse
         {
             CheckoutUrl = payment.CheckoutUrl,
             BillId = bill.Id,

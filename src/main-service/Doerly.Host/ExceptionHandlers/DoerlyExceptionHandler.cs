@@ -29,7 +29,7 @@ internal sealed class DoerlyExceptionHandler : IExceptionHandler
             "Exception occurred: {Message}",
             doerlyException.Message);
 
-        var handlerResult = new HandlerResult<object>(false, doerlyException.Message);
+        var handlerResult = new OperationResult<object>(false, doerlyException.Message);
 
         httpContext.Response.StatusCode = 400;
 

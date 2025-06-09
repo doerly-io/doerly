@@ -1,11 +1,8 @@
 using Doerly.Domain;
-using Doerly.Domain.Models;
 using Doerly.Messaging;
-using Doerly.Module.Order.Contracts.Dtos;
+using Doerly.Module.Order.DataTransferObjects.Dtos;
 using Doerly.Module.Order.Domain.Handlers.Order;
 using Doerly.Module.Order.Enums;
-using Doerly.Module.Payments.Contracts;
-using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Proxy.Payment;
 
 using Moq;

@@ -6,7 +6,7 @@ using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Module.Authorization.DataAccess.Entities;
-using Doerly.Module.Authorization.Contracts.Messages;
+using Doerly.Module.Authorization.DataTransferObjects.Messages;
 using Doerly.Module.Authorization.Enums;
 using Doerly.Notification.EmailSender;
 using Microsoft.Extensions.Options;
@@ -30,7 +30,7 @@ public class RequestEmailVerificationHandler : BaseAuthHandler
         _frontendOptions = frontendOptions;
     }
 
-    public async Task<HandlerResult> HandleAsync(UserRegisteredMessage message)
+    public async Task<OperationResult> HandleAsync(UserRegisteredMessage message)
     {
         var emailBody = EmailTemplate.Get(EmailTemplate.EmailVerification);
 
@@ -58,6 +58,6 @@ public class RequestEmailVerificationHandler : BaseAuthHandler
             throw new DoerlyException(result.ErrorMessage);
 
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

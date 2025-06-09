@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Security.Claims;
 using Doerly.Common.Settings.Constants;
 using Doerly.Domain;
 using Doerly.Domain.Factories;

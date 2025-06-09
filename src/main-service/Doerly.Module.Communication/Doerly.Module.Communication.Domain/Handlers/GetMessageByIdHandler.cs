@@ -5,7 +5,7 @@ using Doerly.Module.Communication.Contracts.Responses;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Communication.Domain.Constants;
 using Doerly.Module.Communication.Enums;
-using Doerly.Module.Profile.Contracts.Dtos;
+using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +15,7 @@ public class GetMessageByIdHandler(CommunicationDbContext dbContext, IProfileMod
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
-    public async Task<HandlerResult<MessageResponse>> HandleAsync(int messageId)
+    public async Task<OperationResult<MessageResponse>> HandleAsync(int messageId)
     {
         var message = await _dbContext.Messages
             .AsNoTracking()
@@ -24,7 +24,7 @@ public class GetMessageByIdHandler(CommunicationDbContext dbContext, IProfileMod
             .FirstOrDefaultAsync();
 
         if (message == null)
-            return HandlerResult.Failure<MessageResponse>(Resources.Get("Communication.MessageNotFound"));
+            return OperationResult.Failure<MessageResponse>(Resources.Get("Communication.MessageNotFound"));
         
         var profiles = new Dictionary<int, ProfileDto>();
         foreach (var userId in message.Conversation.ParticipantIds)
@@ -63,6 +63,6 @@ public class GetMessageByIdHandler(CommunicationDbContext dbContext, IProfileMod
             Status = message.Status
         };
         
-        return HandlerResult.Success(messageDto);
+        return OperationResult.Success(messageDto);
     }
 }

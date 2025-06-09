@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Doerly.DataAccess.Utils;
 using Doerly.Infrastructure.Api;
 using Doerly.Module.Catalog.Api.ModuleWrapper;
+using Doerly.Proxy.Catalog;
 
 namespace Doerly.Module.Catalog.Api
 {

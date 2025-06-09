@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
@@ -7,9 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Doerly.DataAccess\Doerly.DataAccess.csproj" />
-      <ProjectReference Include="..\..\Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj" />
-      <ProjectReference Include="..\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj" />
+      <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Profile.DataTransferObjects\Doerly.Module.Profile.DataTransferObjects.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Profile.Domain\Doerly.Module.Profile.Domain.csproj" />
     </ItemGroup>
 
 </Project>
