@@ -30,7 +30,7 @@ public class BaseOrderTests : IClassFixture<PostgresTestContainerFixture>
             Name = "Test Order",
             Description = "Test Description",
             Price = 100.0m,
-            ServiceId = 1,
+            CategoryId = 1,
             PaymentKind = EPaymentKind.Online,
             DueDate = DateTime.UtcNow.AddDays(7),
             IsPriceNegotiable = false,

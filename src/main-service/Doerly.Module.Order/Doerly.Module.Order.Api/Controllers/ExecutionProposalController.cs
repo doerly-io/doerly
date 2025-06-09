@@ -1,5 +1,5 @@
 ﻿using Doerly.Infrastructure.Api;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
+using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.Domain.Handlers;
 
 using Microsoft.AspNetCore.Authorization;

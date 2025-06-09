@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
     <ProjectReference Include="..\..\Doerly.Module.Order\Doerly.Module.Order.Domain\Doerly.Module.Order.Domain.csproj" />
   </ItemGroup>
 

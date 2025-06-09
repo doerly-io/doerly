@@ -215,4 +215,7 @@ Doerly</value>
   <data name="AddressIsEmpty" xml:space="preserve">
     <value>Address is empty</value>
   </data>
+  <data name="InvalidUserForProposal" xml:space="preserve">
+    <value>Can't send execution proposal to this user</value>
+  </data>
 </root>

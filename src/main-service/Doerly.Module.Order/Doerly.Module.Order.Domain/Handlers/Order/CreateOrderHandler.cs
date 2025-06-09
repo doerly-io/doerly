@@ -1,7 +1,6 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Enums;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
 using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
 using Doerly.Domain;
 using Doerly.FileRepository;
@@ -9,6 +8,9 @@ using Microsoft.AspNetCore.Http;
 using Doerly.Module.Order.DataAccess.Entities;
 using Doerly.Messaging;
 using Doerly.Domain.Exceptions;
+using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.DataTransferObjects;
+using Doerly.Module.Order.DataTransferObjects.Responses;
 using Doerly.Proxy.Profile;
 
 namespace Doerly.Module.Order.Domain.Handlers;
@@ -37,7 +39,7 @@ public class CreateOrderHandler : BaseOrderHandler
 
         var order = new OrderEntity()
         {
-            ServiceId = dto.ServiceId,
+            CategoryId = dto.CategoryId,
             Name = dto.Name,
             Description = dto.Description,
             Price = dto.Price,
@@ -58,6 +60,20 @@ public class CreateOrderHandler : BaseOrderHandler
         {
             Id = order.Id
         };
+
+        if (dto.ExecutorId.HasValue)
+        {
+            try
+            {
+                await SendExecutionProposal(new SendExecutionProposalRequest
+                {
+                    OrderId = order.Id,
+                    ReceiverId = dto.ExecutorId.Value
+                }, userId);
+            }
+            catch (Exception ex)
+            {}
+        }
 
         await PublishOrderStatusUpdatedEventAsync(order.Id, order.Status);
 

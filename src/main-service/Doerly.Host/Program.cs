@@ -1,13 +1,18 @@
 using System.Globalization;
 using System.Text;
-using Doerly.Domain.Factories;
 using Doerly.Common.Settings;
 using Doerly.Domain;
+using Doerly.Domain.Factories;
 using Doerly.FileRepository;
+using Doerly.Host.ExceptionHandlers;
 using Doerly.Host.Middlewares;
+using Doerly.Host.ModelBinders.FloatingPoint;
 using Doerly.Infrastructure.Api;
 using Doerly.Localization;
 using Doerly.Messaging;
+using Doerly.Module.Authorization.Domain;
+using Doerly.Module.Catalog.Domain;
+using Doerly.Module.Order.Domain;
 using Doerly.Notification.EmailSender;
 using Doerly.Proxy.Authorization;
 using Doerly.Proxy.BaseProxy;
@@ -21,8 +26,8 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.Azure;
 using Microsoft.IdentityModel.Tokens;
+
 using SendGrid.Extensions.DependencyInjection;
-using Doerly.Host.ExceptionHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +39,7 @@ builder.Services
     .AddControllers(options =>
     {
         options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider());
+        options.ModelBinderProviders.Insert(0, new FloatingPointModelBinderProvider());
     })
     .AddDataAnnotationsLocalization(options =>
     {
@@ -198,6 +204,8 @@ builder.Services.AddMassTransit(cfg =>
 });
 
 builder.Services.AddScoped<IDoerlyRequestContext, DoerlyRequestContext>();
+
+builder.Services.AddMemoryCache();
 
 
 var app = builder.Build();

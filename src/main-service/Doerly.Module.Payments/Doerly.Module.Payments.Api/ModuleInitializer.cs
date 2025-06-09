@@ -7,7 +7,6 @@ using Doerly.Module.Payments.Client.LiqPay;
 using Doerly.Module.Payments.DataAccess;
 using Doerly.Module.Payments.Domain.Adapters;
 using Doerly.Module.Payments.Enums;
-using Doerly.Module.Payments.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +22,6 @@ public class ModuleInitializer : IModuleInitializer
         builder.Services.AddDbContext<PaymentDbContext>();
         builder.Services.RegisterHandlers(typeof(Domain.IAssemblyMarker).Assembly);
         builder.Services.RegisterEventConsumers(typeof(Domain.IAssemblyMarker).Assembly);;
-        builder.Services.AddScoped<IPaymentModuleWrapper, PaymentModuleWrapper>();
         
         var configuration = builder.Services.BuildServiceProvider().GetRequiredService<IConfiguration>();
         var paymentSettingsConfig = configuration.GetSection(PaymentSettings.PaymentSettingsName);

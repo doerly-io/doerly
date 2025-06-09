@@ -1,10 +1,11 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Module.Order.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Doerly.Module.Order.DataTransferObjects.Dtos;
 using Doerly.Extensions;
 using System.Linq.Expressions;
-
+using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.DataTransferObjects;
+using Doerly.Module.Order.DataTransferObjects.Responses;
 using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
 using Doerly.Proxy.Profile;
 
@@ -40,7 +41,7 @@ public class GetOrdersWithPaginationHandler : BaseOrderHandler
         var orders = entities.Select(order => new GetOrderResponse
         {
             Id = order.Id,
-            ServiceId = order.ServiceId,
+            CategoryId = order.CategoryId,
             CustomerId = order.CustomerId,
             Customer = profileIDsDictionary.TryGetValue(order.CustomerId, out var customerProfile)
                 ? new ProfileInfo

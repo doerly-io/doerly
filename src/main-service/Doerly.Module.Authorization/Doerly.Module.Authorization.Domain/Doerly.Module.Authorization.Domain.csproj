@@ -10,6 +10,7 @@
     <ProjectReference Include="..\..\Doerly.Localization\Doerly.Localization.csproj" />
     <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
     <ProjectReference Include="..\..\Doerly.Notification.EmailSender\Doerly.Notification.EmailSender.csproj" />
+    <ProjectReference Include="..\..\Doerly.Proxy.Authorization\Doerly.Proxy.Authorization.csproj" />
     <ProjectReference Include="..\Doerly.Module.Authorization.DataAccess\Doerly.Module.Authorization.DataAccess.csproj" />
     <ProjectReference Include="..\Doerly.Module.Authorization.DataTransferObjects\Doerly.Module.Authorization.DataTransferObjects.csproj" />
   </ItemGroup>

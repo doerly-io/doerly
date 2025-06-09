@@ -17,6 +17,8 @@ public class OrderDbContext: BaseDbContext
     public DbSet<ExecutionProposal> ExecutionProposals { get; set; }
 
     public DbSet<OrderFile> OrderFiles { get; set; }
+    
+    public DbSet<OrderFeedback> OrderFeedbacks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

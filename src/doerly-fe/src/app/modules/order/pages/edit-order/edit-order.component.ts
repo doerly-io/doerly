@@ -26,6 +26,8 @@ import { Textarea } from 'primeng/textarea';
 import { ImageModule } from 'primeng/image';
 import { AddressSelectComponent } from "../../../../@shared/components/address-select/address-select.component";
 import { ErrorHandlerService } from '../../../../@core/services/error-handler.service';
+import { InputNumber } from 'primeng/inputnumber';
+import { I18nHelperService } from 'app/@core/helpers/i18n.helper.service';
 
 @Component({
   selector: 'app-edit-order',
@@ -49,14 +51,16 @@ import { ErrorHandlerService } from '../../../../@core/services/error-handler.se
     Tooltip,
     Textarea,
     ImageModule,
-    AddressSelectComponent
+    AddressSelectComponent,
+    InputNumber
   ]
 })
 export class EditOrderComponent implements OnInit {
   orderForm!: FormGroup;
   paymentKinds: any[] = [];
   orderId?: number;
-  serviceId?: number;
+  categoryId?: number;
+  executorId?: number;
   isEdit: boolean = false;
   loading: boolean = false;
   currentDate: Date = new Date();
@@ -78,19 +82,23 @@ export class EditOrderComponent implements OnInit {
     private orderService: OrderService,
     private translate: TranslateService,
     private toastHelper: ToastHelper,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService,
+    public i18nHelperService: I18nHelperService
   ) { }
 
   ngOnInit() {
     this.orderId = Number(this.route.snapshot.paramMap.get('id'));
     this.isEdit = !!this.orderId;
 
-    const serviceIdParam = this.route.snapshot.queryParamMap.get('serviceId');
-    this.serviceId = serviceIdParam ? Number(serviceIdParam) : undefined;
-    if (!this.serviceId && !this.isEdit){
+    const categoryIdParam = this.route.snapshot.queryParamMap.get('categoryId');
+    this.categoryId = categoryIdParam ? Number(categoryIdParam) : undefined;
+    if (!this.categoryId && !this.isEdit) {
       this.toastHelper.showError('common.error', this.translate.instant('ordering.service_required'));
-      this.router.navigate(['']);
+      this.router.navigate(['404-page']);
     }
+
+    const executorIdParam = this.route.snapshot.queryParamMap.get('executorId');
+    this.executorId = executorIdParam ? Number(executorIdParam) : undefined;
 
     this.initForm();
     this.initPaymentKinds();
@@ -247,7 +255,8 @@ export class EditOrderComponent implements OnInit {
     } else {
       const createOrderRequest: CreateOrderRequest = {
         ...this.orderForm.value,
-        serviceId: this.serviceId!,
+        categoryId: this.categoryId!,
+        executorId: this.executorId,
       };
       this.orderService.createOrder(createOrderRequest, this.files)
         .subscribe({
