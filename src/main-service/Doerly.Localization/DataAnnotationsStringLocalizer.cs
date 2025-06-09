@@ -1,8 +1,7 @@
-using Doerly.Domain.Helpers;
-
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Resources;
+using Doerly.Common.Helpers;
 
 namespace Doerly.Localization
 {

@@ -6,4 +6,11 @@
         <Nullable>annotations</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj" />
+      <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Authorization.DataTransferObjects\Doerly.Module.Authorization.DataTransferObjects.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Authorization.Domain\Doerly.Module.Authorization.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

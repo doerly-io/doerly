@@ -12,20 +12,20 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Category
         { 
         }
 
-        public async Task<HandlerResult> HandleAsync(int id, UpdateCategoryRequest request)
+        public async Task<OperationResult> HandleAsync(int id, UpdateCategoryRequest request)
         {
             if (request.ParentId == id)
-                return HandlerResult.Failure(Resources.Get("CategoryCannotBeOwnParent"));
+                return OperationResult.Failure(Resources.Get("CategoryCannotBeOwnParent"));
 
             var category = await DbContext.Categories.FindAsync(id);
             if (category == null)
-                return HandlerResult.Failure(Resources.Get("CategoryNotFound"));
+                return OperationResult.Failure(Resources.Get("CategoryNotFound"));
 
             if (request.ParentId.HasValue)
             {
                 var parentExists = await DbContext.Categories.AnyAsync(c => c.Id == request.ParentId);
                 if (!parentExists)
-                    return HandlerResult.Failure(Resources.Get("ParentCategoryNotFound"));
+                    return OperationResult.Failure(Resources.Get("ParentCategoryNotFound"));
             }
 
             category.Name = request.Name;
@@ -35,7 +35,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Category
 
             await DbContext.SaveChangesAsync();
 
-            return HandlerResult.Success();
+            return OperationResult.Success();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
         {
         }
 
-        public async Task<HandlerResult<List<GetFilterResponse>>> HandleAsync(int categoryId)
+        public async Task<OperationResult<List<GetFilterResponse>>> HandleAsync(int categoryId)
         {
             var parentCategoryIds = await GetAllParentCategoryIds(categoryId);
             
@@ -28,7 +28,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
 
             var filters = await query.ToListAsync();
 
-            return HandlerResult.Success(filters);
+            return OperationResult.Success(filters);
         }
 
         private async Task<List<int>> GetAllParentCategoryIds(int categoryId)

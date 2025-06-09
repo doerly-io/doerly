@@ -1,6 +1,6 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Order.Contracts.Dtos;
+using Doerly.Module.Order.DataTransferObjects.Dtos;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +11,11 @@ public class UpdateOrderPaymentStatusHandler : BaseOrderHandler
     public UpdateOrderPaymentStatusHandler(OrderDbContext dbContext) : base(dbContext)
     { }
 
-    public async Task<HandlerResult> HandleAsync(int billId, bool isPaid)
+    public async Task<OperationResult> HandleAsync(int billId, bool isPaid)
     {
         var order = await DbContext.Orders.Select(x => x.BillId).AnyAsync(x => x == billId);
         if (!order)
-            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
+            return OperationResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
 
         if (isPaid)
         {
@@ -26,6 +26,6 @@ public class UpdateOrderPaymentStatusHandler : BaseOrderHandler
                         ? EOrderStatus.Completed : EOrderStatus.AwaitingConfirmation));
         }
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

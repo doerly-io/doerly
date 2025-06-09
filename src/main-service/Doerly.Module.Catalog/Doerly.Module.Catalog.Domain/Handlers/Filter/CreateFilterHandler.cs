@@ -13,13 +13,13 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
         {
         }
 
-        public async Task<HandlerResult<int>> HandleAsync(CreateFilterRequest request)
+        public async Task<OperationResult<int>> HandleAsync(CreateFilterRequest request)
         {
             var categoryExists = await DbContext.Categories
                 .AnyAsync(c => c.Id == request.CategoryId && !c.IsDeleted);
 
             if (!categoryExists)
-                return HandlerResult.Failure<int>(Resources.Get("CategoryNotFound"));
+                return OperationResult.Failure<int>(Resources.Get("CategoryNotFound"));
 
             var filter = new FilterEntity
             {
@@ -31,7 +31,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
             DbContext.Filters.Add(filter);
             await DbContext.SaveChangesAsync();
 
-            return HandlerResult.Success(filter.Id);
+            return OperationResult.Success(filter.Id);
         }
     }
 }

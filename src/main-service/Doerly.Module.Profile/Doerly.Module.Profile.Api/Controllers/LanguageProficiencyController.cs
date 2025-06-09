@@ -1,6 +1,6 @@
 using Doerly.Domain.Models;
 using Doerly.Infrastructure.Api;
-using Doerly.Module.Profile.Contracts.Dtos;
+using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Module.Profile.Domain.Handlers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +13,8 @@ namespace Doerly.Module.Profile.Api.Controllers;
 public class LanguageProficiencyController : BaseApiController
 {
     [HttpPost]
-    [ProducesResponseType<HandlerResult<int>>(StatusCodes.Status201Created)]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<OperationResult<int>>(StatusCodes.Status201Created)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> AddLanguageProficiency(int userId, LanguageProficiencySaveDto dto)
     {
         var result = await ResolveHandler<CreateLanguageProficiencyHandler>().HandleAsync(userId, dto);
@@ -25,8 +25,8 @@ public class LanguageProficiencyController : BaseApiController
     }
     
     [HttpPut("{id:int}")]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status200OK)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateLanguageProficiency(int userId, int id, LanguageProficiencySaveDto dto)
     {
         var result = await ResolveHandler<UpdateLanguageProficiencyHandler>().HandleAsync(userId, id, dto);
@@ -37,8 +37,8 @@ public class LanguageProficiencyController : BaseApiController
     }
 
     [HttpDelete("{id:int}")]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status200OK)]
-    [ProducesResponseType<HandlerResult>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status200OK)]
+    [ProducesResponseType<OperationResult>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteLanguageProficiency(int userId, int id)
     {
         var result = await ResolveHandler<DeleteLanguageProficiencyHandler>().HandleAsync(userId, id);

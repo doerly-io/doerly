@@ -14,12 +14,12 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
         { 
         }
 
-        public async Task<HandlerResult<int>> HandleAsync(CreateServiceRequest request)
+        public async Task<OperationResult<int>> HandleAsync(CreateServiceRequest request)
         {
             var categoryExists = await DbContext.Categories
                 .AnyAsync(c => c.Id == request.CategoryId && !c.IsDeleted);
             if (!categoryExists)
-                return HandlerResult.Failure<int>(Resources.Get("CategoryNotFound"));
+                return OperationResult.Failure<int>(Resources.Get("CategoryNotFound"));
 
             var service = new ServiceEntity
             {
@@ -51,7 +51,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
             DbContext.Services.Add(service);
             await DbContext.SaveChangesAsync();
 
-            return HandlerResult.Success(service.Id);
+            return OperationResult.Success(service.Id);
         }
     }
 }

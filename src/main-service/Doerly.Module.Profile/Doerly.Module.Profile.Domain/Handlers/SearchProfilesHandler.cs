@@ -4,8 +4,8 @@ using Doerly.Domain.Models;
 using Doerly.Extensions;
 using Doerly.FileRepository;
 using Doerly.Module.Common.DataAccess.Address;
-using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
+using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Proxy.Authorization;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
@@ -17,7 +17,7 @@ public class SearchProfilesHandler(
     IAuthorizationModuleProxy authorizationModuleProxy
     ) : BaseProfileHandler(dbContext)
 {
-    public async Task<HandlerResult<PageDto<ProfileDto>>> HandleAsync(ProfileQueryDto queryDto, CancellationToken cancellationToken = default)
+    public async Task<OperationResult<PageDto<ProfileDto>>> HandleAsync(ProfileQueryDto queryDto, CancellationToken cancellationToken = default)
     {
         var predicates = new List<Expression<Func<DataAccess.Models.Profile, bool>>>();
         
@@ -56,6 +56,6 @@ public class SearchProfilesHandler(
             List = profileDtos
         };
 
-        return HandlerResult.Success(result);
+        return OperationResult.Success(result);
     }
 }

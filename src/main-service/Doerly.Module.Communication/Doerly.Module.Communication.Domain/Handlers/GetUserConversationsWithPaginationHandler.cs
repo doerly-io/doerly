@@ -3,7 +3,7 @@ using Doerly.Domain.Models;
 using Doerly.Extensions;
 using Doerly.Module.Communication.Contracts.Responses;
 using Doerly.Module.Communication.DataAccess;
-using Doerly.Module.Profile.Contracts.Dtos;
+using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +13,7 @@ public class GetUserConversationsWithPaginationHandler(CommunicationDbContext db
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
-    public async Task<HandlerResult<GetUserConversationsWithPaginationResponse>> HandleAsync(int userId, GetEntitiesWithPaginationRequest pagination)
+    public async Task<OperationResult<GetUserConversationsWithPaginationResponse>> HandleAsync(int userId, GetEntitiesWithPaginationRequest pagination)
     {
         var (conversations, totalCount) = await _dbContext.Conversations
             .Where(c => c.InitiatorId == userId || c.RecipientId == userId)
@@ -64,6 +64,6 @@ public class GetUserConversationsWithPaginationHandler(CommunicationDbContext db
             Conversations = conversationHeaderResponseDtos
         };
 
-        return HandlerResult.Success(result);
+        return OperationResult.Success(result);
     }
 }

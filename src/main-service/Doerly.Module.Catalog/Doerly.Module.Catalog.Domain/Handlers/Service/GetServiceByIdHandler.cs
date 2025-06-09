@@ -12,7 +12,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
         {
         }
 
-        public async Task<HandlerResult<GetServiceResponse>> HandleAsync(int id)
+        public async Task<OperationResult<GetServiceResponse>> HandleAsync(int id)
         {
             var serviceDto = await DbContext.Services
                 .Where(s => s.Id == id)
@@ -31,9 +31,9 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
                 .FirstOrDefaultAsync();
 
             if (serviceDto == null)
-                return HandlerResult.Failure<GetServiceResponse>(Resources.Get("ServiceNotFound"));
+                return OperationResult.Failure<GetServiceResponse>(Resources.Get("ServiceNotFound"));
 
-            return HandlerResult.Success(new GetServiceResponse
+            return OperationResult.Success(new GetServiceResponse
             {
                 Id = serviceDto.Id,
                 Name = serviceDto.Name,

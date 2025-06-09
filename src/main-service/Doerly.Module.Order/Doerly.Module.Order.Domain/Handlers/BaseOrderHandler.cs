@@ -1,22 +1,22 @@
 ﻿using Doerly.Domain.Exceptions;
 using Doerly.Domain.Handlers;
-using Doerly.Domain.Helpers;
 using Doerly.FileRepository;
+using Doerly.Helpers;
 using Doerly.Localization;
 using Doerly.Messaging;
-using Doerly.Module.Order.Contracts.Messages;
+using Doerly.Module.Order.DataTransferObjects.Messages;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Entities;
 using Doerly.Module.Order.Domain.Constants;
 using Doerly.Module.Order.Enums;
-using Doerly.Module.Profile.Contracts.Dtos;
+using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Proxy.Profile;
 
 using DoerlyDomain.Constants;
 
 using Microsoft.AspNetCore.Http;
 
-using FileInfo = Doerly.Module.Order.Contracts.Dtos.FileInfo;
+using FileInfo = Doerly.Module.Order.DataTransferObjects.Dtos.FileInfo;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 
@@ -130,7 +130,7 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
 
     protected async Task<(int regionId, int cityId)> ManageAddress(int userId, bool useProfileAddress, int? dtoRegionId, int? dtoCityId)
     {
-        ProfileDto profile = null;
+        ProfileDto profile;
         int regionId = 0;
         int cityId = 0;
         if (useProfileAddress)

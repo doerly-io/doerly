@@ -1,11 +1,11 @@
 using Doerly.Domain.Handlers;
-using Doerly.Module.Authorization.Contracts.Responses;
+using Doerly.Module.Authorization.DataTransferObjects.Responses;
 using Doerly.Module.Authorization.DataAccess;
 using Doerly.Module.Authorization.DataAccess.Entities;
 using Doerly.Module.Authorization.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace Doerly.Module.Authorization.Domain.Handlers.Metrics;
+namespace Doerly.Module.Authorization.Domain.Handlers;
 
 public class GetActivityUsersStatisticsHandler : BaseHandler<AuthorizationDbContext>
 {

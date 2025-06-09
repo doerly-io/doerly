@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\Doerly.Infrastructure.Api\Doerly.Infrastructure.Api.csproj" />
     <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
     <ProjectReference Include="..\..\Doerly.Module.Authorization\Doerly.Module.Authorization.DataAccess\Doerly.Module.Authorization.DataAccess.csproj" />
+    <ProjectReference Include="..\..\Doerly.Proxy.Catalog\Doerly.Proxy.Catalog.csproj" />
     <ProjectReference Include="..\Doerly.Module.Catalog.DataAccess\Doerly.Module.Catalog.DataAccess.csproj" />
     <ProjectReference Include="..\Doerly.Module.Catalog.Domain\Doerly.Module.Catalog.Domain.csproj" />
   </ItemGroup>

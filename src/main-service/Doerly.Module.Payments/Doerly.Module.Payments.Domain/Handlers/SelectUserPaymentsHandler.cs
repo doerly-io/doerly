@@ -1,5 +1,5 @@
 using Doerly.DataTransferObjects;
-using Doerly.Module.Payments.Contracts;
+using Doerly.Module.Payments.DataTransferObjects;
 using Doerly.Module.Payments.DataAccess;
 using Microsoft.EntityFrameworkCore;
 

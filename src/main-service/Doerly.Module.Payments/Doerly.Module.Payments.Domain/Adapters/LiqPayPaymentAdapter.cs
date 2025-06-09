@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json;
+using Doerly.Common.Helpers;
 using Doerly.Domain.Factories;
-using Doerly.Domain.Helpers;
 using Doerly.Domain.Models;
 using Doerly.Module.Payments.BaseClient;
 using Doerly.Module.Payments.Client.LiqPay;
@@ -30,7 +30,7 @@ public class LiqPayPaymentAdapter : IPaymentAdapter
         _logger = logger;
     }
 
-    public async Task<HandlerResult> Adapt(string data, string? signature = null)
+    public async Task<OperationResult> Adapt(string data, string? signature = null)
     {
         var client = _paymentClientFactory(EPaymentAggregator.LiqPay);
         var isValidSignature = client.ValidateSignature(data, signature!);
@@ -38,7 +38,7 @@ public class LiqPayPaymentAdapter : IPaymentAdapter
         {
             _logger.LogWarning("Failed to parse LiqPay checkout response or validate signature. Data: {data}, Signature: {signature}", data,
                 signature);
-            return HandlerResult.Failure("Failed to validate signature");
+            return OperationResult.Failure("Failed to validate signature");
         }
 
         var decodedData = Convert.FromBase64String(data);
@@ -48,14 +48,14 @@ public class LiqPayPaymentAdapter : IPaymentAdapter
         if (!liqPayCheckoutStatusResult.IsSuccess)
         {
             _logger.LogWarning("Failed to deserialize LiqPay checkout response. Data: {data}, Signature: {signature}", data, signature);
-            return HandlerResult.Failure("Failed to parse checkout response");
+            return OperationResult.Failure("Failed to parse checkout response");
         }
 
         var liqPayCheckoutStatus = liqPayCheckoutStatusResult.Value;
         if (!Guid.TryParse(liqPayCheckoutStatus.OrderId, out var paymentGuid))
         {
             _logger.LogWarning("Invalid order Id in LiqPay checkout response. PaymentGuid: {PaymentGuid}", liqPayCheckoutStatus.OrderId);
-            return HandlerResult.Failure("Invalid order Id");
+            return OperationResult.Failure("Invalid order Id");
         }
 
         var status = LiqPayMappingHelper.MapLiqPayStatusToCommonStatus(liqPayCheckoutStatus.Status);

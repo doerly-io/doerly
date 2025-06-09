@@ -1,15 +1,15 @@
 using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess;
 using Doerly.Module.Profile.DataAccess.Models;
+using Doerly.Module.Profile.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Profile.Domain.Handlers;
 
 public class CreateLanguageHandler(ProfileDbContext dbContext) : BaseProfileHandler(dbContext) 
 {
-    public async Task<HandlerResult> HandleAsync(LanguageSaveDto dto, CancellationToken cancellationToken = default)
+    public async Task<OperationResult> HandleAsync(LanguageSaveDto dto, CancellationToken cancellationToken = default)
     {
         var validationResult = await ValidateLanguageIsUniqueAsync(dto.Name, dto.Code, cancellationToken: cancellationToken);
         
@@ -24,6 +24,6 @@ public class CreateLanguageHandler(ProfileDbContext dbContext) : BaseProfileHand
 
         DbContext.Languages.Add(newLanguage);
         await DbContext.SaveChangesAsync(cancellationToken);
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

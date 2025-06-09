@@ -1,11 +1,11 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
-using Doerly.Module.Order.Contracts.Dtos;
+using Doerly.Module.Order.DataTransferObjects.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Doerly.Proxy.Profile;
 using Doerly.FileRepository;
-using FileInfo = Doerly.Module.Order.Contracts.Dtos.FileInfo;
+using FileInfo = Doerly.Module.Order.DataTransferObjects.Dtos.FileInfo;
 using Doerly.Module.Common.DataAccess.Address;
 
 namespace Doerly.Module.Order.Domain.Handlers;
@@ -20,7 +20,7 @@ public class GetOrderByIdHandler : BaseOrderHandler
         _profileModuleProxy = profileModuleProxy;
         _addressDbContext = addressDbContext;
     }
-    public async Task<HandlerResult<GetOrderResponse>> HandleAsync(int id)
+    public async Task<OperationResult<GetOrderResponse>> HandleAsync(int id)
     {
         var order = await DbContext.Orders
             .Select(order => new GetOrderResponse
@@ -57,7 +57,7 @@ public class GetOrderByIdHandler : BaseOrderHandler
             .FirstOrDefaultAsync(order => order.Id == id);
 
         if (order == null)
-            return HandlerResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
+            return OperationResult.Failure<GetOrderResponse>(Resources.Get("OrderNotFound"));
 
         await SetOrderFileUrls(order.ExistingFiles);
 
@@ -96,6 +96,6 @@ public class GetOrderByIdHandler : BaseOrderHandler
             };
         }
 
-        return HandlerResult.Success(order);
+        return OperationResult.Success(order);
     }
 }

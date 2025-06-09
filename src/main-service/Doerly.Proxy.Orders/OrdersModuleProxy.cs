@@ -1,4 +1,4 @@
-using Doerly.Module.Order.Api.ModuleWrapper;
+using Doerly.Module.Order.Contracts;
 
 namespace Doerly.Proxy.Orders;
 

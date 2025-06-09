@@ -17,17 +17,17 @@ public class UploadProfileCvHandler : BaseProfileHandler
         _fileRepository = fileRepository;
     }
     
-    public async Task<HandlerResult> HandleAsync(int userId, byte[] fileBytes, CancellationToken cancellationToken = default)
+    public async Task<OperationResult> HandleAsync(int userId, byte[] fileBytes, CancellationToken cancellationToken = default)
     {
         if (!DocumentValidationHelper.IsValidDocument(fileBytes, out var fileExtension))
-            return HandlerResult.Failure(Resources.Get("InvalidDocument"));
+            return OperationResult.Failure(Resources.Get("InvalidDocument"));
         
         var profile = await DbContext.Profiles
             .Select(x => new { x.UserId, x.CvPath })
             .FirstOrDefaultAsync(x => x.UserId == userId, cancellationToken);
         
         if (profile == null)
-            return HandlerResult.Failure(Resources.Get("ProfileNotFound"));
+            return OperationResult.Failure(Resources.Get("ProfileNotFound"));
     
         var documentName = Guid.NewGuid().ToString();
         var documentPath = $"{AzureStorageConstants.FolderNames.ProfileCvs}/{documentName}{fileExtension}";
@@ -54,6 +54,6 @@ public class UploadProfileCvHandler : BaseProfileHandler
                 s.SetProperty(b => b.CvPath, documentPath),
                 cancellationToken);
     
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
 }

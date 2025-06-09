@@ -2,11 +2,11 @@
 using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Localization;
-using Doerly.Module.Authorization.Contracts.Responses;
+using Doerly.Module.Authorization.DataTransferObjects.Responses;
 using Doerly.Module.Common.DataAccess.Address;
 using Doerly.Module.Profile.DataAccess;
-using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.DataAccess.Models;
+using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Module.Profile.Domain.Constants;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +25,7 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
             .AsNoTracking();
     }
     
-    protected async Task<HandlerResult<DataAccess.Models.Profile?>> GetProfileByUserIdAsync(
+    protected async Task<OperationResult<DataAccess.Models.Profile?>> GetProfileByUserIdAsync(
         int userId, 
         CancellationToken cancellationToken = default)
     {
@@ -33,12 +33,12 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
             .FirstOrDefaultAsync(p => p.UserId == userId, cancellationToken);
 
         if (profile == null)
-            return HandlerResult.Failure<DataAccess.Models.Profile?>(Resources.Get("ProfileNotFound"));
+            return OperationResult.Failure<DataAccess.Models.Profile?>(Resources.Get("ProfileNotFound"));
 
-        return HandlerResult.Success(profile);
+        return OperationResult.Success(profile);
     }
 
-    protected async Task<HandlerResult> ValidateProfileExistsAsync(
+    protected async Task<OperationResult> ValidateProfileExistsAsync(
         int userId, 
         bool shouldExist = true, 
         CancellationToken cancellationToken = default)
@@ -48,12 +48,12 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
             .AnyAsync(p => p.UserId == userId, cancellationToken);
 
         if (shouldExist && !exists)
-            return HandlerResult.Failure(Resources.Get("ProfileNotFound"));
+            return OperationResult.Failure(Resources.Get("ProfileNotFound"));
 
         if (!shouldExist && exists)
-            return HandlerResult.Failure(Resources.Get("ProfileAlreadyExist"));
+            return OperationResult.Failure(Resources.Get("ProfileAlreadyExist"));
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
     
     protected void MapProfileFromDto(DataAccess.Models.Profile profile, ProfileSaveDto dto)
@@ -156,7 +156,7 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
     
     #region Language Methods
     
-    protected async Task<HandlerResult> ValidateLanguageAsync(
+    protected async Task<OperationResult> ValidateLanguageAsync(
         int languageId, 
         CancellationToken cancellationToken = default)
     {
@@ -164,12 +164,12 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
             .AnyAsync(l => l.Id == languageId, cancellationToken);
 
         if (!exists)
-            return HandlerResult.Failure(Resources.Get("LanguageNotFound"));
+            return OperationResult.Failure(Resources.Get("LanguageNotFound"));
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
     
-    protected async Task<HandlerResult<Language?>> GetLanguageByIdAsync(
+    protected async Task<OperationResult<Language?>> GetLanguageByIdAsync(
         int languageId, 
         CancellationToken cancellationToken = default)
     {
@@ -177,12 +177,12 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
             .FirstOrDefaultAsync(l => l.Id == languageId, cancellationToken);
 
         if (language == null)
-            return HandlerResult.Failure<Language?>(Resources.Get("LanguageNotFound"));
+            return OperationResult.Failure<Language?>(Resources.Get("LanguageNotFound"));
 
-        return HandlerResult.Success(language);
+        return OperationResult.Success(language);
     }
     
-    protected async Task<HandlerResult> ValidateLanguageIsUniqueAsync(
+    protected async Task<OperationResult> ValidateLanguageIsUniqueAsync(
         string name, 
         string code, 
         int? excludeId = null, 
@@ -196,16 +196,16 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
         var exists = await query.AnyAsync(l => l.Name == name || l.Code == code, cancellationToken);
 
         if (exists)
-            return HandlerResult.Failure(Resources.Get("LanguageAlreadyExists"));
+            return OperationResult.Failure(Resources.Get("LanguageAlreadyExists"));
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
     
     #endregion
     
     #region Language Proficiency Methods
     
-    protected async Task<HandlerResult<LanguageProficiency?>> GetLanguageProficiencyAsync(
+    protected async Task<OperationResult<LanguageProficiency?>> GetLanguageProficiencyAsync(
         int profileId, 
         int proficiencyId, 
         CancellationToken cancellationToken = default)
@@ -214,12 +214,12 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
             .FirstOrDefaultAsync(lp => lp.ProfileId == profileId && lp.Id == proficiencyId, cancellationToken);
 
         if (proficiency == null)
-            return HandlerResult.Failure<LanguageProficiency?>(Resources.Get("LanguageProficiencyNotFound"));
+            return OperationResult.Failure<LanguageProficiency?>(Resources.Get("LanguageProficiencyNotFound"));
 
-        return HandlerResult.Success(proficiency);
+        return OperationResult.Success(proficiency);
     }
     
-    protected async Task<HandlerResult> CheckDuplicateLanguageProficiencyAsync(
+    protected async Task<OperationResult> CheckDuplicateLanguageProficiencyAsync(
         int profileId, 
         int languageId, 
         int? excludeProficiencyId = null, 
@@ -234,9 +234,9 @@ public class BaseProfileHandler(ProfileDbContext dbContext) : BaseHandler<Profil
         var exists = await query.AnyAsync(cancellationToken);
 
         if (exists)
-            return HandlerResult.Failure(Resources.Get("LanguageProficiencyAlreadyExists"));
+            return OperationResult.Failure(Resources.Get("LanguageProficiencyAlreadyExists"));
 
-        return HandlerResult.Success();
+        return OperationResult.Success();
     }
     
     #endregion

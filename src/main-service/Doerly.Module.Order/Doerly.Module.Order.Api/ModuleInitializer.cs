@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Doerly.DataAccess.Utils;
 using Doerly.Module.Order.Domain;
 using Doerly.Messaging;
-using Doerly.Module.Order.Api.ModuleWrapper;
+using Doerly.Module.Order.Contracts;
 
 namespace Doerly.Module.Order.Api;
 

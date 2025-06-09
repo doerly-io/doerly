@@ -1,11 +1,11 @@
 using Doerly.Domain.Models;
-using Doerly.Module.Payments.Contracts;
+using Doerly.Module.Payments.DataTransferObjects;
 
 namespace Doerly.Module.Payments.BaseClient;
 
 public interface IBasePaymentClient
 {
-    Task<HandlerResult<BaseCheckoutResponse>> Checkout(CheckoutModel checkoutModel);
+    Task<OperationResult<BaseCheckoutResponse>> Checkout(CheckoutModel checkoutModel);
 
     bool ValidateSignature(string data, string signature);
 

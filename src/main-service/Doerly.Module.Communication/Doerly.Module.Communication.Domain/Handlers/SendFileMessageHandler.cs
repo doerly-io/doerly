@@ -16,25 +16,25 @@ public class SendFileMessageHandler(CommunicationDbContext dbContext,
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
-    public async Task<HandlerResult<int>> HandleAsync(int conversationId, int userId, IFormFile file)
+    public async Task<OperationResult<int>> HandleAsync(int conversationId, int userId, IFormFile file)
     {
         var conversation = await _dbContext.Conversations
             .FirstOrDefaultAsync(c => c.Id == conversationId);
         
         if (conversation == null)
         {
-            return HandlerResult.Failure<int>(Resources.Get("Communication.ConversationNotFound"));
+            return OperationResult.Failure<int>(Resources.Get("Communication.ConversationNotFound"));
         }
         
         if (conversation.InitiatorId != userId && conversation.RecipientId != userId)
         {
-            return HandlerResult.Failure<int>(Resources.Get("Communication.UnauthorizedSender"));
+            return OperationResult.Failure<int>(Resources.Get("Communication.UnauthorizedSender"));
         }
         
         var fileBytes = await FileHelper.GetFormFileBytesAsync(file);
         if (!FileHelper.IsValidFile(file.FileName, fileBytes, CommunicationConstants.FileConstants.SupportedFileExtensions, CommunicationConstants.FileConstants.MaxFileSizeInBytes))
         {
-            return HandlerResult.Failure<int>(Resources.Get("InvalidDocument"));
+            return OperationResult.Failure<int>(Resources.Get("InvalidDocument"));
         }
     
         //TODO: change filePath to save file name
@@ -57,6 +57,6 @@ public class SendFileMessageHandler(CommunicationDbContext dbContext,
         _dbContext.Messages.Add(message);
         await _dbContext.SaveChangesAsync();
         
-        return HandlerResult.Success(message.Id);
+        return OperationResult.Success(message.Id);
     }
 }

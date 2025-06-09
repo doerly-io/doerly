@@ -3,7 +3,7 @@ using Doerly.Domain.Models;
 using Doerly.Extensions;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Entities;
-using Doerly.Module.Order.Contracts.Dtos;
+using Doerly.Module.Order.DataTransferObjects.Dtos;
 
 using Microsoft.EntityFrameworkCore;
 using Doerly.Proxy.Profile;
@@ -23,7 +23,7 @@ public class GetExecutionProposalsWithPaginationHandler : BaseOrderHandler
         _doerlyRequestContext = doerlyRequestContext;
     }
 
-    public async Task<HandlerResult<GetExecutionProposalsWithPaginationResponse>> HandleAsync(GetExecutionProposalsWithPaginationRequest dto)
+    public async Task<OperationResult<GetExecutionProposalsWithPaginationResponse>> HandleAsync(GetExecutionProposalsWithPaginationRequest dto)
     {
         var predicates = new List<Expression<Func<ExecutionProposal, bool>>>();
 
@@ -90,6 +90,6 @@ public class GetExecutionProposalsWithPaginationHandler : BaseOrderHandler
             ExecutionProposals = executionProposals
         };
 
-        return HandlerResult.Success(result);
+        return OperationResult.Success(result);
     }
 }

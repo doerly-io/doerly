@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Doerly.Domain.Models;
+﻿using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Module.Common.DataAccess.Address;
-using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Module.Order.Domain.Handlers;
-using Doerly.Module.Order.Domain.Handlers.Order;
-using Doerly.Module.Profile.Contracts.Dtos;
-using Doerly.Proxy.Payment;
+using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Proxy.Profile;
 
 using Moq;
@@ -48,7 +39,7 @@ public class GetOrderByIdHandlerTests : BaseOrderTests
 
         _profileModuleProxyMock
             .Setup(x => x.GetProfileAsync(order.CustomerId))
-            .ReturnsAsync(HandlerResult.Success(profileDto));
+            .ReturnsAsync(OperationResult.Success(profileDto));
 
         // Act
         var result = await _handler.HandleAsync(order.Id);
