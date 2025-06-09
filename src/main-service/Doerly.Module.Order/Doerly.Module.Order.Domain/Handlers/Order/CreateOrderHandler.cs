@@ -2,23 +2,14 @@
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Enums;
 using Doerly.Module.Order.Contracts.Dtos;
-using Doerly.Module.Payments.Api.ModuleWrapper;
-using Doerly.Module.Payments.Contracts;
-using Doerly.Module.Payments.Enums;
-
 using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
-using Doerly.Localization;
 using Doerly.Domain;
 using Doerly.FileRepository;
 using Microsoft.AspNetCore.Http;
-using Doerly.Module.Profile.Domain.Constants;
 using Doerly.Module.Order.DataAccess.Entities;
-using Doerly.Module.Order.Contracts.Messages;
 using Doerly.Messaging;
-using Doerly.Domain.Helpers;
 using Doerly.Domain.Exceptions;
 using Doerly.Proxy.Profile;
-using Doerly.Module.Profile.Contracts.Dtos;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 

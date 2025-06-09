@@ -1,6 +1,7 @@
+using Doerly.DataTransferObjects;
 using Doerly.DataTransferObjects.Pagination;
-using Doerly.Module.Order.Api.ModuleWrapper;
 using Doerly.Module.Order.Contracts.Dtos;
+using Doerly.Module.Order.Contracts.Dtos.Responses;
 
 namespace Doerly.Proxy.Orders;
 
@@ -18,5 +19,11 @@ public class OrdersModuleProxy : IOrdersModuleProxy
     {
         var ordersResponse = await _ordersModuleWrapper.GetOrdersWithPaginationAsync(request);
         return ordersResponse;
+    }
+
+    public async Task<CursorPaginationResponse<OrderFeedbackResponse>> HandleAsync(int userId, CursorPaginationRequest request)
+    {
+        var feedbacksResponse = await _ordersModuleWrapper.HandleAsync(userId, request);
+        return feedbacksResponse;
     }
 }

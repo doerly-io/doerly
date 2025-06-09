@@ -2,14 +2,12 @@ using Doerly.DataTransferObjects;
 using Doerly.DataTransferObjects.Pagination;
 using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Module.Order.Contracts.Dtos.Responses;
-using Doerly.Proxy.BaseProxy;
 
 namespace Doerly.Proxy.Orders;
 
-public interface IOrdersModuleProxy : IModuleProxy
+public interface IOrdersModuleWrapper
 {
-    Task<BasePaginationResponse<GetOrdersWithPaginationAndFilterResponse>> GetOrdersWithPaginationAsync(
-        GetOrderWithFilterAndPaginationRequest request);
+    Task<BasePaginationResponse<GetOrdersWithPaginationAndFilterResponse>> GetOrdersWithPaginationAsync(GetOrderWithFilterAndPaginationRequest request);
 
     Task<CursorPaginationResponse<OrderFeedbackResponse>> HandleAsync(int userId, CursorPaginationRequest request);
 }

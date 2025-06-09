@@ -6,6 +6,7 @@ using Doerly.Messaging;
 using Doerly.Module.Profile.Api.ModuleWrapper;
 using Doerly.Module.Profile.Domain;
 using Doerly.Module.Profile.Domain.Constants;
+using Doerly.Proxy.Profile;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,6 +1,5 @@
 using Doerly.DataTransferObjects;
 using Doerly.Domain.Models;
-using Doerly.Module.Payments.Api.ModuleWrapper;
 using Doerly.Module.Payments.Contracts;
 using Doerly.Module.Payments.Contracts.Responses;
 

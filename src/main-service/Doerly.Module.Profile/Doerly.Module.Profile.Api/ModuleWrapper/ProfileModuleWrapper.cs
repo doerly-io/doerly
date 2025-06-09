@@ -2,17 +2,10 @@ using Doerly.Domain.Factories;
 using Doerly.Domain.Models;
 using Doerly.Module.Profile.Contracts.Dtos;
 using Doerly.Module.Profile.Domain.Handlers;
+using Doerly.Proxy.Profile;
 
 namespace Doerly.Module.Profile.Api.ModuleWrapper;
-
-public interface IProfileModuleWrapper
-{
-    Task<HandlerResult<ProfileDto>> GetProfileAsync(int userId);
-    Task<HandlerResult<IEnumerable<ProfileDto>>> GetProfilesAsync(int[] userIds);
-    
-    Task<IEnumerable<ProfileShortInfoWithAvatarDto>> GetProfilesShortInfoWithAvatarAsync(IEnumerable<int> userIds);
-}
-    
+   
 public class ProfileModuleWrapper : IProfileModuleWrapper
 {
     private readonly IHandlerFactory _handlerFactory;

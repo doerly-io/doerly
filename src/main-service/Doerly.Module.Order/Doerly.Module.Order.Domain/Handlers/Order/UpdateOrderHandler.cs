@@ -6,8 +6,6 @@ using Doerly.Localization;
 using Doerly.Module.Order.Contracts.Dtos;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Entities;
-using Doerly.Module.Profile.Contracts.Dtos;
-using Doerly.Module.Profile.Domain.Constants;
 using Doerly.Proxy.Profile;
 
 using Microsoft.AspNetCore.Http;

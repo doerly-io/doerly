@@ -1,5 +1,3 @@
-using Doerly.Module.Catalog.Api.ModuleWrapper;
-
 namespace Doerly.Proxy.Catalog;
 
 public class CatalogModuleProxy : ICatalogModuleProxy
@@ -10,7 +8,5 @@ public class CatalogModuleProxy : ICatalogModuleProxy
     {
         _catalogModuleWrapper = catalogModuleWrapper;
     }
-
-    
     
 }

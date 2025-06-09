@@ -1,5 +1,4 @@
 using Doerly.Domain.Models;
-using Doerly.Module.Profile.Api.ModuleWrapper;
 using Doerly.Module.Profile.Contracts.Dtos;
 
 namespace Doerly.Proxy.Profile;

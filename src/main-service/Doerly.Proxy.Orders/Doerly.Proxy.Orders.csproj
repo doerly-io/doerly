@@ -3,11 +3,12 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+        <Nullable>annotations</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj" />
+      <ProjectReference Include="..\Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Order\Doerly.Module.Order.Contracts\Doerly.Module.Order.Contracts.csproj" />
       <ProjectReference Include="..\Doerly.Proxy.BaseProxy\Doerly.Proxy.BaseProxy.csproj" />
     </ItemGroup>
 

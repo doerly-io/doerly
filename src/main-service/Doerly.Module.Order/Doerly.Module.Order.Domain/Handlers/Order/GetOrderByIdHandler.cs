@@ -53,7 +53,7 @@ public class GetOrderByIdHandler : BaseOrderHandler
                 {
                     UserProfile = new ProfileInfo
                     {
-                        Id = order.Feedback != null ? order.Feedback.ReviewerUserId : -1,
+                        UserId = order.Feedback != null ? order.Feedback.ReviewerUserId : -1,
                     },
                     FeedbackId = order.Feedback.Id,
                     Comment = order.Feedback.Comment,
@@ -78,7 +78,7 @@ public class GetOrderByIdHandler : BaseOrderHandler
         await SetOrderFileUrls(order.ExistingFiles);
 
         var profileIds = new List<int>(2) { order.CustomerId };
-        if (order.Feedback?.UserProfile is { Id: > 0 })
+        if (order.Feedback?.UserProfile is { UserId: > 0 })
             profileIds.Add(order.Feedback.UserProfile.Id);
 
         var profiles = await _profileModuleProxy.GetProfilesShortInfoWithAvatarAsync(profileIds);
@@ -93,7 +93,7 @@ public class GetOrderByIdHandler : BaseOrderHandler
         };
 
         var reviewerProfile = profiles
-            .FirstOrDefault(x => x.UserId == order.Feedback?.UserProfile.Id);
+            .FirstOrDefault(x => x.UserId == order.Feedback?.UserProfile.UserId);
         if (order.Feedback != null && reviewerProfile != null)
         {
             order.Feedback.UserProfile = new ProfileInfo

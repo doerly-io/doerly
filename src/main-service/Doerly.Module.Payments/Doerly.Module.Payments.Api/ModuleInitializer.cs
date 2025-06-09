@@ -8,6 +8,7 @@ using Doerly.Module.Payments.Client.LiqPay;
 using Doerly.Module.Payments.DataAccess;
 using Doerly.Module.Payments.Domain.Adapters;
 using Doerly.Module.Payments.Enums;
+using Doerly.Proxy.Payment;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

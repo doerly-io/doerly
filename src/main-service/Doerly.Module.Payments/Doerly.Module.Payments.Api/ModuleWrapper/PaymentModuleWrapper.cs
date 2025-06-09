@@ -8,17 +8,9 @@ using Doerly.Module.Payments.Contracts;
 using Doerly.Module.Payments.Contracts.Responses;
 using Doerly.Module.Payments.Domain.Handlers;
 using Doerly.Module.Payments.Domain.Handlers.Metrics;
+using Doerly.Proxy.Payment;
 
 namespace Doerly.Module.Payments.Api.ModuleWrapper;
-
-public interface IPaymentModuleWrapper
-{
-    Task<HandlerResult<BaseCheckoutResponse>> CheckoutAsync(CheckoutRequest checkoutRequest);
-
-    Task<CursorPaginationResponse<PaymentHistoryItemResponse>> GetUserPayments(int userId, CursorPaginationRequest request);
-    
-    Task<PaymentStatisticsDto> GetPaymentStatisticsAsync();
-}
 
 public class PaymentModuleWrapper : IPaymentModuleWrapper
 {
