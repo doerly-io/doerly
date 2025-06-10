@@ -26,7 +26,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.Azure;
 using Microsoft.IdentityModel.Tokens;
-
+using Prometheus;
 using SendGrid.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -247,6 +247,7 @@ app.UseRequestLocalization(options =>
 
 app.UseWebSockets();
 app.UseRouting();
+app.UseHttpMetrics();
 
 app.UseCors(policy => policy
     .WithOrigins(frontendSettings.FrontendUrls)
@@ -261,6 +262,7 @@ app.UseMiddleware<RequestContextMiddleware>();
 app.UseExceptionHandler(options => { });
 
 app.MapControllers();
+app.MapMetrics();
 
 var moduleInitializers = app.Services.GetServices<IModuleInitializer>();
 foreach (var moduleInitializer in moduleInitializers)
