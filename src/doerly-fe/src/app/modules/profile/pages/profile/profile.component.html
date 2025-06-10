@@ -998,6 +998,117 @@
           [maxFractionDigits]="2"
         ></p-inputNumber>
       </div>
+
+      <!-- Filter values -->
+      <div formGroupName="filterValues" class="d-flex flex-column gap-3">
+        <div *ngFor="let filter of categoryFilters" class="d-flex flex-column gap-2">
+          <label [for]="'filter-' + filter.id" class="fw-semibold">{{ filter.name }}</label>
+          
+          <!-- Checkbox filter -->
+          <div *ngIf="filter.type === 1" class="d-flex flex-column gap-2">
+            <div class="d-flex gap-2 mb-2">
+              <input
+                type="text"
+                pInputText
+                [placeholder]="'common.add.value' | translate"
+                #newCheckboxValue
+                (keyup.enter)="onAddCheckboxValue(filter.id, newCheckboxValue.value); newCheckboxValue.value = ''"
+              />
+              <button
+                pButton
+                type="button"
+                class="p-button-primary"
+                (click)="onAddCheckboxValue(filter.id, newCheckboxValue.value); newCheckboxValue.value = ''"
+              >
+                <i class="pi pi-plus"></i>
+              </button>
+            </div>
+            <div *ngFor="let value of getFilterValues(filter.id)" class="d-flex align-items-center">
+              <p-checkbox
+                [id]="'filter-' + filter.id + '-' + value"
+                [formControlName]="filter.id.toString()"
+                [value]="value"
+                [binary]="false"
+                (onChange)="onFilterValueChange($event, filter.id)"
+              ></p-checkbox>
+              <label [for]="'filter-' + filter.id + '-' + value" class="ms-2">{{ value }}</label>
+              <button
+                pButton
+                type="button"
+                class="p-button-text p-button-rounded"
+                (click)="onRemoveCheckboxValue(filter.id, value)"
+              >
+                <i class="pi pi-times"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Dropdown filter -->
+          <div *ngIf="filter.type === 2" class="d-flex flex-column gap-2">
+            <div class="d-flex gap-2 mb-2">
+              <input
+                type="text"
+                pInputText
+                [placeholder]="'common.add.value' | translate"
+                #newDropdownValue
+                (keyup.enter)="onAddDropdownValue(filter.id, newDropdownValue.value); newDropdownValue.value = ''"
+              />
+              <button
+                pButton
+                type="button"
+                class="p-button-primary"
+                (click)="onAddDropdownValue(filter.id, newDropdownValue.value); newDropdownValue.value = ''"
+              >
+                <i class="pi pi-plus"></i>
+              </button>
+            </div>
+            <div *ngFor="let value of getFilterValues(filter.id)" class="d-flex align-items-center">
+              <p-checkbox
+                [id]="'filter-' + filter.id + '-' + value"
+                [formControlName]="filter.id.toString()"
+                [value]="value"
+                [binary]="false"
+                (onChange)="onFilterValueChange($event, filter.id)"
+              ></p-checkbox>
+              <label [for]="'filter-' + filter.id + '-' + value" class="ms-2">{{ value }}</label>
+              <button
+                pButton
+                type="button"
+                class="p-button-text p-button-rounded"
+                (click)="onRemoveDropdownValue(filter.id, value)"
+              >
+                <i class="pi pi-times"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Numeric filter -->
+          <p-inputNumber
+            *ngIf="filter.type === 3"
+            [id]="'filter-' + filter.id"
+            [formControlName]="filter.id.toString()"
+            [style]="{'width':'100%'}"
+            mode="decimal"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [min]="0"
+            (onInput)="onFilterValueChange($event, filter.id)"
+          ></p-inputNumber>
+
+          <!-- Radio filter -->
+          <div *ngIf="filter.type === 4" class="d-flex flex-column gap-2">
+            <div class="d-flex align-items-center">
+              <p-checkbox
+                [id]="'filter-' + filter.id"
+                [formControlName]="filter.id.toString()"
+                [binary]="true"
+                (onChange)="onFilterValueChange($event, filter.id)"
+              ></p-checkbox>
+              <label [for]="'filter-' + filter.id" class="ms-2">{{ filter.name }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
     </form>
 
     <ng-template pTemplate="footer">

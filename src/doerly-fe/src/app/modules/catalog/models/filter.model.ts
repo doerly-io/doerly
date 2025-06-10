@@ -1,4 +1,4 @@
-export enum FilterType {
+export enum EFilterType {
     Checkbox = 1,
     Dropdown = 2,
     Price = 3,
@@ -8,13 +8,18 @@ export enum FilterType {
 export interface IFilter {
     id: number;
     name: string;
-    type: FilterType;
-    options?: string[];
+    type: EFilterType;
+    options: string[] | null;
     categoryId: number;
+}
+
+export interface IFilterValue {
+    filterId: number;
+    value: string;
 }
 
 export interface IFilterResponse {
     value: IFilter[];
     isSuccess: boolean;
-    errorMessage?: string;
+    errorMessage: string;
 } 

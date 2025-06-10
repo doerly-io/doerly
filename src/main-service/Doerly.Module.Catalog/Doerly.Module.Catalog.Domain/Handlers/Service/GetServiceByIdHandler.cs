@@ -1,51 +1,55 @@
-﻿using Doerly.Domain.Models;
+﻿using Doerly.Domain;
+using Doerly.Domain.Models;
 using Doerly.Localization;
 using Doerly.Module.Catalog.Contracts.Responses;
 using Doerly.Module.Catalog.DataAccess;
+using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Service
 {
     public class GetServiceByIdHandler : BaseCatalogHandler
     {
-        public GetServiceByIdHandler(CatalogDbContext dbContext) : base(dbContext)
+        private readonly IProfileModuleProxy _profileModuleProxy;
+        public GetServiceByIdHandler(CatalogDbContext dbContext, IProfileModuleProxy profileModuleProxy) : base(dbContext)
         {
+            _profileModuleProxy = profileModuleProxy;
         }
 
         public async Task<OperationResult<GetServiceResponse>> HandleAsync(int id)
         {
-            var serviceDto = await DbContext.Services
-                .Where(s => s.Id == id)
-                .Select(s => new
-                {
-                    s.Id,
-                    s.Name,
-                    s.Description,
-                    s.CategoryId,
-                    CategoryName = s.Category.Name,
-                    s.UserId,
-                    s.Price,
-                    s.IsDeleted,
-                    s.IsEnabled
-                })
-                .FirstOrDefaultAsync();
+            var service = await DbContext.Services
+                .Include(s => s.FilterValues)
+                .ThenInclude(fv => fv.Filter)
+                .Include(s => s.Category)
+                .FirstOrDefaultAsync(s => s.Id == id);
 
-            if (serviceDto == null)
+            if (service == null)
                 return OperationResult.Failure<GetServiceResponse>(Resources.Get("ServiceNotFound"));
 
-            return OperationResult.Success(new GetServiceResponse
-            {
-                Id = serviceDto.Id,
-                Name = serviceDto.Name,
-                Description = serviceDto.Description,
-                CategoryId = serviceDto.CategoryId,
-                CategoryName = serviceDto.CategoryName,
-                UserId = serviceDto.UserId,
-                Price = serviceDto.Price,
-                IsDeleted = serviceDto.IsDeleted,
-                IsEnabled = serviceDto.IsEnabled
-            });
-        }
+            var userProfile = await _profileModuleProxy.GetProfileAsync(service.UserId);
 
+            var response = new GetServiceResponse
+            {
+                Id = service.Id,
+                Name = service.Name,
+                Description = service.Description,
+                CategoryId = service.Category.Id,
+                CategoryName = service.Category.Name,
+                UserId = service.UserId,
+                User = userProfile.Value,
+                Price = service.Price,
+                IsDeleted = service.IsDeleted,
+                IsEnabled = service.IsEnabled,
+                FilterValues = service.FilterValues.Select(fv => new FilterValueResponse
+                {
+                    FilterId = fv.FilterId,
+                    FilterName = fv.Filter.Name,
+                    Value = fv.Value
+                }).ToList()
+            };
+
+            return OperationResult.Success(response);
+        }
     }
 }

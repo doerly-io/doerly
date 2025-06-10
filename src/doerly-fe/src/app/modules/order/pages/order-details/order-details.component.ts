@@ -40,7 +40,6 @@ import {
     Tag,
     AvatarModule,
     DividerModule,
-    TooltipModule,
     NgOptimizedImage,
     ImageModule,
     GalleriaModule,
