@@ -83,4 +83,11 @@ public class OrderController : BaseApiController
 
         return BadRequest(result);
     }
+
+    [HttpDelete("{orderId}/feedback/{feedbackId}")]
+    public async Task<IActionResult> DeleteFeedback(int orderId, int feedbackId)
+    {
+        await ResolveHandler<DeleteOrderFeedbackHandler>().HandleAsync(orderId, feedbackId);
+        return Ok();
+    }
 }

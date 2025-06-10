@@ -77,4 +77,8 @@ export class OrderService {
   updateOrderFeedback(orderId: number, feedbackId: number, createFeedbackRequest: CreateFeedbackRequest): Observable<BaseApiResponse<void>> {
     return this.httpClient.put<BaseApiResponse<void>>(`${this.baseUrl}/${orderId}/feedback/${feedbackId}`, createFeedbackRequest);
   }
+
+  deleteOrderFeedback (orderId: number, feedbackId: number): Observable<BaseApiResponse<void>> {
+    return this.httpClient.delete<BaseApiResponse<void>>(`${this.baseUrl}/${orderId}/feedback/${feedbackId}`);
+  }
 }

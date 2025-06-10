@@ -16,6 +16,7 @@ public class UpdatedOrderFeedbackHandler : BaseOrderHandler
         await DbContext.OrderFeedbacks.Where(x => x.Id == feedbackId)
             .ExecuteUpdateAsync(x => x
                 .SetProperty(y => y.Comment, request.Comment)
+                .SetProperty(b => b.LastModifiedDate, DateTime.UtcNow)
                 .SetProperty(y => y.Rating, request.Rating));
         
         return OperationResult.Success();

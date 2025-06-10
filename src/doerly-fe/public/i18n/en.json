@@ -414,8 +414,13 @@
   },
   "feedback": {
     "title": "Feedback",
+    "history": "Feedback history",
+    "nohistory": "No feedback history found",
     "submit": "Submit Feedback",
-    "feedback_updated": "Feedback has been updated successfully"
+    "delete": "Delete Feedback",
+    "feedback_created": "Feedback has been created successfully",
+    "feedback_updated": "Feedback has been updated successfully",
+    "feedback_deleted": "Feedback has been deleted successfully"
   },
   "payments": {
     "status": {
@@ -492,7 +497,9 @@
     "categories": "Categories",
     "control": {
       "unset": "Unset"
-    }
+    },
+    "edited": "Ed.",
+    "loadMore": "Load more"
   },
   "pages": {
     "profile": {

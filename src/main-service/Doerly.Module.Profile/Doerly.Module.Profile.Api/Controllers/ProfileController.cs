@@ -27,7 +27,7 @@ public class ProfileController : BaseApiController
 
         return Ok(result);
     }
-    
+
     [HttpGet]
     [ProducesResponseType<OperationResult<IEnumerable<ProfileDto>>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProfiles()
@@ -35,7 +35,7 @@ public class ProfileController : BaseApiController
         var result = await ResolveHandler<GetAllShortProfilesHandler>().HandleAsync();
         return Ok(result);
     }
-    
+
     [HttpPost("_search")]
     [ProducesResponseType<OperationResult<PageDto<ProfileDto>>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> SearchProfiles(ProfileQueryDto queryDto)
@@ -83,10 +83,10 @@ public class ProfileController : BaseApiController
         var result = await ResolveHandler<UploadProfileImageHandler>().HandleAsync(userId, GetFormFileBytes(imageFile));
         if (!result.IsSuccess)
             return BadRequest(result);
-        
+
         return Ok(result);
     }
-    
+
     [HttpDelete("{userId:int}/image")]
     [ProducesResponseType<OperationResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteProfileImage([FromRoute] int userId)
@@ -94,7 +94,7 @@ public class ProfileController : BaseApiController
         var result = await ResolveHandler<DeleteProfileImageHandler>().HandleAsync(userId);
         return Ok(result);
     }
-    
+
     [HttpPost("{userId:int}/cv")]
     [ProducesResponseType<OperationResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> UploadProfileCv([FromRoute] int userId, [FromForm] IFormFile cvFile)
@@ -102,10 +102,10 @@ public class ProfileController : BaseApiController
         var result = await ResolveHandler<UploadProfileCvHandler>().HandleAsync(userId, GetFormFileBytes(cvFile));
         if (!result.IsSuccess)
             return BadRequest(result);
-        
+
         return Ok(result);
     }
-    
+
     [HttpDelete("{userId:int}/cv")]
     [ProducesResponseType<OperationResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteProfileCv([FromRoute] int userId)
@@ -113,7 +113,7 @@ public class ProfileController : BaseApiController
         var result = await ResolveHandler<DeleteProfileCvHandler>().HandleAsync(userId);
         return Ok(result);
     }
-    
+
     [HttpPost("{userId:int}/is-enabled")]
     public async Task<IActionResult> SetIsEnabled([FromRoute] int userId, [FromBody] EnableUserDto dto)
     {
@@ -123,19 +123,18 @@ public class ProfileController : BaseApiController
 
         return Ok(result);
     }
-    
+
     [HttpGet("payments-history")]
     public async Task<IActionResult> GetUserPayments([FromQuery] CursorPaginationRequest request)
     {
         var result = await ResolveHandler<SelectUserPaymentsHistory>().HandleAsync(request);
         return Ok(result);
     }
-    
-    // [HttpGet("{userId:int}/feedbacks")]
-    // public async Task<IActionResult> GetUserFeedbacks([FromRoute] int userId, [FromQuery] CursorPaginationRequest request)
-    // {
-    //     var result = await ResolveHandler<SelectUserFeedbacksHandler>().GetFeedbacksAsync(userId, request);
-    //     return Ok(result);
-    // }
-    
+
+    [HttpGet("{userId:int}/feedbacks")]
+    public async Task<IActionResult> GetUserFeedbacks([FromRoute] int userId, [FromQuery] CursorPaginationRequest request)
+    {
+        var result = await ResolveHandler<SelectUserFeedbacksHandler>().HandleAsync(userId, request);
+        return Ok(result);
+    }
 }

@@ -22,7 +22,7 @@ public class SelectUserFeedbacksHandler : BaseOrderHandler
     {
         var query = DbContext.OrderFeedbacks
             .AsNoTracking()
-            .Where(p => p.ReviewerUserId == userId && p.Order.Status == EOrderStatus.Completed);
+            .Where(p => p.Order.ExecutorId == userId && p.Order.Status == EOrderStatus.Completed);
 
         var cursor = Cursor.Decode(request.Cursor);
         if (cursor.LastId != null)
@@ -39,14 +39,14 @@ public class SelectUserFeedbacksHandler : BaseOrderHandler
                 UpdatedAt = x.LastModifiedDate == x.DateCreated ? null : x.LastModifiedDate,
                 UserProfile = new ProfileInfo
                 {
-                    UserId = x.ReviewerUserId
+                    UserId = x.Order.CustomerId
                 }
             })
             .Take(request.PageSize + 1)
             .ToListAsync();
 
         var profiles = await _profileModuleProxy.GetProfilesShortInfoWithAvatarAsync(
-            feedbacks.Select(x => x.UserProfile.Id));
+            feedbacks.Select(x => x.UserProfile.UserId));
 
         foreach (var feedback in feedbacks)
         {

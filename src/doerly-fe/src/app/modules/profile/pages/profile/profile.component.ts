@@ -57,6 +57,7 @@ import { IService, ICreateServiceRequest, IUpdateServiceRequest, IFilterValueReq
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CatalogService } from '../../../catalog/services/catalog.service';
 import { IFilter, EFilterType } from '../../../catalog/models/filter.model';
+import {FeedbackHistoryComponent} from 'app/modules/profile/components/feedback-history/feedback-history.component';
 
 @Component({
   selector: 'app-profile',
@@ -87,7 +88,8 @@ import { IFilter, EFilterType } from '../../../catalog/models/filter.model';
     SendMessageModalComponent,
     CheckboxModule,
     RadioButtonModule,
-    MultiSelectModule
+    MultiSelectModule,
+    FeedbackHistoryComponent,
   ],
   providers: [MessageService],
   templateUrl: './profile.component.html',
@@ -281,7 +283,7 @@ export class ProfileComponent implements OnInit {
     if (!Array.isArray(categories)) {
       return [];
     }
-    
+
     const flattenCategories = (cats: ICategory[], parentPath: string = ''): any[] => {
       return cats.reduce((acc: any[], category) => {
         const currentPath = parentPath ? `${parentPath} > ${category.name}` : category.name;
@@ -290,11 +292,11 @@ export class ProfileComponent implements OnInit {
           label: currentPath,
           data: category
         });
-        
+
         if (category.children && category.children.length > 0) {
           acc.push(...flattenCategories(category.children, currentPath));
         }
-        
+
         return acc;
       }, []);
     };
@@ -740,12 +742,12 @@ export class ProfileComponent implements OnInit {
       categoryId: service.categoryId?.toString(),
       price: service.price,
     });
-    
+
     // Load category filters and set values
     if (service.categoryId) {
       this.loadCategoryFilters(service.categoryId);
     }
-    
+
     // Set filter values from service
     if (service.filterValues) {
       service.filterValues.forEach(filterValue => {
@@ -755,7 +757,7 @@ export class ProfileComponent implements OnInit {
         }
       });
     }
-    
+
     this.isServiceDialogVisible = true;
   }
 
@@ -816,7 +818,7 @@ export class ProfileComponent implements OnInit {
 
   private updateFilterFormControls(): void {
     const filterValuesGroup = this.serviceForm.get('filterValues') as FormGroup;
-    
+
     // Clear existing controls
     Object.keys(filterValuesGroup.controls).forEach(key => {
       filterValuesGroup.removeControl(key);
@@ -837,7 +839,7 @@ export class ProfileComponent implements OnInit {
       this.editingService.filterValues.forEach(filterValue => {
         const key = filterValue.filterId.toString();
         const filter = this.categoryFilters.find(f => f.id === filterValue.filterId);
-        
+
         if (filter) {
           if (filter.type === 1 || filter.type === 2) {
             // For checkbox and dropdown - add to array
@@ -954,7 +956,7 @@ export class ProfileComponent implements OnInit {
     if (this.serviceForm.valid) {
       const formValue = this.serviceForm.value;
       const filterValues: IFilterValueRequest[] = [];
-      
+
       // Convert filter values to the required format
       Object.entries(formValue.filterValues).forEach(([key, value]) => {
         const filter = this.categoryFilters.find(f => f.id.toString() === key);

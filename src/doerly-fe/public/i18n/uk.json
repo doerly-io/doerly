@@ -413,8 +413,13 @@
   },
   "feedback" : {
     "title": "Відгук",
+    "history": "Історія відгуків",
+    "nohistory": "Відгуків ще немає",
     "submit" : "Залишити відгук",
-    "feedback_updated": "Відгук успішно оновлено"
+    "delete": "Видалити відгук",
+    "feedback_created": "Відгук успішно створено",
+    "feedback_updated": "Відгук успішно оновлено",
+    "feedback_deleted": "Відгук успішно видалено"
   },
   "payments": {
     "status": {
@@ -491,7 +496,9 @@
     "categories": "Категорії",
     "control": {
       "unset": "Не встановлено"
-    }
+    },
+    "edited": "Ред.",
+    "loadMore": "Завантажити більше"
   },
   "pages": {
     "profile": {

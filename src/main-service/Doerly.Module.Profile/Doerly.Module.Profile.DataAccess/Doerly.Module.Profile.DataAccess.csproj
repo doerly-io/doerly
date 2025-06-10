@@ -7,16 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Doerly.DataAccess\Doerly.DataAccess.csproj" />
-      <ProjectReference Include="..\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj" />
+        <ProjectReference Include="..\..\Doerly.DataAccess\Doerly.DataAccess.csproj"/>
+        <ProjectReference Include="..\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="Migrations\ProfileDbContextModelSnapshot.cs" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.5"/>
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Migrations\" />
-    </ItemGroup>
-
+    
 </Project>
