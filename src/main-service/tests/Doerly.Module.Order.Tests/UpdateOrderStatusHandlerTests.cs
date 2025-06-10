@@ -25,7 +25,7 @@ public class UpdateOrderStatusHandlerTests : BaseOrderTests
     }
 
     [Fact]
-    public async Task HandleAsync_ShouldUpdateStatus_WhenOrderExists()
+    public async Task HandleAsync_ShouldUpdateStatus_WhenUserIsCustomer()
     {
         var order = await AddTestOrderAsync();
         order.PaymentKind = EPaymentKind.Cash;
@@ -45,6 +45,68 @@ public class UpdateOrderStatusHandlerTests : BaseOrderTests
 
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
+        order = await OrderDbContext.Orders.FindAsync(order.Id);
+        Assert.Equal(EOrderStatus.AwaitingConfirmation, order.Status);
+    }
+
+    [Fact]
+    public async Task HandleAsync_ShouldUpdateStatus_WhenUserIsExecutor()
+    {
+        var order = await AddTestOrderAsync();
+        order.PaymentKind = EPaymentKind.Online;
+        order.Status = EOrderStatus.InProgress;
+        order.ExecutorId = 1;
+
+        await OrderDbContext.SaveChangesAsync();
+
+        _doerlyRequestContextMock.SetupProperty(x => x.UserId, order.ExecutorId);
+
+        var request = new UpdateOrderStatusRequest
+        {
+            Status = EOrderStatus.Completed
+        };
+
+        var result = await _handler.HandleAsync(order.Id, request);
+
+        Assert.True(result.IsSuccess);
+        Assert.NotNull(result.Value);
+        order = await OrderDbContext.Orders.FindAsync(order.Id);
+        Assert.Equal(EOrderStatus.AwaitingPayment, order.Status);
+    }
+
+    [Fact]
+    public async Task HandleAsync_ShouldUpdateStatus_WhenBothConfirmedExecution()
+    {
+        var order = await AddTestOrderAsync();
+        order.PaymentKind = EPaymentKind.Cash;
+        order.Status = EOrderStatus.InProgress;
+        order.ExecutorId = 1;
+
+        await OrderDbContext.SaveChangesAsync();
+
+        _doerlyRequestContextMock.SetupProperty(x => x.UserId, order.CustomerId);
+
+        var request = new UpdateOrderStatusRequest
+        {
+            Status = EOrderStatus.Completed
+        };
+
+        await _handler.HandleAsync(order.Id, request);
+
+        _doerlyRequestContextMock.SetupProperty(x => x.UserId, order.ExecutorId);
+
+        request = new UpdateOrderStatusRequest
+        {
+            Status = EOrderStatus.Completed
+        };
+
+        var result = await _handler.HandleAsync(order.Id, request);
+
+        Assert.True(result.IsSuccess);
+        Assert.NotNull(result.Value);
+        order = await OrderDbContext.Orders.FindAsync(order.Id);
+        Assert.Equal(EOrderStatus.Completed, order.Status);
+        Assert.NotNull(order.ExecutionDate);
     }
 
     [Fact]

@@ -34,8 +34,9 @@ public class BaseOrderTests : IClassFixture<PostgresTestContainerFixture>
             PaymentKind = EPaymentKind.Online,
             DueDate = DateTime.UtcNow.AddDays(7),
             IsPriceNegotiable = false,
-            CustomerId = 123,
-            Status = EOrderStatus.Placed,
+            UseProfileAddress = false,
+            RegionId = 1,
+            CityId = 1
         };
 
         OrderDbContext.Orders.Add(order);

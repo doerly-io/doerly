@@ -1,10 +1,13 @@
 ﻿using Doerly.Domain;
 using Doerly.Domain.Exceptions;
+using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Messaging;
+using Doerly.Module.Order.DataAccess.Entities;
 using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.Domain.Handlers;
 using Doerly.Module.Order.Enums;
+using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Proxy.Profile;
 
 using Microsoft.AspNetCore.Http;
@@ -47,7 +50,10 @@ public class CreateOrderHandlerTests : BaseOrderTests
             Price = 100.50m,
             PaymentKind = EPaymentKind.Online,
             DueDate = DateTime.UtcNow.AddDays(7),
-            IsPriceNegotiable = false
+            IsPriceNegotiable = false,
+            UseProfileAddress = false,
+            RegionId = 1,
+            CityId = 1
         };
 
         var files = new List<IFormFile>();
@@ -59,6 +65,31 @@ public class CreateOrderHandlerTests : BaseOrderTests
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
         Assert.True(result.Value.Id > 0);
+    }
+
+    [Fact]
+    public async Task HandleAsync_ShouldThrowException_WhenAddressIsEmpty()
+    {
+        // Arrange
+        var userId = 123;
+        _doerlyRequestContextMock.SetupProperty(x => x.UserId, userId);
+
+        var request = new CreateOrderRequest
+        {
+            CategoryId = 1,
+            Name = "Test Order",
+            Description = "This is a test order description.",
+            Price = 100.50m,
+            PaymentKind = EPaymentKind.Online,
+            DueDate = DateTime.UtcNow.AddDays(7),
+            IsPriceNegotiable = false,
+            UseProfileAddress = true
+        };
+
+        var files = new List<IFormFile>();
+
+        // Act & Assert
+        await Assert.ThrowsAsync<DoerlyException>(() => _handler.HandleAsync(request, files));
     }
 
     [Fact]
