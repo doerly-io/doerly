@@ -74,6 +74,7 @@
     <Project Path="Doerly.Notification.EmailSender\Doerly.Notification.EmailSender.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="Doerly.Module.Profile.Tests\Doerly.Module.Profile.Tests.csproj" Type="Classic C#" />
     <Project Path="tests\Doerly.EndToEndTests\Doerly.EndToEndTests.csproj" Type="Classic C#" />
     <Project Path="tests\Doerly.Module.Authorization.Tests\Doerly.Module.Authorization.Tests.csproj" Type="Classic C#" />
     <Project Path="tests\Doerly.Module.Communication.Tests\Doerly.Module.Communication.Tests.csproj" Type="Classic C#" />
