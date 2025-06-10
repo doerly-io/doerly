@@ -26,6 +26,11 @@ public class SendMessageHandler(CommunicationDbContext dbContext) : BaseCommunic
         {
             return OperationResult.Failure<int>(Resources.Get("Communication.UnauthorizedSender"));
         }
+        
+        if (string.IsNullOrWhiteSpace(dto.MessageContent))
+        {
+            return OperationResult.Failure<int>(Resources.Get("Communication.MessageContentCannotBeEmpty"));
+        }
     
         var message = new MessageEntity
         {

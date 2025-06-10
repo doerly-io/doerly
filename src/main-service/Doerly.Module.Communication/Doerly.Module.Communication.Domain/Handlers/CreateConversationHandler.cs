@@ -1,18 +1,23 @@
 using Doerly.Domain.Models;
+using Doerly.Localization;
 using Doerly.Module.Communication.Contracts.Requests;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Communication.DataAccess.Entities;
+using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Communication.Domain.Handlers;
 
-public class CreateConversationHandler(CommunicationDbContext dbContext) : BaseCommunicationHandler(dbContext)
+public class CreateConversationHandler(CommunicationDbContext dbContext, IProfileModuleProxy profileModule) : BaseCommunicationHandler(dbContext)
 {
-    private readonly CommunicationDbContext _dbContext = dbContext;
-
     public async Task<OperationResult<int>> HandleAsync(CreateConversationRequest dto, int initiatorId)
     {
-        var existingConversation = await _dbContext.Conversations
+        if (dto.RecipientId == initiatorId)
+        {
+            return OperationResult.Failure<int>(Resources.Get("Communication.CannotCreateConversationWithSelf"));
+        }
+        
+        var existingConversation = await dbContext.Conversations
             .FirstOrDefaultAsync(c =>
                 (c.InitiatorId == initiatorId && c.RecipientId == dto.RecipientId) ||
                 (c.InitiatorId == dto.RecipientId && c.RecipientId == initiatorId));
@@ -28,8 +33,8 @@ public class CreateConversationHandler(CommunicationDbContext dbContext) : BaseC
             RecipientId = dto.RecipientId
         };
 
-        _dbContext.Conversations.Add(conversation);
-        await _dbContext.SaveChangesAsync();
+        dbContext.Conversations.Add(conversation);
+        await dbContext.SaveChangesAsync();
 
         return OperationResult.Success(conversation.Id);
     }

@@ -10,24 +10,23 @@ public class MarkMessageStatusHandler(CommunicationDbContext dbContext) : BaseCo
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
-    public async Task HandleAsync(int messageId, EMessageStatus status)
+    public async Task<OperationResult> HandleAsync(int messageId, EMessageStatus status)
     {
         var message = await _dbContext.Messages
             .FirstOrDefaultAsync(m => m.Id == messageId);
         
         if (message == null)
         {
-            OperationResult.Failure<int>(Resources.Get("Communication.MessageNotFound"));
-            return;
+            return OperationResult.Failure(Resources.Get("Communication.MessageNotFound"));
         }
         
         message.Status = status;
         await _dbContext.SaveChangesAsync();
 
-        OperationResult.Success();
+        return OperationResult.Success();
     }
 
-    public async Task HandleAsync(int[] messageIds, EMessageStatus status)
+    public async Task<OperationResult> HandleAsync(int[] messageIds, EMessageStatus status)
     {
         var messages = await _dbContext.Messages
             .Where(m => messageIds.Contains(m.Id))
@@ -35,8 +34,7 @@ public class MarkMessageStatusHandler(CommunicationDbContext dbContext) : BaseCo
 
         if (!messages.Any())
         {
-            OperationResult.Failure<int>(Resources.Get("Communication.MessageNotFound"));
-            return;
+            return OperationResult.Failure(Resources.Get("Communication.MessageNotFound"));
         }
 
         foreach (var message in messages)
@@ -45,6 +43,6 @@ public class MarkMessageStatusHandler(CommunicationDbContext dbContext) : BaseCo
         }
 
         await _dbContext.SaveChangesAsync();
-        OperationResult.Success();
+        return OperationResult.Success();
     }
 }
