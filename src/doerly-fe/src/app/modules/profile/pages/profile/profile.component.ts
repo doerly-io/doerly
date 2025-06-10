@@ -28,7 +28,6 @@ import { ActivatedRoute } from '@angular/router';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { MultiSelectModule } from 'primeng/multiselect';
-
 import * as sexVariants from '../../constants/sex';
 import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
@@ -743,15 +742,19 @@ export class ProfileComponent implements OnInit {
     });
     
     // Load category filters and set values
-    this.loadCategoryFilters(service.categoryId);
+    if (service.categoryId) {
+      this.loadCategoryFilters(service.categoryId);
+    }
     
     // Set filter values from service
-    service.filterValues.forEach(filterValue => {
-      const filterId = filterValue.filterId;
-      if (filterValue.value) {
-        this.filterValuesMap[filterId] = [filterValue.value];
-      }
-    });
+    if (service.filterValues) {
+      service.filterValues.forEach(filterValue => {
+        const filterId = filterValue.filterId;
+        if (filterValue.value) {
+          this.filterValuesMap[filterId] = [filterValue.value];
+        }
+      });
+    }
     
     this.isServiceDialogVisible = true;
   }
@@ -991,7 +994,7 @@ export class ProfileComponent implements OnInit {
           description: formValue.description || '',
           categoryId: Number(formValue.categoryId),
           price: formValue.price || 0,
-          isEnabled: true,
+          isEnabled: this.editingService.isEnabled,
           filterValues: filterValues
         };
 
@@ -1002,11 +1005,15 @@ export class ProfileComponent implements OnInit {
 
         this.catalogService.updateService(this.editingService.id, updateRequest).subscribe({
           next: (response) => {
-            this.toastHelper.showSuccess('common.success', 'profile.professional.services.update.success');
-            this.loadServices();
-            this.isServiceDialogVisible = false;
-            this.editingService = null;
-            this.serviceForm.reset();
+            if (response.isSuccess && response.value) {
+              this.toastHelper.showSuccess('common.success', 'profile.professional.services.update.success');
+              this.loadServices();
+              this.isServiceDialogVisible = false;
+              this.editingService = null;
+              this.serviceForm.reset();
+            } else {
+              this.toastHelper.showError('common.error', 'profile.professional.services.update.error');
+            }
           },
           error: (error: Error) => {
             this.toastHelper.showError('common.error', 'profile.professional.services.update.error');
@@ -1030,10 +1037,14 @@ export class ProfileComponent implements OnInit {
 
         this.catalogService.createService(createRequest).subscribe({
           next: (response) => {
-            this.toastHelper.showSuccess('common.success', 'profile.professional.services.create.success');
-            this.loadServices();
-            this.isServiceDialogVisible = false;
-            this.serviceForm.reset();
+            if (response.isSuccess && response.value) {
+              this.toastHelper.showSuccess('common.success', 'profile.professional.services.create.success');
+              this.loadServices();
+              this.isServiceDialogVisible = false;
+              this.serviceForm.reset();
+            } else {
+              this.toastHelper.showError('common.error', 'profile.professional.services.create.error');
+            }
           },
           error: (error: Error) => {
             this.toastHelper.showError('common.error', 'profile.professional.services.create.error');

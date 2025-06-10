@@ -9,8 +9,8 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
 {
     public class UpdateServiceHandler : BaseCatalogHandler
     {
-        public UpdateServiceHandler(CatalogDbContext dbContext) : base(dbContext) 
-        { 
+        public UpdateServiceHandler(CatalogDbContext dbContext) : base(dbContext)
+        {
         }
 
         public async Task<OperationResult> HandleAsync(int id, UpdateServiceRequest request)
@@ -35,23 +35,19 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
 
             DbContext.ServiceFilterValues.RemoveRange(service.FilterValues);
 
-            if (request.FilterValues != null)
+            var validFilterIds = await DbContext.Filters
+                .Where(f => f.CategoryId == request.CategoryId)
+                .Select(f => f.Id)
+                .ToHashSetAsync();
+
+            foreach (var filter in request.FilterValues)
             {
-                foreach (var kvp in request.FilterValues)
+                if (validFilterIds.Contains(filter.FilterId))
                 {
-                    var filterId = kvp.Key;
-                    var value = kvp.Value;
-
-                    var filterExists = await DbContext.Filters
-                        .AnyAsync(f => f.Id == filterId && f.CategoryId == request.CategoryId);
-
-                    if (!filterExists)
-                        continue;
-
                     service.FilterValues.Add(new ServiceFilterValue
                     {
-                        FilterId = filterId,
-                        Value = value,
+                        FilterId = filter.FilterId,
+                        Value = filter.Value,
                         Service = service
                     });
                 }

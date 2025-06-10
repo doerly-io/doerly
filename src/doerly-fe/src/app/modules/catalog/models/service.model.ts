@@ -3,25 +3,52 @@ export interface IFilterValueRequest {
     value: string;
 }
 
+export interface IFilterValueResponse {
+    filterId: number;
+    value: string;
+}
+
+export interface IProfileDto {
+    id: number;
+    firstName: string;
+    lastName: string;
+    dateOfBirth?: string;
+    sex: number;
+    bio?: string;
+    dateCreated: string;
+    lastModifiedDate: string;
+    imageUrl?: string;
+    cvUrl?: string;
+    address?: {
+        cityId: number;
+        cityName: string;
+        regionId: number;
+        regionName: string;
+    };
+    languageProficiencies: any[];
+    competences: any[];
+    userInfo?: any;
+}
+
 export interface IService {
     id: number;
     name: string;
     description?: string;
-    categoryId: number;
+    categoryId?: number;
     categoryName?: string;
     userId: number;
+    user?: IProfileDto;
     price?: number;
-    categoryPath: string[];
+    categoryPath?: string[];
     isEnabled: boolean;
     isDeleted: boolean;
-    imageUrl?: string;
-    filterValues: IFilterValueRequest[];
+    filterValues: IFilterValueResponse[];
 }
 
 export interface IServiceResponse {
-    value: IService[];
     isSuccess: boolean;
-    errorMessage: string;
+    value?: IService;
+    error?: string;
 }
 
 export interface ICreateServiceRequest {
@@ -29,7 +56,7 @@ export interface ICreateServiceRequest {
     description?: string;
     categoryId: number;
     userId: number;
-    price?: number;
+    price: number;
     filterValues: IFilterValueRequest[];
 }
 
@@ -37,16 +64,16 @@ export interface IUpdateServiceRequest {
     name: string;
     description?: string;
     categoryId: number;
-    price?: number;
+    price: number;
     isEnabled: boolean;
     filterValues: IFilterValueRequest[];
 }
 
 export interface IPaginatedServiceResponse {
-    value: {
-        total: number;
-        orders: IService[];
-    };
     isSuccess: boolean;
-    errorMessage?: string;
+    value?: {
+        list: IService[];
+        totalSize: number;
+    };
+    error?: string;
 } 
