@@ -76,6 +76,7 @@
   <Folder Name="/tests/">
     <Project Path="tests\Doerly.EndToEndTests\Doerly.EndToEndTests.csproj" Type="Classic C#" />
     <Project Path="tests\Doerly.Module.Authorization.Tests\Doerly.Module.Authorization.Tests.csproj" Type="Classic C#" />
+    <Project Path="tests\Doerly.Module.Communication.Tests\Doerly.Module.Communication.Tests.csproj" Type="Classic C#" />
     <Project Path="tests\Doerly.Module.Order.Tests\Doerly.Module.Order.Tests.csproj" Type="Classic C#" />
   </Folder>
   <Project Path="Doerly.DataAccess\Doerly.DataAccess.csproj" Type="Classic C#" />

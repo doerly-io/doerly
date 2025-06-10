@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\Doerly.Localization\Doerly.Localization.csproj" />
     <ProjectReference Include="..\..\Doerly.Proxy.Catalog\Doerly.Proxy.Catalog.csproj" />
     <ProjectReference Include="..\..\Doerly.Proxy.Orders\Doerly.Proxy.Orders.csproj" />
+    <ProjectReference Include="..\..\Doerly.Proxy.Profile\Doerly.Proxy.Profile.csproj" />
     <ProjectReference Include="..\Doerly.Module.Catalog.Contracts\Doerly.Module.Catalog.Contracts.csproj" />
     <ProjectReference Include="..\Doerly.Module.Catalog.DataAccess\Doerly.Module.Catalog.DataAccess.csproj" />
     <ProjectReference Include="..\Doerly.Module.Catalog.Enums\Doerly.Module.Catalog.Enums.csproj" />

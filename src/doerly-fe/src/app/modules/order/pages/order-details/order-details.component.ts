@@ -42,7 +42,6 @@ import {FeedbackInputComponent} from 'app/modules/order/components/feedback-inpu
     NgOptimizedImage,
     ImageModule,
     GalleriaModule,
-    FeedbackInputComponent,
     FeedbackInputComponent
   ]
 })
@@ -71,7 +70,6 @@ export class OrderDetailsComponent implements OnInit {
       this.loading = true;
       this.orderService.getOrder(orderId).subscribe({
         next: (response) => {
-          console.log(response.value?.feedback);
           this.order = response.value || null;
           this.loading = false;
         },

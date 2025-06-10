@@ -70,12 +70,6 @@ public class CommunicationController(IHubContext<CommunicationHub, ICommunicatio
             return Unauthorized();
 
         var initiatorId = userId.Value;
-
-        if (initiatorId == request.RecipientId)
-        {
-            return BadRequest(OperationResult.Failure<ConversationResponse>(Resources.Get("Communication.CannotCreateConversationWithSelf")));
-        }
-        
         var result = await ResolveHandler<CreateConversationHandler>().HandleAsync(request, initiatorId);
 
         if (!result.IsSuccess)

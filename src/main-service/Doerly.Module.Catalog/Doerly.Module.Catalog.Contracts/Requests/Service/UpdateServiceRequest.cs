@@ -8,6 +8,6 @@
         public int CategoryId { get; set; }
         public bool IsEnabled { get; set; }
 
-        public Dictionary<int, string> FilterValues { get; set; } = new();
+        public List<FilterValueRequest> FilterValues { get; set; } = new();
     }
 }

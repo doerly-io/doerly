@@ -35,6 +35,15 @@ public class SendFileMessageHandler(CommunicationDbContext dbContext,
         {
             return OperationResult.Failure<int>(Resources.Get("InvalidDocument"));
         }
+        
+        if (fileBytes.Length == 0)
+        {
+            return OperationResult.Failure<int>(Resources.Get("Communication.FileCannotBeEmpty"));
+        }
+        if (string.IsNullOrWhiteSpace(fileName))
+        {
+            return OperationResult.Failure<int>(Resources.Get("Communication.MessageContentCannotBeEmpty"));
+        }
     
         //TODO: change filePath to save file name
         var filePath = $"{CommunicationConstants.FolderNames.CommunicationFiles}/{conversationId}/{Guid.NewGuid()}{FileHelper.GetFileExtension(fileName)}";
