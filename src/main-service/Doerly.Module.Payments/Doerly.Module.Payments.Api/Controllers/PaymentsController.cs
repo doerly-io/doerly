@@ -1,3 +1,4 @@
+using Doerly.DataTransferObjects;
 using Doerly.Infrastructure.Api;
 using Doerly.Module.Payments.DataTransferObjects;
 using Doerly.Module.Payments.Domain.Handlers;
@@ -38,6 +39,15 @@ public class PaymentsController : BaseApiController
 
         var uri = _webhookUrlBuilder.BuildWebhookUrl("/api/payments/Webhook/liqpay/final-status");
         var result = await ResolveHandler<CheckoutHandler>().HandleAsync(invoiceCreateRequest, uri);
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpGet("payments-history")]
+    public async Task<IActionResult> GetUserPayments([FromQuery] CursorPaginationRequest request)
+    {
+        var userId = RequestContext.UserId;
+        var result = await ResolveHandler<SelectUserPaymentsHandler>().HandleAsync(userId.Value, request);
         return Ok(result);
     }
 }

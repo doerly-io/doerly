@@ -19,6 +19,4 @@ public class BaseAuthTests : IClassFixture<PostgresTestContainerFixture>
         DbContext = new AuthorizationDbContext(configuration);
         DbContext.Database.EnsureCreated();
     }
-    
-    
 }
