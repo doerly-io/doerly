@@ -14,6 +14,7 @@ public static class QueryableExtensions
         PageInfo pageInfo,
         IEnumerable<Expression<Func<TEntity, bool>>> predicates = null,
         Expression<Func<TEntity, TEntity>> selector = null,
+        IEnumerable<OrderByDto<TEntity>> orderByDtos = null,
         CancellationToken cancellationToken = default) where TEntity : BaseEntity
     {
         if (predicates != null && predicates.Any())
@@ -29,6 +30,27 @@ public static class QueryableExtensions
         if (selector != null)
         {
             query = query.Select(selector);
+        }
+
+        if (orderByDtos != null && orderByDtos.Any())
+        {
+            bool first = true;
+            foreach (var orderByDto in orderByDtos)
+            {
+                if (first)
+                {
+                    query = orderByDto.IsDescending
+                        ? query.OrderByDescending(orderByDto.Expression)
+                        : query.OrderBy(orderByDto.Expression);
+                    first = false;
+                }
+                else
+                {
+                    query = orderByDto.IsDescending
+                        ? ((IOrderedQueryable<TEntity>)query).ThenByDescending(orderByDto.Expression)
+                        : ((IOrderedQueryable<TEntity>)query).ThenBy(orderByDto.Expression);
+                }
+            }
         }
 
         var skip = pageInfo.Size * (pageInfo.Number - 1);

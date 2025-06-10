@@ -1,16 +1,16 @@
 ﻿using System.Linq.Expressions;
+
+using Doerly.DataTransferObjects.Pagination;
+using Doerly.Domain;
 using Doerly.Domain.Models;
 using Doerly.Extensions;
+using Doerly.Localization;
 using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Doerly.Proxy.Profile;
-using Doerly.Domain;
-using MassTransit.Transports;
-using Doerly.Localization;
-using Doerly.Module.Order.DataTransferObjects.Requests;
-using Doerly.Module.Order.DataTransferObjects;
 using Doerly.Module.Order.DataTransferObjects.Responses;
+using Doerly.Module.Order.DataTransferObjects.Requests;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetExecutionProposalsWithPaginationHandler : BaseOrderHandler
@@ -41,9 +41,20 @@ public class GetExecutionProposalsWithPaginationHandler : BaseOrderHandler
             throw new Exception(Resources.Get("InvalidAccess"));
         }
 
+        List<OrderByDto<ExecutionProposal>> orderByDtos = [];
+        orderByDtos.Add(new OrderByDto<ExecutionProposal>
+        {
+            Expression = proposal => proposal.DateCreated,
+            IsDescending = true
+        });
+        orderByDtos.Add(new OrderByDto<ExecutionProposal>
+        {
+            Expression = proposal => proposal.Status,
+        });
+
         var (entities, totalCount) = await DbContext.ExecutionProposals
             .AsNoTracking()
-            .GetEntitiesWithPaginationAsync(dto.PageInfo, predicates);
+            .GetEntitiesWithPaginationAsync(dto.PageInfo, predicates, orderByDtos: orderByDtos);
 
         int[] profileIDs = [];
 

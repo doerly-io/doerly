@@ -8,6 +8,7 @@ using Doerly.Module.Order.DataTransferObjects;
 using Doerly.Module.Order.DataTransferObjects.Responses;
 using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
 using Doerly.Proxy.Profile;
+using Doerly.DataTransferObjects.Pagination;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetOrdersWithPaginationHandler : BaseOrderHandler
@@ -28,9 +29,20 @@ public class GetOrdersWithPaginationHandler : BaseOrderHandler
         if (dto.ExecutorId.HasValue)
             predicates.Add(order => order.ExecutorId == dto.ExecutorId);
 
+        List<OrderByDto<OrderEntity>> orderByDtos = [];
+        orderByDtos.Add(new OrderByDto<OrderEntity>
+        {
+            Expression = order => order.DateCreated,
+            IsDescending = true
+        });
+        orderByDtos.Add(new OrderByDto<OrderEntity>
+        {
+            Expression = order => order.Status,
+        });
+
         var (entities, totalCount) = await DbContext.Orders
             .AsNoTracking()
-            .GetEntitiesWithPaginationAsync(dto.PageInfo, predicates);
+            .GetEntitiesWithPaginationAsync(dto.PageInfo, predicates, orderByDtos: orderByDtos);
 
         var profileIDs = entities.Select(x => x.CustomerId).Distinct().ToArray();
 
