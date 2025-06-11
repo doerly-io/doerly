@@ -45,20 +45,11 @@ public class AuthTestServer : IDisposable
                 services.AddScoped<IHandlerFactory, HandlerFactory>();
                 services.AddScoped<IDoerlyRequestContext, DoerlyRequestContext>();
 
-                // Add IMessagePublisher mock for tests
                 services.AddSingleton<IMessagePublisher, MessagePublisher>();
 
                 // Add controllers
                 services.AddControllers()
                     .AddApplicationPart(typeof(Api.Controllers.AuthController).Assembly);
-
-                // Add your handlers
-                // services.AddScoped<Domain.Handlers.LoginHandler>();
-                // services.AddScoped<Domain.Handlers.RegistrationHandler>();
-                // services.AddScoped<Domain.Handlers.RefreshTokenHandler>();
-                // services.AddScoped<Domain.Handlers.LogoutHandler>();
-                // services.AddScoped<Domain.Handlers.ResetPasswordHandler>();
-                // services.AddScoped<Domain.Handlers.EmailVerificationHandler>();
                 
                 services.RegisterHandlers(typeof(Doerly.Module.Authorization.Domain.IAssemblyMarker).Assembly);
                 services.RegisterHandlers(typeof(Doerly.Module.Profile.Domain.IAssemblyMarker).Assembly);
