@@ -132,6 +132,26 @@ export class EditOrderComponent implements OnInit {
         error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
       });
     } else {
+      // Pre-fill form with query parameters
+      const name = this.route.snapshot.queryParamMap.get('name');
+      const description = this.route.snapshot.queryParamMap.get('description');
+      const price = this.route.snapshot.queryParamMap.get('price');
+
+      if (name || description || price) {
+        this.orderForm.patchValue({
+          name: name || '',
+          description: description || '',
+          price: price ? Number(price) : 1,
+          categoryId: this.categoryId,
+          paymentKind: 1,
+          dueDate: '',
+          isPriceNegotiable: false,
+          useProfileAddress: false,
+          regionId: '',
+          cityId: ''
+        });
+      }
+      
       this.updateFilesSizeAndLimit();
       this.addressReady = true;
     }

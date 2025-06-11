@@ -46,6 +46,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
                 {
                     FilterId = fv.FilterId,
                     FilterName = fv.Filter.Name,
+                    FilterType = fv.Filter.Type,
                     Value = fv.Value
                 }).ToList()
             }).ToList();

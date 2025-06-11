@@ -488,7 +488,13 @@
     }
   },
   "catalog": {
-    "services": "Services"
+    "services": "Services",
+    "description": "Description",
+    "price": "Price",
+    "additionalInfo": "Additional Information",
+    "provider": "Service Provider",
+    "competences": "Competences",
+    "viewDetails": "View Details"
   },
   "common": {
     "actions": "Actions",
@@ -513,7 +519,9 @@
     "loadMore": "Load more",
     "add": {
       "value": "Add value"
-    }
+    },
+    "yes": "Yes",
+    "no": "No"
   },
   "pages": {
     "profile": {

@@ -497,7 +497,13 @@
     }
   },
   "catalog": {
-    "services": "Послуги"
+    "services": "Послуги",
+    "description": "Опис",
+    "price": "Ціна",
+    "additionalInfo": "Додаткова інформація",
+    "provider": "Постачальник послуги",
+    "competences": "Компетенції",
+    "viewDetails": "Переглянути деталі"
   },
   "common": {
     "actions": "Дії",
@@ -522,7 +528,9 @@
     "loadMore": "Завантажити більше",
     "add": {
       "value": "Додати значення"
-    }
+    },
+    "yes": "Так",
+    "no": "Ні"
   },
   "pages": {
     "profile": {

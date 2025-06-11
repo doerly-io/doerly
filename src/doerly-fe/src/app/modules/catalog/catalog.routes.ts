@@ -10,5 +10,9 @@ export const CATALOG_ROUTES: Routes = [
   {
     path: ':categoryId',
     component: CatalogTabsComponent
+  },
+  {
+    path: 'service/:id',
+    loadComponent: () => import('./pages/service-details/service-details.component').then(m => m.ServiceDetailsComponent)
   }
 ]; 

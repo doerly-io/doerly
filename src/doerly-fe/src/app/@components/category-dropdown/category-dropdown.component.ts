@@ -26,7 +26,7 @@ import { RouterModule } from '@angular/router';
       <p-button 
         [outlined]="true" 
         [text]="true"
-        [label]="'Categories' | translate"
+        [label]="'common.categories' | translate"
         icon="pi pi-bars"
         (click)="op.toggle($event)"
         styleClass="p-button-secondary category-button">
