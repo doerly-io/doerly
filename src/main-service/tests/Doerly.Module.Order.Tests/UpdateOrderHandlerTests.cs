@@ -1,9 +1,12 @@
-﻿using Moq;
-using Doerly.Module.Order.Domain.Handlers;
-using Doerly.Domain;
+﻿using Doerly.Domain;
+using Doerly.Domain.Exceptions;
 using Doerly.FileRepository;
+using Doerly.Module.Order.DataAccess.Entities;
 using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Order.Domain.Handlers;
 using Doerly.Proxy.Profile;
+
+using Moq;
 
 namespace Doerly.Module.Order.Tests;
 public class UpdateOrderHandlerTests : BaseOrderTests
@@ -34,7 +37,10 @@ public class UpdateOrderHandlerTests : BaseOrderTests
             Price = order.Price + 10,
             PaymentKind = order.PaymentKind,
             DueDate = order.DueDate.AddDays(1),
-            IsPriceNegotiable = !order.IsPriceNegotiable
+            IsPriceNegotiable = !order.IsPriceNegotiable,
+            UseProfileAddress = false,
+            RegionId = order.RegionId,
+            CityId = order.CityId
         };
 
         var result = await _handler.HandleAsync(order.Id, request, [], []);
@@ -45,13 +51,14 @@ public class UpdateOrderHandlerTests : BaseOrderTests
     [Fact]
     public async Task HandleAsync_ShouldReturnFailure_WhenOrderDoesNotExist()
     {
+        _doerlyRequestContextMock.SetupProperty(x => x.UserId, 1);
+
         var request = new UpdateOrderRequest
         {
             Name = "Name",
             Description = "Desc"
         };
-        var result = await _handler.HandleAsync(-1, request, [], []);
-        Assert.False(result.IsSuccess);
+        await Assert.ThrowsAsync<DoerlyException>(async() => await _handler.HandleAsync(-1, request, [], []));
     }
 
     [Fact]
@@ -69,7 +76,6 @@ public class UpdateOrderHandlerTests : BaseOrderTests
             IsPriceNegotiable = !order.IsPriceNegotiable
         };
 
-        var result = await _handler.HandleAsync(order.Id, request, [], []);
-        Assert.False(result.IsSuccess);
+        await Assert.ThrowsAsync<DoerlyException>(async () => await _handler.HandleAsync(order.Id, request, [], []));
     }
 }

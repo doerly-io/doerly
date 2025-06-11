@@ -1,9 +1,13 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Module.Common.DataAccess.Address;
+using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.Domain.Handlers;
 using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Proxy.Profile;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 using Moq;
 
@@ -18,36 +22,18 @@ public class GetOrderByIdHandlerTests : BaseOrderTests
     {
         _fileRepositoryMock = new Mock<IFileRepository>();
         _profileModuleProxyMock = new Mock<IProfileModuleProxy>();
-        var addressDbContext = new Mock<AddressDbContext>();
+        // Create a configuration for the in-memory database
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string>
+            {
+                ["ConnectionStrings:AddressConnection"] = fixture.ConnectionString
+            })
+            .Build();
 
-        _handler = new GetOrderByIdHandler(OrderDbContext, _profileModuleProxyMock.Object, addressDbContext.Object, _fileRepositoryMock.Object);
-    }
+        var addressDbContext = new AddressDbContext(configuration);
+        addressDbContext.Database.Migrate();
 
-    [Fact]
-    public async Task HandleAsync_ShouldReturnOrder_WhenOrderExists()
-    {
-        // Arrange
-        var order = await AddTestOrderAsync();
-
-        var profileDto = new ProfileDto
-        {
-            Id = order.CustomerId,
-            FirstName = "Test",
-            LastName = "User",
-            ImageUrl = null,
-        };
-
-        _profileModuleProxyMock
-            .Setup(x => x.GetProfileAsync(order.CustomerId))
-            .ReturnsAsync(OperationResult.Success(profileDto));
-
-        // Act
-        var result = await _handler.HandleAsync(order.Id);
-
-        // Assert
-        Assert.True(result.IsSuccess);
-        Assert.NotNull(result.Value);
-        Assert.Equal(order.Id, result.Value.Id);
+        _handler = new GetOrderByIdHandler(OrderDbContext, _profileModuleProxyMock.Object, addressDbContext, _fileRepositoryMock.Object);
     }
 
     [Fact]

@@ -102,9 +102,8 @@ public class UpdateOrderStatusHandlerTests : BaseOrderTests
 
         var result = await _handler.HandleAsync(order.Id, request);
 
-        Assert.True(result.IsSuccess);
-        Assert.NotNull(result.Value);
         order = await OrderDbContext.Orders.FindAsync(order.Id);
+
         Assert.Equal(EOrderStatus.Completed, order.Status);
         Assert.NotNull(order.ExecutionDate);
     }

@@ -89,7 +89,7 @@ public class CreateOrderHandlerTests : BaseOrderTests
         var files = new List<IFormFile>();
 
         // Act & Assert
-        await Assert.ThrowsAsync<DoerlyException>(() => _handler.HandleAsync(request, files));
+        await Assert.ThrowsAsync<DoerlyException>(async () => await _handler.HandleAsync(request, files));
     }
 
     [Fact]
