@@ -162,7 +162,7 @@
     </div>
   </p-card>
 
-  <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
+  <p-card styleClass="mt-5 col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0" *ngIf="order?.status == EOrderStatus.Completed">
     <div class="mb-3">
       <div class="col-12">
         <h3 class="text-center">{{ 'feedback.title' | translate }}</h3>

@@ -16,8 +16,6 @@ public class LiqPayClient : IBasePaymentClient
     private readonly string _privateKey;
     private readonly LiqPayHttpClient _httpClient;
 
-    private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-
     public LiqPayClient(string publicKey, string privateKey, LiqPayHttpClient httpClient)
     {
         _publicKey = publicKey;

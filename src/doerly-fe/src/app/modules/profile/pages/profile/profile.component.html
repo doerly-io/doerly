@@ -610,6 +610,21 @@
     </div>
   </p-card>
 
+  <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
+    <div class="d-flex flex-column gap-3 m-3">
+      <!-- Feedback history section title -->
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div class="mt-1">
+          <h4 class="c-primary">
+            {{ 'feedback.history' | translate }}
+          </h4>
+        </div>
+      </div>
+
+      <app-feedback-history [userId]="this.userId" />
+    </div>
+  </p-card>
+
 
   <!-- Image upload dialog -->
   <p-dialog
