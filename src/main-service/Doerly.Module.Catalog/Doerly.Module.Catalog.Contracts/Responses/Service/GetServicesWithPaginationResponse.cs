@@ -10,6 +10,6 @@ namespace Doerly.Module.Catalog.Contracts.Responses
     {
         public int Total { get; set; }
 
-        public List<GetServiceResponse> Orders { get; set; } = new List<GetServiceResponse>();
+        public List<GetServiceResponse> Services { get; set; } = new List<GetServiceResponse>();
     }
 }

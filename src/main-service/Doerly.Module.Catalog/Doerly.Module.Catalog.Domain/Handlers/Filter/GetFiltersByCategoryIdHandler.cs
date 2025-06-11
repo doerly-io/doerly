@@ -2,6 +2,7 @@
 using Doerly.Localization;
 using Doerly.Module.Catalog.Contracts.Responses;
 using Doerly.Module.Catalog.DataAccess;
+using Doerly.Module.Catalog.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Filter
@@ -17,13 +18,15 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
             var parentCategoryIds = await GetAllParentCategoryIds(categoryId);
             
             var query = DbContext.Filters
+                    .Include(s => s.FilterValues)
                 .Where(f => !f.Category.IsDeleted && parentCategoryIds.Contains(f.CategoryId))
                 .Select(f => new GetFilterResponse
                 {
                     Id = f.Id,
                     Name = f.Name,
                     Type = f.Type,
-                    CategoryId = f.CategoryId
+                    CategoryId = f.CategoryId,
+                    Values = f.FilterValues.Select(fv => fv.Value).ToList()
                 });
 
             var filters = await query.ToListAsync();

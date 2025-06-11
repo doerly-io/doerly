@@ -248,6 +248,17 @@
         },
         "edit": {
           "title": "Edit service"
+        },
+        "disable": {
+          "title": "Disable service"
+        },
+        "enable": {
+          "title": "Enable service"
+        },
+        "delete": {
+          "title": "Delete service",
+          "success": "Service deleted successfully",
+          "error": "Failed to delete service"
         }
       }
     },
@@ -499,7 +510,10 @@
       "unset": "Unset"
     },
     "edited": "Ed.",
-    "loadMore": "Load more"
+    "loadMore": "Load more",
+    "add": {
+      "value": "Add value"
+    }
   },
   "pages": {
     "profile": {

@@ -7,7 +7,7 @@ namespace Doerly.Module.Catalog.Contracts.Responses
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public EFilterType Type { get; set; }
-        public List<string>? Options { get; set; }
+        public List<string>? Values { get; set; }
         public int CategoryId { get; set; }
     }
 }

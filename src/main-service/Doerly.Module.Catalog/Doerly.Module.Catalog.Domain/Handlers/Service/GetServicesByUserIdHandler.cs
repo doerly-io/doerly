@@ -1,6 +1,7 @@
 ﻿using Doerly.Domain.Models;
 using Doerly.Module.Catalog.Contracts.Responses;
 using Doerly.Module.Catalog.DataAccess;
+using Doerly.Module.Catalog.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using CategoryEntity = Doerly.Module.Catalog.DataAccess.Models.Category;
 
@@ -16,6 +17,8 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
         {
             var services = await DbContext.Services
                 .AsNoTracking()
+                .Include(s => s.FilterValues)
+                    .ThenInclude(fv => fv.Filter)
                 .Where(s => !s.IsDeleted && s.UserId == userId)
                 .ToListAsync();
 
@@ -38,7 +41,13 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
                 IsDeleted = s.IsDeleted,
                 CategoryId = s.CategoryId,
                 CategoryName = categoryDict.TryGetValue(s.CategoryId.Value, out var category) ? category.Name : "",
-                CategoryPath = GetCategoryPath(categoryDict, s.CategoryId)
+                CategoryPath = GetCategoryPath(categoryDict, s.CategoryId),
+                FilterValues = s.FilterValues.Select(fv => new FilterValueResponse
+                {
+                    FilterId = fv.FilterId,
+                    FilterName = fv.Filter.Name,
+                    Value = fv.Value
+                }).ToList()
             }).ToList();
 
             return OperationResult.Success(result);

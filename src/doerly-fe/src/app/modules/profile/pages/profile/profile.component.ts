@@ -58,6 +58,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CatalogService } from '../../../catalog/services/catalog.service';
 import { IFilter, EFilterType } from '../../../catalog/models/filter.model';
 import {FeedbackHistoryComponent} from 'app/modules/profile/components/feedback-history/feedback-history.component';
+import { IFilterResponse } from '../../../catalog/models/filter.model';
 
 @Component({
   selector: 'app-profile',
@@ -159,6 +160,7 @@ export class ProfileComponent implements OnInit {
 
   @ViewChild('competenceDialog') competenceDialog: any;
   @ViewChild('serviceDialog') serviceDialog: any;
+  @ViewChild('serviceCategory') serviceCategoryDropdown: any;
 
   categoryFilters: IFilter[] = [];
   private filterValuesMap: { [key: number]: string[] } = {};
@@ -735,130 +737,210 @@ export class ProfileComponent implements OnInit {
   }
 
   onEditService(service: IService) {
+    console.log('Editing service:', service);
     this.editingService = service;
-    this.serviceForm.patchValue({
-      name: service.name,
-      description: service.description,
-      categoryId: service.categoryId?.toString(),
-      price: service.price,
+
+    // First load categories if not already loaded
+    if (this.categoryTreeNodes.length === 0) {
+      this.categoryService.getCategories().subscribe({
+        next: (response) => {
+          if (response.isSuccess && response.value) {
+            this.categories = response.value;
+            this.categoryTreeNodes = this.convertCategoriesToTreeNodes(response.value);
+            this.initializeServiceForm(service);
+          }
+        },
+        error: (error) => {
+          console.error('Error loading categories:', error);
+          this.toastHelper.showError('common.error', 'profile.professional.services.categories.load.error');
+        }
+      });
+    } else {
+      this.initializeServiceForm(service);
+    }
+  }
+
+  private initializeServiceForm(service: IService): void {
+    console.log('Initializing form for service:', service);
+    console.log('Available categories:', this.categoryTreeNodes);
+
+    // Create the form group
+    const formGroup = this.formBuilder.group({
+      name: [service.name, Validators.required],
+      description: [service.description, Validators.required],
+      categoryId: [service.categoryId, Validators.required],
+      price: [service.price, Validators.required],
+      filterValues: this.formBuilder.group({})
     });
 
-    // Load category filters and set values
-    if (service.categoryId) {
-      this.loadCategoryFilters(service.categoryId);
-    }
+    // Set the form
+    this.serviceForm = formGroup;
 
-    // Set filter values from service
-    if (service.filterValues) {
-      service.filterValues.forEach(filterValue => {
-        const filterId = filterValue.filterId;
-        if (filterValue.value) {
-          this.filterValuesMap[filterId] = [filterValue.value];
+    // Ensure category is selected in the dropdown
+    const categoryNode = this.categoryTreeNodes.find(node => Number(node.key) === service.categoryId);
+    if (categoryNode) {
+      console.log('Found category node:', categoryNode);
+      
+      // Force dropdown to update by triggering change detection
+      setTimeout(() => {
+        // First click the dropdown to open it
+        const dropdown = document.querySelector('#serviceCategory') as HTMLElement;
+        if (dropdown) {
+          dropdown.click();
+          
+          // Then after a small delay, find and click the item by its ID
+          setTimeout(() => {
+            const dropdownItem = document.querySelector(`#category-item-${service.categoryId}`) as HTMLElement;
+            if (dropdownItem) {
+              console.log('Clicking dropdown item:', dropdownItem.textContent);
+              dropdownItem.click();
+            } else {
+              console.log('Dropdown item not found for ID:', `category-item-${service.categoryId}`);
+            }
+          }, 100);
         }
       });
     }
+
+    // Load filters for the category
+    this.catalogService.getFiltersByCategoryId(service.categoryId).subscribe({
+      next: (response) => {
+        console.log('Filter response:', response);
+        if (response.isSuccess && response.value) {
+          this.categoryFilters = response.value;
+          
+          // Initialize filter form controls
+          const filterValuesGroup = this.serviceForm.get('filterValues') as FormGroup;
+          
+          // Clear existing controls
+          Object.keys(filterValuesGroup.controls).forEach(key => {
+            filterValuesGroup.removeControl(key);
+          });
+
+          // Add controls for each filter
+          this.categoryFilters.forEach(filter => {
+            if (filter.type === 4) {
+              // For radio/boolean filters
+              filterValuesGroup.addControl(filter.id.toString(), new FormControl(false));
+            } else if (filter.type === 3) {
+              // For numeric filters
+              filterValuesGroup.addControl(filter.id.toString(), new FormControl(null));
+            } else {
+              // For checkbox and dropdown filters
+              filterValuesGroup.addControl(filter.id.toString(), new FormControl([]));
+            }
+          });
+
+          // Set filter values from service
+          if (service.filterValues && service.filterValues.length > 0) {
+            console.log('Setting filter values:', service.filterValues);
+            
+            // Group filter values by filterId
+            const groupedValues = service.filterValues.reduce((acc, curr) => {
+              if (!acc[curr.filterId]) {
+                acc[curr.filterId] = [];
+              }
+              acc[curr.filterId].push(curr.value);
+              return acc;
+            }, {} as { [key: number]: string[] });
+
+            // Set values for each filter
+            Object.entries(groupedValues).forEach(([filterId, values]) => {
+              const control = filterValuesGroup.get(filterId);
+              if (control) {
+                const filter = this.categoryFilters.find(f => f.id === Number(filterId));
+                if (filter) {
+                  console.log(`Setting value for filter ${filter.name} (type ${filter.type}):`, values);
+                  
+                  switch (filter.type) {
+                    case 1: // Checkbox
+                    case 2: // Dropdown
+                      control.setValue(values);
+                      break;
+                      
+                    case 3: // Numeric
+                      // For numeric filters, use the first value and ensure it's a number
+                      const numericValue = parseFloat(values[0]);
+                      if (!isNaN(numericValue)) {
+                        console.log(`Setting numeric value for ${filter.name}:`, numericValue);
+                        // Use setTimeout to ensure the control is ready
+                        setTimeout(() => {
+                          const inputNumber = document.querySelector(`#filter-${filter.id}`) as any;
+                          if (inputNumber) {
+                            inputNumber.value = numericValue;
+                            control.setValue(numericValue);
+                          }
+                        });
+                      }
+                      break;
+                      
+                    case 4: // Radio/Boolean
+                      // For boolean filters, use the first value
+                      control.setValue(values[0] === 'true');
+                      break;
+                  }
+                }
+              }
+            });
+          }
+        }
+      },
+      error: (error) => {
+        console.error('Error loading filters:', error);
+        this.toastHelper.showError('common.error', 'profile.professional.services.filters.load.error');
+      }
+    });
 
     this.isServiceDialogVisible = true;
   }
 
-  onDeleteService(service: IService) {
-    this.handleProfileOperation(
-      this.catalogService.deleteService(service.id),
-      'profile.professional.services.delete.success',
-      'profile.professional.services.delete.error',
-      () => {
-        this.services = this.services.filter(s => s.id !== service.id);
-      }
-    );
-  }
-
-  onCancelService() {
-    this.isServiceDialogVisible = false;
-    this.editingService = null;
-    this.serviceForm.reset();
-    // Reset filter values and category filters
-    this.filterValuesMap = {};
-    this.categoryFilters = [];
-    // Clear filter form controls
-    const filterValuesGroup = this.serviceForm.get('filterValues') as FormGroup;
-    if (filterValuesGroup) {
+  onServiceCategorySelect(event: any): void {
+    const categoryId = event.value;
+    console.log('Selected category ID:', categoryId);
+    
+    if (!categoryId) {
+      this.categoryFilters = [];
+      const filterValuesGroup = this.serviceForm.get('filterValues') as FormGroup;
       Object.keys(filterValuesGroup.controls).forEach(key => {
         filterValuesGroup.removeControl(key);
       });
+      return;
     }
-  }
 
-  onServiceCategorySelect(event: any): void {
-    if (event.value) {
-      const selectedCategory = this.categoryTreeNodes.find(cat => cat.key === event.value);
-      if (selectedCategory) {
-        this.serviceForm.patchValue({
-          categoryId: selectedCategory.key
-        });
-        this.loadCategoryFilters(Number(selectedCategory.key));
-        // Reset filter values when category changes
-        this.filterValuesMap = {};
-      }
-    }
-  }
-
-  private loadCategoryFilters(categoryId: number): void {
     this.catalogService.getFiltersByCategoryId(categoryId).subscribe({
       next: (response) => {
+        console.log('Filter response for category:', response);
         if (response.isSuccess && response.value) {
           this.categoryFilters = response.value;
-          this.updateFilterFormControls();
+          
+          // Initialize filter form controls
+          const filterValuesGroup = this.serviceForm.get('filterValues') as FormGroup;
+          
+          // Clear existing controls
+          Object.keys(filterValuesGroup.controls).forEach(key => {
+            filterValuesGroup.removeControl(key);
+          });
+
+          // Add controls for each filter
+          this.categoryFilters.forEach(filter => {
+            if (filter.type === 4) {
+              // For radio/boolean filters
+              filterValuesGroup.addControl(filter.id.toString(), new FormControl(false));
+            } else if (filter.type === 3) {
+              // For numeric filters
+              filterValuesGroup.addControl(filter.id.toString(), new FormControl(null));
+            } else {
+              // For checkbox and dropdown filters
+              filterValuesGroup.addControl(filter.id.toString(), new FormControl([]));
+            }
+          });
         }
       },
       error: (error) => {
+        console.error('Error loading filters:', error);
         this.toastHelper.showError('common.error', 'profile.professional.services.filters.load.error');
       }
     });
-  }
-
-  private updateFilterFormControls(): void {
-    const filterValuesGroup = this.serviceForm.get('filterValues') as FormGroup;
-
-    // Clear existing controls
-    Object.keys(filterValuesGroup.controls).forEach(key => {
-      filterValuesGroup.removeControl(key);
-    });
-
-    // Add controls for each filter
-    this.categoryFilters.forEach(filter => {
-      if (filter.type === 4) {
-        // For boolean checkbox - initialize with false
-        filterValuesGroup.addControl(filter.id.toString(), new FormControl(false));
-      } else {
-        filterValuesGroup.addControl(filter.id.toString(), new FormControl([]));
-      }
-    });
-
-    // If editing existing service, set values
-    if (this.editingService) {
-      this.editingService.filterValues.forEach(filterValue => {
-        const key = filterValue.filterId.toString();
-        const filter = this.categoryFilters.find(f => f.id === filterValue.filterId);
-
-        if (filter) {
-          if (filter.type === 1 || filter.type === 2) {
-            // For checkbox and dropdown - add to array
-            const currentValues = filterValuesGroup.get(key)?.value || [];
-            filterValuesGroup.get(key)?.setValue([...currentValues, filterValue.value]);
-            this.filterValuesMap[filter.id] = [...(this.filterValuesMap[filter.id] || []), filterValue.value];
-          } else if (filter.type === 4) {
-            // For boolean checkbox - convert string to boolean
-            const boolValue = filterValue.value.toLowerCase() === 'true';
-            filterValuesGroup.get(key)?.setValue(boolValue);
-            this.filterValuesMap[filter.id] = [filterValue.value];
-          } else {
-            // For price - set single value
-            filterValuesGroup.get(key)?.setValue(filterValue.value);
-            this.filterValuesMap[filter.id] = [filterValue.value];
-          }
-        }
-      });
-    }
   }
 
   onFilterValueChange(event: any, filterId: number): void {
@@ -953,123 +1035,101 @@ export class ProfileComponent implements OnInit {
   }
 
   onSaveService() {
-    if (this.serviceForm.valid) {
-      const formValue = this.serviceForm.value;
-      const filterValues: IFilterValueRequest[] = [];
+    if (this.serviceForm.invalid) {
+      return;
+    }
 
-      // Convert filter values to the required format
-      Object.entries(formValue.filterValues).forEach(([key, value]) => {
-        const filter = this.categoryFilters.find(f => f.id.toString() === key);
-        if (filter && value !== null && value !== undefined) {
-          if (filter.type === 1 || filter.type === 2) {
-            // For checkbox and dropdown - send each value separately
-            const values = Array.isArray(value) ? value : [];
-            values.forEach(val => {
-              filterValues.push({
-                filterId: parseInt(key),
-                value: val
-              });
-            });
-          } else if (filter.type === 3) {
-            // For price - ensure it's a valid number
-            const numValue = Number(value);
-            if (!isNaN(numValue)) {
-              filterValues.push({
-                filterId: parseInt(key),
-                value: numValue.toString()
-              });
-            }
-          } else if (filter.type === 4) {
-            // For boolean checkbox - convert to string
+    const formValue = this.serviceForm.value;
+    const filterValues: IFilterValueRequest[] = [];
+
+    // Process filter values based on their types
+    Object.keys(formValue.filterValues).forEach(filterId => {
+      const value = formValue.filterValues[filterId];
+      if (value !== null && value !== undefined) {
+        if (Array.isArray(value)) {
+          // For checkbox and dropdown filters
+          value.forEach(v => {
             filterValues.push({
-              filterId: parseInt(key),
-              value: value.toString()
+              filterId: +filterId,
+              value: v
             });
-          }
+          });
+        } else {
+          // For numeric and boolean filters
+          filterValues.push({
+            filterId: +filterId,
+            value: value.toString()
+          });
         }
-      });
+      }
+    });
 
-      if (this.editingService) {
-        // Update existing service
-        const updateRequest: IUpdateServiceRequest = {
-          name: formValue.name,
-          description: formValue.description || '',
-          categoryId: Number(formValue.categoryId),
-          price: formValue.price || 0,
-          isEnabled: this.editingService.isEnabled,
-          filterValues: filterValues
-        };
+    const serviceData: ICreateServiceRequest = {
+      name: formValue.name,
+      description: formValue.description,
+      categoryId: formValue.categoryId,
+      userId: this.userId,
+      price: formValue.price,
+      isEnabled: true,
+      filterValues: filterValues
+    };
 
-        console.log('Update Service Request:', {
-          ...updateRequest,
-          filterValues: JSON.stringify(filterValues, null, 2)
-        });
+    if (this.editingService) {
+      // Update existing service
+      const updateData: IUpdateServiceRequest = {
+        id: this.editingService.id,
+        ...serviceData
+      };
 
-        this.catalogService.updateService(this.editingService.id, updateRequest).subscribe({
-          next: (response) => {
-            if (response.isSuccess && response.value) {
-              this.toastHelper.showSuccess('common.success', 'profile.professional.services.update.success');
-              this.loadServices();
-              this.isServiceDialogVisible = false;
-              this.editingService = null;
-              this.serviceForm.reset();
-            } else {
-              this.toastHelper.showError('common.error', 'profile.professional.services.update.error');
-            }
-          },
-          error: (error: Error) => {
+      this.catalogService.updateService(updateData).subscribe({
+        next: (response) => {
+          if (response?.isSuccess) {
+            this.toastHelper.showSuccess('common.success', 'profile.professional.services.update.success');
+            this.loadServices();
+            this.onCancelService();
+          } else {
             this.toastHelper.showError('common.error', 'profile.professional.services.update.error');
           }
-        });
-      } else {
-        // Create new service
-        const createRequest: ICreateServiceRequest = {
-          name: formValue.name,
-          description: formValue.description || '',
-          categoryId: Number(formValue.categoryId),
-          userId: this.jwtTokenHelper.getUserInfo()?.id || 0,
-          price: formValue.price || 0,
-          filterValues: filterValues
-        };
-
-        console.log('Create Service Request:', {
-          ...createRequest,
-          filterValues: JSON.stringify(filterValues, null, 2)
-        });
-
-        this.catalogService.createService(createRequest).subscribe({
-          next: (response) => {
-            if (response.isSuccess && response.value) {
-              this.toastHelper.showSuccess('common.success', 'profile.professional.services.create.success');
-              this.loadServices();
-              this.isServiceDialogVisible = false;
-              this.serviceForm.reset();
-            } else {
-              this.toastHelper.showError('common.error', 'profile.professional.services.create.error');
-            }
-          },
-          error: (error: Error) => {
-            this.toastHelper.showError('common.error', 'profile.professional.services.create.error');
-          }
-        });
-      }
+        },
+        error: (error) => {
+          console.error('Error updating service:', error);
+          this.toastHelper.showError('common.error', 'profile.professional.services.update.error');
+        }
+      });
+    } else {
+      // Create new service
+      this.catalogService.createService(serviceData).subscribe({
+        next: () => {
+          // For 201 Created response without body
+          this.toastHelper.showSuccess('common.success', 'profile.professional.services.create.success');
+          this.loadServices();
+          this.onCancelService();
+        },
+        error: (error) => {
+          console.error('Error creating service:', error);
+          this.toastHelper.showError('common.error', 'profile.professional.services.create.error');
+        }
+      });
     }
   }
 
   loadServices() {
-    const userId = this.isViewingOtherProfile ? this.viewedUserId : this.jwtTokenHelper.getUserInfo()?.id;
-    if (!userId) return;
-
-    console.log('Loading services for user:', userId);
-    this.catalogService.getServicesByUserId(userId).subscribe({
+    console.log('Loading services for user:', this.userId);
+    this.catalogService.getServicesByUserId(this.userId).subscribe({
       next: (response) => {
         console.log('Load services response:', response);
-        if (response.isSuccess && response.value) {
+        if (response && response.isSuccess && response.value) {
           this.services = response.value;
+          console.log('Updated services array:', this.services);
+        } else {
+          console.error('Invalid response structure:', response);
+          this.services = [];
+          this.toastHelper.showError('common.error', 'profile.professional.services.load.error');
         }
       },
-      error: (error: Error) => {
+      error: (error) => {
         console.error('Error loading services:', error);
+        this.services = [];
         this.toastHelper.showError('common.error', 'profile.professional.services.load.error');
       }
     });
@@ -1086,5 +1146,62 @@ export class ProfileComponent implements OnInit {
   // Add these methods to handle filter values
   getFilterValues(filterId: number): string[] {
     return this.filterValuesMap[filterId] || [];
+  }
+
+  onDeleteService(service: IService) {
+    this.handleProfileOperation(
+      this.catalogService.deleteService(service.id),
+      'profile.professional.services.delete.success',
+      'profile.professional.services.delete.error',
+      () => {
+        this.services = this.services.filter(s => s.id !== service.id);
+      }
+    );
+  }
+
+  onCancelService() {
+    this.isServiceDialogVisible = false;
+    this.editingService = null;
+    this.serviceForm.reset();
+    // Reset filter values and category filters
+    this.filterValuesMap = {};
+    this.categoryFilters = [];
+    // Clear filter form controls
+    const filterValuesGroup = this.serviceForm.get('filterValues') as FormGroup;
+    if (filterValuesGroup) {
+      Object.keys(filterValuesGroup.controls).forEach(key => {
+        filterValuesGroup.removeControl(key);
+      });
+    }
+  }
+
+  onToggleServiceStatus(service: IService): void {
+    const updatedService: IUpdateServiceRequest = {
+      id: service.id,
+      name: service.name,
+      description: service.description,
+      categoryId: service.categoryId,
+      price: service.price,
+      isEnabled: !service.isEnabled,
+      filterValues: service.filterValues.map(fv => ({
+        filterId: fv.filterId,
+        value: fv.value
+      }))
+    };
+
+    this.catalogService.updateService(updatedService).subscribe({
+      next: (response) => {
+        if (response.isSuccess) {
+          this.toastHelper.showSuccess('common.success', 'profile.professional.services.update.success');
+          this.loadServices();
+        } else {
+          this.toastHelper.showError('common.error', 'profile.professional.services.update.error');
+        }
+      },
+      error: (error) => {
+        console.error('Error updating service:', error);
+        this.toastHelper.showError('common.error', 'profile.professional.services.update.error');
+      }
+    });
   }
 }

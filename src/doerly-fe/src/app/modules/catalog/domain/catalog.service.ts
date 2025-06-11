@@ -1,39 +1,38 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from 'environments/environment.development';
-import { IServiceResponse, IPaginatedServiceResponse } from '../models/service.model';
+import { environment } from '../../../../environments/environment';
+import { IService } from '../models/service.model';
+import { IPaginatedServiceResponse } from '../models/service.model';
 import { IFilterResponse } from '../models/filter.model';
+
+interface PaginationRequest {
+  pageInfo: {
+    number: number;
+    size: number;
+  };
+  categoryId?: number;
+  filterValues: any[];
+  sortBy?: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class CatalogService {
-  private baseUrl = environment.baseApiUrl;
+  private apiUrl = `${environment.baseApiUrl}/service`;
 
   constructor(private http: HttpClient) {}
 
-  getServicesWithPagination(params: {
-    pageNumber: number;
-    pageSize: number;
-    categoryId?: number;
-    filterValues?: { [key: number]: string };
-    sortBy?: string;
-  }): Observable<IPaginatedServiceResponse> {
-    const requestBody = {
-      pageInfo: {
-        number: params.pageNumber,
-        size: params.pageSize
-      },
-      categoryId: params.categoryId,
-      filterValues: params.filterValues || {},
-      sortBy: params.sortBy
-    };
-
-    return this.http.post<IPaginatedServiceResponse>(`${this.baseUrl}/service/paginated`, requestBody);
+  getServicesWithPagination(request: PaginationRequest): Observable<IPaginatedServiceResponse> {
+    return this.http.post<IPaginatedServiceResponse>(`${this.apiUrl}/paginated`, request);
   }
 
-  getFiltersByCategoryId(categoryId: number): Observable<IFilterResponse> {
-    return this.http.get<IFilterResponse>(`${this.baseUrl}/filter/${categoryId}`);
+  getServiceById(id: number): Observable<IService> {
+    return this.http.get<IService>(`${this.apiUrl}/${id}`);
+  }
+
+  getFiltersByCategoryId(categoryId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/filters/${categoryId}`);
   }
 } 

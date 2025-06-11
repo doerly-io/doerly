@@ -8,18 +8,23 @@ export enum EFilterType {
 export interface IFilter {
     id: number;
     name: string;
-    type: EFilterType;
-    options: string[] | null;
+    type: number;
+    options: string[];
     categoryId: number;
-}
-
-export interface IFilterValue {
-    filterId: number;
-    value: string;
 }
 
 export interface IFilterResponse {
     value: IFilter[];
     isSuccess: boolean;
-    errorMessage: string;
+    errorMessage?: string;
+}
+
+export interface IFilterValueRequest {
+    filterId: number;
+    value: string;
+}
+
+export interface IFilterValueResponse {
+    filterId: number;
+    value: string;
 } 

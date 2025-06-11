@@ -551,7 +551,7 @@
                 <p class="fw-normal fs-7">{{ service.name }}</p>
               </div>
               <div style="width: 30%">
-                <p class="fw-normal fs-7">{{ service.categoryName }}</p>
+                <p class="fw-normal fs-7">{{ service.categoryName || 'N/A' }}</p>
               </div>
               <div style="width: 20%">
                 <p class="fw-normal fs-7">
@@ -561,6 +561,17 @@
                 </p>
               </div>
               <div style="width: 20%" class="d-flex justify-content-end gap-2" *ngIf="!isViewingOtherProfile">
+                <button
+                  pButton type="button"
+                  class="p-button-rounded p-button-text"
+                  [class.text-success]="service.isEnabled"
+                  [class.text-danger]="!service.isEnabled"
+                  (click)="onToggleServiceStatus(service)"
+                  [pTooltip]="(service.isEnabled ? 'profile.professional.services.disable.title' : 'profile.professional.services.enable.title') | translate"
+                  tooltipPosition="top"
+                >
+                  <i pButtonIcon [class]="service.isEnabled ? 'pi pi-check' : 'pi pi-times'"></i>
+                </button>
                 <button
                   pButton type="button"
                   class="p-button-rounded p-button-text"
@@ -582,6 +593,11 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- No services message -->
+        <div *ngIf="!services?.length" class="d-flex justify-content-center align-items-center p-4">
+          <p class="text-muted">{{ 'profile.professional.services.empty' | translate }}</p>
         </div>
       </div>
 
@@ -922,7 +938,11 @@
           [autoZIndex]="true"
           [baseZIndex]="1000"
           [editable]="false"
-        ></p-dropdown>
+        >
+          <ng-template let-category pTemplate="item">
+            <div [id]="'category-item-' + category.key">{{category.label}}</div>
+          </ng-template>
+        </p-dropdown>
       </div>
     </form>
 
@@ -986,6 +1006,7 @@
       <div class="d-flex flex-column gap-2">
         <label for="serviceCategory" class="fw-semibold">{{ 'profile.professional.services.category.label' | translate }}</label>
         <p-dropdown
+          #serviceCategory
           id="serviceCategory"
           [options]="categoryTreeNodes"
           formControlName="categoryId"
@@ -1001,7 +1022,11 @@
           [autoZIndex]="true"
           [baseZIndex]="1000"
           [editable]="false"
-        ></p-dropdown>
+        >
+          <ng-template let-category pTemplate="item">
+            <div [id]="'category-item-' + category.key">{{category.label}}</div>
+          </ng-template>
+        </p-dropdown>
       </div>
 
       <div class="d-flex flex-column gap-2">
@@ -1110,6 +1135,8 @@
             [minFractionDigits]="2"
             [maxFractionDigits]="2"
             [min]="0"
+            [showButtons]="false"
+            [format]="true"
             (onInput)="onFilterValueChange($event, filter.id)"
           ></p-inputNumber>
 

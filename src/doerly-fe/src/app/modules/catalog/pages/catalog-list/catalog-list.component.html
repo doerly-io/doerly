@@ -1,31 +1,62 @@
 <div class="catalog-container">
   <div class="services-section">
-    <div class="sorting-section">
+    <div class="sorting-section" *ngIf="!isAuthPage">
       <p-dropdown
         [options]="sortOptions"
         [(ngModel)]="selectedSort"
         (onChange)="onSortChange($event)"
-        [style]="{'width':'200px'}"
+        [style]="{'width':'100%', 'max-width':'200px'}"
         placeholder="{{ 'catalog.sort' | translate }}">
       </p-dropdown>
     </div>
 
-    <div class="services-grid">
-      <div *ngFor="let service of services" class="service-card">
+    <div class="services-list">
+      <p-card *ngFor="let service of services" class="service-card">
         <div class="service-info">
-          <h3>{{service.name}}</h3>
-          <p>{{service.description}}</p>
-          <div class="service-price">{{service.price | currency}}</div>
+          <div class="service-main">
+            <div class="service-header">
+              <h3 class="service-title">{{service.name}}</h3>
+              <span class="service-category">{{service.categoryName}}</span>
+            </div>
+            
+            <p class="service-description">{{service.description}}</p>
+            
+            <div class="service-meta">
+              <div class="service-price">{{service.price | currency:'UAH':'symbol-narrow':'1.0-0'}}</div>
+            </div>
+          </div>
+
+          <div class="service-sidebar">
+            <div class="service-user" *ngIf="service.user">
+              <img [src]="service.user.imageUrl || 'assets/images/default-avatar.png'" 
+                   [alt]="service.user.firstName + ' ' + service.user.lastName"
+                   class="user-avatar">
+              <div class="user-info">
+                <span class="user-name">{{service.user.firstName}} {{service.user.lastName}}</span>
+                <span class="user-address" *ngIf="service.user.address">
+                  {{service.user.address.cityName}}
+                </span>
+              </div>
+            </div>
+
+            <div class="service-actions">
+              <button pButton 
+                      [routerLink]="['/catalog/service', service.id]"
+                      label="{{ 'catalog.viewDetails' | translate }}"
+                      class="p-button-primary">
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      </p-card>
     </div>
 
     <p-paginator
       [rows]="pagination.pageSize"
       [totalRecords]="pagination.totalCount"
-      [first]="pagination.pageNumber * pagination.pageSize"
+      [first]="(pagination.pageNumber - 1) * pagination.pageSize"
       (onPageChange)="onPageChange($event)"
-      [rowsPerPageOptions]="[12, 24, 36]"
+      [rowsPerPageOptions]="[10, 20, 30]"
       [alwaysShow]="false">
     </p-paginator>
   </div>

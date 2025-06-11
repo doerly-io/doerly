@@ -20,7 +20,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
         {
             var service = await DbContext.Services
                 .Include(s => s.FilterValues)
-                .ThenInclude(fv => fv.Filter)
+                    .ThenInclude(fv => fv.Filter)
                 .Include(s => s.Category)
                 .FirstOrDefaultAsync(s => s.Id == id);
 

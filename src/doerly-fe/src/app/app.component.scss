@@ -12,3 +12,17 @@ textarea {
   border-radius: 5px;
   border: 1px solid var(--p-inputtext-border-color);
 }
+
+@media (max-width: 768px) {
+  p-header {
+    text-align: center;
+
+    .navbar-brand {
+      margin: 0 auto;
+    }
+
+    app-category-dropdown {
+      margin: 0 auto;
+    }
+  }
+}

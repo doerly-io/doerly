@@ -33,36 +33,39 @@ export interface IProfileDto {
 export interface IService {
     id: number;
     name: string;
-    description?: string;
-    categoryId?: number;
-    categoryName?: string;
+    description: string;
+    categoryId: number;
+    categoryName: string;
     userId: number;
-    user?: IProfileDto;
-    price?: number;
-    categoryPath?: string[];
+    user: IProfileDto | null;
+    price: number;
+    categoryPath: string[];
     isEnabled: boolean;
     isDeleted: boolean;
     filterValues: IFilterValueResponse[];
+    createdDate: string;
 }
 
 export interface IServiceResponse {
+    value: IService[];
     isSuccess: boolean;
-    value?: IService;
-    error?: string;
+    errorMessage: string;
 }
 
 export interface ICreateServiceRequest {
     name: string;
-    description?: string;
+    description: string;
     categoryId: number;
     userId: number;
     price: number;
+    isEnabled: boolean;
     filterValues: IFilterValueRequest[];
 }
 
 export interface IUpdateServiceRequest {
+    id: number;
     name: string;
-    description?: string;
+    description: string;
     categoryId: number;
     price: number;
     isEnabled: boolean;

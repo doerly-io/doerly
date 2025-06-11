@@ -1,19 +1,25 @@
 ﻿using Doerly.Domain.Models;
-using Doerly.Module.Catalog.DataAccess;
-using Microsoft.EntityFrameworkCore;
-using ServiceEntity = Doerly.Module.Catalog.DataAccess.Models.Service;
-using CategoryEntity = Doerly.Module.Catalog.DataAccess.Models.Category;
-using System.Linq.Expressions;
 using Doerly.Extensions;
 using Doerly.Module.Catalog.Contracts.Requests;
 using Doerly.Module.Catalog.Contracts.Responses;
+using Doerly.Module.Catalog.DataAccess;
+using Doerly.Proxy.Profile;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using CategoryEntity = Doerly.Module.Catalog.DataAccess.Models.Category;
+using ServiceEntity = Doerly.Module.Catalog.DataAccess.Models.Service;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Service
 {
     public class GetServicesWithPaginationHandler : BaseCatalogHandler
     {
-        public GetServicesWithPaginationHandler(CatalogDbContext dbContext) : base(dbContext)
+        private readonly IProfileModuleProxy _profileModuleProxy;
+
+        public GetServicesWithPaginationHandler(
+            CatalogDbContext dbContext,
+            IProfileModuleProxy profileModuleProxy) : base(dbContext)
         {
+            _profileModuleProxy = profileModuleProxy;
         }
 
         public async Task<OperationResult<GetServicesWithPaginationResponse>> HandleAsync(GetServiceWithPaginationRequest request)
@@ -22,6 +28,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
                 .AsNoTracking()
                 .Include(s => s.Category)
                 .Include(s => s.FilterValues)
+                    .ThenInclude(fv => fv.Filter)
                 .Where(s => !s.IsDeleted && s.IsEnabled);
 
             var predicates = new List<Expression<Func<ServiceEntity, bool>>>();
@@ -29,52 +36,67 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
             if (request.CategoryId.HasValue)
             {
                 var categoryIds = await GetAllDescendantCategoryIdsAsync(request.CategoryId.Value);
-                predicates.Add(s => categoryIds.Contains(s.CategoryId.Value));
+                predicates.Add(s => categoryIds.Contains(s.CategoryId ?? 0));
             }
 
-            if (request.FilterValues is { Count: > 0 })
+            if (request.FilterValues?.Count > 0)
             {
-                foreach (var (filterId, value) in request.FilterValues)
+                foreach (var fv in request.FilterValues)
                 {
-                    var fid = filterId;
-                    var val = value;
-                    predicates.Add(s => s.FilterValues.Any(fv => fv.FilterId == fid && fv.Value == val));
+                    var filterId = fv.FilterId;
+                    var value = fv.Value;
+                    predicates.Add(s =>
+                        s.FilterValues.Any(f => f.FilterId == filterId && f.Value == value));
                 }
             }
+
+            foreach (var predicate in predicates)
+                baseQuery = baseQuery.Where(predicate);
 
             baseQuery = request.SortBy?.ToLower() switch
             {
                 "name_asc" => baseQuery.OrderBy(s => s.Name),
                 "name_desc" => baseQuery.OrderByDescending(s => s.Name),
+                "price_asc" => baseQuery.OrderBy(s => s.Price),
+                "price_desc" => baseQuery.OrderByDescending(s => s.Price),
                 _ => baseQuery.OrderBy(s => s.Name)
             };
 
-            var (entities, totalCount) = await baseQuery.GetEntitiesWithPaginationAsync(
-                request.PageInfo,
-                predicates
-            );
+            var (entities, totalCount) = await baseQuery.GetEntitiesWithPaginationAsync(request.PageInfo);
 
-            var dtos = entities.Select(s => new GetServiceResponse
+            var dtos = new List<GetServiceResponse>();
+
+            foreach (var service in entities)
             {
-                Id = s.Id,
-                Name = s.Name,
-                Description = s.Description,
-                CategoryId = s.CategoryId,
-                CategoryName = s.Category?.Name,
-                UserId = s.UserId,
-                Price = s.Price,
-                IsEnabled = s.IsEnabled,
-                IsDeleted = s.IsDeleted,
-                CategoryPath = GetCategoryPath(s.Category)
-            }).ToList();
+                var userProfile = await _profileModuleProxy.GetProfileAsync(service.UserId);
 
-            var response = new GetServicesWithPaginationResponse
+                dtos.Add(new GetServiceResponse
+                {
+                    Id = service.Id,
+                    Name = service.Name,
+                    Description = service.Description,
+                    CategoryId = service.CategoryId,
+                    CategoryName = service.Category?.Name,
+                    UserId = service.UserId,
+                    Price = service.Price,
+                    IsEnabled = service.IsEnabled,
+                    IsDeleted = service.IsDeleted,
+                    CategoryPath = GetCategoryPath(service.Category),
+                    User = userProfile.Value,
+                    FilterValues = service.FilterValues.Select(fv => new FilterValueResponse
+                    {
+                        FilterId = fv.FilterId,
+                        FilterName = fv.Filter.Name,
+                        Value = fv.Value
+                    }).ToList()
+                });
+            }
+
+            return OperationResult.Success(new GetServicesWithPaginationResponse
             {
                 Total = totalCount,
-                Orders = dtos
-            };
-
-            return OperationResult.Success(response);
+                Services = dtos
+            });
         }
 
         private List<string> GetCategoryPath(CategoryEntity? category)
@@ -99,7 +121,7 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
 
             void CollectChildren(int parentId)
             {
-                var children = allCategories.Where(c => c.ParentId == parentId).ToList();
+                var children = allCategories.Where(c => c.ParentId == parentId);
                 foreach (var child in children)
                 {
                     result.Add(child.Id);

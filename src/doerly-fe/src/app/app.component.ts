@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MessageService, SharedModule} from 'primeng/api';
 import {Button} from 'primeng/button';
 import {MessageModule} from 'primeng/message';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import {RouterLink, RouterOutlet, Router, NavigationEnd} from '@angular/router';
 import {Divider} from 'primeng/divider';
 import {I18nHelperService} from './@core/helpers/i18n.helper.service';
 import {StyleClass} from 'primeng/styleclass';
@@ -13,6 +13,7 @@ import {Popover} from 'primeng/popover';
 import {AuthService} from './modules/authorization/domain/auth.service';
 import {Toast} from 'primeng/toast';
 import {CategoryDropdownComponent} from './@components/category-dropdown/category-dropdown.component';
+import {filter} from 'rxjs';
 
 const THEME = 'theme';
 
@@ -40,18 +41,25 @@ export class AppComponent implements OnInit {
   lang!: string;
   theme!: string;
   isLoggedIn: boolean = false;
+  isAuthPage: boolean = false;
 
   constructor(private i18nHelperService: I18nHelperService,
               private jwtTokenHelper: JwtTokenHelper,
               private authService: AuthService,
-  ) {
+              private router: Router) {
     this.setDefaults();
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      this.isAuthPage = event.url.includes('/auth');
+    });
   }
 
   ngOnInit(): void {
     this.jwtTokenHelper.isLoggedIn$.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
     });
+    this.isAuthPage = this.router.url.includes('/auth');
   }
 
   setDefaults() {
