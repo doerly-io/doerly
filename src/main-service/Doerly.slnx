@@ -40,6 +40,14 @@
     <Project Path="Doerly.Module.Communication\Doerly.Module.Communication.Domain\Doerly.Module.Communication.Domain.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Communication\Doerly.Module.Communication.Enums\Doerly.Module.Communication.Enums.csproj" Type="Classic C#" />
   </Folder>
+  <Folder Name="/Modules/Notification/">
+    <Project Path="Doerly.Module.Notification\Doerly.Module.Notification.Api\Doerly.Module.Notification.Api.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Notification\Doerly.Module.Notification.DataAccess\Doerly.Module.Notification.DataAccess.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Notification\Doerly.Module.Notification.DataTransferObjects\Doerly.Module.Notification.DataTransferObjects.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Notification\Doerly.Module.Notification.Domain\Doerly.Module.Notification.Domain.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Notification\Doerly.Module.Notification.Enums\Doerly.Module.Notification.Enums.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Notification\Doerly.Module.Notification.Proxy\Doerly.Module.Notification.Proxy.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Modules/Orders/">
     <Project Path="Doerly.Module.Order/Doerly.Module.Order.Enums\Doerly.Module.Order.Enums.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj" Type="Classic C#" />

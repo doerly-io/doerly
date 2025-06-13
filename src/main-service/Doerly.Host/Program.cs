@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using Doerly.Common.Settings;
+using Doerly.Common.Settings.Constants;
 using Doerly.Domain;
 using Doerly.Domain.Factories;
 using Doerly.FileRepository;
@@ -12,6 +13,8 @@ using Doerly.Localization;
 using Doerly.Messaging;
 using Doerly.Module.Authorization.Domain;
 using Doerly.Module.Catalog.Domain;
+using Doerly.Module.Notification.Domain;
+using Doerly.Module.Notification.Proxy;
 using Doerly.Module.Order.Domain;
 using Doerly.Notification.EmailSender;
 using Doerly.Proxy.Authorization;
@@ -62,6 +65,7 @@ builder.RegisterModule(new Doerly.Module.Order.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Catalog.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Common.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Statistics.Api.ModuleInitializer());
+builder.RegisterModule(new Doerly.Module.Notification.Api.ModuleInitializer());
 
 
 #region ModuleProxies
@@ -71,6 +75,7 @@ builder.Services.AddProxy<IProfileModuleProxy, ProfileModuleProxy>();
 builder.Services.AddProxy<IAuthorizationModuleProxy, AuthorizationModuleProxy>();
 builder.Services.AddProxy<IOrdersModuleProxy, OrdersModuleProxy>();
 builder.Services.AddProxy<ICatalogModuleProxy, CatalogModuleProxy>();
+builder.Services.AddProxy<INotificationModuleProxy, NotificationModuleProxy>();
 
 #endregion
 
@@ -160,7 +165,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 var accessToken = context.Request.Query["access_token"];
                 var path = context.HttpContext.Request.Path;
                 if (!string.IsNullOrEmpty(accessToken) &&
-                    path.StartsWithSegments("/communicationhub"))
+                    (path.StartsWithSegments(HubConstants.communicationHub) 
+                    || path.StartsWithSegments(HubConstants.notificationHub)))
                 {
                     context.Token = accessToken;
                 }

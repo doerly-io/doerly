@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>annotations</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Doerly.DataAccess\Doerly.DataAccess.csproj" />
+        <ProjectReference Include="..\Doerly.Module.Notification.Enums\Doerly.Module.Notification.Enums.csproj" />
+    </ItemGroup>
+
+</Project> 

@@ -1,4 +1,5 @@
-﻿using Doerly.DataAccess.Utils;
+﻿using Doerly.Common.Settings.Constants;
+using Doerly.DataAccess.Utils;
 using Doerly.Domain.Extensions;
 using Doerly.Infrastructure.Api;
 using Doerly.Module.Communication.DataAccess;
@@ -34,6 +35,6 @@ public class ModuleInitializer : IModuleInitializer, ISignalrEndpointRouteInitia
 
     public void ConfigureEndpoints(IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapHub<CommunicationHub>("/communicationhub").RequireAuthorization();
+        endpoints.MapHub<CommunicationHub>(HubConstants.communicationHub).RequireAuthorization();
     }
 }
