@@ -51,7 +51,7 @@ public class SelectOrdersWithFilterAndPaginationHandler : BaseOrderHandler
         var filteredCount = await query.CountAsync();
 
         var orders = await query
-            .Skip(dto.PageInfo.Number * dto.PageInfo.Size)
+            .Skip((dto.PageInfo.Number - 1) * dto.PageInfo.Size)
             .Take(dto.PageInfo.Size)
             .Select(order => new
             {

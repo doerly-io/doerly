@@ -19,7 +19,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './ordering-tabs.component.scss'
 })
 export class OrderingTabsComponent implements OnInit {
-  tab: number = 1;
+  tab: number = 2;
   subTab: number = 0;
 
   constructor(
