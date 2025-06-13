@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { TagModule } from 'primeng/tag';
 import { IServiceDetails } from '../../models/service-details.model';
+import { IService } from '../../models/service.model';
 
 @Component({
   selector: 'app-service-details',
@@ -118,6 +119,55 @@ import { IServiceDetails } from '../../models/service-details.model';
                        severity="info"
                        styleClass="competence-tag">
                 </p-tag>
+              </div>
+            </div>
+          </p-card>
+        </div>
+      </div>
+
+      <div class="recommended-services" *ngIf="recommendedServices.length">
+        <h2>{{ 'catalog.recommendedServices' | translate }}</h2>
+        <div class="recommended-grid" [ngClass]="{
+          'single-item': recommendedServices.length === 1,
+          'two-items': recommendedServices.length === 2
+        }">
+          <p-card *ngFor="let service of recommendedServices" class="recommended-card">
+            <div class="service-info">
+              <div class="service-main">
+                <div class="service-header">
+                  <div class="title-section">
+                    <h3 class="service-title">{{service.name}}</h3>
+                    <span class="service-category">{{service.categoryName}}</span>
+                  </div>
+                </div>
+                
+                <p class="service-description">{{service.description}}</p>
+                
+                <div class="service-meta">
+                  <div class="service-price">{{service.price | currency:'UAH':'symbol-narrow':'1.0-0'}}</div>
+                </div>
+              </div>
+
+              <div class="service-sidebar">
+                <div class="service-user" *ngIf="service.user">
+                  <img [src]="service.user.imageUrl || 'assets/images/default-avatar.png'" 
+                       [alt]="service.user.firstName + ' ' + service.user.lastName"
+                       class="user-avatar">
+                  <div class="user-info">
+                    <span class="user-name">{{service.user.firstName}} {{service.user.lastName}}</span>
+                    <span class="user-address" *ngIf="service.user.address">
+                      {{service.user.address.cityName}}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="service-actions">
+                  <button pButton 
+                          [routerLink]="['/catalog/service', service.id]"
+                          label="{{ 'catalog.viewDetails' | translate }}"
+                          class="p-button-primary">
+                  </button>
+                </div>
               </div>
             </div>
           </p-card>
@@ -336,28 +386,271 @@ import { IServiceDetails } from '../../models/service-details.model';
         word-break: break-word;
       }
     }
+
+    .recommended-services {
+      margin-top: 3rem;
+
+      h2 {
+        color: var(--text-color);
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+      }
+    }
+
+    .recommended-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+
+      &.single-item {
+        grid-template-columns: 1fr;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      &.two-items {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      @media (max-width: 1200px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .recommended-card {
+      height: 100%;
+
+      :host ::ng-deep .p-card {
+        height: 100%;
+        background-color: var(--surface-card);
+        
+        .p-card-body {
+          height: 100%;
+          padding: 1rem;
+        }
+      }
+    }
+
+    .service-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      height: 100%;
+    }
+
+    .service-main {
+      flex: 1;
+    }
+
+    .service-header {
+      margin-bottom: 1rem;
+
+      .title-section {
+        .service-title {
+          margin: 0;
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: var(--text-color);
+          word-break: break-word;
+        }
+
+        .service-category {
+          display: block;
+          color: var(--text-color-secondary);
+          font-size: 0.9rem;
+          margin-top: 0.5rem;
+        }
+      }
+    }
+
+    .service-description {
+      color: var(--text-color);
+      margin: 0 0 1rem 0;
+      line-height: 1.6;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+
+    .service-meta {
+      .service-price {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--primary-color);
+      }
+    }
+
+    .service-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .service-user {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background-color: var(--surface-hover);
+      border-radius: 8px;
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .user-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .user-name {
+          font-weight: 500;
+          color: var(--text-color);
+          word-break: break-word;
+          font-size: 0.9rem;
+        }
+
+        .user-address {
+          color: var(--text-color-secondary);
+          font-size: 0.8rem;
+          word-break: break-word;
+        }
+      }
+    }
+
+    .service-actions {
+      :host ::ng-deep .p-button {
+        width: 100%;
+      }
+    }
   `]
 })
 export class ServiceDetailsComponent implements OnInit {
   service: IServiceDetails | null = null;
   groupedFilters: { name: string; type: number; values: string[] }[] = [];
 
+  recommendedServices: IService[] = [
+    {
+      id: 1,
+      name: 'Репетитор з математики',
+      description: 'Допомога з домашніми завданнями та підготовка до ЗНО з математики. Індивідуальний підхід до кожного учня.',
+      categoryId: 12,
+      categoryName: 'Освіта',
+      userId: 1,
+      user: {
+        id: 1,
+        firstName: 'Олександр',
+        lastName: 'Петренко',
+        sex: 1,
+        dateCreated: '2024-03-20',
+        lastModifiedDate: '2024-03-20',
+        imageUrl: 'assets/images/default-avatar.png',
+        address: {
+          cityId: 1,
+          cityName: 'Київ',
+          regionId: 1,
+          regionName: 'Київська область'
+        },
+        languageProficiencies: [],
+        competences: []
+      },
+      price: 300,
+      categoryPath: ['Освіта', 'Репетитори'],
+      isEnabled: true,
+      isDeleted: false,
+      filterValues: [],
+      createdDate: '2024-03-20'
+    },
+    {
+      id: 2,
+      name: 'Репетитор з фізики',
+      description: 'Підготовка до ЗНО з фізики. Розбір складних тем та практичні завдання.',
+      categoryId: 12,
+      categoryName: 'Освіта',
+      userId: 2,
+      user: {
+        id: 2,
+        firstName: 'Марія',
+        lastName: 'Коваленко',
+        sex: 2,
+        dateCreated: '2024-03-19',
+        lastModifiedDate: '2024-03-19',
+        imageUrl: 'assets/images/default-avatar.png',
+        address: {
+          cityId: 2,
+          cityName: 'Львів',
+          regionId: 2,
+          regionName: 'Львівська область'
+        },
+        languageProficiencies: [],
+        competences: []
+      },
+      price: 350,
+      categoryPath: ['Освіта', 'Репетитори'],
+      isEnabled: true,
+      isDeleted: false,
+      filterValues: [],
+      createdDate: '2024-03-19'
+    },
+    {
+      id: 3,
+      name: 'Репетитор з англійської мови',
+      description: 'Індивідуальні заняття з англійської мови для всіх рівнів. Розмовна практика та граматика.',
+      categoryId: 12,
+      categoryName: 'Освіта',
+      userId: 3,
+      user: {
+        id: 3,
+        firstName: 'Анна',
+        lastName: 'Сидоренко',
+        sex: 2,
+        dateCreated: '2024-03-18',
+        lastModifiedDate: '2024-03-18',
+        imageUrl: 'assets/images/default-avatar.png',
+        address: {
+          cityId: 3,
+          cityName: 'Харків',
+          regionId: 3,
+          regionName: 'Харківська область'
+        },
+        languageProficiencies: [],
+        competences: []
+      },
+      price: 400,
+      categoryPath: ['Освіта', 'Репетитори'],
+      isEnabled: true,
+      isDeleted: false,
+      filterValues: [],
+      createdDate: '2024-03-18'
+    }
+  ];
+
   constructor(
-    private catalogService: CatalogService,
     private route: ActivatedRoute,
+    private catalogService: CatalogService,
     private router: Router
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.route.params.subscribe(params => {
       const serviceId = params['id'];
       if (serviceId) {
-        this.loadServiceDetails(serviceId);
+        this.loadServiceDetails(+serviceId);
+        this.loadRecommendedServices(+serviceId);
       }
     });
   }
 
-  loadServiceDetails(serviceId: number) {
+  private loadServiceDetails(serviceId: number): void {
     this.catalogService.getServiceDetails(serviceId).subscribe({
       next: (response) => {
         if (response.isSuccess && response.value) {
@@ -369,6 +662,12 @@ export class ServiceDetailsComponent implements OnInit {
         console.error('Error loading service details:', error);
       }
     });
+  }
+
+  private loadRecommendedServices(serviceId: number): void {
+    // TODO: Replace with actual API call when available
+    // For now, we're using mock data
+    console.log('Loading recommended services for service:', serviceId);
   }
 
   private groupFilters() {

@@ -1,0 +1,49 @@
+<div class="recommended-services">
+  <h2 class="section-title">{{ 'service.recommended' | translate }}</h2>
+  
+  <div class="recommended-grid" [ngClass]="{
+    'single-item': recommendedServices.length === 1,
+    'two-items': recommendedServices.length === 2
+  }">
+    <p-card *ngFor="let service of recommendedServices" class="recommended-card">
+      <div class="service-info">
+        <div class="service-main">
+          <div class="service-header">
+            <div class="title-section">
+              <h3 class="service-title">{{service.name}}</h3>
+              <span class="service-category">{{service.categoryName}}</span>
+            </div>
+          </div>
+          
+          <p class="service-description">{{service.description}}</p>
+          
+          <div class="service-meta">
+            <div class="service-price">{{service.price | currency:'UAH':'symbol-narrow':'1.0-0'}}</div>
+          </div>
+        </div>
+
+        <div class="service-sidebar">
+          <div class="service-user" *ngIf="service.user">
+            <img [src]="service.user.imageUrl || 'assets/images/default-avatar.png'" 
+                 [alt]="service.user.firstName + ' ' + service.user.lastName"
+                 class="user-avatar">
+            <div class="user-info">
+              <span class="user-name">{{service.user.firstName}} {{service.user.lastName}}</span>
+              <span class="user-address" *ngIf="service.user.address">
+                {{service.user.address.cityName}}
+              </span>
+            </div>
+          </div>
+
+          <div class="service-actions">
+            <button pButton 
+                    [routerLink]="['/catalog/service', service.id]"
+                    label="{{ 'catalog.viewDetails' | translate }}"
+                    class="p-button-primary">
+            </button>
+          </div>
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div> 

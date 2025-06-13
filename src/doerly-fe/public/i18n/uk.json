@@ -503,7 +503,8 @@
     "additionalInfo": "Додаткова інформація",
     "provider": "Постачальник послуги",
     "competences": "Компетенції",
-    "viewDetails": "Переглянути деталі"
+    "viewDetails": "Переглянути деталі",
+    "recommendedServices": "Рекомендовані послуги"
   },
   "common": {
     "actions": "Дії",
@@ -530,7 +531,10 @@
       "value": "Додати значення"
     },
     "yes": "Так",
-    "no": "Ні"
+    "no": "Ні",
+    "search": {
+      "placeholder": "Пошук..."
+    }
   },
   "pages": {
     "profile": {

@@ -494,7 +494,8 @@
     "additionalInfo": "Additional Information",
     "provider": "Service Provider",
     "competences": "Competences",
-    "viewDetails": "View Details"
+    "viewDetails": "View Details",
+    "recommendedServices": "Recommended Services"
   },
   "common": {
     "actions": "Actions",
@@ -521,7 +522,10 @@
       "value": "Add value"
     },
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "search": {
+      "placeholder": "Search..."
+    }
   },
   "pages": {
     "profile": {

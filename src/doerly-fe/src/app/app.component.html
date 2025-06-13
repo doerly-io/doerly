@@ -12,6 +12,22 @@
     </div>
   </div>
 
+  <!-- Search bar -->
+  <div class="search-container d-none d-md-flex align-items-center ms-4" *ngIf="!isAuthPage">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input type="text" pInputText placeholder="{{ 'common.search.placeholder' | translate }}" />
+    </span>
+  </div>
+
+  <!-- Mobile search bar -->
+  <div class="search-container d-flex d-md-none w-100 mt-3" *ngIf="!isAuthPage">
+    <span class="p-input-icon-left w-100">
+      <i class="pi pi-search"></i>
+      <input type="text" pInputText class="w-100" placeholder="{{ 'common.search.placeholder' | translate }}" />
+    </span>
+  </div>
+
   <!-- Right block: Action buttons -->
   <div class="d-flex flex-wrap justify-content-center justify-content-md-end align-items-center gap-2 mt-3 mt-md-0 w-100">
     <p-button class="ms-0 ms-md-1" size="small" text="true" [raised]="false" [outlined]="true"

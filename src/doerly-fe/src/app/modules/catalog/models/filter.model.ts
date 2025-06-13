@@ -9,7 +9,7 @@ export interface IFilter {
     id: number;
     name: string;
     type: number;
-    options: string[];
+    values: string[];
     categoryId: number;
 }
 
