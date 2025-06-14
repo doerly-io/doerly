@@ -1,16 +1,37 @@
-<div class="hello-banner">
-  <img ngSrc="/assets/images/hello-banner.png"
-       class="w-100 banner-image-desktop" alt="Hello Banner"
-       [priority]="true"
-       height="906"
-       width="1536">
-  <img ngSrc="/assets/images/hello-banner-mobile.png"
-       class="w-100 banner-image-mobile" alt="Hello Banner" height="1536"
-       [priority]="true"
-       width="1024">
-  <div class="banner-text">
-    <h1>Welcome to Doerly!</h1>
-    <p class="mt-4">Find and offer services in any sphere. Whether you need a task done or want to help
-      others.</p>
-  </div>
+<div class="container">
+
+  <section class="hello-banner">
+    <img ngSrc="/assets/images/hello-banner.png"
+         class="w-100 banner-image-desktop" alt="Hello Banner"
+         [priority]="true"
+         height="906"
+         width="1536">
+    <img ngSrc="/assets/images/hello-banner-mobile.png"
+         class="w-100 banner-image-mobile" alt="Hello Banner" height="1536"
+         [priority]="true"
+         width="1024">
+    <div class="banner-text">
+      <h1>Welcome to Doerly!</h1>
+      <p class="mt-4">Find and offer services in any sphere. Whether you need a task done or want to help
+        others.</p>
+    </div>
+  </section>
+
+  <p-card class="mt-4 popular-categories">
+    <h2>Popular Categories</h2>
+    <div class="row mt-4">
+      <p-card class="col-md-4 mb-3" *ngFor="let category of categories()"
+              [routerLink]="['/catalog', category.categoryId]">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <h5 class="card-title">{{ category.categoryName }}</h5>
+              <p class="card-text" *ngIf="category.amount != 0">{{ category.amount }}</p>
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+  </p-card>
 </div>

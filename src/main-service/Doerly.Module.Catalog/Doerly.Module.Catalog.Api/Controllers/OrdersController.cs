@@ -24,6 +24,7 @@ public class OrdersController : BaseApiController
         return Ok(result);
     }
 
+    [AllowAnonymous]
     [HttpGet("get-orders-amount-by-categories")]
     [ProducesResponseType<List<GetOrdersAmountByCategoriesResponse>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetOrdersAmountByCategories()

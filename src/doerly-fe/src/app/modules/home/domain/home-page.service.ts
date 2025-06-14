@@ -8,7 +8,7 @@ import { Observable } from "rxjs";
     providedIn: 'root'
 })
 
-export class OrdersService {
+export class HomePageService {
     private baseUrl = environment.baseApiUrl + '/catalog/orders';
     private readonly http = inject(HttpClient);
 
