@@ -1,10 +1,11 @@
 <div class="catalog-container">
-  <div class="filters-section">
+  <div class="filters-section" *ngIf="!!services.length">
     <ng-container *ngIf="isLoadingFilters; else filtersLoaded">
       <p>Loading filters...</p>
     </ng-container>
-    <ng-template #filtersLoaded>
-      <app-filter-display 
+    <ng-template #filtersLoaded >
+      <app-filter-display
+
         [filters]="filters"
         (filterChange)="onFilterChange($event)">
       </app-filter-display>
@@ -31,7 +32,7 @@
             </p-dropdown>
           </div>
       </div>
-    
+
 
     <div class="services-list">
       <p-card *ngFor="let service of services" class="service-card">
@@ -43,9 +44,9 @@
                 <span class="service-category">{{service.categoryName}}</span>
               </div>
             </div>
-            
+
             <p class="service-description">{{service.description}}</p>
-            
+
             <div class="service-meta">
               <div class="service-price">{{service.price | currency:'UAH':'symbol-narrow':'1.0-0'}}</div>
             </div>
@@ -53,7 +54,7 @@
 
           <div class="service-sidebar">
             <div class="service-user" *ngIf="service.user">
-              <img [src]="service.user.imageUrl || 'assets/images/default-avatar.png'" 
+              <img [src]="service.user.imageUrl || 'assets/images/default-avatar.png'"
                    [alt]="service.user.firstName + ' ' + service.user.lastName"
                    class="user-avatar">
               <div class="user-info">
@@ -65,7 +66,7 @@
             </div>
 
             <div class="service-actions">
-              <button pButton 
+              <button pButton
                       [routerLink]="['/catalog/service', service.id]"
                       label="{{ 'catalog.viewDetails' | translate }}"
                       class="p-button-primary">
@@ -91,4 +92,4 @@
       [alwaysShow]="false">
     </p-paginator>
   </div>
-</div> 
+</div>

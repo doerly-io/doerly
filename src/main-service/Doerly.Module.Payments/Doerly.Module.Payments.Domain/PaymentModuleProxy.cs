@@ -21,7 +21,7 @@ public class PaymentModuleProxy : IPaymentModuleProxy
 
     public async Task<OperationResult<BaseCheckoutResponse>> CheckoutAsync(CheckoutRequest checkoutRequest)
     {
-        var webhookUrl = _webhookUrlBuilder.BuildWebhookUrl("/api/payments/Webhook/liqpay/final-status");
+        var webhookUrl = _webhookUrlBuilder.BuildWebhookUrl("/api/payments/Webhook/liqpay/update-status");
         var checkoutResponse = await _handlerFactory.Get<CheckoutHandler>().HandleAsync(checkoutRequest, webhookUrl);
         return checkoutResponse;
     }

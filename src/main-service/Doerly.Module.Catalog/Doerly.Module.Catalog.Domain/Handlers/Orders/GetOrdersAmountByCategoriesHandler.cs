@@ -18,9 +18,11 @@ public class GetOrdersAmountByCategoriesHandler : BaseCatalogHandler
     public async Task<List<GetOrdersAmountByCategoriesResponse>> HandleAsync()
     {
         var response = await _ordersModuleProxy.GetOrdersAmountByCategoriesAsync();
+
+        List<int> categoryIds = [];
         if (response.Count != 0)
         {
-            var categoryIds = response.Select(r => r.CategoryId).ToList();
+            categoryIds = response.Select(r => r.CategoryId).ToList() ?? [];
             var categories = await DbContext.Categories.AsNoTracking()
                 .Select(c => new { c.Id, c.Name })
                 .Where(c => categoryIds.Contains(c.Id))
@@ -33,24 +35,24 @@ public class GetOrdersAmountByCategoriesHandler : BaseCatalogHandler
                     item.CategoryName = categoryName;
                 }
             }
+        }
 
-            if (response.Count < 10)
+        if (response.Count < 10)
+        {
+            var otherCategories = await DbContext.Categories.AsNoTracking()
+                .Where(c => !categoryIds.Contains(c.Id))
+                .Select(c => new { c.Id, c.Name })
+                .Take(10 - categoryIds.Count)
+                .ToListAsync();
+
+            foreach (var category in otherCategories)
             {
-                var otherCategories = await DbContext.Categories.AsNoTracking()
-                    .Where(c => !categoryIds.Contains(c.Id))
-                    .Select(c => new { c.Id, c.Name })
-                    .Take(10 - categoryIds.Count)
-                    .ToListAsync();
-
-                foreach (var category in otherCategories)
+                response.Add(new GetOrdersAmountByCategoriesResponse
                 {
-                    response.Add(new GetOrdersAmountByCategoriesResponse
-                    {
-                        CategoryId = category.Id,
-                        CategoryName = category.Name,
-                        Amount = 0
-                    });
-                }
+                    CategoryId = category.Id,
+                    CategoryName = category.Name,
+                    Amount = 0
+                });
             }
         }
 

@@ -34,7 +34,7 @@ export class EmailVerificationComponent implements OnInit {
     this.quthService.verifyEmail(token, email).subscribe({
       next: (response) => {
 
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/login']);
       },
       error: error => {
         this.router.navigate(['/404-page']);
