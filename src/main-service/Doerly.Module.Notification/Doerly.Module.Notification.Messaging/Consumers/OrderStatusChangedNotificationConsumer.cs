@@ -23,6 +23,7 @@ public class OrderStatusChangedNotificationConsumer(
             (int)requestContext.UserId,
             NotificationConstants.StatusChanged,
             NotificationType.Order,
+            DateTime.UtcNow, 
             JsonSerializer.Serialize(new { orderId = context.Message.OrderId, orderStatus = context.Message.OrderStatus })
         );
     }

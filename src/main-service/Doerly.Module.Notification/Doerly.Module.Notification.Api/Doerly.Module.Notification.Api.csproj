@@ -14,7 +14,6 @@
         <ProjectReference Include="..\Doerly.Module.Notification.Domain\Doerly.Module.Notification.Domain.csproj" />
         <ProjectReference Include="..\Doerly.Module.Notification.DataAccess\Doerly.Module.Notification.DataAccess.csproj" />
         <ProjectReference Include="..\Doerly.Module.Notification.Messaging\Doerly.Module.Notification.Messaging.csproj" />
-        <ProjectReference Include="..\Doerly.Module.Notification.Proxy\Doerly.Module.Notification.Proxy.csproj" />
     </ItemGroup>
 
 </Project> 
