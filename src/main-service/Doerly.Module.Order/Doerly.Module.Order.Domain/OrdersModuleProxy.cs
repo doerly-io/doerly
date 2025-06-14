@@ -4,6 +4,7 @@ using Doerly.Domain.Factories;
 using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.DataTransferObjects.Responses;
 using Doerly.Module.Order.Domain.Handlers;
+using Doerly.Module.Order.Domain.Handlers.Order;
 using Doerly.Proxy.Orders;
 
 namespace Doerly.Module.Order.Domain;
@@ -28,5 +29,11 @@ public class OrdersModuleProxy : IOrdersModuleProxy
     {
         var feedbacksResponse = await _handlerFactory.Get<SelectUserFeedbacksHandler>().HandleAsync(userId, request);
         return feedbacksResponse;
+    }
+
+    public async Task<List<GetOrdersAmountByCategoriesResponse>> GetOrdersAmountByCategoriesAsync()
+    {
+        var ordersResponse = await _handlerFactory.Get<GetOrdersAmountByCategoriesHandler>().HandleAsync();
+        return ordersResponse;
     }
 }
