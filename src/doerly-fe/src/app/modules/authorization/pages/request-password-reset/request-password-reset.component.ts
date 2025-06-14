@@ -8,6 +8,8 @@ import {Ripple} from 'primeng/ripple';
 import {Card} from 'primeng/card';
 import {NgIf} from '@angular/common';
 import {getError, getServersideError, isInvalid} from 'app/@core/helpers/input-validation-helpers';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ErrorHandlerService} from 'app/@core/services/error-handler.service';
 
 
 @Component({
@@ -30,6 +32,7 @@ export class RequestPasswordResetComponent implements OnInit {
 
   constructor(private readonly authService: AuthService,
               private readonly formBuilder: FormBuilder,
+              private errorHandler: ErrorHandlerService,
   ) {
   }
 
@@ -46,10 +49,7 @@ export class RequestPasswordResetComponent implements OnInit {
       next: (response) => {
         this.isSubmitted = true;
       },
-      error: error => {
-        console.error(error);
-      }
-
+      error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
     });
   }
 

@@ -30,14 +30,14 @@ public class PaymentsController : BaseApiController
             PayerId = 1,
             AmountTotal = 150.25M,
             BillDescription = "Hello world",
-            PaymentDescription = "Hello world",
+            PaymentDescription = "Тестова оплата",
             ReturnUrl = null,
             Currency = ECurrency.UAH,
             PaymentAction = EPaymentAction.Pay,
             PayerEmail = RequestContext.UserEmail
         };
 
-        var uri = _webhookUrlBuilder.BuildWebhookUrl("/api/payments/Webhook/liqpay/final-status");
+        var uri = _webhookUrlBuilder.BuildWebhookUrl("/api/payments/Webhook/liqpay/update-status");
         var result = await ResolveHandler<CheckoutHandler>().HandleAsync(invoiceCreateRequest, uri);
         return Ok(result);
     }
