@@ -62,7 +62,6 @@ export class EditOrderComponent implements OnInit {
   categoryId?: number;
   executorId?: number;
   isEdit: boolean = false;
-  loading: boolean = false;
   currentDate: Date = new Date();
 
   totalSizeLimit: number = 10 * 1024 * 1024; // 10 MB
@@ -106,7 +105,6 @@ export class EditOrderComponent implements OnInit {
     this.orderForm.setValidators(() => this.filesTotalSizeValidator());
 
     if (this.isEdit) {
-      this.loading = true;
       this.orderService.getOrder(this.orderId!).subscribe({
         next: (response: BaseApiResponse<GetOrderResponse>) => {
           const order = response.value;
@@ -127,7 +125,6 @@ export class EditOrderComponent implements OnInit {
             this.existingFiles = order.existingFiles || [];
             this.updateFilesSizeAndLimit();
           }
-          this.loading = false;
         },
         error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
       });
@@ -198,11 +195,9 @@ export class EditOrderComponent implements OnInit {
   }
 
   onSelectedFiles(event: any) {
-    let added = false;
     for (const file of event.currentFiles) {
       if (!this.files.includes(file)) {
         this.files.push(file);
-        added = true;
       }
     }
     this.updateFilesSizeAndLimit();

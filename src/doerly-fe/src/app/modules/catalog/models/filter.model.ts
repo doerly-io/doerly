@@ -9,7 +9,17 @@ export interface IFilter {
     id: number;
     name: string;
     type: number;
-    values: string[];
+    values: {
+        id: string;
+        name: string;
+        selected?: boolean;
+    }[];
+    selectedValue?: string;
+    min?: number;
+    max?: number;
+    minValue?: number;
+    maxValue?: number;
+    range?: [number, number];
     categoryId: number;
 }
 

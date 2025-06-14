@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Doerly.DataTransferObjects.Pagination;
-using Doerly.Domain.Handlers;
-using Doerly.Module.Catalog.DataAccess;
-using Doerly.Module.Order.DataTransferObjects.Requests;
+﻿using Doerly.Module.Catalog.DataAccess;
 using Doerly.Module.Order.DataTransferObjects.Responses;
 using Doerly.Proxy.Orders;
-
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Orders;
+
 public class GetOrdersAmountByCategoriesHandler : BaseCatalogHandler
 {
     private readonly IOrdersModuleProxy _ordersModuleProxy;
@@ -42,7 +33,27 @@ public class GetOrdersAmountByCategoriesHandler : BaseCatalogHandler
                     item.CategoryName = categoryName;
                 }
             }
+
+            if (response.Count < 10)
+            {
+                var otherCategories = await DbContext.Categories.AsNoTracking()
+                    .Where(c => !categoryIds.Contains(c.Id))
+                    .Select(c => new { c.Id, c.Name })
+                    .Take(10 - categoryIds.Count)
+                    .ToListAsync();
+
+                foreach (var category in otherCategories)
+                {
+                    response.Add(new GetOrdersAmountByCategoriesResponse
+                    {
+                        CategoryId = category.Id,
+                        CategoryName = category.Name,
+                        Amount = 0
+                    });
+                }
+            }
         }
+
         return response;
     }
 }

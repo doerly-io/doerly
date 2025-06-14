@@ -7,7 +7,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./modules/home/home/home.component').then(m => m.HomeComponent),
-    canActivate: [authGuard]
+    //canActivate: [authGuard]
   },
   {
     path: 'auth',
@@ -15,8 +15,7 @@ export const routes: Routes = [
   },
   {
     path: 'profile',
-    loadChildren: () => import('./modules/profile/profile.routes').then(m => m.routes),
-    canActivate: [authGuard]
+    loadChildren: () => import('./modules/profile/profile.routes').then(m => m.routes)
   },
   {
     path: 'communication',
@@ -26,7 +25,6 @@ export const routes: Routes = [
   {
     path: 'ordering',
     loadChildren: () => import('./modules/order/ordering.routes').then(m => m.routes),
-    canActivate: [authGuard]
   },
   {
     path: 'catalog',

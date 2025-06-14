@@ -42,6 +42,12 @@
   display: none;
 }
 
+.card-text {
+  color: var(--p-primary-color);
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
 @media (max-width: 990px) and (min-width: 768px) {
 
   .hello-banner .banner-text h1 {

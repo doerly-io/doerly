@@ -1,10 +1,20 @@
 .order-container {
-    ::ng-deep p-progressbar {
+    ::ng-deep p-progressbar  {
+        display: none !important;
+    }
+
+    ::ng-deep p-message{
         display: none !important;
     }
 
     .upload-header {
         justify-content: space-between;
+
+        .upload-buttons{
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
     }
 
     .files-section {

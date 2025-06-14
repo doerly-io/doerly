@@ -67,25 +67,13 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
                 _ => baseQuery.OrderBy(s => s.Name)
             };
 
-            var (entities, totalCount) = await baseQuery.GetEntitiesWithPaginationAsync(request.PageInfo);
-
-            if (!string.IsNullOrWhiteSpace(request.SearchBy))
+            if (!string.IsNullOrWhiteSpace(request.SearchValue))
             {
-                var words = request.SearchBy
-                    .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                    .Select(w => w.ToLowerInvariant())
-                    .ToList();
-
-                entities = entities
-                    .Where(s =>
-                        words.All(word =>
-                            s.Name != null &&
-                            s.Name
-                                .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                                .Any(n => n.Equals(word, StringComparison.InvariantCultureIgnoreCase) ||
-                                          n.Contains(word, StringComparison.InvariantCultureIgnoreCase))))
-                    .ToList();
+                var lowerSearch = request.SearchValue.ToLowerInvariant();
+                baseQuery = baseQuery.Where(s => s.Name != null && s.Name.ToLower().Contains(lowerSearch));
             }
+
+            var (entities, totalCount) = await baseQuery.GetEntitiesWithPaginationAsync(request.PageInfo);
 
             var dtos = new List<GetServiceResponse>();
 

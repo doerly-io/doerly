@@ -16,6 +16,7 @@ namespace Doerly.Module.Profile.Api.Controllers;
 [Route("api/[area]")]
 public class ProfileController : BaseApiController
 {
+    [AllowAnonymous]
     [HttpGet("{userId:int}")]
     [ProducesResponseType<OperationResult<ProfileDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<OperationResult<ProfileDto>>(StatusCodes.Status404NotFound)]

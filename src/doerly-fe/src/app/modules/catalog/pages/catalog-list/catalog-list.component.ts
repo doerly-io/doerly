@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { CatalogService } from '../../domain/catalog.service';
@@ -12,6 +12,8 @@ import { ButtonModule } from 'primeng/button';
 import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
 import { FilterDisplayComponent } from '../../components/filter-display/filter-display.component';
 import { IFilter } from '../../models/filter.model';
+import { SearchService } from 'app/@core/services/search.service';
+import { Subscription } from 'rxjs';
 
 interface SortOption {
   label: string;
@@ -35,19 +37,21 @@ interface SortOption {
   templateUrl: './catalog-list.component.html',
   styleUrls: ['./catalog-list.component.scss']
 })
-export class CatalogListComponent implements OnInit {
+export class CatalogListComponent implements OnInit, OnDestroy {
   services: IService[] = [];
   filters: IFilter[] = [];
   isAuthorized: boolean = false;
   isAuthPage: boolean = false;
   isLoadingFilters: boolean = false;
+  selectedFilters: any[] = [];
   sortOptions: SortOption[] = [
-    { label: 'Price: Low to High', value: 'price_asc' },
-    { label: 'Price: High to Low', value: 'price_desc' },
-    { label: 'Name: A to Z', value: 'name_asc' },
-    { label: 'Name: Z to A', value: 'name_desc' }
+    { label: 'catalog.sort_options.price_asc', value: 'price_asc' },
+    { label: 'catalog.sort_options.price_desc', value: 'price_desc' },
+    { label: 'catalog.sort_options.name_asc', value: 'name_asc' },
+    { label: 'catalog.sort_options.name_desc', value: 'name_desc' }
   ];
   selectedSort: string = 'price_asc';
+  private searchSubscription: Subscription;
   
   pagination = {
     pageNumber: 1,
@@ -55,14 +59,23 @@ export class CatalogListComponent implements OnInit {
     totalCount: 0
   };
 
-  categoryId: number = 2;
+  categoryId: number | null = null;
 
   constructor(
     private catalogService: CatalogService, 
     private route: ActivatedRoute,
     private router: Router,
-    private jwtTokenHelper: JwtTokenHelper
-  ) {}
+    private jwtTokenHelper: JwtTokenHelper,
+    private searchService: SearchService
+  ) {
+    this.searchSubscription = this.searchService.searchValue$.subscribe(searchValue => {
+      if (searchValue) {
+        this.categoryId = null;
+        this.pagination.pageNumber = 1;
+        this.loadServices();
+      }
+    });
+  }
 
   ngOnInit() {
     this.isAuthorized = !!this.jwtTokenHelper.getUserInfo();
@@ -71,24 +84,35 @@ export class CatalogListComponent implements OnInit {
     });
     
     this.route.params.subscribe(params => {
-      this.categoryId = params['categoryId'] ? +params['categoryId'] : 2;
+      this.categoryId = params['categoryId'] ? +params['categoryId'] : null;
       this.pagination.pageNumber = 1;
       this.loadFilters();
       this.loadServices();
     });
   }
 
+  ngOnDestroy() {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
+  }
+
   loadFilters(): void {
+    if (!this.categoryId) return;
+    
     this.isLoadingFilters = true;
-    console.log('Loading filters for category:', this.categoryId);
     this.catalogService.getFiltersByCategoryId(this.categoryId).subscribe({
       next: (response) => {
-        console.log('Filters API Response:', response);
         if (response && response.value) {
-          this.filters = response.value;
-          console.log('Parsed filters:', this.filters);
+          this.filters = response.value.map((filter: IFilter) => ({
+            ...filter,
+            values: filter.values.map(value => ({
+              id: value,
+              name: value,
+              selected: false
+            }))
+          }));
         } else {
-          console.warn('No filters data in response');
           this.filters = [];
         }
         this.isLoadingFilters = false;
@@ -101,20 +125,26 @@ export class CatalogListComponent implements OnInit {
     });
   }
 
+  onFilterChange(filterValues: any[]): void {
+    this.selectedFilters = filterValues;
+    this.pagination.pageNumber = 1;
+    this.loadServices();
+  }
+
   loadServices() {
     const requestBody = {
       pageInfo: {
         number: this.pagination.pageNumber,
         size: this.pagination.pageSize
       },
-      categoryId: this.categoryId,
-      filterValues: [],
-      sortBy: this.selectedSort
+      categoryId: this.categoryId || undefined,
+      filterValues: this.selectedFilters,
+      sortBy: this.selectedSort,
+      searchValue: this.searchService.getSearchValue()
     };
-    console.log('Sending to service:', requestBody);
+
     this.catalogService.getServicesWithPagination(requestBody).subscribe({
       next: (response: any) => {
-        console.log('Received from service:', response);
         if (response.isSuccess && response.value) {
           this.services = response.value.services;
           this.pagination.totalCount = response.value.total;
