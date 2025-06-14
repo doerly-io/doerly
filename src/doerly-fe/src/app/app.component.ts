@@ -16,6 +16,8 @@ import {CategoryDropdownComponent} from './@components/category-dropdown/categor
 import {NotificationBadgeComponent} from './@components/notification-badge/notification-badge.component';
 import {NotificationPanelComponent} from './@components/notification-panel/notification-panel.component';
 import {filter} from 'rxjs';
+import {SearchService} from './@core/services/search.service';
+import {FormsModule} from '@angular/forms';
 
 const THEME = 'theme';
 
@@ -35,7 +37,8 @@ const THEME = 'theme';
     CategoryDropdownComponent,
     NotificationBadgeComponent,
     NotificationPanelComponent,
-    ButtonDirective
+    ButtonDirective,
+    FormsModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -52,7 +55,8 @@ export class AppComponent implements OnInit {
   constructor(private i18nHelperService: I18nHelperService,
               private jwtTokenHelper: JwtTokenHelper,
               private authService: AuthService,
-              private router: Router) {
+              private router: Router,
+              private searchService: SearchService) {
     this.setDefaults();
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -101,5 +105,12 @@ export class AppComponent implements OnInit {
     this.jwtTokenHelper.removeToken();
     window.location.reload();
   }
+
+  // onSearch() {
+  //   if (this.searchText.trim()) {
+  //     this.searchService.setSearchValue(this.searchText);
+  //     this.router.navigate(['/catalog']);
+  //   }
+  // }
 
 }
