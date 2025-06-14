@@ -547,5 +547,33 @@
       "no-document": "PDF-документ не завантажено",
       "canvas-context": "Не вдалося отримати контекст полотна"
     }
+  },
+  "Notification": {
+    "Order": {
+      "StatusChanged": "Статус замовлення #{{id}} змінено на {{status}}"
+    }
+  },
+  "notification": {
+    "title": "Сповіщення",
+    "mark_all_read": "Позначити всі як прочитані",
+    "no_notifications": "Немає сповіщень",
+    "types": {
+      "Message": "Повідомлення",
+      "Order": "Замовлення",
+      "System": "Система",
+      "Task": "Завдання",
+      "Comment": "Коментар",
+      "Like": "Лайк",
+      "Follow": "Підписка",
+      "Mention": "Згадка"
+    },
+    "message": "{{senderName}} надіслав вам повідомлення",
+    "order": "Статус замовлення #{{orderId}} змінено на {{status}}",
+    "system": "{{message}}",
+    "task": "Нове завдання: {{taskName}}",
+    "comment": "{{userName}} прокоментував ваш {{entityType}}",
+    "like": "{{userName}} вподобав ваш {{entityType}}",
+    "follow": "{{userName}} почав слідкувати за вами",
+    "mention": "{{userName}} згадав вас у {{entityType}}"
   }
 }

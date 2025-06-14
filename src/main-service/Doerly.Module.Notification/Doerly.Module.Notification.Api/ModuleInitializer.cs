@@ -16,8 +16,8 @@ public class ModuleInitializer: IModuleInitializer, ISignalrEndpointRouteInitial
     public void ConfigureServices(IHostApplicationBuilder builder)
     {
         builder.Services.AddDbContext<NotificationDbContext>();
-        builder.Services.RegisterHandlers(typeof(IAssemblyMarker).Assembly);
-        builder.Services.RegisterEventConsumers(typeof(IAssemblyMarker).Assembly);
+        builder.Services.RegisterHandlers(typeof(Doerly.Module.Notification.Domain.IAssemblyMarker).Assembly);
+        builder.Services.RegisterEventConsumers(typeof(Doerly.Module.Notification.Messaging.IAssemblyMarker).Assembly);
         builder.Services.AddSingleton<ISignalrEndpointRouteInitializer, ModuleInitializer>();
         builder.Services.AddScoped<INotificationModuleProxy, NotificationModuleProxy>();
         builder.Services.AddScoped<INotificationSender, NotificationHubSender>();

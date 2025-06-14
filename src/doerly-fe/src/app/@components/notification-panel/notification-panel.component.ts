@@ -8,20 +8,23 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { RippleModule } from 'primeng/ripple';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { NotificationType } from '../../@core/enums/notification-type.enum';
+import {EOrderStatus} from '../../modules/order/domain/enums/order-status';
 
 @Component({
   selector: 'app-notification-panel',
   standalone: true,
-  imports: [CommonModule, ButtonModule, CardModule, ScrollPanelModule, RippleModule],
+  imports: [CommonModule, ButtonModule, CardModule, ScrollPanelModule, RippleModule, TranslatePipe],
   template: `
     <div class="notification-panel" *ngIf="isVisible$ | async">
       <p-card styleClass="notification-card">
         <ng-template pTemplate="header">
           <div class="panel-header">
-            <h3>Notifications</h3>
-            <p-button 
+            <h3>{{ 'notification.title' | translate }}</h3>
+            <p-button
               *ngIf="hasUnreadNotifications"
-              label="Mark all as read"
+              [label]="'notification.mark_all_read' | translate"
               icon="pi pi-check"
               (click)="markAllAsRead()"
               [text]="true"
@@ -35,10 +38,10 @@ import { RippleModule } from 'primeng/ripple';
           <div class="panel-content">
             <div *ngIf="notifications.length === 0" class="no-notifications">
               <i class="pi pi-bell" style="font-size: 2rem"></i>
-              <p>No notifications</p>
+              <p>{{ 'notification.no_notifications' | translate }}</p>
             </div>
-            
-            <div *ngFor="let notification of notifications" 
+
+            <div *ngFor="let notification of notifications"
                  class="notification-item"
                  [class.unread]="!notification.isRead"
                  (click)="handleNotificationClick(notification)"
@@ -46,9 +49,9 @@ import { RippleModule } from 'primeng/ripple';
               <div class="notification-content">
                 <div class="notification-header">
                   <i [class]="getNotificationIcon(notification.type)" class="notification-icon"></i>
-                  <h4>{{ notification.title }}</h4>
+                  <h4>{{ getNotificationTitle(notification) }}</h4>
                 </div>
-                <p>{{ notification.message }}</p>
+                <p>{{ getNotificationMessage(notification) }}</p>
                 <small>{{ notification.createdAt | date:'short' }}</small>
               </div>
             </div>
@@ -97,6 +100,12 @@ import { RippleModule } from 'primeng/ripple';
           background: var(--p-surface-700);
         }
       }
+
+      .p-button {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        line-height: 1.5;
+      }
     }
 
     .panel-header {
@@ -114,16 +123,16 @@ import { RippleModule } from 'primeng/ripple';
     .panel-content {
       .notification-item {
         padding: 1rem;
-        border-bottom: 1px solid var(--p-surface-700);
+        border-bottom: 1px solid var(--p-surface-400);
         cursor: pointer;
         transition: background-color 0.2s;
 
         &:hover {
-          background-color: var(--p-surface-700);
+          background-color: var(--p-primary-300);
         }
 
         &.unread {
-          background-color: var(--p-surface-700);
+          background-color: var(--p-surface-200);
         }
 
         .notification-content {
@@ -155,6 +164,37 @@ import { RippleModule } from 'primeng/ripple';
             color: var(--p-surface-400);
             font-size: 0.75rem;
             opacity: 0.7;
+          }
+        }
+      }
+    }
+
+    :host-context(.my-app-dark) {
+      .panel-content {
+        .notification-item {
+          background-color: var(--p-surface-800);
+          border-bottom-color: var(--p-surface-700);
+
+          &:hover {
+            background-color: var(--p-surface-700);
+          }
+
+          &.unread {
+            background-color: var(--p-surface-700);
+          }
+
+          .notification-content {
+            h4 {
+              color: var(--p-surface-0);
+            }
+
+            p {
+              color: var(--p-surface-300);
+            }
+
+            small {
+              color: var(--p-surface-400);
+            }
           }
         }
       }
@@ -202,6 +242,12 @@ import { RippleModule } from 'primeng/ripple';
         .p-scrollpanel {
           height: 100%;
         }
+
+        .p-button {
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+          line-height: 1.5;
+        }
       }
     }
   `]
@@ -214,7 +260,8 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
   constructor(
     private notificationService: NotificationService,
     private panelService: NotificationPanelService,
-    private navigationService: NotificationNavigationService
+    private navigationService: NotificationNavigationService,
+    private translateService: TranslateService
   ) {
     this.isVisible$ = this.panelService.isVisible$;
   }
@@ -255,17 +302,44 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
     this.notificationService.markAllAsRead().subscribe();
   }
 
-  getNotificationIcon(type: number): string {
-    switch (type) {
-      case 0: return 'pi pi-envelope'; // Message
-      case 1: return 'pi pi-shopping-cart'; // Order
-      case 2: return 'pi pi-info-circle'; // System
-      case 3: return 'pi pi-check-square'; // Task
-      case 4: return 'pi pi-comments'; // Comment
-      case 5: return 'pi pi-heart'; // Like
-      case 6: return 'pi pi-user-plus'; // Follow
-      case 7: return 'pi pi-at'; // Mention
-      default: return 'pi pi-bell';
+  getNotificationTitle(notification: Notification): string {
+    return this.translateService.instant(`notification.types.${NotificationType[notification.type]}`);
+  }
+
+  getNotificationMessage(notification: Notification): string {
+    try {
+      if (notification.type === NotificationType.Order && notification.message === 'Notification.Order.StatusChanged') {
+
+        const data = notification.data ? JSON.parse(notification.data) : {};
+        if (data.OrderStatus) {
+          data.OrderStatus = this.translateService.instant(`ordering.order_statuses.${EOrderStatus[data.OrderStatus]}`);
+        }
+
+        let translated = '';
+        this.translateService.get('Notification.Order.StatusChanged', {id: data.OrderId, status: data.OrderStatus}).subscribe(translate => {
+          translated = translate;
+        });
+        return translated;
+      }
+
+      const translationKey = notification.message;
+      const data = notification.data ? JSON.parse(notification.data) : {};
+
+      return this.translateService.instant(translationKey, data);
+    } catch (e) {
+      console.error('Error parsing notification data:', e);
+      return notification.message;
     }
   }
-} 
+
+  getNotificationIcon(type: NotificationType): string {
+    switch (type) {
+      case NotificationType.Message:
+        return 'pi pi-envelope';
+      case NotificationType.Order:
+        return 'pi pi-shopping-cart';
+      default:
+        return 'pi pi-envelope';
+    }
+  }
+}

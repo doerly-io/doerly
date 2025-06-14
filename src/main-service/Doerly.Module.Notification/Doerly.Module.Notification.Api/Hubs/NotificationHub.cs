@@ -12,20 +12,20 @@ namespace Doerly.Module.Notification.Api.Hubs;
 [Authorize]
 public class NotificationHub(IHandlerFactory handlerFactory) : Hub<INotificationHub>
 {
-    public async Task SendNotification(int userId, string title, string message, NotificationType type, string? data = null)
+    public async Task SendNotification(int userId, string title, NotificationType type, string? data = null)
     {
-        var result = await handlerFactory.Get<SendNotificationHandler>().HandleAsync(userId, title, message, type, data);
+        var result = await handlerFactory.Get<SendNotificationHandler>().HandleAsync(userId, title, type, data);
         if (!result.IsSuccess)
         {
             throw new DoerlyException(result.ErrorMessage);
         }
     }
 
-    public async Task SendNotificationToUsers(IEnumerable<int> userIds, string title, string message, NotificationType type, string? data = null)
+    public async Task SendNotificationToUsers(IEnumerable<int> userIds, string title, NotificationType type, string? data = null)
     {
         foreach (var userId in userIds)
         {
-            await SendNotification(userId, title, message, type, data);
+            await SendNotification(userId, title, type, data);
         }
     }
 

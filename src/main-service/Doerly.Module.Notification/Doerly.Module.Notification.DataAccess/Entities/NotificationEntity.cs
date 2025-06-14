@@ -6,10 +6,8 @@ namespace Doerly.Module.Notification.DataAccess.Entities;
 public class NotificationEntity : BaseEntity
 {
     public int UserId { get; set; }
-    public string Title { get; set; }
     public string Message { get; set; }
     public NotificationType Type { get; set; }
     public bool IsRead { get; set; }
-    public DateTime CreatedAt { get; set; }
     public string? Data { get; set; } // JSON data for additional information
 } 

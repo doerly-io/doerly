@@ -22,7 +22,6 @@ public class ModuleInitializer : IModuleInitializer, ISignalrEndpointRouteInitia
     {
         builder.Services.AddDbContext<CommunicationDbContext>();
         builder.Services.RegisterHandlers(typeof(IAssemblyMarker).Assembly);
-        builder.Services.RegisterEventConsumers(typeof(IAssemblyMarker).Assembly);
         builder.Services.AddSingleton<ISignalrEndpointRouteInitializer, ModuleInitializer>();
         builder.Services.AddScoped<IUserOnlineStatusHelper, UserOnlineStatusHelper>();
     }

@@ -10,16 +10,16 @@ namespace Doerly.Module.Notification.Domain;
 
 public class NotificationModuleProxy(IHandlerFactory handlerFactory) : INotificationModuleProxy
 {
-    public Task<OperationResult<NotificationDto>> SendNotificationAsync(int userId, string title, string message, NotificationType type, string? data = null)
+    public Task<OperationResult<NotificationDto>> SendNotificationAsync(int userId, string message, NotificationType type, string? data = null)
     {
-        return handlerFactory.Get<SendNotificationHandler>().HandleAsync(userId, title, message, type, data);
+        return handlerFactory.Get<SendNotificationHandler>().HandleAsync(userId, message, type, data);
     }
 
-    public async Task<OperationResult> SendNotificationToUsersAsync(IEnumerable<int> userIds, string title, string message, NotificationType type, string? data = null)
+    public async Task<OperationResult> SendNotificationToUsersAsync(IEnumerable<int> userIds, string message, NotificationType type, string? data = null)
     {
         foreach (var userId in userIds)
         {
-            var result = await SendNotificationAsync(userId, title, message, type, data);
+            var result = await SendNotificationAsync(userId, message, type, data);
             if (!result.IsSuccess)
             {
                 return result;

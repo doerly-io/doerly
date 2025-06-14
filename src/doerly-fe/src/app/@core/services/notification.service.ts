@@ -9,12 +9,12 @@ import {JwtTokenHelper} from '../helpers/jwtToken.helper';
 
 export interface Notification {
   id: number;
-  title: string;
+  userId: number;
   message: string;
   type: NotificationType;
-  data?: string;
   isRead: boolean;
   createdAt: Date;
+  data?: string;
 }
 
 @Injectable({

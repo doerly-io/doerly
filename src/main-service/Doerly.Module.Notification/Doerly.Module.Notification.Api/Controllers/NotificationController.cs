@@ -27,9 +27,9 @@ public class NotificationController : ControllerBase
     }
 
     [HttpPost("send")]
-    public async Task<IActionResult> SendNotification(int userId, string title, string message, NotificationType type, string? data = null)
+    public async Task<IActionResult> SendNotification(int userId, string title, NotificationType type, string? data = null)
     {
-        var result = await _handlerFactory.Get<SendNotificationHandler>().HandleAsync(userId, title, message, type, data);
+        var result = await _handlerFactory.Get<SendNotificationHandler>().HandleAsync(userId, title, type, data);
         if (!result.IsSuccess)
         {
             throw new DoerlyException(result.ErrorMessage);
@@ -45,11 +45,11 @@ public class NotificationController : ControllerBase
     }
 
     [HttpPost("send-to-users")]
-    public async Task<IActionResult> SendNotificationToUsers(IEnumerable<int> userIds, string title, string message, NotificationType type, string? data = null)
+    public async Task<IActionResult> SendNotificationToUsers(IEnumerable<int> userIds, string title, NotificationType type, string? data = null)
     {
         foreach (var userId in userIds)
         {
-            var result = await _handlerFactory.Get<SendNotificationHandler>().HandleAsync(userId, title, message, type, data);
+            var result = await _handlerFactory.Get<SendNotificationHandler>().HandleAsync(userId, title, type, data);
             if (!result.IsSuccess)
             {
                 throw new DoerlyException(result.ErrorMessage);

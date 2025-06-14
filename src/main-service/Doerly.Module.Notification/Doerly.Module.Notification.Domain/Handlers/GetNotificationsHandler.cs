@@ -28,11 +28,9 @@ public class GetNotificationsHandler : BaseNotificationHandler
             .Select(n => new NotificationDto
             {
                 Id = n.Id,
-                Title = n.Title,
                 Message = n.Message,
                 Type = n.Type,
                 IsRead = n.IsRead,
-                CreatedAt = n.CreatedAt,
                 Data = n.Data
             })
             .Take(cursorRequest.PageSize + 1)

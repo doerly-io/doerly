@@ -320,4 +320,10 @@ Doerly</value>
   <data name="InvalidUserForProposal" xml:space="preserve">
     <value>Цьому користувачу не можна надіслати пропозицію виконання</value>
   </data>
+  <data name="Notification.NewMessage" xml:space="preserve">
+    <value>{0} надіслав вам повідомлення</value>
+  </data>
+  <data name="Notification.Order.StatusChanged" xml:space="preserve">
+    <value>Статус замовлення #{0} змінився на {1}</value>
+  </data>
 </root>

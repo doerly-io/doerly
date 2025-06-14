@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
+      <ProjectReference Include="..\..\Doerly.Module.Order\Doerly.Module.Order.DataTransferObjects\Doerly.Module.Order.DataTransferObjects.csproj" />
+      <ProjectReference Include="..\..\Doerly.Module.Payments\Doerly.Module.Payments.DataTransferObjects\Doerly.Module.Payments.DataTransferObjects.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Notification.Domain\Doerly.Module.Notification.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

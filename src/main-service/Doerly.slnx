@@ -46,6 +46,7 @@
     <Project Path="Doerly.Module.Notification\Doerly.Module.Notification.DataTransferObjects\Doerly.Module.Notification.DataTransferObjects.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Notification\Doerly.Module.Notification.Domain\Doerly.Module.Notification.Domain.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Notification\Doerly.Module.Notification.Enums\Doerly.Module.Notification.Enums.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Notification\Doerly.Module.Notification.Messaging\Doerly.Module.Notification.Messaging.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Notification\Doerly.Module.Notification.Proxy\Doerly.Module.Notification.Proxy.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Modules/Orders/">

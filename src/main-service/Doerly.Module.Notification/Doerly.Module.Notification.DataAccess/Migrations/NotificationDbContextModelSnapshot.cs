@@ -32,10 +32,6 @@ namespace Doerly.Module.Notification.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
                     b.Property<string>("Data")
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)")
@@ -55,18 +51,11 @@ namespace Doerly.Module.Notification.DataAccess.Migrations
 
                     b.Property<string>("Message")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)")
-                        .HasColumnName("message");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)")
-                        .HasColumnName("title");
+                        .HasColumnName("message");
 
                     b.Property<byte>("Type")
-                        .HasMaxLength(50)
                         .HasColumnType("smallint")
                         .HasColumnName("type");
 
@@ -77,8 +66,8 @@ namespace Doerly.Module.Notification.DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("pk_notification");
 
-                    b.HasIndex("CreatedAt")
-                        .HasDatabaseName("ix_notification_created_at");
+                    b.HasIndex("DateCreated")
+                        .HasDatabaseName("ix_notification_date_created");
 
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_notification_user_id");

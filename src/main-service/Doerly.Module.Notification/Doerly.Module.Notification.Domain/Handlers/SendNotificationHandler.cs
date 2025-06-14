@@ -13,16 +13,14 @@ public class SendNotificationHandler(
     INotificationSender notificationSender)
     : BaseNotificationHandler(dbContext)
 {
-    public async Task<OperationResult<NotificationDto>> HandleAsync(int userId, string title, string message, NotificationType type, string? data = null)
+    public async Task<OperationResult<NotificationDto>> HandleAsync(int userId, string message, NotificationType type, string? data = null)
     {
         var notification = new NotificationEntity
         {
             UserId = userId,
-            Title = title,
             Message = message,
             Type = type,
             IsRead = false,
-            CreatedAt = DateTime.UtcNow,
             Data = data
         };
 
@@ -33,11 +31,10 @@ public class SendNotificationHandler(
         {
             Id = notification.Id,
             UserId = notification.UserId,
-            Title = notification.Title,
             Message = notification.Message,
             Type = notification.Type,
             IsRead = notification.IsRead,
-            CreatedAt = notification.CreatedAt,
+            CreatedAt = notification.DateCreated,
             Data = notification.Data
         };
 

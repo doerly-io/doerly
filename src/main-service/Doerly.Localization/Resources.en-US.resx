@@ -221,25 +221,7 @@ Doerly</value>
   <data name="Notification.NewMessage" xml:space="preserve">
     <value>{0} sent you a message</value>
   </data>
-  <data name="Notification.NewOrder" xml:space="preserve">
-    <value>New order received</value>
-  </data>
-  <data name="Notification.System" xml:space="preserve">
-    <value>System notification</value>
-  </data>
-  <data name="Notification.NewTask" xml:space="preserve">
-    <value>New task assigned to you</value>
-  </data>
-  <data name="Notification.NewComment" xml:space="preserve">
-    <value>New comment on your post</value>
-  </data>
-  <data name="Notification.NewLike" xml:space="preserve">
-    <value>Someone liked your post</value>
-  </data>
-  <data name="Notification.NewFollower" xml:space="preserve">
-    <value>New follower</value>
-  </data>
-  <data name="Notification.NewMention" xml:space="preserve">
-    <value>Someone mentioned you</value>
+  <data name="Notification.Order.StatusChanged" xml:space="preserve">
+    <value>Order #{0} status has been changed to {1}</value>
   </data>
 </root>

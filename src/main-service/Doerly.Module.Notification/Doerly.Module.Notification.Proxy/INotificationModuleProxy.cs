@@ -8,8 +8,8 @@ namespace Doerly.Module.Notification.Proxy;
 
 public interface INotificationModuleProxy : IModuleProxy
 {
-    Task<OperationResult<NotificationDto>> SendNotificationAsync(int userId, string title, string message, NotificationType type, string? data = null);
-    Task<OperationResult> SendNotificationToUsersAsync(IEnumerable<int> userIds, string title, string message, NotificationType type, string? data = null);
+    Task<OperationResult<NotificationDto>> SendNotificationAsync(int userId, string message, NotificationType type, string? data = null);
+    Task<OperationResult> SendNotificationToUsersAsync(IEnumerable<int> userIds, string message, NotificationType type, string? data = null);
     Task<OperationResult> MarkNotificationsAsReadAsync(int userId, int[] notificationIds);
     Task<OperationResult> MarkAllNotificationsAsReadAsync(int userId);
     Task<OperationResult<int>> GetUnreadNotificationsCountAsync(int userId);
