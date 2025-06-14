@@ -62,7 +62,9 @@ public class LiqPayPaymentAdapter : IPaymentAdapter
         var payType = LiqPayMappingHelper.MapLiqPaymentMethodToCommonType(liqPayCheckoutStatus.PaymentMethod);
 
         var paymentStatusChangedHandler = _handlerFactory.Get<PaymentStatusChangedHandler>();
-        var result = await paymentStatusChangedHandler.Handle(new PaymentStatusChangedModel(paymentGuid, status, payType, liqPayCheckoutStatus.SenderCardMask));
+        var result = await paymentStatusChangedHandler.Handle(
+            new PaymentStatusChangedModel(paymentGuid, status, payType, liqPayCheckoutStatus.SenderCardMask));
+        
         return result;
     }
 }
