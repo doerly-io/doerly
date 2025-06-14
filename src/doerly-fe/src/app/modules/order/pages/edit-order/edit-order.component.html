@@ -41,7 +41,7 @@
           </div>
           <div class="row mb-3 mx-0 px-0">
             <div class="card">
-              <p-fileupload [multiple]="true" accept=".jpg,.jpeg,.png" auto="false"
+              <p-fileupload [multiple]="true" invalidFileTypeMessageDetail="" invalidFileTypeMessageSummary="" accept=".jpg,.jpeg,.png" auto="false"
                 (onSelect)="onSelectedFiles($event)">
                 <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback">
                   <div class="upload-header flex items-center flex-1 gap-2 w-100">

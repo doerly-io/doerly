@@ -1,5 +1,9 @@
 .order-container {
-    ::ng-deep p-progressbar {
+    ::ng-deep p-progressbar  {
+        display: none !important;
+    }
+
+    ::ng-deep p-message{
         display: none !important;
     }
 

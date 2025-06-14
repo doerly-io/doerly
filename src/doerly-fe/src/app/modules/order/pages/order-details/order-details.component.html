@@ -1,10 +1,9 @@
-<section class="order-details-container row justify-content-center">
+<section *ngIf="!loading && order" class="order-details-container row justify-content-center">
   <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
-    <h3 class="order-title">{{ 'ordering.order_number' | translate: ({orderId: order?.id}) }}</h3>
+    <h3 class="order-title">{{ 'ordering.order_number' | translate: ({orderId: order.id}) }}</h3>
     <div class="row justify-content-center">
       <div class="col-sm-12 col-md-10">
-        <div *ngIf="loading" class="text-center">{{ 'ordering.loading' | translate }}</div>
-        <div *ngIf="!loading && order" class="order-details">
+        <div class="order-details">
 
           <!-- Фото замовника по центру -->
           <div class="d-flex flex-column align-items-center mb-4">
@@ -16,7 +15,7 @@
                         class="avatar"></p-avatar>
               <div class="profile-hover-overlay">
                 <i class="pi pi-user"></i>
-                <span>{{ 'profile.view.title' | translate }}</span>
+                <span>{{ 'pages.profile.title' | translate }}</span>
               </div>
             </div>
             <span>
@@ -170,7 +169,7 @@
     </div>
 
     <app-feedback-input *ngIf="order?.status == EOrderStatus.Completed && (this.order?.feedback || canEditFeedback)"
-                        [orderId]="this.order?.id" [canEdit]="canEditFeedback" [feedback]="this.order?.feedback"
+                        [orderId]="this.order.id" [canEdit]="canEditFeedback" [feedback]="this.order.feedback"
                         class="mt-4" />
     </p-card>
 </section>

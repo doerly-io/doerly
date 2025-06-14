@@ -37,7 +37,6 @@ export class EditExecutionProposalComponent implements OnInit {
   orderId?: number;
   receiverId?: number;
   isEdit: boolean = false;
-  loading: boolean = true;
   commentMaxLength: number = 1000;
 
   constructor(
@@ -64,12 +63,10 @@ export class EditExecutionProposalComponent implements OnInit {
               comment: proposal.comment
             });
           }
-          this.loading = false;
         },
         error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
       });
     } else {
-      this.loading = false;
       this.orderId = Number(this.route.snapshot.queryParamMap.get('orderId'));
       this.receiverId = Number(this.route.snapshot.queryParamMap.get('receiverId'));
     }
