@@ -584,5 +584,10 @@
     "like": "{{userName}} liked your {{entityType}}",
     "follow": "{{userName}} started following you",
     "mention": "{{userName}} mentioned you in a {{entityType}}"
+  },
+  "home":{
+    "welcome": "Welcome to Doerly!",
+    "welcome_description": "Find and offer services in any sphere",
+    "popular_categories": "Popular Categories"
   }
 }

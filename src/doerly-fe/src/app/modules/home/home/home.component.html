@@ -11,14 +11,13 @@
          [priority]="true"
          width="1024">
     <div class="banner-text">
-      <h1>Welcome to Doerly!</h1>
-      <p class="mt-4">Find and offer services in any sphere. Whether you need a task done or want to help
-        others.</p>
+      <h1>{{ 'home.welcome' | translate }}</h1>
+      <p class="mt-4">{{ 'home.welcome_description' | translate }}</p>
     </div>
   </section>
 
   <p-card class="mt-4 popular-categories">
-    <h2>Popular Categories</h2>
+    <h2>{{ 'home.popular_categories' | translate }}</h2>
     <div class="row mt-4">
       <p-panel class="col-md-4 mb-3" *ngFor="let category of categories()"
               [routerLink]="['/catalog', category.categoryId]">

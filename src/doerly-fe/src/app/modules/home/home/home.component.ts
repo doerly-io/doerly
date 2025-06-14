@@ -7,6 +7,7 @@ import {RouterLink} from '@angular/router';
 import {Card} from 'primeng/card';
 import {HomePageService} from 'app/modules/home/domain/home-page.service';
 import {Panel} from 'primeng/panel';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +17,8 @@ import {Panel} from 'primeng/panel';
     NgForOf,
     NgIf,
     Card,
-    Panel
+    Panel,
+    TranslatePipe
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
