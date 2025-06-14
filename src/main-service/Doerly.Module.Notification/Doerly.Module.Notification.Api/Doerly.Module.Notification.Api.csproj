@@ -1,19 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>annotations</Nullable>
-        <OutputType>Library</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Doerly.Infrastructure.Api\Doerly.Infrastructure.Api.csproj" />
-        <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
-        <ProjectReference Include="..\Doerly.Module.Notification.DataTransferObjects\Doerly.Module.Notification.DataTransferObjects.csproj" />
-        <ProjectReference Include="..\Doerly.Module.Notification.Domain\Doerly.Module.Notification.Domain.csproj" />
-        <ProjectReference Include="..\Doerly.Module.Notification.DataAccess\Doerly.Module.Notification.DataAccess.csproj" />
-        <ProjectReference Include="..\Doerly.Module.Notification.Messaging\Doerly.Module.Notification.Messaging.csproj" />
+      <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
+      <ProjectReference Include="..\..\Doerly.Infrastructure.Api\Doerly.Infrastructure.Api.csproj" />
+      <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Notification.Domain\Doerly.Module.Notification.Domain.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Notification.Messaging\Doerly.Module.Notification.Messaging.csproj" />
     </ItemGroup>
 
-</Project> 
+</Project>
