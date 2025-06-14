@@ -18,6 +18,13 @@ export class CommunicationSignalRService {
 
   private hubConnection!: signalR.HubConnection;
 
+  private isConnecting = false;
+
+  private connectionPromise: Promise<void> | null = null;
+
+  private readonly MAX_RETRY_ATTEMPTS = 3;
+  private readonly RETRY_DELAY_MS = 1000;
+
   private readonly userStatus = signal(new Map<number, boolean>());
 
   // Callbacks for handling events
@@ -37,18 +44,44 @@ export class CommunicationSignalRService {
     this.userStatus.set(updated);
   }
 
-  public startConnection = () => {
+  public startConnection = async () => {
+    if (this.isConnecting) {
+      return this.connectionPromise;
+    }
+
+    if (this.hubConnection?.state === signalR.HubConnectionState.Connected) {
+      return Promise.resolve();
+    }
+
+    this.isConnecting = true;
     const accessToken = this.jwtTokenHelper.getToken() ?? '';
 
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(this.baseUrl, {
         accessTokenFactory: () => accessToken,
         transport: HttpTransportType.WebSockets,
-        skipNegotiation: true
       })
       .withAutomaticReconnect()
       .build();
 
+    this.setupHubHandlers();
+
+    this.connectionPromise = this.hubConnection.start()
+      .then(() => {
+        console.log('SignalR connection established');
+        this.isConnecting = false;
+      })
+      .catch(err => {
+        console.error('Error establishing SignalR connection:', err);
+        this.isConnecting = false;
+        this.connectionPromise = null;
+        throw err;
+      });
+
+    return this.connectionPromise;
+  }
+
+  private setupHubHandlers(): void {
     this.hubConnection.on('UserTyping', (fullName: string) => {
       if (this.typingCallback) {
         this.typingCallback(fullName);
@@ -63,7 +96,6 @@ export class CommunicationSignalRService {
 
     this.hubConnection.on('UserStatusChanged', (userId: string, isOnline: boolean) => {
       const parsedUserId = parseInt(userId);
-      console.log('User status changed:', parsedUserId, isOnline);
       this.updateUserStatus(parsedUserId, isOnline);
     });
 
@@ -84,13 +116,6 @@ export class CommunicationSignalRService {
         this.lastMessageUpdateCallback(message);
       }
     });
-
-    this.hubConnection
-      .start()
-      .then(() => {
-        console.log('SignalR connection established');
-      })
-      .catch(err => console.log('Error establishing SignalR connection: ' + err));
   }
 
   public async stopConnection(): Promise<void> {
@@ -100,79 +125,92 @@ export class CommunicationSignalRService {
     }
 
     try {
+      // Remove all handlers before stopping
+      this.hubConnection.off('UserTyping');
+      this.hubConnection.off('ReceiveMessage');
+      this.hubConnection.off('UserStatusChanged');
+      this.hubConnection.off('MessageDelivered');
+      this.hubConnection.off('MessageRead');
+      this.hubConnection.off('UpdateLastMessage');
+
+      // Clear callbacks
+      this.typingCallback = undefined;
+      this.messageReceivedCallback = undefined;
+      this.messageStatusCallback = undefined;
+      this.lastMessageUpdateCallback = undefined;
+
       await this.hubConnection.stop();
       console.log('SignalR connection stopped successfully');
       this.hubConnection = null as any;
-      this.typingCallback = undefined;
-      this.messageReceivedCallback = undefined;
+      this.connectionPromise = null;
+      this.isConnecting = false;
     } catch (err) {
       console.error('Error stopping SignalR connection:', err);
       throw err;
     }
   }
 
-  public async markMessagesAsDelivered(messageIds: number[], senderId: string): Promise<void> {
-    if (!this.isConnected()) {
-      return Promise.reject(new Error('SignalR connection is not established'));
+  private async ensureConnection(): Promise<void> {
+    if (this.isConnected()) {
+      return;
     }
 
-    try {
-      return await this.hubConnection.invoke('MarkMessagesAsDelivered', messageIds, senderId);
-    } catch (err) {
-      console.error('Error marking messages as delivered:', err);
-      throw err;
+    let attempts = 0;
+    while (attempts < this.MAX_RETRY_ATTEMPTS) {
+      try {
+        await this.startConnection();
+        if (this.isConnected()) {
+          return;
+        }
+      } catch (error) {
+        console.warn(`Connection attempt ${attempts + 1} failed:`, error);
+      }
+
+      attempts++;
+      if (attempts < this.MAX_RETRY_ATTEMPTS) {
+        await new Promise(resolve => setTimeout(resolve, this.RETRY_DELAY_MS));
+      }
     }
+
+    throw new Error('Failed to establish SignalR connection after multiple attempts');
+  }
+
+  private async invokeWithConnectionCheck(methodName: string, ...args: any[]): Promise<void> {
+    try {
+      await this.ensureConnection();
+      await this.hubConnection!.invoke(methodName, ...args);
+    } catch (error) {
+      console.error(`Error invoking ${methodName}:`, error);
+      throw error;
+    }
+  }
+
+  public async markMessagesAsDelivered(messageIds: number[], senderId: string): Promise<void> {
+    return this.invokeWithConnectionCheck('MarkMessagesAsDelivered', messageIds, senderId);
   }
 
   public async markMessagesAsRead(messageIds: number[], senderId: string): Promise<void> {
-    if (!this.isConnected()) {
-      return Promise.reject(new Error('SignalR connection is not established'));
-    }
-
-    try {
-      return await this.hubConnection.invoke('MarkMessagesAsRead', messageIds, senderId);
-    } catch (err) {
-      console.error('Error marking messages as read:', err);
-      throw err;
-    }
+    return this.invokeWithConnectionCheck('MarkMessagesAsRead', messageIds, senderId);
   }
 
   public async sendTyping(conversationId: number, fullName: string): Promise<void> {
-    if (!this.isConnected()) {
-      return Promise.reject(new Error('SignalR connection is not established'));
-    }
-
-    try {
-      return await this.hubConnection.invoke('SendTyping', conversationId.toString(), fullName);
-    } catch (err) {
-      console.error('Error sending typing event:', err);
-      throw err;
-    }
+    return this.invokeWithConnectionCheck('SendTyping', conversationId.toString(), fullName);
   }
 
   public async sendMessage(sendMessageRequest: SendMessageRequest): Promise<void> {
-    if (!this.isConnected()) {
-      return Promise.reject(new Error('SignalR connection is not established'));
-    }
-
-    try {
-      return await this.hubConnection.invoke('SendMessage', {
-        conversationId: sendMessageRequest.conversationId,
-        senderId: sendMessageRequest.senderId,
-        messageContent: sendMessageRequest.messageContent
-      });
-    } catch (err) {
-      console.error('Error sending message:', err);
-      throw err;
-    }
+    return this.invokeWithConnectionCheck('SendMessage', {
+      conversationId: sendMessageRequest.conversationId,
+      senderId: sendMessageRequest.senderId,
+      messageContent: sendMessageRequest.messageContent
+    });
   }
 
-  public joinConversation(conversationId: string): void {
-    this.hubConnection?.invoke('JoinConversation', conversationId).catch(err => console.error(err));
+  public async joinConversation(conversationId: string): Promise<void> {
+    return this.invokeWithConnectionCheck('JoinConversation', conversationId);
   }
 
-  public leaveConversation(conversationId: string): void {
-    this.hubConnection?.invoke('LeaveConversation', conversationId).catch(err => console.error(err));
+  public async leaveConversation(conversationId: string): Promise<void> {
+    return this.invokeWithConnectionCheck('LeaveConversation', conversationId);
   }
 
   public onUserTyping(callback: (fullName: string) => void): void {
@@ -192,6 +230,6 @@ export class CommunicationSignalRService {
   }
 
   private isConnected(): boolean {
-    return this.hubConnection.state === signalR.HubConnectionState.Connected;
+    return this.hubConnection?.state === signalR.HubConnectionState.Connected;
   }
 }

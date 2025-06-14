@@ -1,18 +1,25 @@
+using System.Text.Json;
 using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Localization;
+using Doerly.Messaging;
 using Doerly.Module.Communication.DataTransferObjects.Responses;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Communication.DataAccess.Entities;
+using Doerly.Module.Communication.DataTransferObjects.Messages;
 using Doerly.Module.Communication.Domain.Constants;
 using Doerly.Module.Communication.Enums;
+using Doerly.Proxy.Profile;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Communication.Domain.Handlers;
 
 public class SendFileMessageHandler(CommunicationDbContext dbContext, 
-    IFileRepository fileRepository) : BaseCommunicationHandler(dbContext)
+    IProfileModuleProxy profileModuleProxy,
+    IMessagePublisher messagePublisher,
+    IFileRepository fileRepository)
+    : BaseCommunicationHandler(dbContext)
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
@@ -64,6 +71,25 @@ public class SendFileMessageHandler(CommunicationDbContext dbContext,
     
         _dbContext.Messages.Add(message);
         await _dbContext.SaveChangesAsync();
+        
+        // Get sender's name for the notification
+        var sender = await profileModuleProxy.GetProfileAsync(userId);
+        if (!sender.IsSuccess)
+        {
+            return OperationResult.Failure<int>(Resources.Get("Communication.UnauthorizedSender"));
+        }
+        
+        // Notify the conversation participants about the new message
+        var notificationMessage = new NewMessageNotificationMessage(
+            conversation.RecipientId == userId ? conversation.InitiatorId : conversation.RecipientId,
+            JsonSerializer.Serialize(new { 
+                conversationId = conversation.Id, 
+                messageId = message.Id,
+                senderName = $"{sender.Value.FirstName} {sender.Value.LastName}",
+            }),
+            message.SentAt
+        );
+        await messagePublisher.Publish(notificationMessage);
         
         return OperationResult.Success(message.Id);
     }

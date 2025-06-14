@@ -66,7 +66,7 @@ export class CommunicationService {
 
   uploadFile(conversationId: number, file: File): Observable<any> {
     const formData = new FormData();
-    formData.append('request.File', file);
+    formData.append('imageFile', file);
 
     return this.http.post<any>(
       `${this.apiUrl}/conversations/${conversationId}/messages/file/send`,

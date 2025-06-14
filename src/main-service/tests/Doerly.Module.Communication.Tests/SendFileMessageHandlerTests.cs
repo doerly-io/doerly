@@ -1,5 +1,6 @@
 using Doerly.Domain.Models;
 using Doerly.FileRepository;
+using Doerly.Messaging;
 using Doerly.Module.Communication.DataTransferObjects.Requests;
 using Doerly.Module.Communication.DataAccess.Entities;
 using Doerly.Module.Communication.Domain.Handlers;
@@ -16,7 +17,8 @@ public class SendFileMessageHandlerTests : BaseCommunicationTests
 
     public SendFileMessageHandlerTests(PostgresTestContainerFixture fixture) : base(fixture)
     {
-        _handler = new SendFileMessageHandler(DbContext, FileRepositoryMock.Object);
+        var messagePublisherMock = new Mock<IMessagePublisher>();
+        _handler = new SendFileMessageHandler(DbContext, ProfileModuleMock.Object, messagePublisherMock.Object, FileRepositoryMock.Object);
     }
 
     [Fact]
