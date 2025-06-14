@@ -2,7 +2,7 @@ const config = {
   AUTH_URL: '/auth',
   BACKEND_URL: process.env.REACT_APP_BACKEND_URL,
   BASE_URL: process.env.REACT_APP_BASE_URL,
-  CATALOG_SERVICE: '/catalog',
+  CATALOG_SERVICE: '/Catalog',
   CATEGORY_SERVICE: '/category',
   ORDERS_SERVICE: '/order/order',
   PROFILE_SERVICE: '/profile',

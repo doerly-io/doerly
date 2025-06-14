@@ -3,7 +3,7 @@ import config from 'config';
 
 const {
   BASE_URL,
-  BACKEND_URL,
+  CATALOG_SERVICE,
   CATEGORY_SERVICE,
 } = config;
 
@@ -63,7 +63,7 @@ const getCategoryFilters = ({
   onSuccess,
 }: any) => {
   onRequest();
-  return axios.get(`${BACKEND_URL}/filter/${categoryId}`)
+  return axios.get(`${BASE_URL}${CATALOG_SERVICE}/filter/${categoryId}`)
     .then(({ data }) => onSuccess(data))
     .catch(() => onFailed());
 };
@@ -82,7 +82,7 @@ const createCategoryFilter = ({
     name: filterName,
     type: filterType,
   };
-  return axios.post(`${BACKEND_URL}/filter`, request)
+  return axios.post(`${BASE_URL}${CATALOG_SERVICE}/filter`, request)
     .then(({ data }) => onSuccess(data))
     .catch(() => onFailed());
 };
@@ -102,7 +102,8 @@ const updateCategoryFilter = ({
     name: filterName,
     type: filterType,
   };
-  return axios.put(`${BACKEND_URL}/filter/${filterId}`, request)
+  return axios.put(`${BASE_URL}${CATALOG_SERVICE}/filter/${filterId}`,
+    request)
     .then(({ data }) => onSuccess(data))
     .catch(() => onFailed());
 };
@@ -114,7 +115,7 @@ const deleteCategoryFilter = ({
   onSuccess,
 }: any) => {
   onRequest();
-  return axios.delete(`${BACKEND_URL}/filter/${filterId}`)
+  return axios.delete(`${BASE_URL}${CATALOG_SERVICE}/filter/${filterId}`)
     .then(() => onSuccess())
     .catch(() => onFailed());
 };
