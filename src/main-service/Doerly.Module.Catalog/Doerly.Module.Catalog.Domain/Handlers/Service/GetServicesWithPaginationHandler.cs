@@ -13,6 +13,11 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
 {
     public class GetServicesWithPaginationHandler : BaseCatalogHandler
     {
+        private const string NameAsc = "name_asc";
+        private const string NameDesc = "name_desc";
+        private const string PriceAsc = "price_asc";
+        private const string PriceDesc = "price_desc";
+
         private readonly IProfileModuleProxy _profileModuleProxy;
 
         public GetServicesWithPaginationHandler(
@@ -55,10 +60,10 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
 
             baseQuery = request.SortBy?.ToLower() switch
             {
-                "name_asc" => baseQuery.OrderBy(s => s.Name),
-                "name_desc" => baseQuery.OrderByDescending(s => s.Name),
-                "price_asc" => baseQuery.OrderBy(s => s.Price),
-                "price_desc" => baseQuery.OrderByDescending(s => s.Price),
+                NameAsc => baseQuery.OrderBy(s => s.Name),
+                NameDesc => baseQuery.OrderByDescending(s => s.Name),
+                PriceAsc => baseQuery.OrderBy(s => s.Price),
+                PriceDesc => baseQuery.OrderByDescending(s => s.Price),
                 _ => baseQuery.OrderBy(s => s.Name)
             };
 

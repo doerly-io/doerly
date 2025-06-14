@@ -17,5 +17,6 @@ namespace Doerly.Module.Catalog.Contracts.Responses
         public bool IsDeleted { get; set; }
 
         public List<FilterValueResponse> FilterValues { get; set; } = new();
+        public List<GetServiceResponse> RecommendedServices { get; set; } = new();
     }
 }

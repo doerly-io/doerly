@@ -37,7 +37,8 @@ public class GetProfileHandler(ProfileDbContext dbContext, AddressDbContext addr
             {
                 Id = c.Id,
                 CategoryId = c.CategoryId,
-                CategoryName = c.CategoryName
+                CategoryName = c.CategoryName,
+                Rating = c.Rating
             })
             .ToList();
 
@@ -75,7 +76,8 @@ public class GetProfileHandler(ProfileDbContext dbContext, AddressDbContext addr
             CvUrl = urls.CvUrl,
             Address = address,
             LanguageProficiencies = languageProficiencies,
-            Competences = competences
+            Competences = competences,
+            Rating = profile.Rating
         };
 
         return OperationResult.Success(profileDto);

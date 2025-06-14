@@ -108,6 +108,10 @@ import { IService } from '../../models/service.model';
                   <i class="pi pi-user"></i>
                   {{service.user.bio}}
                 </p>
+                <div class="rating" *ngIf="service.user.rating">
+                  <i class="pi pi-star-fill"></i>
+                  <span class="rating-value">{{service.user.rating | number:'1.1-1'}}</span>
+                </div>
               </div>
             </div>
 
@@ -125,13 +129,13 @@ import { IService } from '../../models/service.model';
         </div>
       </div>
 
-      <div class="recommended-services" *ngIf="recommendedServices.length">
+      <div class="recommended-services" *ngIf="service.recommendedServices?.length">
         <h2>{{ 'catalog.recommendedServices' | translate }}</h2>
         <div class="recommended-grid" [ngClass]="{
-          'single-item': recommendedServices.length === 1,
-          'two-items': recommendedServices.length === 2
+          'single-item': service.recommendedServices.length === 1,
+          'two-items': service.recommendedServices.length === 2
         }">
-          <p-card *ngFor="let service of recommendedServices" class="recommended-card">
+          <p-card *ngFor="let service of service.recommendedServices" class="recommended-card">
             <div class="service-info">
               <div class="service-main">
                 <div class="service-header">
@@ -365,6 +369,28 @@ import { IService } from '../../models/service.model';
           font-size: 1rem;
         }
       }
+
+      .rating {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+        color: var(--text-color-secondary);
+
+        i {
+          color: #FFD700;
+          font-size: 1.2rem;
+        }
+
+        .rating-value {
+          font-weight: 600;
+          font-size: 1.1rem;
+        }
+
+        @media (max-width: 480px) {
+          justify-content: center;
+        }
+      }
     }
 
     .provider-competences {
@@ -538,102 +564,6 @@ export class ServiceDetailsComponent implements OnInit {
   service: IServiceDetails | null = null;
   groupedFilters: { name: string; type: number; values: string[] }[] = [];
 
-  recommendedServices: IService[] = [
-    {
-      id: 1,
-      name: 'Репетитор з математики',
-      description: 'Допомога з домашніми завданнями та підготовка до ЗНО з математики. Індивідуальний підхід до кожного учня.',
-      categoryId: 12,
-      categoryName: 'Освіта',
-      userId: 1,
-      user: {
-        id: 1,
-        firstName: 'Олександр',
-        lastName: 'Петренко',
-        sex: 1,
-        dateCreated: '2024-03-20',
-        lastModifiedDate: '2024-03-20',
-        imageUrl: 'assets/images/default-avatar.png',
-        address: {
-          cityId: 1,
-          cityName: 'Київ',
-          regionId: 1,
-          regionName: 'Київська область'
-        },
-        languageProficiencies: [],
-        competences: []
-      },
-      price: 300,
-      categoryPath: ['Освіта', 'Репетитори'],
-      isEnabled: true,
-      isDeleted: false,
-      filterValues: [],
-      createdDate: '2024-03-20'
-    },
-    {
-      id: 2,
-      name: 'Репетитор з фізики',
-      description: 'Підготовка до ЗНО з фізики. Розбір складних тем та практичні завдання.',
-      categoryId: 12,
-      categoryName: 'Освіта',
-      userId: 2,
-      user: {
-        id: 2,
-        firstName: 'Марія',
-        lastName: 'Коваленко',
-        sex: 2,
-        dateCreated: '2024-03-19',
-        lastModifiedDate: '2024-03-19',
-        imageUrl: 'assets/images/default-avatar.png',
-        address: {
-          cityId: 2,
-          cityName: 'Львів',
-          regionId: 2,
-          regionName: 'Львівська область'
-        },
-        languageProficiencies: [],
-        competences: []
-      },
-      price: 350,
-      categoryPath: ['Освіта', 'Репетитори'],
-      isEnabled: true,
-      isDeleted: false,
-      filterValues: [],
-      createdDate: '2024-03-19'
-    },
-    {
-      id: 3,
-      name: 'Репетитор з англійської мови',
-      description: 'Індивідуальні заняття з англійської мови для всіх рівнів. Розмовна практика та граматика.',
-      categoryId: 12,
-      categoryName: 'Освіта',
-      userId: 3,
-      user: {
-        id: 3,
-        firstName: 'Анна',
-        lastName: 'Сидоренко',
-        sex: 2,
-        dateCreated: '2024-03-18',
-        lastModifiedDate: '2024-03-18',
-        imageUrl: 'assets/images/default-avatar.png',
-        address: {
-          cityId: 3,
-          cityName: 'Харків',
-          regionId: 3,
-          regionName: 'Харківська область'
-        },
-        languageProficiencies: [],
-        competences: []
-      },
-      price: 400,
-      categoryPath: ['Освіта', 'Репетитори'],
-      isEnabled: true,
-      isDeleted: false,
-      filterValues: [],
-      createdDate: '2024-03-18'
-    }
-  ];
-
   constructor(
     private route: ActivatedRoute,
     private catalogService: CatalogService,
@@ -645,7 +575,6 @@ export class ServiceDetailsComponent implements OnInit {
       const serviceId = params['id'];
       if (serviceId) {
         this.loadServiceDetails(+serviceId);
-        this.loadRecommendedServices(+serviceId);
       }
     });
   }
@@ -662,12 +591,6 @@ export class ServiceDetailsComponent implements OnInit {
         console.error('Error loading service details:', error);
       }
     });
-  }
-
-  private loadRecommendedServices(serviceId: number): void {
-    // TODO: Replace with actual API call when available
-    // For now, we're using mock data
-    console.log('Loading recommended services for service:', serviceId);
   }
 
   private groupFilters() {

@@ -19,4 +19,5 @@ public class ProfileDto
     public ICollection<LanguageProficiencyDto> LanguageProficiencies { get; set; } = new List<LanguageProficiencyDto>();
     public ICollection<CompetenceDto> Competences { get; set; } = new List<CompetenceDto>();
     public UserInfo? UserInfo { get; set; }
+    public float? Rating { get; set; }
 }
