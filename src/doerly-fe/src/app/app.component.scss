@@ -1,7 +1,27 @@
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1 0 auto;
+  padding: 2rem 0;
+}
+
+p-footer {
+  flex-shrink: 0;
+}
+
+.list-unstyled {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
 .navbar-brand {
   color: var(--p-button-text-success-color);
 }
-
 
 label {
   padding-left: 0;

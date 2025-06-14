@@ -42,6 +42,7 @@ export class AppComponent implements OnInit {
   theme!: string;
   isLoggedIn: boolean = false;
   isAuthPage: boolean = false;
+  currentYear: number = new Date().getFullYear();
 
   constructor(private i18nHelperService: I18nHelperService,
               private jwtTokenHelper: JwtTokenHelper,

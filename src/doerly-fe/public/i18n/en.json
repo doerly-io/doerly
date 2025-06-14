@@ -538,5 +538,15 @@
       "no-document": "No PDF document loaded",
       "canvas-context": "Could not get canvas context"
     }
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "aboutUs": "About Us",
+    "services": "Services",
+    "contact": "Contact",
+    "faq": "FAQ",
+    "contactUs": "Contact Us",
+    "allRightsReserved": "All rights reserved",
+    "description": "Your trusted platform for professional services and local expertise."
   }
 }
