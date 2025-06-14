@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MessageService, SharedModule} from 'primeng/api';
-import {Button} from 'primeng/button';
+import {Button, ButtonDirective} from 'primeng/button';
 import {MessageModule} from 'primeng/message';
 import {RouterLink, RouterOutlet, Router, NavigationEnd} from '@angular/router';
 import {Divider} from 'primeng/divider';
@@ -34,7 +34,8 @@ const THEME = 'theme';
     Toast,
     CategoryDropdownComponent,
     NotificationBadgeComponent,
-    NotificationPanelComponent
+    NotificationPanelComponent,
+    ButtonDirective
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

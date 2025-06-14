@@ -20,17 +20,17 @@
   <p-card class="mt-4 popular-categories">
     <h2>Popular Categories</h2>
     <div class="row mt-4">
-      <p-card class="col-md-4 mb-3" *ngFor="let category of categories()"
+      <p-panel class="col-md-4 mb-3" *ngFor="let category of categories()"
               [routerLink]="['/catalog', category.categoryId]">
-        <div class="card h-100">
+        <div class="card h-100" style="cursor: pointer">
           <div class="card-body">
-            <div class="d-flex justify-content-between">
+<!--            <div class="d-flex justify-content-between">-->
               <h5 class="card-text">{{ category.categoryName }}</h5>
 <!--              <p class="card-text" *ngIf="category.amount != 0">{{ category.amount }}</p>-->
-            </div>
+<!--            </div>-->
           </div>
         </div>
-      </p-card>
+      </p-panel>
     </div>
 
   </p-card>

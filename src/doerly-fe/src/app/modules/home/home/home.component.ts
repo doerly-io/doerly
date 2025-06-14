@@ -6,6 +6,7 @@ import {ErrorHandlerService} from 'app/@core/services/error-handler.service';
 import {RouterLink} from '@angular/router';
 import {Card} from 'primeng/card';
 import {HomePageService} from 'app/modules/home/domain/home-page.service';
+import {Panel} from 'primeng/panel';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,8 @@ import {HomePageService} from 'app/modules/home/domain/home-page.service';
     RouterLink,
     NgForOf,
     NgIf,
-    Card
+    Card,
+    Panel
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
