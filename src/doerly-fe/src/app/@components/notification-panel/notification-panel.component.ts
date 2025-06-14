@@ -52,7 +52,7 @@ import {EOrderStatus} from '../../modules/order/domain/enums/order-status';
                   <h4>{{ getNotificationTitle(notification) }}</h4>
                 </div>
                 <p>{{ getNotificationMessage(notification) }}</p>
-                <small>{{ notification.createdAt | date:'short' }}</small>
+                <small>{{ notification.timestamp | date: 'dd.MM.yyyy HH:mm' }}</small>
               </div>
             </div>
           </div>

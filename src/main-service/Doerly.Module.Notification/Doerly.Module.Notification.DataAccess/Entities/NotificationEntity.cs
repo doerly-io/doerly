@@ -10,4 +10,5 @@ public class NotificationEntity : BaseEntity
     public NotificationType Type { get; set; }
     public bool IsRead { get; set; }
     public string? Data { get; set; } // JSON data for additional information
+    public DateTime Timestamp { get; set; }
 } 

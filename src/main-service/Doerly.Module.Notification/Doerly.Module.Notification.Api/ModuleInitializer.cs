@@ -5,9 +5,12 @@ using Doerly.Infrastructure.Api;
 using Doerly.Messaging;
 using Doerly.Module.Notification.Api.Hubs;
 using Doerly.Module.Notification.DataAccess;
-using Doerly.Module.Notification.Domain;
-using Doerly.Module.Notification.Proxy;
 using Doerly.Module.Notification.Domain.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Doerly.Module.Notification.Api;
 
@@ -19,7 +22,6 @@ public class ModuleInitializer: IModuleInitializer, ISignalrEndpointRouteInitial
         builder.Services.RegisterHandlers(typeof(Doerly.Module.Notification.Domain.IAssemblyMarker).Assembly);
         builder.Services.RegisterEventConsumers(typeof(Doerly.Module.Notification.Messaging.IAssemblyMarker).Assembly);
         builder.Services.AddSingleton<ISignalrEndpointRouteInitializer, ModuleInitializer>();
-        builder.Services.AddScoped<INotificationModuleProxy, NotificationModuleProxy>();
         builder.Services.AddScoped<INotificationSender, NotificationHubSender>();
     }
 

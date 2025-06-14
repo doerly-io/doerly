@@ -65,7 +65,8 @@ public class SendMessageHandler(CommunicationDbContext dbContext,
                 conversationId = conversation.Id, 
                 messageId = message.Id,
                 senderName = $"{sender.Value.FirstName} {sender.Value.LastName}",
-            })
+            }),
+            message.SentAt
         );
         await messagePublisher.Publish(notificationMessage);
         

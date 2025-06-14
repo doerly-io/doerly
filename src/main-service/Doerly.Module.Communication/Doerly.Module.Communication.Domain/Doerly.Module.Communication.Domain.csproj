@@ -12,7 +12,6 @@
         <ProjectReference Include="..\..\Doerly.Localization\Doerly.Localization.csproj" />
         <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
         <ProjectReference Include="..\..\Doerly.Module.Notification\Doerly.Module.Notification.Enums\Doerly.Module.Notification.Enums.csproj" />
-        <ProjectReference Include="..\..\Doerly.Module.Notification\Doerly.Module.Notification.Proxy\Doerly.Module.Notification.Proxy.csproj" />
         <ProjectReference Include="..\..\Doerly.Proxy.Profile\Doerly.Proxy.Profile.csproj" />
         <ProjectReference Include="..\Doerly.Module.Communication.DataTransferObjects\Doerly.Module.Communication.DataTransferObjects.csproj" />
         <ProjectReference Include="..\Doerly.Module.Communication.DataAccess\Doerly.Module.Communication.DataAccess.csproj" />

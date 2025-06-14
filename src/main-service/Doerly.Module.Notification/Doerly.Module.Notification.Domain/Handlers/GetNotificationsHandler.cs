@@ -31,6 +31,7 @@ public class GetNotificationsHandler : BaseNotificationHandler
                 Message = n.Message,
                 Type = n.Type,
                 IsRead = n.IsRead,
+                Timestamp = n.Timestamp,
                 Data = n.Data
             })
             .Take(cursorRequest.PageSize + 1)

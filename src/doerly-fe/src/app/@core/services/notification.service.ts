@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {HttpTransportType, HubConnection, HubConnectionBuilder} from '@microsoft/signalr';
+import {HttpTransportType, HubConnection} from '@microsoft/signalr';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { NotificationType } from '../enums/notification-type.enum';
@@ -13,7 +13,7 @@ export interface Notification {
   message: string;
   type: NotificationType;
   isRead: boolean;
-  createdAt: Date;
+  timestamp: Date;
   data?: string;
 }
 
