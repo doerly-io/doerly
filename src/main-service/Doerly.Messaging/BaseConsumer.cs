@@ -1,3 +1,4 @@
+using System.Globalization;
 using Doerly.Domain;
 using MassTransit;
 using Microsoft.Extensions.Logging;
@@ -38,6 +39,12 @@ public abstract class BaseConsumer<TMessage> : IConsumer<TMessage> where TMessag
         _doerlyRequestContext.UserEmail = context.Headers.Get("UserEmail", string.Empty);
         if (int.TryParse(context.Headers.Get("UserId", string.Empty), out var userId))
             _doerlyRequestContext.UserId = userId;
+        
+        var cultureName = context.Headers.Get<string>("Culture") ?? "en-US";
+        var culture = new CultureInfo(cultureName);
+
+        Thread.CurrentThread.CurrentCulture = culture;
+        Thread.CurrentThread.CurrentUICulture = culture;
         
         return Task.CompletedTask;  
     }

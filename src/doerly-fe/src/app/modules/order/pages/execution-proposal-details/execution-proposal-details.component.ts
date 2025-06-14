@@ -77,7 +77,7 @@ export class ExecutionProposalDetailsComponent implements OnInit {
     this.executionProposalService.resolveExecutionProposal(this.proposal.id, request).subscribe({
       next: () => {
         this.toastHelper.showSuccess('common.success', 'ordering.resolved_successfully');
-        this.router.navigate(['/ordering'], { queryParams: { tab: 0, subTab: 0 } });
+        this.router.navigate(['/ordering'], { queryParams: { tab: 1, subTab: 0 } });
       },
       error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
     });

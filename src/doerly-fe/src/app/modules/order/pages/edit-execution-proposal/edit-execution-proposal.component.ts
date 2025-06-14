@@ -104,7 +104,7 @@ export class EditExecutionProposalComponent implements OnInit {
       this.executionProposalService.sendExecutionProposal(request).subscribe({
         next: () => {
           this.toastHelper.showSuccess('common.success', 'ordering.execution_proposal_sent');
-          this.router.navigate(['/ordering'], { queryParams: { tab: 0, subTab: 1 } });
+          this.router.navigate(['/ordering'], { queryParams: { tab: 1, subTab: 1 } });
         },
         error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
       });

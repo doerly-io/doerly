@@ -3,7 +3,7 @@ import { EPaymentKind } from "../../domain/enums/payment-kind";
 import { AddressInfoModel } from "./address-info-model";
 import { FileInfoModel } from "./file-info-model";
 import { ProfileInfoModel } from "./profile-info-model";
-import {OrderFeedbackResponse} from 'app/modules/order/models/responses/feedback/order-feedback-response';
+import { OrderFeedbackResponse } from 'app/modules/order/models/responses/feedback/order-feedback-response';
 
 export interface GetOrderResponse {
     id: number;
@@ -19,10 +19,10 @@ export interface GetOrderResponse {
     addressInfo: AddressInfoModel;
     customerId: number;
     customer: ProfileInfoModel;
-    customerCompletionConfirmation: boolean;
+    customerCompletionConfirmed: boolean;
     executorId?: number;
     executor?: ProfileInfoModel;
-    executorCompletionConfirmation: boolean;
+    executorCompletionConfirmed: boolean;
     executionDate?: Date;
     billId?: number;
     existingFiles?: FileInfoModel[];

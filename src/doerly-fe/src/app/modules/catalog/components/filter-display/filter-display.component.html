@@ -1,0 +1,38 @@
+<div class="filters-container">
+  <div *ngFor="let filter of filters" class="filter-item">
+    <h3 class="filter-title">{{filter.name}}</h3>
+
+    <!-- Checkbox filters (type 1) -->
+    <div *ngIf="filter.type === 1" class="checkbox-filters">
+      <div *ngFor="let value of filter.values" class="checkbox-item">
+        <p-checkbox [binary]="true" [value]="value"></p-checkbox>
+        <span>{{ value }}</span>
+      </div>
+    </div>
+
+    <!-- Dropdown filters (type 2) -->
+    <div *ngIf="filter.type === 2" class="dropdown-filters">
+      <div *ngFor="let value of filter.values" class="checkbox-item">
+        <p-checkbox [binary]="true" [value]="value"></p-checkbox>
+        <span>{{ value }}</span>
+      </div>
+    </div>
+
+    <!-- Numeric range filters (type 3) -->
+    <div *ngIf="filter.type === 3" class="numeric-filters">
+      <div class="range-inputs">
+        <input type="number" [min]="getMinValue(filter)" [max]="getMaxValue(filter)" class="range-input">
+        <input type="number" [min]="getMinValue(filter)" [max]="getMaxValue(filter)" class="range-input">
+      </div>
+      <p-slider [min]="getMinValue(filter)" [max]="getMaxValue(filter)" [range]="true"></p-slider>
+    </div>
+
+    <!-- Radio filters (type 4) -->
+    <div *ngIf="filter.type === 4" class="radio-filters">
+      <div *ngFor="let value of filter.values" class="radio-item">
+        <p-radioButton [name]="filter.name" [value]="value"></p-radioButton>
+        <span>{{ value === 'true' ? 'Yes' : (value === 'false' ? 'No' : value) }}</span>
+      </div>
+    </div>
+  </div>
+</div> 

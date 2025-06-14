@@ -438,3 +438,4 @@ Thumbs.db
 
 appsettings.Development.json
 appsettings.Staging.json
+appsettings.Production.json

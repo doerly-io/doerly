@@ -24,6 +24,7 @@ public class MessagePublisher : IMessagePublisher
     private void AddHeaders(PublishContext context)
     {
         context.Headers.Set("UserId", _doerlyRequestContext.UserId.ToString());
-        context.Headers.Get("UserEmail", _doerlyRequestContext.UserEmail);
+        context.Headers.Set("UserEmail", _doerlyRequestContext.UserEmail);
+        context.Headers.Set("Culture", Thread.CurrentThread.CurrentCulture.Name);
     }
 }

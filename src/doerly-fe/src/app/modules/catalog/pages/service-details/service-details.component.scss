@@ -1,52 +1,60 @@
-.catalog-container {
-  max-width: 1400px;
-  margin: 2rem auto;
+.recommended-services {
+  margin-top: 3rem;
   padding: 0 1rem;
-  display: flex;
-  gap: 2rem;
-}
 
-.filters-section {
-  width: 300px;
-  flex-shrink: 0;
-}
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--surface-900);
+    margin-bottom: 1.5rem;
 
-.services-section {
-  flex: 1;
-  min-width: 0; // Prevents flex item from overflowing
-
-  .sorting-section {
-    margin-bottom: 2rem;
+    :host-context(.dark-theme) & {
+      color: var(--surface-0);
+    }
   }
 
-  .services-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 2rem;
+  .recommended-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+
+    &.single-item {
+      grid-template-columns: 1fr;
+      max-width: 600px;
+    }
+
+    &.two-items {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 1000px;
+    }
   }
 
-  .service-card {
-    width: 100%;
+  .recommended-card {
+    height: 100%;
 
     :host ::ng-deep .p-card {
+      height: 100%;
       background-color: var(--surface-card);
       
       .p-card-body {
         padding: 1rem;
+        height: 100%;
       }
     }
   }
 
   .service-info {
     display: flex;
-    gap: 2rem;
-    align-items: flex-start;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
   }
 
   .service-main {
     flex: 1;
-    min-width: 0; // Prevents flex item from overflowing
+    min-width: 0;
   }
 
   .service-header {
@@ -85,6 +93,10 @@
     line-height: 1.6;
     word-break: break-word;
     white-space: pre-wrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 
     :host-context(.dark-theme) & {
       color: var(--surface-0);
@@ -105,8 +117,6 @@
   }
 
   .service-sidebar {
-    width: 200px;
-    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -162,27 +172,27 @@
   }
 }
 
-@media (max-width: 1024px) {
-  .catalog-container {
-    flex-direction: column;
-  }
+@media (max-width: 1200px) {
+  .recommended-services {
+    .recommended-grid {
+      grid-template-columns: repeat(2, 1fr);
 
-  .filters-section {
-    width: 100%;
+      &.single-item {
+        grid-template-columns: 1fr;
+      }
+    }
   }
 }
 
-/* Dark theme overrides */
-:host-context(.my-app-dark) .service-card {
-  background: #1a1a1a;
-  border-color: var(--p-green-400);
-  color: var(--p-green-400);
-}
-:host-context(.my-app-dark) .service-card .service-info h3,
-:host-context(.my-app-dark) .service-card .service-info p,
-:host-context(.my-app-dark) .service-card .service-info .service-price {
-  color: var(--p-green-400);
-}
-:host-context(.my-app-dark) .service-card:hover {
-  border-color: var(--p-green-400);
+@media (max-width: 768px) {
+  .recommended-services {
+    .recommended-grid {
+      grid-template-columns: 1fr;
+
+      &.single-item,
+      &.two-items {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
 } 

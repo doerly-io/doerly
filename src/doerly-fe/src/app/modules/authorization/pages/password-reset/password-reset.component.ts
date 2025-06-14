@@ -39,6 +39,7 @@ export class PasswordResetComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.route.queryParams.subscribe(params => {
       this.token = params['token'];
       this.email = params['email'];
@@ -73,7 +74,7 @@ export class PasswordResetComponent implements OnInit {
     this.authorizationService.resetPassword(request).subscribe({
       next: (value) => {
 
-        this.router.navigate(['/login'], {relativeTo: this.route});
+        this.router.navigate(['auth/login']);
       },
       error: (error) => {
         console.error(error);

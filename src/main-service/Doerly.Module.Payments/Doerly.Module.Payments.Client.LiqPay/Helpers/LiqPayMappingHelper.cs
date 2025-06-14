@@ -40,7 +40,7 @@ public class LiqPayMappingHelper
         _ => LiqPayConstants.CurrenciesConstants.UAH
     };
 
-    public static EPaymentMethod MapLiqPaymentMethodToCommonType(string liqPayType)
+    public static EPaymentMethod MapLiqPayPaymentMethodToCommon(string liqPayType)
     {
         return liqPayType switch
         {

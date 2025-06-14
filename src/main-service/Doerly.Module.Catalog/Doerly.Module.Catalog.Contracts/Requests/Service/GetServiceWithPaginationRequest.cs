@@ -7,5 +7,6 @@ namespace Doerly.Module.Catalog.Contracts.Requests
         public int? CategoryId { get; set; }
         public List<FilterValueRequest>? FilterValues { get; set; }
         public string? SortBy { get; set; }
+        public string? SearchBy { get; set; }
     }
 }

@@ -16,8 +16,8 @@ public class WebhookController : BaseApiController
         _paymentAdapterFactory = paymentAdapterFactory;
     }
 
-    [HttpPost("liqpay/final-status")]
-    public async Task<IActionResult> FinalStatus([FromForm] string data, [FromForm] string signature)
+    [HttpPost("liqpay/update-status")]
+    public async Task<IActionResult> UpdateStatus([FromForm] string data, [FromForm] string signature)
     {
         var adapter = _paymentAdapterFactory(EPaymentAggregator.LiqPay);
         var result = await adapter.Adapt(data, signature);
