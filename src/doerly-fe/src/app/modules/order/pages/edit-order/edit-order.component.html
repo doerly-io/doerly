@@ -45,7 +45,7 @@
                 (onSelect)="onSelectedFiles($event)">
                 <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback">
                   <div class="upload-header flex items-center flex-1 gap-2 w-100">
-                    <div class="flex gap-2">
+                    <div class="upload-buttons">
                       <p-button pTooltip="{{ 'ordering.add_files' | translate }}" tooltipPosition="top"
                         (onClick)="choose($event, chooseCallback)" icon="pi pi-images" [rounded]="true"
                         [outlined]="true" />

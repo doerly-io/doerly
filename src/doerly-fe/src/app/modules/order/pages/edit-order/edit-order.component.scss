@@ -9,6 +9,12 @@
 
     .upload-header {
         justify-content: space-between;
+
+        .upload-buttons{
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
     }
 
     .files-section {
