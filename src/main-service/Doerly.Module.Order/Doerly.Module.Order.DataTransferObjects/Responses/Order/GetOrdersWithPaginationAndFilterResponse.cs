@@ -4,7 +4,7 @@ public class GetOrdersWithPaginationAndFilterResponse
 {
     public int OrderId { get; set; }
 
-    public int CategoryId { get; set; }
+    public int? CategoryId { get; set; }
 
     public string Name { get; set; }
 

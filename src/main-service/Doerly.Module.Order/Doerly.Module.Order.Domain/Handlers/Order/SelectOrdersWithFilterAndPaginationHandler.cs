@@ -28,7 +28,10 @@ public class SelectOrdersWithFilterAndPaginationHandler : BaseOrderHandler
     {
         var predicates = new List<Expression<Func<DataAccess.Entities.Order, bool>>>();
 
-        predicates.Add(o => o.CategoryId == dto.CategoryId && o.Status == EOrderStatus.Placed);
+        predicates.Add(o => o.Status == EOrderStatus.Placed);
+
+        if (dto.CategoryId.HasValue)
+            predicates.Add(o => o.CategoryId == dto.CategoryId.Value);
 
         if (dto.RegionId.HasValue)
             predicates.Add(o => o.RegionId == dto.RegionId);

@@ -49,6 +49,10 @@ textarea {
 
 :host ::ng-deep {
   .search-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
     input {
       padding: 5px 10px 5px 10px;
     }
@@ -95,9 +99,21 @@ textarea {
       }
     }
 
+    .p-button {
+      height: 42px;
+      width: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      &:hover {
+        background-color: var(--surface-hover);
+      }
+    }
+
     @media (max-width: 768px) {
       .p-inputtext {
-        width: 75%;
+        width: 100%;
       }
     }
   }

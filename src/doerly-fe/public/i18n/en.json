@@ -349,7 +349,7 @@
     "comment": "Comment",
     "loading": "Loading...",
     "no_data": "No data",
-    "no_orders": "No orders",
+    "no_orders": "No Orders Found",
     "no_execution_proposals": "No execution proposals",
     "send": "Send",
     "resolved_successfully": "Resolved successfully",
@@ -421,7 +421,8 @@
     "files_size": "Files size",
     "files_size_limit_exceeded": "File size limit exceeded.",
     "files_size_limit": "Maximum files size is {{size}}.",
-    "service_required": "Service is required for order creation"
+    "service_required": "Service is required for order creation",
+    "try_adjusting_search": "Try adjusting your search or filter to find what you're looking for."
   },
   "feedback": {
     "title": "Feedback",
@@ -495,7 +496,16 @@
     "provider": "Service Provider",
     "competences": "Competences",
     "viewDetails": "View Details",
-    "recommendedServices": "Recommended Services"
+    "recommendedServices": "Recommended Services",
+    "no_services": "No Services Found",
+    "try_adjusting_search": "Try adjusting your search or filter to find what you're looking for.",
+    "sort": "Sort by",
+    "sort_options": {
+      "price_asc": "Price: Low to High",
+      "price_desc": "Price: High to Low",
+      "name_asc": "Name: A to Z",
+      "name_desc": "Name: Z to A"
+    }
   },
   "common": {
     "actions": "Actions",

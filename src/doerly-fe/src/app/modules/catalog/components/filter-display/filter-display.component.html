@@ -1,38 +1,73 @@
 <div class="filters-container">
-  <div *ngFor="let filter of filters" class="filter-item">
-    <h3 class="filter-title">{{filter.name}}</h3>
-
-    <!-- Checkbox filters (type 1) -->
-    <div *ngIf="filter.type === 1" class="checkbox-filters">
-      <div *ngFor="let value of filter.values" class="checkbox-item">
-        <p-checkbox [binary]="true" [value]="value"></p-checkbox>
-        <span>{{ value }}</span>
+  <p-accordion [multiple]="true">
+    <p-accordionTab *ngFor="let filter of filters" [header]="filter.name">
+      <!-- Checkbox and Dropdown Filters (both use checkboxes) -->
+      <div *ngIf="filter.type === 1 || filter.type === 2" class="filter-group">
+        <div *ngFor="let value of filter.values" class="filter-checkbox-item">
+          <p-checkbox [value]="value.id"
+                     [(ngModel)]="value.selected"
+                     (onChange)="onFilterChange()"
+                     [binary]="true"
+                     styleClass="filter-checkbox">
+          </p-checkbox>
+          <span class="checkbox-label">{{value.name}}</span>
+        </div>
       </div>
-    </div>
 
-    <!-- Dropdown filters (type 2) -->
-    <div *ngIf="filter.type === 2" class="dropdown-filters">
-      <div *ngFor="let value of filter.values" class="checkbox-item">
-        <p-checkbox [binary]="true" [value]="value"></p-checkbox>
-        <span>{{ value }}</span>
+      <!-- Numeric Range Filter -->
+      <div *ngIf="filter.type === 3" class="filter-group">
+        <div class="range-inputs">
+          <div class="range-field">
+            <label>{{filter.name}} (min)</label>
+            <p-inputNumber [(ngModel)]="filter.minValue"
+                          [min]="filter.min"
+                          [max]="filter.max"
+                          (onInput)="onFilterChange()"
+                          [showButtons]="true"
+                          buttonLayout="horizontal"
+                          spinnerMode="horizontal"
+                          decrementButtonClass="p-button-secondary"
+                          incrementButtonClass="p-button-secondary"
+                          incrementButtonIcon="pi pi-plus"
+                          decrementButtonIcon="pi pi-minus">
+            </p-inputNumber>
+          </div>
+          <div class="range-field">
+            <label>{{filter.name}} (max)</label>
+            <p-inputNumber [(ngModel)]="filter.maxValue"
+                          [min]="filter.min"
+                          [max]="filter.max"
+                          (onInput)="onFilterChange()"
+                          [showButtons]="true"
+                          buttonLayout="horizontal"
+                          spinnerMode="horizontal"
+                          decrementButtonClass="p-button-secondary"
+                          incrementButtonClass="p-button-secondary"
+                          incrementButtonIcon="pi pi-plus"
+                          decrementButtonIcon="pi pi-minus">
+            </p-inputNumber>
+          </div>
+        </div>
+        <p-slider [(ngModel)]="filter.range"
+                  [range]="true"
+                  [min]="filter.min"
+                  [max]="filter.max"
+                  (onChange)="onRangeChange($event, filter)"
+                  class="w-100">
+        </p-slider>
       </div>
-    </div>
 
-    <!-- Numeric range filters (type 3) -->
-    <div *ngIf="filter.type === 3" class="numeric-filters">
-      <div class="range-inputs">
-        <input type="number" [min]="getMinValue(filter)" [max]="getMaxValue(filter)" class="range-input">
-        <input type="number" [min]="getMinValue(filter)" [max]="getMaxValue(filter)" class="range-input">
+      <!-- Radio (Boolean) Filter -->
+      <div *ngIf="filter.type === 4" class="filter-group">
+        <div class="filter-checkbox-item">
+          <p-checkbox [(ngModel)]="filter.selectedValue"
+                     (onChange)="onFilterChange()"
+                     [binary]="true"
+                     styleClass="filter-checkbox">
+          </p-checkbox>
+          <span class="checkbox-label">{{filter.name}}</span>
+        </div>
       </div>
-      <p-slider [min]="getMinValue(filter)" [max]="getMaxValue(filter)" [range]="true"></p-slider>
-    </div>
-
-    <!-- Radio filters (type 4) -->
-    <div *ngIf="filter.type === 4" class="radio-filters">
-      <div *ngFor="let value of filter.values" class="radio-item">
-        <p-radioButton [name]="filter.name" [value]="value"></p-radioButton>
-        <span>{{ value === 'true' ? 'Yes' : (value === 'false' ? 'No' : value) }}</span>
-      </div>
-    </div>
-  </div>
+    </p-accordionTab>
+  </p-accordion>
 </div> 
