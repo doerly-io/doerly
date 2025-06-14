@@ -308,24 +308,30 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
 
   getNotificationMessage(notification: Notification): string {
     try {
-      if (notification.type === NotificationType.Order && notification.message === 'Notification.Order.StatusChanged') {
+      const data = notification.data ? JSON.parse(notification.data) : {};
 
-        const data = notification.data ? JSON.parse(notification.data) : {};
-        if (data.OrderStatus) {
-          data.OrderStatus = this.translateService.instant(`ordering.order_statuses.${EOrderStatus[data.OrderStatus]}`);
+      if (notification.type === NotificationType.Order && notification.message === 'Notification.Order.StatusChanged') {
+        if (data.orderStatus) {
+          data.orderStatus = this.translateService.instant(`ordering.order_statuses.${EOrderStatus[data.orderStatus]}`);
         }
 
         let translated = '';
-        this.translateService.get('Notification.Order.StatusChanged', {id: data.OrderId, status: data.OrderStatus}).subscribe(translate => {
+        this.translateService.get('Notification.Order.StatusChanged', {id: data.orderId, status: data.orderStatus}).subscribe(translate => {
           translated = translate;
         });
         return translated;
       }
 
-      const translationKey = notification.message;
-      const data = notification.data ? JSON.parse(notification.data) : {};
+      if (notification.type === NotificationType.Message && notification.message === 'Notification.Message.NewMessage') {
+        let translated = '';
+        this.translateService.get('Notification.Message.NewMessage', {senderName: data.senderName}).subscribe(translate => {
+          translated = translate;
+        });
+        return translated;
+      }
 
-      return this.translateService.instant(translationKey, data);
+      const messageKey = notification.message;
+      return this.translateService.instant(messageKey, data);
     } catch (e) {
       console.error('Error parsing notification data:', e);
       return notification.message;

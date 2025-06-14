@@ -1,18 +1,20 @@
 using System.Text.Json;
 using Doerly.Domain.Models;
 using Doerly.Localization;
-using Doerly.Module.Communication.Contracts.Requests;
+using Doerly.Messaging;
+using Doerly.Module.Communication.DataTransferObjects.Messages;
+using Doerly.Module.Communication.DataTransferObjects.Requests;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Communication.DataAccess.Entities;
 using Doerly.Module.Communication.Enums;
-using Doerly.Module.Notification.Enums;
-using Doerly.Module.Notification.Proxy;
 using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Communication.Domain.Handlers;
 
-public class SendMessageHandler(CommunicationDbContext dbContext, INotificationModuleProxy notificationModuleProxy, IProfileModuleProxy profileModuleProxy) : BaseCommunicationHandler(dbContext)
+public class SendMessageHandler(CommunicationDbContext dbContext, 
+    IProfileModuleProxy profileModuleProxy,
+    IMessagePublisher messagePublisher) : BaseCommunicationHandler(dbContext)
 {
     private readonly CommunicationDbContext _dbContext = dbContext;
 
@@ -56,15 +58,16 @@ public class SendMessageHandler(CommunicationDbContext dbContext, INotificationM
             return OperationResult.Failure<int>(Resources.Get("Communication.UnauthorizedSender"));
         }
         
-        var senderName = $"{sender.Value.FirstName} {sender.Value.LastName}";
         // Notify the conversation participants about the new message
-        await notificationModuleProxy.SendNotificationAsync(
+        var notificationMessage = new NewMessageNotificationMessage(
             conversation.RecipientId == userId ? conversation.InitiatorId : conversation.RecipientId,
-            Resources.Get("Notification.NewMessage", senderName),
-            dto.MessageContent,
-            NotificationType.Message,
-            JsonSerializer.Serialize(new { conversationId = conversation.Id, messageId = message.Id })
+            JsonSerializer.Serialize(new { 
+                conversationId = conversation.Id, 
+                messageId = message.Id,
+                senderName = $"{sender.Value.FirstName} {sender.Value.LastName}",
+            })
         );
+        await messagePublisher.Publish(notificationMessage);
         
         return OperationResult.Success(message.Id);
     }

@@ -1,7 +1,7 @@
 using Doerly.Module.Communication.Enums;
 using Doerly.Module.Profile.DataTransferObjects;
 
-namespace Doerly.Module.Communication.Contracts.Responses;
+namespace Doerly.Module.Communication.DataTransferObjects.Responses;
 
 public class MessageResponse
 {

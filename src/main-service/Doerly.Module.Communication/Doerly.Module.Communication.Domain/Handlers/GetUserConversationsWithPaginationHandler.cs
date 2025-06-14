@@ -1,7 +1,7 @@
 using Doerly.DataTransferObjects.Pagination;
 using Doerly.Domain.Models;
 using Doerly.Extensions;
-using Doerly.Module.Communication.Contracts.Responses;
+using Doerly.Module.Communication.DataTransferObjects.Responses;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Proxy.Profile;

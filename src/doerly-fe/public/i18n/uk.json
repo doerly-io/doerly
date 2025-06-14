@@ -551,6 +551,9 @@
   "Notification": {
     "Order": {
       "StatusChanged": "Статус замовлення #{{id}} змінено на {{status}}"
+    },
+    "Message": {
+      "NewMessage": "{{senderName}} надіслав вам повідомлення"
     }
   },
   "notification": {

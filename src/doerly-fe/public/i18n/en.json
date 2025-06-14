@@ -542,6 +542,9 @@
   "Notification": {
     "Order": {
       "StatusChanged": "Order #{{id}} status changed to {{status}}"
+    },
+    "Message": {
+      "Received": "{{senderName}} sent you a message"
     }
   },
   "notification": {

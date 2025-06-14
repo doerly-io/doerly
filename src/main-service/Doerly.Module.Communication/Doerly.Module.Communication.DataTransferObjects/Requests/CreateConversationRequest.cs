@@ -1,4 +1,4 @@
-namespace Doerly.Module.Communication.Contracts.Requests;
+namespace Doerly.Module.Communication.DataTransferObjects.Requests;
 
 public class CreateConversationRequest
 {

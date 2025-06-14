@@ -35,8 +35,8 @@
   </Folder>
   <Folder Name="/Modules/Communication/">
     <Project Path="Doerly.Module.Communication\Doerly.Module.Communication.Api\Doerly.Module.Communication.Api.csproj" Type="Classic C#" />
-    <Project Path="Doerly.Module.Communication\Doerly.Module.Communication.Contracts\Doerly.Module.Communication.Contracts.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Communication\Doerly.Module.Communication.DataAccess\Doerly.Module.Communication.DataAccess.csproj" Type="Classic C#" />
+    <Project Path="Doerly.Module.Communication\Doerly.Module.Communication.DataTransferObjects\Doerly.Module.Communication.DataTransferObjects.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Communication\Doerly.Module.Communication.Domain\Doerly.Module.Communication.Domain.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Communication\Doerly.Module.Communication.Enums\Doerly.Module.Communication.Enums.csproj" Type="Classic C#" />
   </Folder>
