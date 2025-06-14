@@ -13,6 +13,8 @@ import {Popover} from 'primeng/popover';
 import {AuthService} from './modules/authorization/domain/auth.service';
 import {Toast} from 'primeng/toast';
 import {CategoryDropdownComponent} from './@components/category-dropdown/category-dropdown.component';
+import {NotificationBadgeComponent} from './@components/notification-badge/notification-badge.component';
+import {NotificationPanelComponent} from './@components/notification-panel/notification-panel.component';
 import {filter} from 'rxjs';
 
 const THEME = 'theme';
@@ -30,7 +32,9 @@ const THEME = 'theme';
     NgIf,
     Popover,
     Toast,
-    CategoryDropdownComponent
+    CategoryDropdownComponent,
+    NotificationBadgeComponent,
+    NotificationPanelComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

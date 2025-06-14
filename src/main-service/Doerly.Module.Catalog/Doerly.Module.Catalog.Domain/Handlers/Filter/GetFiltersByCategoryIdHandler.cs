@@ -26,7 +26,11 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
                     Name = f.Name,
                     Type = f.Type,
                     CategoryId = f.CategoryId,
-                    Values = f.FilterValues.Select(fv => fv.Value).ToList()
+                    Values = f.FilterValues
+                        .Select(fv => fv.Value)
+                        .Where(v => !string.IsNullOrWhiteSpace(v))
+                        .Distinct()
+                        .ToList()
                 });
 
             var filters = await query.ToListAsync();

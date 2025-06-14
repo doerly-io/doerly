@@ -218,4 +218,10 @@ Doerly</value>
   <data name="InvalidUserForProposal" xml:space="preserve">
     <value>Can't send execution proposal to this user</value>
   </data>
+  <data name="Notification.NewMessage" xml:space="preserve">
+    <value>{0} sent you a message</value>
+  </data>
+  <data name="Notification.Order.StatusChanged" xml:space="preserve">
+    <value>Order #{0} status has been changed to {1}</value>
+  </data>
 </root>

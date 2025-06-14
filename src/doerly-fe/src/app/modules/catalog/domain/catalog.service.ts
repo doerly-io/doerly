@@ -35,7 +35,7 @@ export class CatalogService {
   }
 
   getFiltersByCategoryId(categoryId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/filters/${categoryId}`);
+    return this.http.get(`${environment.baseApiUrl}/catalog/filter/${categoryId}`);
   }
 
   getServiceDetails(serviceId: number) {

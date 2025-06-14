@@ -1,7 +1,7 @@
 using Doerly.Domain.Models;
 using Doerly.FileRepository;
 using Doerly.Localization;
-using Doerly.Module.Communication.Contracts.Responses;
+using Doerly.Module.Communication.DataTransferObjects.Responses;
 using Doerly.Module.Communication.DataAccess;
 using Doerly.Module.Communication.DataAccess.Entities;
 using Doerly.Module.Communication.Domain.Constants;

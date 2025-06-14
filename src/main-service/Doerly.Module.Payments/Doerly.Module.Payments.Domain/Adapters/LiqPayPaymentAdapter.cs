@@ -1,8 +1,10 @@
+using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using Doerly.Common.Helpers;
 using Doerly.Domain.Factories;
 using Doerly.Domain.Models;
+using Doerly.Localization;
 using Doerly.Module.Payments.BaseClient;
 using Doerly.Module.Payments.Client.LiqPay;
 using Doerly.Module.Payments.Client.LiqPay.Helpers;
@@ -57,12 +59,29 @@ public class LiqPayPaymentAdapter : IPaymentAdapter
             _logger.LogWarning("Invalid order Id in LiqPay checkout response. PaymentGuid: {PaymentGuid}", liqPayCheckoutStatus.OrderId);
             return OperationResult.Failure("Invalid order Id");
         }
+        
+        SetCurrentCulture(liqPayCheckoutStatus.Language);
 
         var status = LiqPayMappingHelper.MapLiqPayStatusToCommonStatus(liqPayCheckoutStatus.Status);
-        var payType = LiqPayMappingHelper.MapLiqPaymentMethodToCommonType(liqPayCheckoutStatus.PaymentMethod);
+        var payType = LiqPayMappingHelper.MapLiqPayPaymentMethodToCommon(liqPayCheckoutStatus.PaymentMethod);
 
         var paymentStatusChangedHandler = _handlerFactory.Get<PaymentStatusChangedHandler>();
-        var result = await paymentStatusChangedHandler.Handle(new PaymentStatusChangedModel(paymentGuid, status, payType, liqPayCheckoutStatus.SenderCardMask));
+        var result = await paymentStatusChangedHandler.Handle(
+            new PaymentStatusChangedModel(paymentGuid, status, payType, liqPayCheckoutStatus.SenderCardMask));
+
         return result;
+    }
+
+    private void SetCurrentCulture(string liqpayLanguage)
+    {
+        switch (liqpayLanguage)
+        {
+            case "uk":
+                CultureHelper.SetCurrentCulture("uk-UA");
+                break;
+            default: //en
+                CultureHelper.SetCurrentCulture("en-US");
+                break;
+        }
     }
 }

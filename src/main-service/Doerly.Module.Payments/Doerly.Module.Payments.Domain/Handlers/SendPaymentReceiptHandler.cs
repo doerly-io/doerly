@@ -47,7 +47,7 @@ public class SendPaymentReceiptHandler : BasePaymentHandler
         var emailBody = EmailTemplate.Get(EmailTemplate.PaymentReceipt);
 
         emailBody = emailBody
-            .Replace(PaymentDateTemplate, payment.DateCreated.ToString("yyyy-MM-dd HH:mm:ss"))
+            .Replace(PaymentDateTemplate, payment.DateCreated.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss"))
             .Replace(PaymentMethodTemplate, payment.PaymentMethod.ToDescription())
             .Replace(PaymentCardNumberTemplate, payment.CardNumber ?? string.Empty)
             .Replace(PaymentDescriptionTemplate, payment.Description)

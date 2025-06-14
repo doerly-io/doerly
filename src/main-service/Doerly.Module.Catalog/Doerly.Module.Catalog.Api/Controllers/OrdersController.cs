@@ -23,4 +23,12 @@ public class OrdersController : BaseApiController
         var result = await ResolveHandler<SelectOrdersWithFilterAndPaginationHandler>().HandleAsync(request);
         return Ok(result);
     }
+
+    [HttpGet("get-orders-amount-by-categories")]
+    [ProducesResponseType<List<GetOrdersAmountByCategoriesResponse>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetOrdersAmountByCategories()
+    {
+        var result = await ResolveHandler<GetOrdersAmountByCategoriesHandler>().HandleAsync();
+        return Ok(result);
+    }
 }

@@ -1,4 +1,13 @@
 <div class="catalog-container">
+  <div class="filters-section">
+    <ng-container *ngIf="isLoadingFilters; else filtersLoaded">
+      <p>Loading filters...</p>
+    </ng-container>
+    <ng-template #filtersLoaded>
+      <app-filter-display [filters]="filters"></app-filter-display>
+    </ng-template>
+  </div>
+
   <div class="services-section">
     <div class="sorting-section" *ngIf="!isAuthPage">
       <p-dropdown

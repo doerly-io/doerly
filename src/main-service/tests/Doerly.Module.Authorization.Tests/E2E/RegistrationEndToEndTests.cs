@@ -61,7 +61,9 @@ public class RegistrationEndToEndTests : IClassFixture<AuthAndProfilePostgresTes
         // Wait for eventual consistency if needed (e.g., if profile creation is async)
         await Task.Delay(5000);
         
-        var profile = await _profileDbContext.Profiles.FirstOrDefaultAsync(p => p.FirstName == registerDto.FirstName && p.LastName == registerDto.LastName);
+        var profile = await _profileDbContext.Profiles
+            .FirstOrDefaultAsync(p => p.FirstName == registerDto.FirstName 
+                                      && p.LastName == registerDto.LastName);
         Assert.NotNull(profile);
         Assert.Equal(registerDto.FirstName, profile.FirstName);
         Assert.Equal(registerDto.LastName, profile.LastName);

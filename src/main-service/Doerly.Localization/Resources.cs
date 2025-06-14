@@ -13,6 +13,10 @@ namespace Doerly.Localization
             return resourceValue.Value ?? key;
         }
         
-
+        public static string Get(string key, params object[] args)
+        {
+            var resourceValue = SafeExecutor.Execute(() => ResourceManager.GetString(key));
+            return resourceValue.Value != null ? string.Format(resourceValue.Value, args) : key;
+        }
     }
 }

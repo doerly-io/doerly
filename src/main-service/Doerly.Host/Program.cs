@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using Doerly.Common.Settings;
+using Doerly.Common.Settings.Constants;
 using Doerly.Domain;
 using Doerly.Domain.Factories;
 using Doerly.FileRepository;
@@ -62,6 +63,7 @@ builder.RegisterModule(new Doerly.Module.Order.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Catalog.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Common.Api.ModuleInitializer());
 builder.RegisterModule(new Doerly.Module.Statistics.Api.ModuleInitializer());
+builder.RegisterModule(new Doerly.Module.Notification.Api.ModuleInitializer());
 
 
 #region ModuleProxies
@@ -160,7 +162,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 var accessToken = context.Request.Query["access_token"];
                 var path = context.HttpContext.Request.Path;
                 if (!string.IsNullOrEmpty(accessToken) &&
-                    path.StartsWithSegments("/communicationhub"))
+                    (path.StartsWithSegments(HubConstants.communicationHub) 
+                    || path.StartsWithSegments(HubConstants.notificationHub)))
                 {
                     context.Token = accessToken;
                 }

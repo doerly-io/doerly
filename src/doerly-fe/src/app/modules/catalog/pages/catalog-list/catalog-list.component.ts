@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { JwtTokenHelper } from 'app/@core/helpers/jwtToken.helper';
+import { FilterDisplayComponent } from '../../components/filter-display/filter-display.component';
+import { IFilter } from '../../models/filter.model';
 
 interface SortOption {
   label: string;
@@ -27,22 +29,25 @@ interface SortOption {
     TranslateModule,
     FormsModule,
     CardModule,
-    ButtonModule
+    ButtonModule,
+    FilterDisplayComponent
   ],
   templateUrl: './catalog-list.component.html',
   styleUrls: ['./catalog-list.component.scss']
 })
 export class CatalogListComponent implements OnInit {
   services: IService[] = [];
-  sortOptions: SortOption[] = [
-    { label: 'Name (A-Z)', value: 'name_asc' },
-    { label: 'Name (Z-A)', value: 'name_desc' },
-    { label: 'Price (Low to High)', value: 'price_asc' },
-    { label: 'Price (High to Low)', value: 'price_desc' }
-  ];
-  selectedSort: string = 'name_asc';
+  filters: IFilter[] = [];
   isAuthorized: boolean = false;
   isAuthPage: boolean = false;
+  isLoadingFilters: boolean = false;
+  sortOptions: SortOption[] = [
+    { label: 'Price: Low to High', value: 'price_asc' },
+    { label: 'Price: High to Low', value: 'price_desc' },
+    { label: 'Name: A to Z', value: 'name_asc' },
+    { label: 'Name: Z to A', value: 'name_desc' }
+  ];
+  selectedSort: string = 'price_asc';
   
   pagination = {
     pageNumber: 1,
@@ -68,7 +73,31 @@ export class CatalogListComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.categoryId = params['categoryId'] ? +params['categoryId'] : 2;
       this.pagination.pageNumber = 1;
+      this.loadFilters();
       this.loadServices();
+    });
+  }
+
+  loadFilters(): void {
+    this.isLoadingFilters = true;
+    console.log('Loading filters for category:', this.categoryId);
+    this.catalogService.getFiltersByCategoryId(this.categoryId).subscribe({
+      next: (response) => {
+        console.log('Filters API Response:', response);
+        if (response && response.value) {
+          this.filters = response.value;
+          console.log('Parsed filters:', this.filters);
+        } else {
+          console.warn('No filters data in response');
+          this.filters = [];
+        }
+        this.isLoadingFilters = false;
+      },
+      error: (error) => {
+        console.error('Error loading filters:', error);
+        this.filters = [];
+        this.isLoadingFilters = false;
+      }
     });
   }
 
