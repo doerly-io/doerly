@@ -35,6 +35,23 @@ export class NotificationService {
 
   constructor(private http: HttpClient) {
     this.initializeHubConnection();
+    this.loadInitialData();
+  }
+
+  private loadInitialData(): void {
+    this.getUnreadCount().subscribe({
+      next: (count: number) => {
+        this.unreadCountSubject.next(count);
+      },
+      error: (err) => console.error('Error loading unread count:', err)
+    });
+
+    this.getNotifications().subscribe({
+      next: (response: { items: Notification[], totalCount: number }) => {
+        this.notificationsSubject.next(response.items);
+      },
+      error: (err) => console.error('Error loading notifications:', err)
+    });
   }
 
   private initializeHubConnection(): void {
@@ -51,6 +68,10 @@ export class NotificationService {
     this.hubConnection.on('ReceiveNotification', (notification: Notification) => {
       const currentNotifications = this.notificationsSubject.value;
       this.notificationsSubject.next([notification, ...currentNotifications]);
+
+      if (!notification.isRead) {
+        this.unreadCountSubject.next(this.unreadCountSubject.value + 1);
+      }
     });
 
     this.hubConnection.on('NotificationsMarkedAsRead', (notificationIds: number[]) => {
@@ -65,6 +86,8 @@ export class NotificationService {
       const currentNotifications = this.notificationsSubject.value;
       const updatedNotifications = currentNotifications.map(notification => ({ ...notification, isRead: true }));
       this.notificationsSubject.next(updatedNotifications);
+
+      this.unreadCountSubject.next(updatedNotifications.filter(n => !n.isRead).length);
     });
 
     this.hubConnection.on('UnreadNotificationsCount', (count: number) => {

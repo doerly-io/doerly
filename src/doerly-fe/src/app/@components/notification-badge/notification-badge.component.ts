@@ -11,8 +11,8 @@ import { BadgeModule } from 'primeng/badge';
   standalone: true,
   imports: [CommonModule, ButtonModule, BadgeModule],
   template: `
-    <p-button 
-      icon="pi pi-bell" 
+    <p-button
+      icon="pi pi-bell"
       (click)="toggleNotifications()"
       [text]="true"
       [rounded]="true"
@@ -29,7 +29,7 @@ import { BadgeModule } from 'primeng/badge';
           background: var(--p-surface-ground);
           border-color: var(--p-surface-700);
           color: var(--p-surface-400);
-          
+
           &:hover {
             background: var(--p-surface-700);
             border-color: var(--p-surface-700);
@@ -68,20 +68,13 @@ export class NotificationBadgeComponent implements OnInit, OnDestroy {
         this.unreadCount = count;
       })
     );
-
-    this.loadUnreadCount();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  loadUnreadCount(): void {
-    this.notificationService.getUnreadCount().subscribe();
-  }
-
   toggleNotifications(): void {
     this.panelService.toggle();
   }
 }
- 

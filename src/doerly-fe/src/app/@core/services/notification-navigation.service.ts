@@ -29,7 +29,7 @@ export class NotificationNavigationService {
           break;
 
         case NotificationType.Order:
-          this.router.navigate(['/orders']);
+          this.router.navigate(['/ordering/order/', data.orderId]);
           break;
       }
     } catch (error) {

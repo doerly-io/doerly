@@ -272,8 +272,6 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
         this.notifications = notifications;
       })
     );
-
-    this.loadNotifications();
   }
 
   ngOnDestroy(): void {
@@ -282,10 +280,6 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
 
   get hasUnreadNotifications(): boolean {
     return this.notifications.some(n => !n.isRead);
-  }
-
-  loadNotifications(): void {
-    this.notificationService.getNotifications().subscribe();
   }
 
   handleNotificationClick(notification: Notification): void {
