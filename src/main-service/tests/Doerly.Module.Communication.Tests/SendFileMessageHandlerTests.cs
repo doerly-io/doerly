@@ -1,6 +1,6 @@
 using Doerly.Domain.Models;
 using Doerly.FileRepository;
-using Doerly.Module.Communication.Contracts.Requests;
+using Doerly.Module.Communication.DataTransferObjects.Requests;
 using Doerly.Module.Communication.DataAccess.Entities;
 using Doerly.Module.Communication.Domain.Handlers;
 using Doerly.Module.Communication.Enums;

@@ -51,6 +51,11 @@
               routerLink="/auth/login" label="{{ 'auth.login' | translate }}"
               [severity]="'success'" *ngIf="!isLoggedIn"/>
 
+    <div class="position-relative" *ngIf="isLoggedIn">
+      <app-notification-badge></app-notification-badge>
+      <app-notification-panel></app-notification-panel>
+    </div>
+
     <p-button class="ms-0 ms-md-1" size="small" icon="pi pi-comments" text="true" [raised]="false" [outlined]="false"
               routerLink="/communication/conversations"
               *ngIf="isLoggedIn"

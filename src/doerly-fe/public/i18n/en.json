@@ -542,5 +542,36 @@
       "no-document": "No PDF document loaded",
       "canvas-context": "Could not get canvas context"
     }
+  },
+  "Notification": {
+    "Order": {
+      "StatusChanged": "Order #{{id}} status changed to '{{status}}'"
+    },
+    "Message": {
+      "Received": "{{senderName}} sent you a message"
+    }
+  },
+  "notification": {
+    "title": "Notifications",
+    "mark_all_read": "Mark all as read",
+    "no_notifications": "No notifications",
+    "types": {
+      "Message": "Message",
+      "Order": "Order",
+      "System": "System",
+      "Task": "Task",
+      "Comment": "Comment",
+      "Like": "Like",
+      "Follow": "Follow",
+      "Mention": "Mention"
+    },
+    "message": "{{senderName}} sent you a message",
+    "order": "Order #{{orderId}} status has been changed to {{status}}",
+    "system": "{{message}}",
+    "task": "New task assigned: {{taskName}}",
+    "comment": "{{userName}} commented on your {{entityType}}",
+    "like": "{{userName}} liked your {{entityType}}",
+    "follow": "{{userName}} started following you",
+    "mention": "{{userName}} mentioned you in a {{entityType}}"
   }
 }

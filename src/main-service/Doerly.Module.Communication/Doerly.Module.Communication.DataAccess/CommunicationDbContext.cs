@@ -6,12 +6,8 @@ using Microsoft.Extensions.Configuration;
 
 namespace Doerly.Module.Communication.DataAccess;
 
-public class CommunicationDbContext : BaseDbContext
+public class CommunicationDbContext(IConfiguration configuration) : BaseDbContext(configuration)
 {
-    public CommunicationDbContext(IConfiguration configuration) : base(configuration)
-    {
-    }
-
     public DbSet<MessageEntity> Messages { get; set; }
     public DbSet<ConversationEntity> Conversations { get; set; }
 

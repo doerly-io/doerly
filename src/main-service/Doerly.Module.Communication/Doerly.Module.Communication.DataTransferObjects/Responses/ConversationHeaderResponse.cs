@@ -1,8 +1,8 @@
 using Doerly.Module.Profile.DataTransferObjects;
 
-namespace Doerly.Module.Communication.Contracts.Responses;
+namespace Doerly.Module.Communication.DataTransferObjects.Responses;
 
-public class ConversationResponse
+public class ConversationHeaderResponse
 {
     public int Id { get; set; }
     
@@ -10,5 +10,5 @@ public class ConversationResponse
     
     public ProfileDto Recipient { get; set; }
     
-    public List<MessageResponse> Messages { get; set; }
+    public MessageResponse? LastMessage { get; set; }
 }

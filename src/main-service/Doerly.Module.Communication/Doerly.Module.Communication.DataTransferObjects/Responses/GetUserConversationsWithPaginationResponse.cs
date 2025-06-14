@@ -1,4 +1,4 @@
-namespace Doerly.Module.Communication.Contracts.Responses;
+namespace Doerly.Module.Communication.DataTransferObjects.Responses;
 
 public class GetUserConversationsWithPaginationResponse
 {
