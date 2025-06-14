@@ -23,6 +23,7 @@ public class OrderController : BaseApiController
         return BadRequest(result);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetOrder(int id)
     {

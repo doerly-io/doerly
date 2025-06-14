@@ -16,6 +16,7 @@ namespace Doerly.Module.Catalog.Api.Controllers;
 [Route("api/[area]/[controller]")]
 public class OrdersController : BaseApiController
 {
+    [AllowAnonymous]
     [HttpGet("get-orders-with-pagination")]
     [ProducesResponseType<BasePaginationResponse<GetOrdersWithPaginationAndFilterResponse>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetOrdersWithPagination([FromQuery] GetOrderWithFilterAndPaginationRequest request)

@@ -4,31 +4,37 @@ import { OrderingTabsComponent } from "./pages/ordering-tabs/ordering-tabs.compo
 import { ExecutionProposalDetailsComponent } from "./pages/execution-proposal-details/execution-proposal-details.component";
 import { EditOrderComponent } from "./pages/edit-order/edit-order.component";
 import { EditExecutionProposalComponent } from "./pages/edit-execution-proposal/edit-execution-proposal.component";
+import {authGuard} from 'app/@core/guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: 'order/:id',
-    component: OrderDetailsComponent
+    component: OrderDetailsComponent,
   },
   {
     path: 'execution-proposal/:id',
-    component: ExecutionProposalDetailsComponent
+    component: ExecutionProposalDetailsComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'create-order',
-    component: EditOrderComponent
+    component: EditOrderComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'edit-order/:id',
-    component: EditOrderComponent
+    component: EditOrderComponent,
+    canActivate: [authGuard]
   },
   {
     path: "send-execution-proposal",
-    component: EditExecutionProposalComponent
+    component: EditExecutionProposalComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'edit-execution-proposal/:id',
-    component: EditExecutionProposalComponent
+    component: EditExecutionProposalComponent,
+    canActivate: [authGuard]
   },
   {
     path: "**",
