@@ -13,8 +13,6 @@ using Doerly.Localization;
 using Doerly.Messaging;
 using Doerly.Module.Authorization.Domain;
 using Doerly.Module.Catalog.Domain;
-using Doerly.Module.Notification.Domain;
-using Doerly.Module.Notification.Proxy;
 using Doerly.Module.Order.Domain;
 using Doerly.Notification.EmailSender;
 using Doerly.Proxy.Authorization;
@@ -75,7 +73,6 @@ builder.Services.AddProxy<IProfileModuleProxy, ProfileModuleProxy>();
 builder.Services.AddProxy<IAuthorizationModuleProxy, AuthorizationModuleProxy>();
 builder.Services.AddProxy<IOrdersModuleProxy, OrdersModuleProxy>();
 builder.Services.AddProxy<ICatalogModuleProxy, CatalogModuleProxy>();
-builder.Services.AddProxy<INotificationModuleProxy, NotificationModuleProxy>();
 
 #endregion
 

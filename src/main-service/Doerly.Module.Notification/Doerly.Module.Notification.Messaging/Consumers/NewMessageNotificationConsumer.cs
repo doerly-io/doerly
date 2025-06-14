@@ -22,6 +22,7 @@ public class NewMessageNotificationConsumer(
             context.Message.UserId,
             NotificationConstants.NewMessage,
             NotificationType.Message,
+            context.Message.Timestamp,
             context.Message.Data
         );
     }

@@ -21,7 +21,7 @@
           <h3>{{ getRecipientName(conversation) }}</h3>
           <div class="conversation-meta">
             <small *ngIf="conversation.lastMessage">{{
-              conversation.lastMessage.sentAt | date: 'shortTime'
+              conversation.lastMessage.sentAt | date: 'dd.MM.yyyy HH:mm'
             }}</small>
           </div>
         </div>

@@ -38,9 +38,9 @@
               {{ 'communication.download_file' | translate }}
             </a>
           </div>
-          <div class="message-footer" *ngIf="isOwnMessage(message)">
-            <small class="message-time">{{ message.sentAt | date:'shortTime' }}</small>
-            <span class="message-status">
+          <div class="message-footer">
+            <small class="message-time">{{ message.sentAt | date: 'dd.MM.yyyy HH:mm' }}</small>
+            <span class="message-status" *ngIf="isOwnMessage(message)">
               <i *ngIf="message.status === MessageStatus.SENT" class="pi pi-send"></i>
               <i *ngIf="message.status === MessageStatus.DELIVERED" class="pi pi-check"></i>
               <i *ngIf="message.status === MessageStatus.READ" class="pi pi-check-circle"></i>

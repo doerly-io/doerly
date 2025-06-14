@@ -27,7 +27,6 @@ import { BadgeModule } from 'primeng/badge';
       .notification-button {
         .p-button {
           background: var(--p-surface-ground);
-          border-color: var(--p-surface-700);
           color: var(--p-surface-400);
 
           &:hover {
