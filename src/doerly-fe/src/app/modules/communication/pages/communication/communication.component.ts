@@ -37,7 +37,6 @@ export class CommunicationComponent implements OnInit, OnDestroy {
 
   constructor() {
     this.checkScreenSize();
-    this.initializeSignalR();
   }
 
   @HostListener('window:resize')
@@ -93,7 +92,12 @@ export class CommunicationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Підписуємось на зміни query параметрів
+    // Initialize SignalR connection
+    if (this.userId) {
+      this.initializeSignalR();
+    }
+
+    // Subscribe to query params
     this.route.queryParams.subscribe(params => {
       const conversationId = params['conversationId'];
       if (conversationId) {
@@ -103,6 +107,11 @@ export class CommunicationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.communicationSignalR.stopConnection().catch(err => console.error('Error during cleanup:', err));
+    // Ensure proper cleanup of SignalR connection
+    if (this.communicationSignalR) {
+      this.communicationSignalR.stopConnection()
+        .then(() => console.log('SignalR connection stopped successfully'))
+        .catch(err => console.error('Error stopping SignalR connection:', err));
+    }
   }
 }
