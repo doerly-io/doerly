@@ -21,9 +21,9 @@ public class OrderStatusChangedNotificationConsumer(
     {
         return handlerFactory.Get<SendNotificationHandler>().HandleAsync(
             (int)requestContext.UserId,
-            NotificationConstants.StatusChanged,
+            NotificationConstants.Orders.StatusChanged,
             NotificationType.Order,
-            DateTime.UtcNow, 
+            DateTime.UtcNow,
             JsonSerializer.Serialize(new { orderId = context.Message.OrderId, orderStatus = context.Message.OrderStatus })
         );
     }

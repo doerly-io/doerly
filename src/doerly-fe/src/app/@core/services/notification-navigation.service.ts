@@ -5,6 +5,7 @@ import { Notification } from './notification.service';
 export enum NotificationType {
   Message = 0,
   Order = 1,
+  ExecutionProposal = 2
 }
 
 @Injectable({
@@ -26,6 +27,10 @@ export class NotificationNavigationService {
           this.router.navigate(['/communication/conversations'], {
             queryParams: { conversationId: data.conversationId }
           });
+          break;
+
+        case NotificationType.ExecutionProposal:
+          this.router.navigate(['ordering/execution-proposal/', data.executionProposalId]);
           break;
 
         case NotificationType.Order:

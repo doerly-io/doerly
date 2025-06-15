@@ -20,7 +20,7 @@ public class NewMessageNotificationConsumer(
     {
         return handlerFactory.Get<SendNotificationHandler>().HandleAsync(
             context.Message.UserId,
-            NotificationConstants.NewMessage,
+            NotificationConstants.Messages.NewMessage,
             NotificationType.Message,
             context.Message.Timestamp,
             context.Message.Data

@@ -4,4 +4,5 @@ public enum NotificationType : byte
 {
     Message = 0,
     Order,
+    ExecutionProposal
 } 

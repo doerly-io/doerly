@@ -569,6 +569,9 @@
     },
     "Message": {
       "NewMessage": "{{senderName}} надіслав вам повідомлення"
+    },
+    "ExecutionProposal": {
+      "StatusChanged": "Статус пропозиції виконання #{{id}} змінено на {{status}}"
     }
   },
   "notification": {
@@ -578,12 +581,7 @@
     "types": {
       "Message": "Повідомлення",
       "Order": "Замовлення",
-      "System": "Система",
-      "Task": "Завдання",
-      "Comment": "Коментар",
-      "Like": "Лайк",
-      "Follow": "Підписка",
-      "Mention": "Згадка"
+      "ExecutionProposal": "Пропозиція виконання"
     },
     "message": "{{senderName}} надіслав вам повідомлення",
     "order": "Статус замовлення #{{orderId}} змінено на {{status}}",

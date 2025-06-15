@@ -11,6 +11,7 @@ import { RippleModule } from 'primeng/ripple';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { NotificationType } from '../../@core/enums/notification-type.enum';
 import {EOrderStatus} from '../../modules/order/domain/enums/order-status';
+import {EExecutionProposalStatus} from '../../modules/order/domain/enums/execution-proposal-status';
 
 @Component({
   selector: 'app-notification-panel',
@@ -303,6 +304,7 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
   getNotificationMessage(notification: Notification): string {
     try {
       const data = notification.data ? JSON.parse(notification.data) : {};
+      console.log(data);
 
       if (notification.type === NotificationType.Order && notification.message === 'Notification.Order.StatusChanged') {
         if (data.orderStatus) {
@@ -311,6 +313,18 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
 
         let translated = '';
         this.translateService.get('Notification.Order.StatusChanged', {id: data.orderId, status: data.orderStatus}).subscribe(translate => {
+          translated = translate;
+        });
+        return translated;
+      }
+
+      if (notification.type === NotificationType.ExecutionProposal && notification.message === 'Notification.ExecutionProposal.StatusChanged') {
+        if (data.executionProposalStatus) {
+          data.executionProposalStatus = this.translateService.instant(`ordering.proposal_statuses.${EExecutionProposalStatus[data.executionProposalStatus]}`);
+        }
+
+        let translated = '';
+        this.translateService.get('Notification.ExecutionProposal.StatusChanged', {id: data.executionProposalId, status: data.executionProposalStatus}).subscribe(translate => {
           translated = translate;
         });
         return translated;
