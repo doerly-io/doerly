@@ -1,4 +1,4 @@
-﻿namespace Doerly.Module.Order.DataTransferObjects.Responses;
+﻿namespace Doerly.Module.Profile.DataTransferObjects.Profile;
 public class ProfileInfo
 {
     public int Id { get; set; }

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Doerly.Module.Payments.DataAccess;
 
-public class PaymentContextDesignTimeFactory : IDesignTimeDbContextFactory<ProfileDbContext>
+public class ProfileContextDesignTimeFactory : IDesignTimeDbContextFactory<ProfileDbContext>
 {
     public ProfileDbContext CreateDbContext(string[] args)
     {

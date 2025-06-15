@@ -1,4 +1,5 @@
 ﻿using Doerly.Module.Order.Enums;
+using Doerly.Module.Profile.DataTransferObjects.Profile;
 
 namespace Doerly.Module.Order.DataTransferObjects.Responses;
 public class GetExecutionProposalResponse

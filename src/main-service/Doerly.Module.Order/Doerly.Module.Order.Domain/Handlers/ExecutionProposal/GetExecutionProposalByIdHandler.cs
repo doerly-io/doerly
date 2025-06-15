@@ -6,6 +6,7 @@ using Doerly.Module.Order.DataAccess.Entities;
 using Doerly.Domain;
 using Doerly.Module.Order.DataTransferObjects;
 using Doerly.Module.Order.DataTransferObjects.Responses;
+using Doerly.Module.Profile.DataTransferObjects.Profile;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetExecutionProposalByIdHandler : BaseOrderHandler

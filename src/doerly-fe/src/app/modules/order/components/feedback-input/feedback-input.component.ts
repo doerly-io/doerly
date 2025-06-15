@@ -41,6 +41,8 @@ export class FeedbackInputComponent implements OnInit {
     protected _feedback?: OrderFeedbackResponse;
 
     public orderId = input<number>();
+    public executorId = input<number>();
+    public categoryId = input<number>();
     public canEdit = input<boolean>(false);
 
     protected isReadonlyMode = signal<boolean>(false);
@@ -88,10 +90,6 @@ export class FeedbackInputComponent implements OnInit {
         return this.feedbackForm.get('comment');
     }
 
-    toggleEditMode() {
-        this.isReadonlyMode.set(!this.isReadonlyMode());
-    }
-
     deleteFeedback() {
         if (!this._feedback || !this.orderId()) return;
 
@@ -108,6 +106,8 @@ export class FeedbackInputComponent implements OnInit {
     onSubmit() {
         if (this.feedbackForm.valid) {
             const createdFeedbackRequest = this.feedbackForm.value as CreateFeedbackRequest;
+            createdFeedbackRequest.executorId = this.executorId()!;
+            createdFeedbackRequest.categoryId = this.categoryId()!;
             const orderId = this.orderId()!;
             const feedbackId = this._feedback?.feedbackId;
             if (feedbackId) {

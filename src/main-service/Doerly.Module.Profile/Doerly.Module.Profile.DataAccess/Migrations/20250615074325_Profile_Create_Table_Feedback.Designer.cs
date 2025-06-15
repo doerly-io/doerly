@@ -3,6 +3,7 @@ using System;
 using Doerly.Module.Profile.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Doerly.Module.Profile.DataAccess.Migrations
 {
     [DbContext(typeof(ProfileDbContext))]
-    partial class ProfileDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250615074325_Profile_Create_Table_Feedback")]
+    partial class Profile_Create_Table_Feedback
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

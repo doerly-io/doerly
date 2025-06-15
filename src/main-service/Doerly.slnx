@@ -73,6 +73,9 @@
     <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Domain\Doerly.Module.Profile.Domain.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Profile\Doerly.Module.Profile.Enums\Doerly.Module.Profile.Enums.csproj" Type="Classic C#" />
   </Folder>
+  <Folder Name="/Modules/Profile/Jobs/">
+    <Project Path="Jobs\Doerly.Module.Profile.RatingJob\Doerly.Module.Profile.RatingJob.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Modules/Statistics/">
     <Project Path="Doerly.Module.Statistics.Api\Doerly.Module.Statistics.Api.csproj" Type="Classic C#" />
     <Project Path="Doerly.Module.Statistics.DataTransferObjects\Doerly.Module.Statistics.DataTransferObjects.csproj" Type="Classic C#" />

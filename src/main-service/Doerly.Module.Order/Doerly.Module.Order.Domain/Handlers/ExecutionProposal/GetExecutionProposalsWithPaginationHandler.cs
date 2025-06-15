@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Doerly.Proxy.Profile;
 using Doerly.Module.Order.DataTransferObjects.Responses;
 using Doerly.Module.Order.DataTransferObjects.Requests;
+using Doerly.Module.Profile.DataTransferObjects.Profile;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetExecutionProposalsWithPaginationHandler : BaseOrderHandler

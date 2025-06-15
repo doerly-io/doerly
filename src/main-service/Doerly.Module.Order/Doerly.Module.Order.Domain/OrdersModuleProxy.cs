@@ -25,11 +25,11 @@ public class OrdersModuleProxy : IOrdersModuleProxy
         return ordersResponse;
     }
 
-    public async Task<CursorPaginationResponse<OrderFeedbackResponse>> GetFeedbacksAsync(int userId, CursorPaginationRequest request)
-    {
-        var feedbacksResponse = await _handlerFactory.Get<SelectUserFeedbacksHandler>().HandleAsync(userId, request);
-        return feedbacksResponse;
-    }
+    // public async Task<CursorPaginationResponse<OrderFeedbackResponse>> GetFeedbacksAsync(int userId, CursorPaginationRequest request)
+    // {
+    //     var feedbacksResponse = await _handlerFactory.Get<SelectUserFeedbacksHandler>().HandleAsync(userId, request);
+    //     return feedbacksResponse;
+    // }
 
     public async Task<List<GetOrdersAmountByCategoriesResponse>> GetOrdersAmountByCategoriesAsync()
     {

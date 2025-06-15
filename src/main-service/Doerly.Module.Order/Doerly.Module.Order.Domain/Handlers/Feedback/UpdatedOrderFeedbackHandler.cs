@@ -1,24 +1,24 @@
+using Doerly.Domain.Handlers;
 using Doerly.Domain.Models;
-using Doerly.Module.Order.DataAccess;
 using Doerly.Module.Order.DataTransferObjects.Requests;
-using Microsoft.EntityFrameworkCore;
+using Doerly.Module.Profile.DataTransferObjects.Feedback;
+using Doerly.Proxy.Profile;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 
-public class UpdatedOrderFeedbackHandler : BaseOrderHandler
+public class UpdatedOrderFeedbackHandler : BaseHandler
 {
-    public UpdatedOrderFeedbackHandler(OrderDbContext dbContext) : base(dbContext)
+    private readonly IProfileModuleProxy _profileModuleProxy;
+
+    public UpdatedOrderFeedbackHandler(IProfileModuleProxy profileModuleProxy)
     {
+        _profileModuleProxy = profileModuleProxy;
     }
 
-    public async Task<OperationResult> HandleAsync(int orderId, int feedbackId, OrderFeedbackRequest request)
+    public async Task<OperationResult> HandleAsync(int feedbackId, FeedbackRequest request)
     {
-        await DbContext.OrderFeedbacks.Where(x => x.Id == feedbackId)
-            .ExecuteUpdateAsync(x => x
-                .SetProperty(y => y.Comment, request.Comment)
-                .SetProperty(b => b.LastModifiedDate, DateTime.UtcNow)
-                .SetProperty(y => y.Rating, request.Rating));
-        
+        await _profileModuleProxy.UpdateFeedback(feedbackId, request);
+
         return OperationResult.Success();
     }
 }

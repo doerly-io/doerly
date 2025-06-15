@@ -37,12 +37,13 @@ public abstract class BaseDbContext : DbContext, IDbContext
 
         foreach (var entry in entries)
         {
+            var now = DateTime.UtcNow;
             if (entry.State == EntityState.Added)
             {
-                ((BaseEntity)entry.Entity).DateCreated = DateTime.UtcNow;
+                ((BaseEntity)entry.Entity).DateCreated = now;
             }
 
-            ((BaseEntity)entry.Entity).LastModifiedDate = DateTime.UtcNow;
+            ((BaseEntity)entry.Entity).LastModifiedDate = now;
         }
     }
 
