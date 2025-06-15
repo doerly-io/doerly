@@ -1,30 +1,14 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationPanelService {
-  private isVisibleSubject = new BehaviorSubject<boolean>(false);
-  public isVisible$ = this.isVisibleSubject.asObservable();
+  private toggleSubject = new Subject<Event>();
+  public toggle$ = this.toggleSubject.asObservable();
 
-  show(): void {
-    this.isVisibleSubject.next(true);
+  toggle(event: Event): void {
+    this.toggleSubject.next(event);
   }
-
-  hide(): void {
-    this.isVisibleSubject.next(false);
-  }
-
-  toggle(): void {
-    this.isVisibleSubject.next(!this.isVisibleSubject.value);
-  }
-
-  open(): void {
-    this.isVisibleSubject.next(true);
-  }
-
-  close(): void {
-    this.isVisibleSubject.next(false);
-  }
-} 
+}

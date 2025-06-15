@@ -13,7 +13,7 @@ import { BadgeModule } from 'primeng/badge';
   template: `
     <p-button
       icon="pi pi-bell"
-      (click)="toggleNotifications()"
+      (click)="toggleNotifications($event)"
       [text]="true"
       [rounded]="true"
       [outlined]="true"
@@ -73,7 +73,7 @@ export class NotificationBadgeComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  toggleNotifications(): void {
-    this.panelService.toggle();
+  toggleNotifications(event: Event): void {
+    this.panelService.toggle(event);
   }
 }
