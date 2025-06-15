@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AccordionModule } from 'primeng/accordion';
@@ -39,9 +39,33 @@ interface FilterRange {
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class FilterDisplayComponent {
+export class FilterDisplayComponent implements OnChanges {
   @Input() filters: IFilter[] = [];
   @Output() filterChange = new EventEmitter<any[]>();
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['filters'] && changes['filters'].currentValue) {
+      this.resetFilterValues();
+    }
+  }
+
+  private resetFilterValues(): void {
+    this.filters.forEach(filter => {
+      if (filter.type === 1 || filter.type === 2) {
+        filter.values.forEach(value => {
+          value.selected = false;
+        });
+      } else if (filter.type === 3) {
+        const min = filter.min ?? 0;
+        const max = filter.max ?? 100;
+        filter.minValue = min;
+        filter.maxValue = max;
+        filter.range = [min, max];
+      } else if (filter.type === 4) {
+        filter.selectedValue = undefined;
+      }
+    });
+  }
 
   onFilterChange(): void {
     const filterValues = this.getFilterValues();

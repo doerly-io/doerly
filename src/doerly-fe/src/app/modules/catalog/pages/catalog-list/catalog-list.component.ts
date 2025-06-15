@@ -84,7 +84,11 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     });
     
     this.route.params.subscribe(params => {
-      this.categoryId = params['categoryId'] ? +params['categoryId'] : null;
+      const newCategoryId = params['categoryId'] ? +params['categoryId'] : null;
+      if (this.categoryId !== newCategoryId) {
+        this.resetFilters();
+      }
+      this.categoryId = newCategoryId;
       this.pagination.pageNumber = 1;
       this.loadFilters();
       this.loadServices();
@@ -165,5 +169,11 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     this.pagination.pageNumber = event.page + 1;
     this.pagination.pageSize = event.rows;
     this.loadServices();
+  }
+
+  private resetFilters(): void {
+    this.selectedFilters = [];
+    this.filters = [];
+    this.selectedSort = 'price_asc';
   }
 } 

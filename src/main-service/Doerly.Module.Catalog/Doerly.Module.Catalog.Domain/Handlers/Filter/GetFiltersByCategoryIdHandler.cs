@@ -1,8 +1,6 @@
 ﻿using Doerly.Domain.Models;
-using Doerly.Localization;
 using Doerly.Module.Catalog.Contracts.Responses;
 using Doerly.Module.Catalog.DataAccess;
-using Doerly.Module.Catalog.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Catalog.Domain.Handlers.Filter
@@ -15,11 +13,12 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
 
         public async Task<OperationResult<List<GetFilterResponse>>> HandleAsync(int categoryId)
         {
-            var parentCategoryIds = await GetAllParentCategoryIds(categoryId);
-            
+            var allChildCategoryIds = await GetAllChildCategoryIds(categoryId);
+
             var query = DbContext.Filters
-                    .Include(s => s.FilterValues)
-                .Where(f => !f.Category.IsDeleted && parentCategoryIds.Contains(f.CategoryId))
+                .Include(f => f.FilterValues)
+                    .ThenInclude(fv => fv.Service)
+                .Where(f => !f.Category.IsDeleted && allChildCategoryIds.Contains(f.CategoryId))
                 .Select(f => new GetFilterResponse
                 {
                     Id = f.Id,
@@ -27,8 +26,12 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
                     Type = f.Type,
                     CategoryId = f.CategoryId,
                     Values = f.FilterValues
+                        .Where(fv =>
+                            fv.Service != null &&
+                            fv.Service.IsEnabled &&
+                            !fv.Service.IsDeleted &&
+                            !string.IsNullOrWhiteSpace(fv.Value))
                         .Select(fv => fv.Value)
-                        .Where(v => !string.IsNullOrWhiteSpace(v))
                         .Distinct()
                         .ToList()
                 });
@@ -38,25 +41,33 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Filter
             return OperationResult.Success(filters);
         }
 
-        private async Task<List<int>> GetAllParentCategoryIds(int categoryId)
+        private async Task<List<int>> GetAllChildCategoryIds(int rootCategoryId)
         {
-            var parentIds = new List<int>();
-            var currentCategoryId = (int?)categoryId;
+            var allCategories = await DbContext.Categories
+                .Where(c => !c.IsDeleted)
+                .Select(c => new { c.Id, c.ParentId })
+                .ToListAsync();
 
-            while (currentCategoryId.HasValue)
+            var result = new List<int>();
+            var stack = new Stack<int>();
+            stack.Push(rootCategoryId);
+
+            while (stack.Count > 0)
             {
-                parentIds.Add(currentCategoryId.Value);
+                var currentId = stack.Pop();
+                result.Add(currentId);
 
-                var id = currentCategoryId;
-                var parentId = await DbContext.Categories
-                    .Where(c => c.Id == id.Value)
-                    .Select(c => c.ParentId)
-                    .FirstOrDefaultAsync();
+                var children = allCategories
+                    .Where(c => c.ParentId == currentId)
+                    .Select(c => c.Id);
 
-                currentCategoryId = parentId;
+                foreach (var childId in children)
+                {
+                    stack.Push(childId);
+                }
             }
 
-            return parentIds;
+            return result;
         }
     }
 }
