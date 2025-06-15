@@ -9,14 +9,17 @@
   border-radius: 8px;
   margin-bottom: 2rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-
+  color: var(--p-card-color);
+  background: var(--p-card-background);
+  margin-bottom: 1rem;
   .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 2rem;
     color: var(--bs-heading-color);
-    margin-bottom: 1.5rem;
+    margin-bottom: 10px;
+    padding: var(--p-card-body-padding);
 
     @media (max-width: 768px) {
       flex-direction: column;
@@ -49,12 +52,15 @@
     white-space: nowrap;
   }
 
-  .create-order-button {
-    :host ::ng-deep .p-button {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1.1rem;
-    }
+  
+}
+
+.create-order-button {
+  :host ::ng-deep .p-button {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
   }
 }
 
@@ -62,6 +68,7 @@
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 2rem;
+  margin-top: 10px;
 
   @media (max-width: 1024px) {
     grid-template-columns: 1fr;
@@ -162,19 +169,6 @@
   border: 3px solid var(--surface-border);
 }
 
-.provider-icon {
-  width: 100px;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--surface-ground);
-  border: 3px solid var(--surface-border);
-  border-radius: 50%;
-  font-size: 2.5rem;
-  color: var(--surface-600);
-}
-
 .provider-details {
   h3 {
     margin: 0 0 0.5rem 0;
@@ -245,10 +239,14 @@
 
 .recommended-services {
   margin-top: 3rem;
-
+  background-color: var(--surface-card);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  color: var(--p-card-color);
   h2 {
-    color: var(--text-color);
-    font-size: 1.5rem;
+    color: var(--p-card-color);
+    font-size: 2rem;
     margin-bottom: 1.5rem;
     font-weight: 600;
   }
@@ -281,16 +279,14 @@
 }
 
 .recommended-card {
+  background-color: var(--surface-ground);
+  border-radius: 8px;
+  padding: 1.25rem;
   height: 100%;
+  transition: transform 0.2s ease-in-out;
 
-  :host ::ng-deep .p-card {
-    height: 100%;
-    background-color: var(--surface-card);
-    
-    .p-card-body {
-      height: 100%;
-      padding: 1rem;
-    }
+  &:hover {
+    transform: translateY(-2px);
   }
 }
 
@@ -313,7 +309,7 @@
       margin: 0;
       font-size: 1.25rem;
       font-weight: 600;
-      color: var(--text-color);
+      color: var(--bs-heading-color);
       word-break: break-word;
     }
 
@@ -372,7 +368,7 @@
     background-color: var(--surface-ground);
     border-radius: 50%;
     font-size: 1.5rem;
-    color: var(--surface-600);
+    color: var(--text-color-secondary);
   }
 
   .user-info {

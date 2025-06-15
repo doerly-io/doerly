@@ -9,22 +9,23 @@
         {{service.price | currency:'UAH':'symbol-narrow':'1.0-0'}}
       </div>
     </div>
-    <div class="create-order-button">
-      <p-button 
-        icon="pi pi-shopping-cart" 
-        [routerLink]="'/ordering/create-order'"
-        [queryParams]="{
-          categoryId: service.categoryId,
-          executorId: service.userId,
-          name: service.name,
-          description: service.description,
-          price: service.price
-        }"
-        label="{{ 'ordering.create_order' | translate }}"
-        [severity]="'success'"
-        styleClass="w-100">
-      </p-button>
-    </div>
+    
+  </div>
+  <div class="create-order-button">
+    <p-button 
+      icon="pi pi-shopping-cart" 
+      [routerLink]="'/ordering/create-order'"
+      [queryParams]="{
+        categoryId: service.categoryId,
+        executorId: service.userId,
+        name: service.name,
+        description: service.description,
+        price: service.price
+      }"
+      label="{{ 'ordering.create_order' | translate }}"
+      [severity]="'success'"
+      styleClass="w-100">
+    </p-button>
   </div>
 
   <div class="service-content">
@@ -118,12 +119,8 @@
       <p-card *ngFor="let service of service.recommendedServices" class="recommended-card">
         <div class="service-info">
           <div class="service-main">
-            <div class="service-header">
-              <div class="title-section">
-                <h3 class="service-title">{{service.name}}</h3>
+            <h3 class="service-title">{{service.name}}</h3>
                 <span class="service-category">{{service.categoryName}}</span>
-              </div>
-            </div>
             
             <p class="service-description">{{service.description}}</p>
             
