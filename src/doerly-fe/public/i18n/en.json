@@ -570,6 +570,9 @@
     },
     "Message": {
       "NewMessage": "{{senderName}} sent you a message"
+    },
+    "ExecutionProposal": {
+      "StatusChanged": "Execution proposal #{{id}} status changed to '{{status}}'"
     }
   },
   "notification": {
@@ -579,12 +582,7 @@
     "types": {
       "Message": "Message",
       "Order": "Order",
-      "System": "System",
-      "Task": "Task",
-      "Comment": "Comment",
-      "Like": "Like",
-      "Follow": "Follow",
-      "Mention": "Mention"
+      "ExecutionProposal": "Execution Proposal"
     },
     "message": "{{senderName}} sent you a message",
     "order": "Order #{{orderId}} status has been changed to {{status}}",

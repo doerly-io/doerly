@@ -126,10 +126,12 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
         await _messagePublisher.Publish(message);
     }
 
-    protected async Task PublishExecutionProposalStatusUpdatedEventAsync(int executionProposalId,
-        EExecutionProposalStatus executionProposalStatus)
+    protected async Task PublishExecutionProposalStatusUpdatedEventAsync(
+        int executionProposalId,
+        EExecutionProposalStatus executionProposalStatus,
+        int receiverId)
     {
-        var message = new ExecutionProposalStatucUpdatedMessage(executionProposalId, executionProposalStatus);
+        var message = new ExecutionProposalStatusChangedMessage(executionProposalId, executionProposalStatus, receiverId);
         await _messagePublisher.Publish(message);
     }
 
@@ -177,7 +179,7 @@ public class BaseOrderHandler : BaseHandler<OrderDbContext>
         DbContext.ExecutionProposals.Add(executionProposal);
         await DbContext.SaveChangesAsync();
 
-        await PublishExecutionProposalStatusUpdatedEventAsync(executionProposal.Id, executionProposal.Status);
+        await PublishExecutionProposalStatusUpdatedEventAsync(executionProposal.Id, executionProposal.Status, executionProposal.ReceiverId);
 
         var result = new SendExecutionProposalResponse()
         {

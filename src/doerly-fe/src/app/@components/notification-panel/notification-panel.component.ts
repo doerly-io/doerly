@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotificationService, Notification } from '../../@core/services/notification.service';
 import { NotificationPanelService } from '../../@core/services/notification-panel.service';
@@ -11,53 +11,58 @@ import { RippleModule } from 'primeng/ripple';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { NotificationType } from '../../@core/enums/notification-type.enum';
 import {EOrderStatus} from '../../modules/order/domain/enums/order-status';
+import {EExecutionProposalStatus} from '../../modules/order/domain/enums/execution-proposal-status';
+import {OverlayPanelModule} from 'primeng/overlaypanel';
+import {Popover} from 'primeng/popover';
 
 @Component({
   selector: 'app-notification-panel',
   standalone: true,
-  imports: [CommonModule, ButtonModule, CardModule, ScrollPanelModule, RippleModule, TranslatePipe],
+  imports: [CommonModule, ButtonModule, CardModule, ScrollPanelModule, RippleModule, TranslatePipe, OverlayPanelModule, Popover],
   template: `
-    <div class="notification-panel" *ngIf="isVisible$ | async">
-      <p-card styleClass="notification-card">
-        <ng-template pTemplate="header">
-          <div class="panel-header">
-            <h3>{{ 'notification.title' | translate }}</h3>
-            <p-button
-              *ngIf="hasUnreadNotifications"
-              [label]="'notification.mark_all_read' | translate"
-              icon="pi pi-check"
-              (click)="markAllAsRead()"
-              [text]="true"
-              [rounded]="true"
-              [outlined]="true"
-            ></p-button>
-          </div>
-        </ng-template>
-
-        <p-scrollPanel [style]="{width: '100%', height: '400px'}">
-          <div class="panel-content">
-            <div *ngIf="notifications.length === 0" class="no-notifications">
-              <i class="pi pi-bell" style="font-size: 2rem"></i>
-              <p>{{ 'notification.no_notifications' | translate }}</p>
+    <div class="notification-panel">
+      <p-popover #op [dismissable]="true">
+        <p-card styleClass="notification-card">
+          <ng-template pTemplate="header">
+            <div class="panel-header">
+              <h3>{{ 'notification.title' | translate }}</h3>
+              <p-button
+                *ngIf="hasUnreadNotifications"
+                [label]="'notification.mark_all_read' | translate"
+                icon="pi pi-check"
+                (click)="markAllAsRead()"
+                [text]="true"
+                [rounded]="true"
+                [outlined]="true"
+              ></p-button>
             </div>
+          </ng-template>
 
-            <div *ngFor="let notification of notifications"
-                 class="notification-item"
-                 [class.unread]="!notification.isRead"
-                 (click)="handleNotificationClick(notification)"
-                 pRipple>
-              <div class="notification-content">
-                <div class="notification-header">
-                  <i [class]="getNotificationIcon(notification.type)" class="notification-icon"></i>
-                  <h4>{{ getNotificationTitle(notification) }}</h4>
+          <p-scrollPanel [style]="{width: '100%', height: '400px'}">
+            <div class="panel-content">
+              <div *ngIf="notifications.length === 0" class="no-notifications">
+                <i class="pi pi-bell" style="font-size: 2rem"></i>
+                <p>{{ 'notification.no_notifications' | translate }}</p>
+              </div>
+
+              <div *ngFor="let notification of notifications"
+                   class="notification-item"
+                   [class.unread]="!notification.isRead"
+                   (click)="handleNotificationClick(notification)"
+                   pRipple>
+                <div class="notification-content">
+                  <div class="notification-header">
+                    <i [class]="getNotificationIcon(notification.type)" class="notification-icon"></i>
+                    <h4>{{ getNotificationTitle(notification) }}</h4>
+                  </div>
+                  <p>{{ getNotificationMessage(notification) }}</p>
+                  <small>{{ notification.timestamp | date: 'dd.MM.yyyy HH:mm' }}</small>
                 </div>
-                <p>{{ getNotificationMessage(notification) }}</p>
-                <small>{{ notification.timestamp | date: 'dd.MM.yyyy HH:mm' }}</small>
               </div>
             </div>
-          </div>
-        </p-scrollPanel>
-      </p-card>
+          </p-scrollPanel>
+        </p-card>
+      </p-popover>
     </div>
   `,
   styles: [`
@@ -235,6 +240,7 @@ import {EOrderStatus} from '../../modules/order/domain/enums/order-status';
           border-radius: 0;
 
           .p-card-body {
+            padding: 0 !important;
             height: calc(100% - 4rem);
           }
         }
@@ -253,9 +259,10 @@ import {EOrderStatus} from '../../modules/order/domain/enums/order-status';
   `]
 })
 export class NotificationPanelComponent implements OnInit, OnDestroy {
+  @ViewChild('op') op!: Popover;
+
   notifications: Notification[] = [];
   private subscriptions: Subscription[] = [];
-  isVisible$;
 
   constructor(
     private notificationService: NotificationService,
@@ -263,13 +270,17 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
     private navigationService: NotificationNavigationService,
     private translateService: TranslateService
   ) {
-    this.isVisible$ = this.panelService.isVisible$;
   }
 
   ngOnInit(): void {
     this.subscriptions.push(
       this.notificationService.notifications$.subscribe(notifications => {
         this.notifications = notifications;
+      }),
+      this.panelService.toggle$.subscribe(event => {
+        if (this.op) {
+          this.op.toggle(event);
+        }
       })
     );
   }
@@ -285,7 +296,9 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
   handleNotificationClick(notification: Notification): void {
     this.markAsRead([notification.id]);
     this.navigationService.navigateToNotificationSource(notification);
-    this.panelService.close();
+    if (this.op) {
+      this.op.hide();
+    }
   }
 
   markAsRead(notificationIds: number[]): void {
@@ -303,6 +316,7 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
   getNotificationMessage(notification: Notification): string {
     try {
       const data = notification.data ? JSON.parse(notification.data) : {};
+      console.log(data);
 
       if (notification.type === NotificationType.Order && notification.message === 'Notification.Order.StatusChanged') {
         if (data.orderStatus) {
@@ -311,6 +325,18 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
 
         let translated = '';
         this.translateService.get('Notification.Order.StatusChanged', {id: data.orderId, status: data.orderStatus}).subscribe(translate => {
+          translated = translate;
+        });
+        return translated;
+      }
+
+      if (notification.type === NotificationType.ExecutionProposal && notification.message === 'Notification.ExecutionProposal.StatusChanged') {
+        if (data.executionProposalStatus) {
+          data.executionProposalStatus = this.translateService.instant(`ordering.proposal_statuses.${EExecutionProposalStatus[data.executionProposalStatus]}`);
+        }
+
+        let translated = '';
+        this.translateService.get('Notification.ExecutionProposal.StatusChanged', {id: data.executionProposalId, status: data.executionProposalStatus}).subscribe(translate => {
           translated = translate;
         });
         return translated;

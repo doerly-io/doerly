@@ -48,7 +48,7 @@ public class ResolveExecutionProposalHandler : BaseOrderHandler
 
         await DbContext.SaveChangesAsync();
 
-        await PublishExecutionProposalStatusUpdatedEventAsync(executionProposal.Id, executionProposal.Status);
+        await PublishExecutionProposalStatusUpdatedEventAsync(executionProposal.Id, executionProposal.Status, executionProposal.ReceiverId);
 
         return OperationResult.Success();
     }
