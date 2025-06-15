@@ -585,6 +585,16 @@
     "follow": "{{userName}} started following you",
     "mention": "{{userName}} mentioned you in a {{entityType}}"
   },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "aboutUs": "About Us",
+    "services": "Services",
+    "contact": "Contact",
+    "faq": "FAQ",
+    "contactUs": "Contact Us",
+    "allRightsReserved": "All rights reserved",
+    "description": "Your trusted platform for professional services and local expertise."
+  },
   "home":{
     "welcome": "Welcome to Doerly!",
     "welcome_description": "Find and offer services in any sphere",
