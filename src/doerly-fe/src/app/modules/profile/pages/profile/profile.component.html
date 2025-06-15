@@ -1066,13 +1066,6 @@
               </button>
             </div>
             <div *ngFor="let value of getFilterValues(filter.id)" class="d-flex align-items-center">
-              <p-checkbox
-                [id]="'filter-' + filter.id + '-' + value"
-                [formControlName]="filter.id.toString()"
-                [value]="value"
-                [binary]="false"
-                (onChange)="onFilterValueChange($event, filter.id)"
-              ></p-checkbox>
               <label [for]="'filter-' + filter.id + '-' + value" class="ms-2">{{ value }}</label>
               <button
                 pButton
@@ -1105,13 +1098,6 @@
               </button>
             </div>
             <div *ngFor="let value of getFilterValues(filter.id)" class="d-flex align-items-center">
-              <p-checkbox
-                [id]="'filter-' + filter.id + '-' + value"
-                [formControlName]="filter.id.toString()"
-                [value]="value"
-                [binary]="false"
-                (onChange)="onFilterValueChange($event, filter.id)"
-              ></p-checkbox>
               <label [for]="'filter-' + filter.id + '-' + value" class="ms-2">{{ value }}</label>
               <button
                 pButton
@@ -1148,7 +1134,7 @@
                 [binary]="true"
                 (onChange)="onFilterValueChange($event, filter.id)"
               ></p-checkbox>
-              <label [for]="'filter-' + filter.id" class="ms-2">{{ filter.name }}</label>
+              <label [for]="'filter-' + filter.id" class="ms-2">{{ 'common.yes' | translate }}</label>
             </div>
           </div>
         </div>

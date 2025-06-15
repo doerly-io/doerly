@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AccordionModule } from 'primeng/accordion';
-import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SliderModule } from 'primeng/slider';
 import { TranslateModule } from '@ngx-translate/core';
@@ -32,7 +31,6 @@ interface FilterRange {
     CommonModule,
     FormsModule,
     AccordionModule,
-    CheckboxModule,
     InputNumberModule,
     SliderModule,
     TranslateModule
@@ -43,14 +41,19 @@ export class FilterDisplayComponent implements OnChanges {
   @Input() filters: IFilter[] = [];
   @Output() filterChange = new EventEmitter<any[]>();
 
+  private selectedFilterValues: Map<number, Set<string>> = new Map();
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['filters'] && changes['filters'].currentValue) {
-      this.resetFilterValues();
+      this.initializeFilterState();
     }
   }
 
-  private resetFilterValues(): void {
+  private initializeFilterState(): void {
+    this.selectedFilterValues.clear();
     this.filters.forEach(filter => {
+      this.selectedFilterValues.set(filter.id, new Set());
+      
       if (filter.type === 1 || filter.type === 2) {
         filter.values.forEach(value => {
           value.selected = false;
@@ -72,6 +75,20 @@ export class FilterDisplayComponent implements OnChanges {
     this.filterChange.emit(filterValues);
   }
 
+  onCheckboxChange(filter: IFilter, value: FilterValue): void {
+    value.selected = !value.selected;
+    const selectedValues = this.selectedFilterValues.get(filter.id) || new Set();
+    
+    if (value.selected) {
+      selectedValues.add(value.id);
+    } else {
+      selectedValues.delete(value.id);
+    }
+    
+    this.selectedFilterValues.set(filter.id, selectedValues);
+    this.onFilterChange();
+  }
+
   onRangeChange(event: any, filter: IFilter): void {
     if (filter.type === 3) {
       filter.minValue = event.values[0];
@@ -87,14 +104,15 @@ export class FilterDisplayComponent implements OnChanges {
       switch (filter.type) {
         case 1: // Checkbox
         case 2: // Dropdown (now treated as checkbox)
-          filter.values.forEach((value: FilterValue) => {
-            if (value.selected) {
+          const selectedValues = this.selectedFilterValues.get(filter.id);
+          if (selectedValues) {
+            selectedValues.forEach(valueId => {
               filterValues.push({
                 filterId: filter.id,
-                value: value.id
+                value: valueId
               });
-            }
-          });
+            });
+          }
           break;
 
         case 3: // Numeric Range

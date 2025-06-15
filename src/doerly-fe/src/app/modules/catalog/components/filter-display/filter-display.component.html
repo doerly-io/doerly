@@ -4,13 +4,13 @@
       <!-- Checkbox and Dropdown Filters (both use checkboxes) -->
       <div *ngIf="filter.type === 1 || filter.type === 2" class="filter-group">
         <div *ngFor="let value of filter.values" class="filter-checkbox-item">
-          <p-checkbox [value]="value.id"
-                     [(ngModel)]="value.selected"
-                     (onChange)="onFilterChange()"
-                     [binary]="true"
-                     styleClass="filter-checkbox">
-          </p-checkbox>
-          <span class="checkbox-label">{{value.name}}</span>
+          <label class="custom-checkbox">
+            <input type="checkbox"
+                   [checked]="value.selected"
+                   (change)="onCheckboxChange(filter, value)">
+            <span class="checkmark"></span>
+          </label>
+          <span class="checkbox-label" style="margin-left: 7px;">{{value.name}}</span>
         </div>
       </div>
 
@@ -60,11 +60,12 @@
       <!-- Radio (Boolean) Filter -->
       <div *ngIf="filter.type === 4" class="filter-group">
         <div class="filter-checkbox-item">
-          <p-checkbox [(ngModel)]="filter.selectedValue"
-                     (onChange)="onFilterChange()"
-                     [binary]="true"
-                     styleClass="filter-checkbox">
-          </p-checkbox>
+          <label class="custom-checkbox">
+            <input type="checkbox"
+                   [checked]="filter.selectedValue"
+                   (change)="onFilterChange()">
+            <span class="checkmark"></span>
+          </label>
           <span class="checkbox-label">{{filter.name}}</span>
         </div>
       </div>
