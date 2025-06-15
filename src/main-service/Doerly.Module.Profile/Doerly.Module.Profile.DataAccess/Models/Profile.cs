@@ -22,4 +22,8 @@ public class Profile : BaseEntity
     
     public virtual ICollection<LanguageProficiency> LanguageProficiencies { get; set; } = new List<LanguageProficiency>();
     public virtual ICollection<Competence> Competences { get; set; } = new List<Competence>();
+
+    public virtual ICollection<FeedbackEntity> FeedbackGiven { get; set; }
+    public virtual ICollection<FeedbackEntity> FeedbackReceived { get; set; }
+
 }   

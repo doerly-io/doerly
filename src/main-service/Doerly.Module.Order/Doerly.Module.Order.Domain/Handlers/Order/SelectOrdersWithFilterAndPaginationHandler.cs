@@ -6,6 +6,7 @@ using Doerly.Module.Order.DataTransferObjects;
 using Doerly.Module.Order.DataTransferObjects.Responses;
 using Doerly.Module.Order.Enums;
 using Doerly.Module.Profile.DataTransferObjects;
+using Doerly.Module.Profile.DataTransferObjects.Profile;
 using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 

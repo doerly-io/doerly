@@ -1,4 +1,6 @@
 using Doerly.Module.Order.Enums;
+using Doerly.Module.Profile.DataTransferObjects.Feedback;
+using Doerly.Module.Profile.DataTransferObjects.Profile;
 
 namespace Doerly.Module.Order.DataTransferObjects.Responses;
 public class GetOrderResponse
@@ -45,5 +47,5 @@ public class GetOrderResponse
 
     public DateTime CreatedDate { get; set; }
     
-    public OrderFeedbackResponse? Feedback { get; set; }
+    public FeedbackResponse? Feedback { get; set; }
 }

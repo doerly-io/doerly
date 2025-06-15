@@ -1,17 +1,20 @@
-using Doerly.Module.Order.DataAccess;
+using Doerly.Domain.Handlers;
+using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 
-public class DeleteOrderFeedbackHandler : BaseOrderHandler
+public class DeleteOrderFeedbackHandler : BaseHandler
 {
-    public DeleteOrderFeedbackHandler(OrderDbContext dbContext) : base(dbContext)
+    private readonly IProfileModuleProxy _profileModuleProxy;
+
+    public DeleteOrderFeedbackHandler(IProfileModuleProxy profileModuleProxy)
     {
+        _profileModuleProxy = profileModuleProxy;
     }
-    
-    public async Task HandleAsync(int orderId, int feedbackId)
+
+    public async Task HandleAsync(int feedbackId)
     {
-        await DbContext.OrderFeedbacks.Where(x => x.Id == feedbackId && x.OrderId == orderId)
-            .ExecuteDeleteAsync();
+        await _profileModuleProxy.DeleteFeedback(feedbackId);
     }
 }

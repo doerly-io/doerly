@@ -13,6 +13,8 @@ public class ProfileDbContext(IConfiguration configuration) : BaseDbContext(conf
     public DbSet<LanguageProficiency> LanguageProficiencies { get; set; }
     public DbSet<Competence> Competences { get; set; }
 
+    public DbSet<FeedbackEntity> Feedbacks { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProfileDbContext).Assembly);

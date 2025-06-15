@@ -11,7 +11,7 @@ public interface IOrdersModuleProxy : IModuleProxy
     Task<BasePaginationResponse<GetOrdersWithPaginationAndFilterResponse>> GetOrdersWithPaginationAsync(
         GetOrderWithFilterAndPaginationRequest request);
 
-    Task<CursorPaginationResponse<OrderFeedbackResponse>> GetFeedbacksAsync(int userId, CursorPaginationRequest request);
+    // Task<CursorPaginationResponse<OrderFeedbackResponse>> GetFeedbacksAsync(int userId, CursorPaginationRequest request);
 
     Task<List<GetOrdersAmountByCategoriesResponse>> GetOrdersAmountByCategoriesAsync();
 }

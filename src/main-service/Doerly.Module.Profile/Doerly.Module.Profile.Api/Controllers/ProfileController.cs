@@ -4,6 +4,7 @@ using Doerly.Infrastructure.Api;
 using Doerly.Domain.Models;
 using Doerly.Module.Profile.DataTransferObjects;
 using Doerly.Module.Profile.Domain.Handlers;
+using Doerly.Module.Profile.Domain.Handlers.Feedback;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

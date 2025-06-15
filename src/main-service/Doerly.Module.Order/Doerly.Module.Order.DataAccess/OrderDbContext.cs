@@ -18,8 +18,6 @@ public class OrderDbContext: BaseDbContext
 
     public DbSet<OrderFile> OrderFiles { get; set; }
     
-    public DbSet<OrderFeedback> OrderFeedbacks { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderDbContext).Assembly);

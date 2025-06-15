@@ -1,6 +1,8 @@
-namespace Doerly.Module.Order.DataTransferObjects.Responses;
+﻿using Doerly.Module.Profile.DataTransferObjects.Profile;
 
-public class OrderFeedbackResponse
+namespace Doerly.Module.Profile.DataTransferObjects.Feedback;
+
+public class FeedbackResponse
 {
     public int FeedbackId { get; set; }
     

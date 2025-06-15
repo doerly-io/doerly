@@ -1,6 +1,7 @@
 ﻿using Doerly.Infrastructure.Api;
 using Doerly.Module.Order.DataTransferObjects.Requests;
 using Doerly.Module.Order.Domain.Handlers;
+using Doerly.Module.Profile.DataTransferObjects.Feedback;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -45,7 +46,8 @@ public class OrderController : BaseApiController
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateOrder([FromRoute] int id, [FromForm] UpdateOrderRequest dto, [FromForm] List<IFormFile>? files,
+    public async Task<IActionResult> UpdateOrder([FromRoute] int id, [FromForm] UpdateOrderRequest dto,
+        [FromForm] List<IFormFile>? files,
         [FromForm] List<string>? existingFileNames)
     {
         var result = await ResolveHandler<UpdateOrderHandler>().HandleAsync(id, dto, files, existingFileNames);
@@ -66,7 +68,7 @@ public class OrderController : BaseApiController
     }
 
     [HttpPost("{orderId}/feedback")]
-    public async Task<IActionResult> AddFeedback(int orderId, [FromBody] OrderFeedbackRequest dto)
+    public async Task<IActionResult> AddFeedback(int orderId, [FromBody] FeedbackRequest dto)
     {
         var result = await ResolveHandler<AddOrderFeedbackHandler>().HandleAsync(orderId, dto);
         if (result.IsSuccess)
@@ -76,9 +78,9 @@ public class OrderController : BaseApiController
     }
 
     [HttpPut("{orderId}/feedback/{feedbackId}")]
-    public async Task<IActionResult> UpdateFeedback(int orderId, int feedbackId, [FromBody] OrderFeedbackRequest dto)
+    public async Task<IActionResult> UpdateFeedback(int feedbackId, [FromBody] FeedbackRequest dto)
     {
-        var result = await ResolveHandler<UpdatedOrderFeedbackHandler>().HandleAsync(orderId, feedbackId, dto);
+        var result = await ResolveHandler<UpdatedOrderFeedbackHandler>().HandleAsync(feedbackId, dto);
         if (result.IsSuccess)
             return Ok(result);
 
@@ -86,9 +88,9 @@ public class OrderController : BaseApiController
     }
 
     [HttpDelete("{orderId}/feedback/{feedbackId}")]
-    public async Task<IActionResult> DeleteFeedback(int orderId, int feedbackId)
+    public async Task<IActionResult> DeleteFeedback(int feedbackId)
     {
-        await ResolveHandler<DeleteOrderFeedbackHandler>().HandleAsync(orderId, feedbackId);
+        await ResolveHandler<DeleteOrderFeedbackHandler>().HandleAsync(feedbackId);
         return Ok();
     }
 }

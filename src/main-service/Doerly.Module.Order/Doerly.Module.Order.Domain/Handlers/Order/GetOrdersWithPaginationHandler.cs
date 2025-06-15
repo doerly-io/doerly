@@ -9,6 +9,7 @@ using Doerly.Module.Order.DataTransferObjects.Responses;
 using OrderEntity = Doerly.Module.Order.DataAccess.Entities.Order;
 using Doerly.Proxy.Profile;
 using Doerly.DataTransferObjects.Pagination;
+using Doerly.Module.Profile.DataTransferObjects.Profile;
 
 namespace Doerly.Module.Order.Domain.Handlers;
 public class GetOrdersWithPaginationHandler : BaseOrderHandler
