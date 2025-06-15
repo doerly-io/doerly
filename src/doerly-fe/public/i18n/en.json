@@ -505,6 +505,16 @@
       "price_desc": "Price: High to Low",
       "name_asc": "Name: A to Z",
       "name_desc": "Name: Z to A"
+    },
+    "filters":{
+      "filters": "Filters",
+      "sort_by": "Sort by",
+      "sort_direction": "Direction",
+      "ascending": "Ascending",
+      "descending": "Descending",
+      "apply": "Apply",
+      "title": "Title",
+      "price": "Price"
     }
   },
   "common": {

@@ -4,49 +4,105 @@
             [queryParams]="{ categoryId: this.categoryId }" label="{{ 'ordering.create_order' | translate }}"
             [severity]="'success'" />
     </div>
-    <p-dataview [value]="orders" [paginator]="true" alwaysShowPaginator="false" [rows]="10"
-        [rowsPerPageOptions]="[10, 20, 50, 100]" [totalRecords]="totalRecords" [lazy]="false" 
-        [loading]="loading" emptyMessage="{{ 'ordering.no_orders' | translate }}">
-        <ng-template #list>
-            <div *ngFor="let order of orders; let first = first">
-                <div class="order-item d-flex flex-row align-items-center">
-                    <div class="customer-avatar-block d-flex flex-column align-items-center me-3">
-                        <div class="position-relative" [routerLink]="['/profile', order.customer.id]"
-                            style="cursor: pointer;">
-                            <img *ngIf="order.customer?.avatarUrl" [src]="order.customer.avatarUrl"
-                                alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar order-list-avatar mb-1"
-                                width="56" height="56" />
-                            <p-avatar *ngIf="!order.customer?.avatarUrl" icon="pi pi-user" shape="circle" size="large"
-                                class="avatar-bg order-list-avatar mb-1"></p-avatar>
-                            <div class="profile-hover-overlay">
-                                <i class="pi pi-user"></i>
-                                <span>{{ 'profile.view.title' | translate }}</span>
-                            </div>
-                        </div>
-                        <span class="customer-name text-center text-sm">
-                            {{ order.customer.firstName }}
-                        </span>
+    <div class="col-md-3 col-sm-12 mb-4">
+        <div class="card p-3">
+            <h5>{{ 'catalog.filters.filters' | translate }}</h5>
+            <div class="mb-3">
+                <label class="flex flex-column mb-2">{{ 'catalog.filters.sort_by' | translate }}</label>
+                <div class="d-flex flex-row flex-wrap gap-2">
+                    <div>
+                        <p-radioButton name="sortField" value="name" [(ngModel)]="sortField"
+                            inputId="sortByName"></p-radioButton>
+                        <label for="sortByName" class="ms-1">{{ 'catalog.filters.title' | translate }}</label>
+                    </div>
+                    <div>
+                        <p-radioButton name="sortField" value="price" [(ngModel)]="sortField"
+                            inputId="sortByPrice"></p-radioButton>
+                        <label for="sortByPrice" class="ms-1">{{ 'catalog.filters.price' | translate }}</label>
                     </div>
 
-                    <div class="order-info flex-grow-1" [routerLink]="['/ordering/order', order.orderId]"
-                        style="cursor: pointer;">
-                        <div class="order-header">
-                            <div>
-                                <span class="order-title">{{ order.name }}</span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="d-block mb-2">{{ 'catalog.filters.sort_direction' | translate }}</label>
+                <div class="d-flex flex-row flex-wrap gap-2">
+                    <div>
+                        <p-radioButton name="sortDirection" value="asc" [(ngModel)]="sortDirection"
+                            inputId="sortAsc"></p-radioButton>
+                        <label for="sortAsc" class="ms-1">{{ 'catalog.filters.ascending' | translate }}</label>
+                    </div>
+                    <div>
+                        <p-radioButton name="sortDirection" value="desc" [(ngModel)]="sortDirection"
+                            inputId="sortDesc"></p-radioButton>
+                        <label for="sortDesc" class="ms-1">{{ 'catalog.filters.descending' | translate }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 flex flex-column">
+                <div class="mb-3">
+                    <label class="d-block mb-2">{{ 'catalog.filters.price' | translate }}</label>
+                    <p-slider class="mb-3" [(ngModel)]="priceRange" [min]="minPrice" [max]="maxPrice"
+                        [range]="true"></p-slider>
+                </div>
+                <div class="justify-content-between mt-2">
+                    <p-inputNumber [(ngModel)]="priceRange[0]" [min]="minPrice" [max]="priceRange[1]"
+                        [showButtons]="true" [step]="0.01"></p-inputNumber>
+                </div>
+                <span class="mx-2">-</span>
+                <div>
+                    <p-inputNumber [(ngModel)]="priceRange[1]" [min]="priceRange[0]" [max]="maxPrice"
+                        [showButtons]="true" [step]="0.01"></p-inputNumber>
+                </div>
+            </div>
+            <p-button pButton type="button" (click)="applyFilters()" label="{{ 'catalog.filters.apply' | translate }}"
+                class="w-100 mt-2"></p-button>
+        </div>
+    </div>
+    <div class="col-12 col-md-9">
+        <p-dataview [value]="orders" [paginator]="true" alwaysShowPaginator="false" [rows]="10"
+            [rowsPerPageOptions]="[10, 20, 50, 100]" [totalRecords]="totalRecords" [lazy]="false"
+            emptyMessage="{{ 'ordering.no_orders' | translate }}">
+            <ng-template #list>
+                <div *ngFor="let order of orders; let first = first">
+                    <div class="order-item d-flex flex-row align-items-center">
+                        <div class="customer-avatar-block d-flex flex-column align-items-center me-3">
+                            <div class="position-relative" [routerLink]="['/profile', order.customer.id]"
+                                style="cursor: pointer;">
+                                <img *ngIf="order.customer?.avatarUrl" [src]="order.customer.avatarUrl"
+                                    alt="{{ 'profile.basic.image.alt' | translate }}"
+                                    class="avatar order-list-avatar mb-1" width="56" height="56" />
+                                <p-avatar *ngIf="!order.customer?.avatarUrl" icon="pi pi-user" shape="circle"
+                                    size="large" class="avatar-bg order-list-avatar mb-1"></p-avatar>
+                                <div class="profile-hover-overlay">
+                                    <i class="pi pi-user"></i>
+                                    <span>{{ 'profile.view.title' | translate }}</span>
+                                </div>
                             </div>
-                            <div>
-                                <span>{{ order.price }} ₴</span>
-                            </div>
+                            <span class="customer-name text-center text-sm">
+                                {{ order.customer.firstName }}
+                            </span>
                         </div>
-                        <div class="order-footer">
-                            <div>
-                                <span>{{ 'ordering.due_date' | translate }}: </span>
-                                <span>{{ order.dueDate | date: "dd.MM.yyyy" }}</span>
+
+                        <div class="order-info flex-grow-1" [routerLink]="['/ordering/order', order.orderId]"
+                            style="cursor: pointer;">
+                            <div class="order-header">
+                                <div>
+                                    <span class="order-title">{{ order.name }}</span>
+                                </div>
+                                <div>
+                                    <span>{{ order.price }} ₴</span>
+                                </div>
+                            </div>
+                            <div class="order-footer">
+                                <div>
+                                    <span>{{ 'ordering.due_date' | translate }}: </span>
+                                    <span>{{ order.dueDate | date: "dd.MM.yyyy" }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </ng-template>
-    </p-dataview>
+            </ng-template>
+        </p-dataview>
+    </div>
 </section>

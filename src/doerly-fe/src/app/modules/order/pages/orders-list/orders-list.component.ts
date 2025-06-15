@@ -14,6 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { getOrderStatusSeverity } from '../../domain/enums/order-status';
 import { Avatar } from 'primeng/avatar';
 import { ErrorHandlerService } from '../../../../@core/services/error-handler.service';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-orders-list',
@@ -25,7 +26,8 @@ import { ErrorHandlerService } from '../../../../@core/services/error-handler.se
     Button,
     TranslatePipe,
     RouterLink,
-    Avatar
+    Avatar,
+    SkeletonModule
   ],
   templateUrl: './orders-list.component.html',
   styleUrl: './orders-list.component.scss'

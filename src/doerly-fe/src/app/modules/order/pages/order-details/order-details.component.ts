@@ -96,7 +96,7 @@ export class OrderDetailsComponent implements OnInit {
           }, 3000);
         } else {
           this.toastHelper.showSuccess('common.success', 'ordering.order_status_changed');
-          this.router.navigate(['/ordering'], { queryParams: { tab: 0, subTab: 0 } });
+          this.router.navigate(['/ordering']);
         }
       },
       error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)

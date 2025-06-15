@@ -169,11 +169,11 @@
     </div>
 
     <app-feedback-input *ngIf="order?.status == EOrderStatus.Completed && (this.order?.feedback || canEditFeedback)"
-                        [orderId]="this.order?.id"
+                        [orderId]="this.order.id"
                         [executorId]="order.executorId"
                         [categoryId]="order.categoryId"
                         [canEdit]="canEditFeedback"
-                        [feedback]="this.order?.feedback"
+                        [feedback]="this.order.feedback"
                         class="mt-4" />
     </p-card>
 </section>

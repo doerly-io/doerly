@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TabsModule } from 'primeng/tabs';
 import { ExecutionProposalsTabsComponent } from '../execution-proposals-tabs/execution-proposals-tabs.component';
-import { OrdersListComponent } from '../orders-list/orders-list.component';
 import { MyOrdersTabsComponent } from '../my-orders-tabs/my-orders-tabs.component';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
@@ -11,7 +10,6 @@ import { ActivatedRoute } from '@angular/router';
   imports: [
     TabsModule,
     ExecutionProposalsTabsComponent,
-    OrdersListComponent,
     MyOrdersTabsComponent,
     TranslatePipe
   ],
@@ -19,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './ordering-tabs.component.scss'
 })
 export class OrderingTabsComponent implements OnInit {
-  tab: number = 2;
+  tab: number = 0;
   subTab: number = 0;
 
   constructor(

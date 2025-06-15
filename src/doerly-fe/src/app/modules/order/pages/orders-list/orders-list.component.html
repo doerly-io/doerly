@@ -1,16 +1,19 @@
 <section class="order-list row justify-content-center">
     <div *ngIf="canCreateOrder" class="d-flex justify-content-end mb-3">
-        <p-button icon="pi pi-shopping-cart" [routerLink]="'/ordering/create-order'" [queryParams]="{ categoryId: 1, executorId: 2 }"
-            label="{{ 'ordering.create_order' | translate }}" [severity]="'success'"/>
+        <p-button icon="pi pi-shopping-cart" [routerLink]="'/ordering/create-order'"
+            [queryParams]="{ categoryId: 1, executorId: 2 }" label="{{ 'ordering.create_order' | translate }}"
+            [severity]="'success'" />
     </div>
-    <p-dataview [value]="orders" [paginator]="true" alwaysShowPaginator="false" [rows]="10" [rowsPerPageOptions]="[10, 20, 50, 100]"
-        [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="loadOrders($event)" [loading]="loading"
-        emptyMessage="{{ 'ordering.no_orders' | translate }}">
+    <p-dataview [value]="orders" [paginator]="true" alwaysShowPaginator="false" [rows]="10"
+        [rowsPerPageOptions]="[10, 20, 50, 100]" [totalRecords]="totalRecords" [lazy]="true"
+        (onLazyLoad)="loadOrders($event)" emptyMessage="{{ 'ordering.no_orders' | translate }}">
         <ng-template #list>
             <div *ngFor="let order of orders; let first = first">
                 <div class="order-item d-flex flex-row align-items-center">
+                    <p-skeleton />
                     <div class="customer-avatar-block d-flex flex-column align-items-center me-3">
-                        <div class="position-relative" [routerLink]="['/profile', order.customer.id]" style="cursor: pointer;">
+                        <div class="position-relative" [routerLink]="['/profile', order.customer.id]"
+                            style="cursor: pointer;">
                             <img *ngIf="order.customer?.avatarUrl" [src]="order.customer.avatarUrl"
                                 alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar order-list-avatar"
                                 width="56" height="56" />
@@ -26,10 +29,11 @@
                         </span>
                     </div>
 
-                    <div class="order-info flex-grow-1" [routerLink]="['/ordering/order', order.id]" style="cursor: pointer;">
+                    <div class="order-info flex-grow-1" [routerLink]="['/ordering/order', order.id]"
+                        style="cursor: pointer;">
                         <div class="order-header">
                             <div>
-                                <span class="order-title">{{  order.name }}</span>
+                                <span class="order-title">{{ order.name }}</span>
                             </div>
                             <div>
                                 <span>{{ order.price }} ₴</span>

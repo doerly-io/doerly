@@ -18,6 +18,10 @@ import { GetOrdersWithFiltrationResponse } from '../../models/get-orders-with-fi
 import { OrdersService } from '../../services/orders.service';
 import { GetOrdersWithFiltrationRequest } from '../../models/get-orders-with-filtration-request.model';
 import { BasePaginationResponse } from 'app/@core/models/base-pagination-response';
+import { FormsModule } from '@angular/forms';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { SliderModule } from 'primeng/slider';
 
 @Component({
   selector: 'app-orders-list',
@@ -28,7 +32,11 @@ import { BasePaginationResponse } from 'app/@core/models/base-pagination-respons
     Button,
     TranslatePipe,
     RouterLink,
-    Avatar
+    Avatar,
+    FormsModule,
+    RadioButtonModule,
+    SliderModule,
+    InputNumberModule
   ],
   templateUrl: './orders-list.component.html',
   styleUrl: './orders-list.component.scss'
@@ -53,6 +61,12 @@ export class OrdersListComponent implements OnInit {
     totalCount: 0
   };
 
+  sortField: 'name' | 'price' = 'name';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  minPrice: number = 0;
+  maxPrice: number = 10000;
+  priceRange: number[] = [0, 10000];
+
   constructor(private ordersService: OrdersService,
     private route: ActivatedRoute,
     private errorHandler: ErrorHandlerService
@@ -76,8 +90,10 @@ export class OrdersListComponent implements OnInit {
         size: this.pagination.pageSize
       },
       categoryId: this.categoryId!,
-      isOrderByPrice: false,
-      isDescending: false,
+      isOrderByPrice: this.sortField === 'price',
+      isDescending: this.sortDirection === 'desc',
+      minPrice: this.priceRange[0],
+      maxPrice: this.priceRange[1],
     };
     this.ordersService.getOrdersWithPagination(request).subscribe({
       next: (response: BasePaginationResponse<GetOrdersWithFiltrationResponse>) => {
@@ -87,5 +103,10 @@ export class OrdersListComponent implements OnInit {
       },
       error: (error: HttpErrorResponse) => this.errorHandler.handleApiError(error)
     });
+  }
+
+  applyFilters() {
+    this.pagination.pageNumber = 0;
+    this.loadOrders();
   }
 }

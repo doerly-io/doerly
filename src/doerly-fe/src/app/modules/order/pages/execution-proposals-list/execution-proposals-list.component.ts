@@ -13,6 +13,7 @@ import { ToastHelper } from 'app/@core/helpers/toast.helper';
 import { Avatar } from 'primeng/avatar';
 import { getExecutionProposalStatusSeverity } from '../../domain/enums/execution-proposal-status';
 import { ErrorHandlerService } from '../../../../@core/services/error-handler.service';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-execution-proposals-list',
@@ -23,7 +24,8 @@ import { ErrorHandlerService } from '../../../../@core/services/error-handler.se
     CommonModule,
     TranslatePipe,
     RouterLink,
-    Avatar
+    Avatar,
+    SkeletonModule
   ],
   templateUrl: './execution-proposals-list.component.html',
   styleUrl: './execution-proposals-list.component.scss'

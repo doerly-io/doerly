@@ -2,8 +2,7 @@
     <p-tabs lazy="true" [value]="`${tab}`" scrollable selectOnFocus="true">
         <p-tablist class="custom-tablist">
             <p-tab value="0">{{ 'ordering.my_orders' | translate }}</p-tab>
-            <p-tab value="1" class="">{{ 'ordering.execution_proposals' | translate }}</p-tab>
-            <p-tab value="2">{{ 'ordering.orders' | translate }}</p-tab>
+            <p-tab value="1">{{ 'ordering.execution_proposals' | translate }}</p-tab>
         </p-tablist>
         <p-tabpanels>
             <p-tabpanel value="0">
@@ -11,9 +10,6 @@
             </p-tabpanel>
             <p-tabpanel value="1">
                 <app-execution-proposals-tabs [tab]="subTab"></app-execution-proposals-tabs>
-            </p-tabpanel>
-            <p-tabpanel value="2">
-                <app-orders-list [canCreateOrder]="true"></app-orders-list>
             </p-tabpanel>
         </p-tabpanels> 
     </p-tabs>

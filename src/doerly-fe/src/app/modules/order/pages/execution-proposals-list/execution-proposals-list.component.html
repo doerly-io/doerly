@@ -6,7 +6,7 @@
             <div *ngFor="let proposal of proposals">
                 <div class="execution-proposal-item d-flex flex-row align-items-center"
                     [routerLink]="['/ordering/execution-proposal', proposal.id]" routerLinkActive="router-link-active">
-
+                    <p-skeleton />
                     <!-- Аватар та ім'я -->
                     <div class="proposal-avatar-block d-flex flex-column align-items-center me-3">
                         <div class="position-relative" [routerLink]="['/profile', receiverId ? proposal.sender?.id : proposal.receiver?.id]" style="cursor: pointer;">
