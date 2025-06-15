@@ -37,12 +37,12 @@ public class GetOrdersAmountByCategoriesHandler : BaseCatalogHandler
             }
         }
 
-        if (response.Count < 10)
+        if (response.Count < 9)
         {
             var otherCategories = await DbContext.Categories.AsNoTracking()
                 .Where(c => !categoryIds.Contains(c.Id))
                 .Select(c => new { c.Id, c.Name })
-                .Take(10 - categoryIds.Count)
+                .Take(9 - categoryIds.Count)
                 .ToListAsync();
 
             foreach (var category in otherCategories)

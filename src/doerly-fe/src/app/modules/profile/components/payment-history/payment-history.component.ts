@@ -83,6 +83,7 @@ export class PaymentHistoryComponent implements OnInit {
         return 'info';
       case EPaymentStatus.Failed:
       case EPaymentStatus.Error:
+      case EPaymentStatus.Expired:
         return 'danger';
       default:
         return 'warn';

@@ -24,7 +24,7 @@ public class GetOrdersAmountByCategoriesHandler : BaseOrderHandler
             })
             .GroupBy(order => order.CategoryId)
             .OrderByDescending(g => g.Count())
-            .Take(10)
+            .Take(9)
             .Select(groupedOrders => new GetOrdersAmountByCategoriesResponse
             {
                 CategoryId = groupedOrders.Key,

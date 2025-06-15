@@ -2,6 +2,11 @@
 USER $APP_UID
 WORKDIR /app
 
+# Add ICU globalization support
+USER root
+RUN apk add --no-cache icu-libs
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src

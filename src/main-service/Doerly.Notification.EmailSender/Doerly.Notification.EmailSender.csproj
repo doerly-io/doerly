@@ -13,9 +13,11 @@
     <PackageReference Include="SendGrid" Version="9.29.3" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="EmailTemplates\EmailTemplate.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>EmailTemplate.Designer.cs</LastGenOutput>
+    <EmbeddedResource Update="EmailTemplates\EmailTemplate.en-US.resx">
+      <DependentUpon>EmailTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="EmailTemplates\EmailTemplate.uk-UA.resx">
+      <DependentUpon>EmailTemplate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

@@ -439,6 +439,7 @@
       "pending": "Pending",
       "failed": "Failed to process payment",
       "error": "Error entering payment details",
+      "expired" : "Expired",
       "completed": "Successful",
       "canceled": "Canceled",
       "unknown": "Unknown status"

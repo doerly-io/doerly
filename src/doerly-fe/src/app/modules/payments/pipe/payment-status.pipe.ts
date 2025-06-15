@@ -19,6 +19,8 @@ export class PaymentStatusPipe implements PipeTransform {
         return this.translateService.get('payments.status.failed');
       case EPaymentStatus.Error:
         return this.translateService.get('payments.status.error');
+      case EPaymentStatus.Expired:
+        return this.translateService.get('payments.status.expired');
       case EPaymentStatus.Completed:
         return this.translateService.get('payments.status.completed');
       default:
