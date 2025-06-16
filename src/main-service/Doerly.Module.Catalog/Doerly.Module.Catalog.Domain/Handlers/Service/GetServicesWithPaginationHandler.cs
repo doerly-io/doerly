@@ -3,6 +3,7 @@ using Doerly.Extensions;
 using Doerly.Module.Catalog.Contracts.Requests;
 using Doerly.Module.Catalog.Contracts.Responses;
 using Doerly.Module.Catalog.DataAccess;
+using Doerly.Module.Catalog.DataAccess.Models;
 using Doerly.Proxy.Profile;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -46,14 +47,43 @@ namespace Doerly.Module.Catalog.Domain.Handlers.Service
 
             if (request.FilterValues?.Count > 0)
             {
-                foreach (var fv in request.FilterValues)
+                var serviceParam = Expression.Parameter(typeof(ServiceEntity), "s");
+                var filterValueParam = Expression.Parameter(typeof(ServiceFilterValue), "fv");
+
+                Expression combinedPredicate = null;
+
+                foreach (var filterValue in request.FilterValues)
                 {
-                    var filterId = fv.FilterId;
-                    var value = fv.Value;
-                    predicates.Add(s =>
-                        s.FilterValues.Any(f => f.FilterId == filterId && f.Value == value));
+                    var filterIdCheck = Expression.Equal(
+                        Expression.Property(filterValueParam, nameof(ServiceFilterValue.FilterId)),
+                        Expression.Constant(filterValue.FilterId));
+
+                    var valueCheck = Expression.Equal(
+                        Expression.Property(filterValueParam, nameof(ServiceFilterValue.Value)),
+                        Expression.Constant(filterValue.Value));
+
+                    var predicateForThisFilter = Expression.AndAlso(filterIdCheck, valueCheck);
+
+                    combinedPredicate = combinedPredicate == null
+                        ? predicateForThisFilter
+                        : Expression.OrElse(combinedPredicate, predicateForThisFilter);
                 }
+
+                var anyMethod = typeof(Enumerable).GetMethods()
+                    .First(m => m.Name == nameof(Enumerable.Any)
+                             && m.GetParameters().Length == 2)
+                    .MakeGenericMethod(typeof(ServiceFilterValue));
+
+                var anyCallExpression = Expression.Call(
+                    anyMethod,
+                    Expression.Property(serviceParam, nameof(ServiceEntity.FilterValues)),
+                    Expression.Lambda<Func<ServiceFilterValue, bool>>(combinedPredicate!, filterValueParam));
+
+                var lambda = Expression.Lambda<Func<ServiceEntity, bool>>(anyCallExpression, serviceParam);
+
+                baseQuery = baseQuery.Where(lambda);
             }
+
 
             foreach (var predicate in predicates)
                 baseQuery = baseQuery.Where(predicate);
