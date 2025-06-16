@@ -63,4 +63,17 @@ public class LiqPayClient : IBasePaymentClient
         var hash = SHA1.HashData(Encoding.UTF8.GetBytes(signatureData));
         return Convert.ToBase64String(hash);
     }
+
+    public async Task<OperationResult> TransferToCard(TransferModel transferModel)
+    {
+        var liqPayTransfer = transferModel.ToDto(_publicKey);
+        
+        var serializedRequest = JsonSerializer.Serialize(liqPayTransfer);
+        var base64Request = Convert.ToBase64String(Encoding.UTF8.GetBytes(serializedRequest));
+        var signature = GenerateSignature(base64Request);
+        
+        await _httpClient.TransferAsync(base64Request, signature);
+        
+        return OperationResult.Success();
+    }
 }

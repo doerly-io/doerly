@@ -1,8 +1,8 @@
-
 namespace Doerly.Module.Payments.Client.LiqPay.Client;
 
 public class LiqPayHttpClient
 {
+    private const string FormUrlEncoding = "application/x-www-form-urlencoded";
     private readonly HttpClient _httpClient;
 
     public LiqPayHttpClient()
@@ -21,13 +21,28 @@ public class LiqPayHttpClient
             Content = new StringContent($"data={data}&signature={signature}")
         };
 
-        request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded");
+        request.Content.Headers.ContentType =
+            new System.Net.Http.Headers.MediaTypeHeaderValue(FormUrlEncoding);
 
         var response = await _httpClient.SendAsync(request);
         response.EnsureSuccessStatusCode();
-        
+
         var result = response.RequestMessage?.RequestUri?.ToString();
-        
+
         return result;
+    }
+
+    public async Task TransferAsync(string data, string signature)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, "/request")
+        {
+            Content = new StringContent($"data={data}&signature={signature}")
+        };
+
+        request.Content.Headers.ContentType =
+            new System.Net.Http.Headers.MediaTypeHeaderValue(FormUrlEncoding);
+
+        var response = await _httpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
     }
 }

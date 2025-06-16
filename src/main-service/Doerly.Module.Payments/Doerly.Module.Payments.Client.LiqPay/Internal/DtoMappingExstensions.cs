@@ -18,8 +18,19 @@ internal static class DtoMappingExtensions
             PaymentAction = LiqPayMappingHelper.MapCommonActionToLiqPayAction(liqPayCheckout.PaymentAction),
             ResultUrl = liqPayCheckout.ReturnUrl,
             ServerUrl = liqPayCheckout.CallbackUrl,
-            PublicKey = publicKey
+            PublicKey = publicKey,
         };
     }
-    
+
+    internal static LiqpayTransferRequest ToDto(this TransferModel transferModel, string publicKey)
+    {
+        return new LiqpayTransferRequest
+        {
+            PublicKey = publicKey,
+            Action = "p2pcredit",
+            Amount = transferModel.Amount,
+            Currency = "UAH",
+            OrderId = transferModel.PaymentGuid
+        };
+    }
 }

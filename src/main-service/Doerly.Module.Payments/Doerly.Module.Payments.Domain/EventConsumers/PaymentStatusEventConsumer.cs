@@ -36,5 +36,9 @@ public class PaymentStatusEventConsumer : BaseConsumer<BillStatusChangedMessage>
         var message = context.Message;
         var handler = _handlerFactory.Get<SendPaymentReceiptHandler>();
         await handler.HandleAsync(message);
+
+        //TODO: uncomment after consultation with tax department
+        // var transferHandler = _handlerFactory.Get<TransferMoneyToExecutorHandler>();
+        // await transferHandler.HandleAsync(message);
     }
 }

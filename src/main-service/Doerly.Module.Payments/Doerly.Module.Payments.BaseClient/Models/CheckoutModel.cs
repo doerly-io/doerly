@@ -13,4 +13,5 @@ public class CheckoutModel
     public string ReturnUrl { get; set; }
     public string CallbackUrl { get; set; }
     public string ApiVersion { get; set; }
+    public DateTime ExpireDate { get; set; }
 }

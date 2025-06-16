@@ -30,18 +30,28 @@ public class CheckoutHandler : BasePaymentHandler
     /// 3. If no pending payment exists, check if the bill exists and is not already paid.
     /// 4. If the billId is not provided, create a new bill with the provided amount and description.
     /// </summary>
-    public async Task<OperationResult<BaseCheckoutResponse>> HandleAsync(CheckoutRequest checkoutRequest, Uri webhookUrl)
+    public async Task<OperationResult<BaseCheckoutResponse>> HandleAsync(CheckoutRequest checkoutRequest,
+        Uri webhookUrl)
     {
         Bill bill;
 
         if (checkoutRequest.BillId.HasValue)
         {
             var existingPendingPayment = await DbContext.Payments
-                .Where(p => p.BillId == checkoutRequest.BillId && p.Status == EPaymentStatus.Pending)
-                .Select(x => new { x.Id, x.CheckoutUrl })
+                .Where(p => p.BillId == checkoutRequest.BillId
+                            && p.Status == EPaymentStatus.Pending)
+                .Select(x => new { x.Id, x.CheckoutUrl, x.DateCreated })
                 .FirstOrDefaultAsync();
 
-            if (!string.IsNullOrEmpty(existingPendingPayment?.CheckoutUrl))
+            if (existingPendingPayment != null && existingPendingPayment.DateCreated.AddMinutes(15) < DateTime.UtcNow)
+            {
+                await DbContext.Payments
+                    .Where(x => x.Id == existingPendingPayment.Id)
+                    .ExecuteUpdateAsync(x =>
+                    x.SetProperty(c => c.Status, EPaymentStatus.Error));
+            }
+
+            else if (!string.IsNullOrEmpty(existingPendingPayment?.CheckoutUrl) && existingPendingPayment.DateCreated.AddMinutes(15) > DateTime.UtcNow)
             {
                 return OperationResult.Success(new BaseCheckoutResponse
                 {
@@ -60,7 +70,7 @@ public class CheckoutHandler : BasePaymentHandler
                 return OperationResult.Failure<BaseCheckoutResponse>("BillNotFound");
             }
 
-            if (bill.AmountPaid != bill.AmountTotal)
+            if (bill.AmountPaid == bill.AmountTotal)
                 return OperationResult.Failure<BaseCheckoutResponse>("BillAlreadyPaid");
         }
         else

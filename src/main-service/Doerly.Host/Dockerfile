@@ -9,7 +9,8 @@ EXPOSE 8081
 
 # Add ICU globalization support
 USER root
-RUN apk add --no-cache icu-libs
+RUN apk add --no-cache icu-libs && apk add --no-cache tzdata
+ENV TZ=Europe/Kyiv
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
 # This stage is used to build the service project

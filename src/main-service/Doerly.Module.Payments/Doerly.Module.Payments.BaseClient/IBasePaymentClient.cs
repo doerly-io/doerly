@@ -11,4 +11,6 @@ public interface IBasePaymentClient
 
     string GenerateSignature(string data);
 
+    Task<OperationResult> TransferToCard(TransferModel transferModel);
+
 }
