@@ -13,6 +13,10 @@ export const bearerTokenInterceptor: HttpInterceptorFn = (req, next) => {
   if (!jwtToken) {
     return next(req);
   }
+  if (req.url.includes('stdoerlydev')) {
+    return next(req);
+  }
+
   req = req.clone({
     setHeaders: {
       Authorization: `Bearer ${jwtToken}`

@@ -25,10 +25,8 @@ export class PdfService {
   }
 
   loadPdf(url: string): Promise<void> {
-    const proxyUrl = url.replace(environment.azureBlobStorageUrl, '');
-
     return firstValueFrom(
-      this.httpClient.get(proxyUrl, { responseType: 'blob' })
+      this.httpClient.get(url, { responseType: 'blob' })
         .pipe(
           switchMap(pdfBlob => {
             const blobUrl = URL.createObjectURL(pdfBlob);
