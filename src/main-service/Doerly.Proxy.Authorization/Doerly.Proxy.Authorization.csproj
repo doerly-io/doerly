@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>annotations</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Doerly.Domain\Doerly.Domain.csproj" />
+      <ProjectReference Include="..\Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Authorization\Doerly.Module.Authorization.DataTransferObjects\Doerly.Module.Authorization.DataTransferObjects.csproj" />
+      <ProjectReference Include="..\Doerly.Proxy.BaseProxy\Doerly.Proxy.BaseProxy.csproj" />
+    </ItemGroup>
+
+</Project>

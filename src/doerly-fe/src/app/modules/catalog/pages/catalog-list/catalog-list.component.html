@@ -1,0 +1,100 @@
+<div class="catalog-container">
+  <div class="filters-section">
+    <ng-container *ngIf="isLoadingFilters; else filtersLoaded">
+      <p>Loading filters...</p>
+    </ng-container>
+    <ng-template #filtersLoaded >
+      <app-filter-display
+
+        [filters]="filters"
+        (filterChange)="onFilterChange($event)">
+      </app-filter-display>
+    </ng-template>
+  </div>
+
+  <div class="services-section">
+    <div *ngIf="services.length !== 0">
+        <div class="sorting-section" *ngIf="!isAuthPage">
+            <p-dropdown
+              [options]="sortOptions"
+              [(ngModel)]="selectedSort"
+              (onChange)="onSortChange($event)"
+              [style]="{'width':'100%', 'max-width':'200px'}"
+              [optionLabel]="'label'"
+              [optionValue]="'value'"
+              placeholder="{{ 'catalog.sort' | translate }}">
+              <ng-template let-option pTemplate="selectedItem">
+                {{ option.label | translate }}
+              </ng-template>
+              <ng-template let-option pTemplate="item">
+                {{ option.label | translate }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+      </div>
+
+
+    <div class="services-list">
+      <p-card *ngFor="let service of services" class="service-card">
+        <div class="service-info">
+          <div class="service-main">
+            <div class="service-header">
+              <div class="title-section">
+                <h1 class="service-title">{{service.name}}</h1>
+                <span class="service-category">{{service.categoryName}}</span>
+              </div>
+            </div>
+
+            <p class="service-description">{{service.description}}</p>
+
+            <div class="service-meta">
+              <div class="service-price">{{service.price | currency:'UAH':'symbol-narrow':'1.0-0'}}</div>
+            </div>
+          </div>
+
+          <div class="service-sidebar">
+            <div class="service-user" *ngIf="service.user">
+              <ng-container *ngIf="service.user.imageUrl; else noAvatar">
+                <img [src]="service.user.imageUrl"
+                     [alt]="service.user.firstName + ' ' + service.user.lastName"
+                     class="user-avatar">
+              </ng-container>
+              <ng-template #noAvatar>
+                <i class="pi pi-user user-icon"></i>
+              </ng-template>
+              <div class="user-info">
+                <span class="user-name">{{service.user.firstName}} {{service.user.lastName}}</span>
+                <span class="user-address" *ngIf="service.user.address">
+                  {{service.user.address.cityName}}
+                </span>
+              </div>
+            </div>
+
+            <div class="service-actions">
+              <button pButton
+                      [routerLink]="['/catalog/service', service.id]"
+                      label="{{ 'catalog.viewDetails' | translate }}"
+                      class="p-button-primary">
+              </button>
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <div *ngIf="services.length === 0" class="empty-message text-center p-4">
+      <i class="pi pi-search text-4xl text-500 mb-3"></i>
+      <h3 class="text-900 font-medium text-xl mb-2">{{ 'catalog.no_services' | translate }}</h3>
+      <p class="text-600 mb-4">{{ 'catalog.try_adjusting_search' | translate }}</p>
+    </div>
+
+    <p-paginator
+      [rows]="pagination.pageSize"
+      [totalRecords]="pagination.totalCount"
+      [first]="(pagination.pageNumber - 1) * pagination.pageSize"
+      (onPageChange)="onPageChange($event)"
+      [rowsPerPageOptions]="[10, 20, 30]"
+      [alwaysShow]="false">
+    </p-paginator>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>annotations</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Doerly.DataTransferObjects\Doerly.DataTransferObjects.csproj" />
+    <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
+    <ProjectReference Include="..\..\Doerly.Module.Profile\Doerly.Module.Profile.DataTransferObjects\Doerly.Module.Profile.DataTransferObjects.csproj" />
+    <ProjectReference Include="..\Doerly.Module.Order.Enums\Doerly.Module.Order.Enums.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Requests\Feedback\" />
+  </ItemGroup>
+
+</Project>

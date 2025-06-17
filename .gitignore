@@ -303,10 +303,6 @@ node_modules/
 *.dsw
 *.dsp
 
-# Visual Studio 6 technical files
-*.ncb
-*.aps
-
 # Visual Studio LightSwitch build output
 **/*.HTMLClient/GeneratedArtifacts
 **/*.DesktopClient/GeneratedArtifacts
@@ -379,7 +375,7 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # VS Code files for those working on multiple tools
-.vscode/*
+**/.vscode
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -396,5 +392,50 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
+#Angular
+
+# Compiled output
+**/dist
+**/tmp
+**/out-tsc
+**/bazel-out
+
+# Node
+**/node_modules
+npm-debug.log
+yarn-error.log
+**/package-lock.json
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.history/*
+
+# Miscellaneous
+**/.angular/cache
+**/connect.lock
+**/coverage
+**/libpeerconnection.log
+testem.log
+**/typings
+
+# System files
+.DS_Store
+Thumbs.db
+
 # JetBrains Rider
 *.sln.iml
+**/.idea
+
+**/.env
+
+appsettings.Development.json
+appsettings.Staging.json
+appsettings.Production.json

@@ -1,0 +1,324 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="PaymentReceipt" xml:space="preserve">
+        <value>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+  &lt;title&gt;Doerly Payment Receipt&lt;/title&gt;
+  &lt;style&gt;
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f5f7fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .header {
+      text-align: center;
+      padding-bottom: 20px;
+    }
+    .header img {
+      width: 120px;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #111827;
+      margin: 20px 0 10px;
+    }
+    .content {
+      font-size: 15px;
+      color: #374151;
+      line-height: 1.6;
+    }
+    .receipt-details {
+      margin: 20px 0;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    .receipt-details th, .receipt-details td {
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .total {
+      font-weight: bold;
+      color: #111827;
+    }
+    .footer {
+      text-align: center;
+      font-size: 13px;
+      color: #9ca3af;
+      margin-top: 30px;
+    }
+    .button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #34d399;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="email-container"&gt;
+    &lt;div class="header"&gt;
+      &lt;h1 style="color: #34d399"&gt;Doerly&lt;/h1&gt;
+    &lt;/div&gt;
+
+    &lt;div class="title"&gt;Payment Receipt&lt;/div&gt;
+
+    &lt;div class="content"&gt;
+      &lt;p&gt;Hello,&lt;/p&gt;
+      &lt;p&gt;Thank you for your payment. Here are the details of your recent transaction:&lt;/p&gt;
+
+      &lt;table class="receipt-details"&gt;        
+        &lt;tr&gt;
+          &lt;th&gt;Date&lt;/th&gt;
+          &lt;td&gt;{{PaymentDate}}&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;th&gt;Payment Method&lt;/th&gt;
+          &lt;td&gt;{{PaymentMethod}} {{PaymentCardNumber}}&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;th&gt;Description&lt;/th&gt;
+          &lt;td&gt;{{PaymentDescription}}&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr class="total"&gt;
+          &lt;th&gt;Total Paid&lt;/th&gt;
+          &lt;td&gt;{{TotalPaid}}&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/table&gt;
+
+      &lt;p&gt;If you have any questions about this receipt, please contact our support team.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="footer"&gt;
+      © 2025 Doerly. All rights reserved.&lt;br /&gt;
+      Kharkiv, Nauki 14&lt;br /&gt;
+      &lt;a href="mailto:support@doerly.com"&gt;support@doerly.com&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</value>
+    </data>
+  <data name="EmailVerification" xml:space="preserve">
+    <value>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=Edge"&gt;
+    &lt;title&gt;Email Template&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            color: #000;
+            background-color: #FFF;
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .wrapper {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #FFF;
+        }
+
+        .header {
+            background-color: #10b981;
+            padding: 30px 20px 22px;
+            text-align: left;
+            color: #FFF;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+
+        .content {
+            padding: 18px 15px;
+            line-height: 22px;
+            text-align: left;
+        }
+
+        .footer {
+            background-color: #10b981;
+            padding: 30px 20px 22px;
+            text-align: left;
+            color: #FFF;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        @media screen and (max-width: 480px) {
+            .container {
+                width: 100% !important;
+            }
+
+            .content {
+                padding: 10px;
+            }
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div class="wrapper"&gt;
+        &lt;table class="container"&gt;
+            &lt;tr&gt;
+                &lt;td class="header"&gt;DOERLY&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td class="content"&gt;
+                    {{welcomeVerificationText}} &lt;a href="{{verificationLink}}"&gt;{{verificationLinkText}}&lt;/a&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td class="content"&gt;
+                    {{bestRegardsText}}
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td class="footer"&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</value>
+  </data>
+    <data name="ResetPassword" xml:space="preserve">
+        <value>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=Edge"&gt;
+    &lt;title&gt;Email Template&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            color: #000;
+            background-color: #FFF;
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .wrapper {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #FFF;
+        }
+
+        .header {
+            background-color: #10b981;
+            padding: 30px 20px 22px;
+            text-align: left;
+            color: #FFF;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+
+        .content {
+            padding: 18px 15px;
+            line-height: 22px;
+            text-align: left;
+        }
+
+        .footer {
+            background-color: #10b981;
+            padding: 30px 20px 22px;
+            text-align: left;
+            color: #FFF;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        @media screen and (max-width: 480px) {
+            .container {
+                width: 100% !important;
+            }
+
+            .content {
+                padding: 10px;
+            }
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div class="wrapper"&gt;
+        &lt;table class="container"&gt;
+            &lt;tr&gt;
+                &lt;td class="header"&gt;DOERLY&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td class="content"&gt;
+                    {{welcomeVerificationText}} &lt;a href="{{verificationLink}}"&gt;{{verificationLinkText}}&lt;/a&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td class="content"&gt;
+                    {{bestRegardsText}}
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td class="footer"&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</value>
+    </data>
+</root>

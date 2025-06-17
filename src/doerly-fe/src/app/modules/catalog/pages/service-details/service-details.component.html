@@ -1,0 +1,162 @@
+<div class="service-details-container" *ngIf="service">
+  <div class="service-header">
+    <div class="header-content">
+      <div class="title-section">
+        <h1>{{service.name}}</h1>
+        <span class="category">{{service.categoryName}}</span>
+      </div>
+      <div class="price-tag">
+        {{service.price | currency:'UAH':'symbol-narrow':'1.0-0'}}
+      </div>
+    </div>
+    
+  </div>
+  <div class="create-order-button">
+    <p-button 
+      icon="pi pi-shopping-cart" 
+      [routerLink]="'/ordering/create-order'"
+      [queryParams]="{
+        categoryId: service.categoryId,
+        executorId: service.userId,
+        name: service.name,
+        description: service.description,
+        price: service.price
+      }"
+      label="{{ 'ordering.create_order' | translate }}"
+      [severity]="'success'"
+      styleClass="w-100">
+    </p-button>
+  </div>
+
+  <div class="service-content">
+    <div class="main-info">
+      <p-card>
+        <div class="description">
+          <h2>{{ 'catalog.description' | translate }}</h2>
+          <p class="description-text">{{service.description}}</p>
+        </div>
+
+        <div class="filters" *ngIf="service.filterValues?.length">
+          <h2>{{ 'catalog.additionalInfo' | translate }}</h2>
+          <div class="filter-grid">
+            <ng-container *ngFor="let filterGroup of groupedFilters">
+              <div class="filter-item">
+                <span class="filter-name">{{filterGroup.name}}:</span>
+                <div class="filter-values">
+                  <ng-container *ngIf="filterGroup.type === 1 || filterGroup.type === 2">
+                    <span class="filter-value" *ngFor="let value of filterGroup.values; let last = last">
+                      {{value}}{{!last ? ', ' : ''}}
+                    </span>
+                  </ng-container>
+                  <ng-container *ngIf="filterGroup.type === 3">
+                    <span class="filter-value">{{filterGroup.values[0]}}</span>
+                  </ng-container>
+                  <ng-container *ngIf="filterGroup.type === 4">
+                    <span class="filter-value" [ngClass]="{'boolean-value': true}">
+                      {{filterGroup.values[0] === 'true' ? ('common.yes' | translate) : ('common.no' | translate)}}
+                    </span>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="provider-info">
+      <p-card>
+        <div class="provider-header">
+          <h2>{{ 'catalog.provider' | translate }}</h2>
+        </div>
+
+        <div class="provider-card">
+          <ng-container *ngIf="service.user.imageUrl; else noProviderAvatar">
+            <img [src]="service.user.imageUrl" 
+                 [alt]="service.user.firstName + ' ' + service.user.lastName"
+                 class="provider-avatar">
+          </ng-container>
+          <ng-template #noProviderAvatar>
+            <i class="pi pi-user provider-icon"></i>
+          </ng-template>
+          <div class="provider-details">
+            <h3>{{service.user.firstName}} {{service.user.lastName}}</h3>
+            <p class="location" *ngIf="service.user.address">
+              <i class="pi pi-map-marker"></i>
+              {{service.user.address.cityName}}, {{service.user.address.regionName}}
+            </p>
+            <p class="bio" *ngIf="service.user.bio">
+              <i class="pi pi-user"></i>
+              {{service.user.bio}}
+            </p>
+            <div class="rating" *ngIf="service.user.rating">
+              <i class="pi pi-star-fill"></i>
+              <span class="rating-value">{{service.user.rating | number:'1.1-1'}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="provider-competences" *ngIf="service.user.competences?.length">
+          <h3>{{ 'catalog.competences' | translate }}</h3>
+          <div class="competence-tags">
+            <p-tag *ngFor="let competence of service.user.competences" 
+                   [value]="competence.categoryName"
+                   severity="info"
+                   styleClass="competence-tag">
+            </p-tag>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <div class="recommended-services" *ngIf="service.recommendedServices?.length">
+    <h2>{{ 'catalog.recommendedServices' | translate }}</h2>
+    <div class="recommended-grid" [ngClass]="{
+      'single-item': service.recommendedServices.length === 1,
+      'two-items': service.recommendedServices.length === 2
+    }">
+      <p-card *ngFor="let service of service.recommendedServices" class="recommended-card">
+        <div class="service-info">
+          <div class="service-main">
+            <h3 class="service-title">{{service.name}}</h3>
+                <span class="service-category">{{service.categoryName}}</span>
+            
+            <p class="service-description">{{service.description}}</p>
+            
+            <div class="service-meta">
+              <div class="service-price">{{service.price | currency:'UAH':'symbol-narrow':'1.0-0'}}</div>
+            </div>
+          </div>
+
+          <div class="service-sidebar">
+            <div class="service-user" *ngIf="service.user">
+              <ng-container *ngIf="service.user.imageUrl; else noRecommendedAvatar">
+                <img [src]="service.user.imageUrl" 
+                     [alt]="service.user.firstName + ' ' + service.user.lastName"
+                     class="user-avatar">
+              </ng-container>
+              <ng-template #noRecommendedAvatar>
+                <i class="pi pi-user user-icon"></i>
+              </ng-template>
+              <div class="user-info">
+                <span class="user-name">{{service.user.firstName}} {{service.user.lastName}}</span>
+                <span class="user-address" *ngIf="service.user.address">
+                  {{service.user.address.cityName}}
+                </span>
+              </div>
+            </div>
+
+            <div class="service-actions">
+              <button pButton 
+                      [routerLink]="['/catalog/service', service.id]"
+                      label="{{ 'catalog.viewDetails' | translate }}"
+                      class="p-button-primary">
+              </button>
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div> 

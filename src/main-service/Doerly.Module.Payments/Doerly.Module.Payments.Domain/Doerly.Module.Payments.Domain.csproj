@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Doerly.Common.Helpers\Doerly.Common.Helpers.csproj" />
+      <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
+      <ProjectReference Include="..\..\Doerly.Helpers\Doerly.Helpers.csproj" />
+      <ProjectReference Include="..\..\Doerly.Infrastructure.Api\Doerly.Infrastructure.Api.csproj" />
+      <ProjectReference Include="..\..\Doerly.Messaging\Doerly.Messaging.csproj" />
+      <ProjectReference Include="..\..\Doerly.Notification.EmailSender\Doerly.Notification.EmailSender.csproj" />
+      <ProjectReference Include="..\..\Doerly.Proxy.Payment\Doerly.Proxy.Payment.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Payments.DataTransferObjects\Doerly.Module.Payments.DataTransferObjects.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Payments.DataAccess\Doerly.Module.Payments.DataAccess.csproj" />
+      <ProjectReference Include="..\Doerly.Module.Payments.Client.LiqPay\Doerly.Module.Payments.Client.LiqPay.csproj" />
+    </ItemGroup>
+
+</Project>

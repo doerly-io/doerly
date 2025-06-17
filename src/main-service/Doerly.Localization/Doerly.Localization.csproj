@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>annotations</Nullable>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.5"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\Doerly.Common.Helpers\Doerly.Common.Helpers.csproj"/>
+        <ProjectReference Include="..\Doerly.Domain\Doerly.Domain.csproj"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <EmbeddedResource Update="Resources.en-US.resx">
+        <DependentUpon>Resources.cs</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources.uk-UA.resx">
+        <DependentUpon>Resources.cs</DependentUpon>
+      </EmbeddedResource>
+    </ItemGroup>
+    
+</Project>

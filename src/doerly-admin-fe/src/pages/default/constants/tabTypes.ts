@@ -1,0 +1,2 @@
+export const USER_ACTIVITY = 'USER_ACTIVITY';
+export const BILLS_PAYMENTS = 'BILLS_PAYMENTS';

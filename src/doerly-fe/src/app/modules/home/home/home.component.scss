@@ -1,0 +1,115 @@
+.hello-banner {
+  position: relative;
+  text-align: left;
+  border-radius: 8px;
+  margin: 2rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  user-select: none;
+}
+
+.hello-banner .banner-image-desktop {
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.hello-banner .banner-text {
+  position: absolute;
+  width: 50%;
+  top: 5rem;
+  left: 2rem;
+  text-align: left;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+}
+
+.hello-banner .banner-text h1 {
+  margin-bottom: 0.5rem;
+  color: #2d3a4b;
+  font-size: 3.5rem;
+  font-weight: 700;
+}
+
+.hello-banner .banner-text p {
+  color: #4a5a6a;
+  font-size:1.5rem;
+  font-weight: 500;
+}
+
+.banner-image-mobile {
+  display: none;
+}
+
+.card-text {
+  color: var(--p-primary-color);
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+@media (max-width: 990px) and (min-width: 768px) {
+
+  .hello-banner .banner-text h1 {
+    margin-bottom: 0.5rem;
+    color: #2d3a4b;
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+  .hello-banner .banner-text p {
+    color: #4a5a6a;
+    font-size: 1.1rem;
+  }
+
+  .hello-banner .banner-text {
+    top: 1rem;
+  }
+
+}
+
+
+@media (max-width: 767px) {
+
+  .hello-banner .banner-text h1 {
+    margin-bottom: 0.5rem;
+    color: #2d3a4b;
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+  .hello-banner .banner-text p {
+    color: #4a5a6a;
+    font-size: 1.1rem;
+  }
+
+  .hello-banner .banner-image-mobile {
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 8px;
+    display: block;
+  }
+
+  .hello-banner .banner-text {
+    position: absolute;
+    width: 100%;
+    top: 1rem;
+    left: 0.5rem;
+    text-align: left;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+  }
+
+  .banner-image-desktop {
+    display: none !important;
+  }
+}
+
+@media (max-width: 442px) {
+  .hello-banner .banner-text p {
+    width: 50%;
+  }
+
+}
+

@@ -1,0 +1,52 @@
+<div class="conversation-list-container">
+  <div *ngIf="loading()" class="loading-overlay">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+
+<!-- conversation list -->
+  <div class="conversation-list" *ngIf="!loading() && conversations().length > 0">
+    <div
+      class="conversation-item"
+      *ngFor="let conversation of conversations(); trackBy: trackByConversationId"
+      (click)="navigateToConversation(conversation.id)"
+    >
+      <img
+        *ngIf="getRecipientImageUrl(conversation)"
+        [src]="getRecipientImageUrl(conversation)"
+        alt="Avatar"
+        class="avatar"
+      />
+      <div class="conversation-details">
+        <div class="conversation-header">
+          <h3>{{ getRecipientName(conversation) }}</h3>
+          <div class="conversation-meta">
+            <small *ngIf="conversation.lastMessage">{{
+              conversation.lastMessage.sentAt | date: 'dd.MM.yyyy HH:mm'
+            }}</small>
+          </div>
+        </div>
+        <p *ngIf="conversation.lastMessage" class="last-message">
+          {{ conversation.lastMessage.messageContent | slice: 0:50
+          }}{{ conversation.lastMessage.messageContent.length > 50 ? '...' : '' }}
+        </p>
+        <p *ngIf="!conversation.lastMessage" class="no-message">{{ 'communication.no_messages_yet' | translate }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-conversations" *ngIf="!loading() && conversations().length === 0">
+    <p>{{ 'communication.no_messages' | translate}}</p>
+  </div>
+
+  <!-- paginator -->
+  <p-paginator
+    [rows]="pageSize()"
+    [totalRecords]="totalRecords()"
+    (onPageChange)="onPageChange($event)"
+    [rowsPerPageOptions]="[10, 20, 50]"
+    [alwaysShow]="false"
+  ></p-paginator>
+
+  <!-- Toast for messages -->
+  <p-toast></p-toast>
+</div>

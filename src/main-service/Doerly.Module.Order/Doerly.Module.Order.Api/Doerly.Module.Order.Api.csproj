@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>annotations</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
+    <ProjectReference Include="..\..\Doerly.Infrastructure.Api\Doerly.Infrastructure.Api.csproj" />
+    <ProjectReference Include="..\Doerly.Module.Order.DataTransferObjects\Doerly.Module.Order.DataTransferObjects.csproj" />
+    <ProjectReference Include="..\Doerly.Module.Order.DataAccess\Doerly.Module.Order.DataAccess.csproj" />
+    <ProjectReference Include="..\Doerly.Module.Order.Domain\Doerly.Module.Order.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

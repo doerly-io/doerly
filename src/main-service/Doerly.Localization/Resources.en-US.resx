@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true"></xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+  </resheader>
+  <data name="UserNotFound" xml:space="preserve">
+        <value>User not found</value>
+    </data>
+  <data name="InvalidPassword" xml:space="preserve">
+        <value>Invalid password</value>
+    </data>
+  <data name="UserAlreadyExist" xml:space="preserve">
+        <value>User with this username already exists</value>
+    </data>
+  <data name="InvalidPasswordInput" xml:space="preserve">
+        <value>Incorrect password format</value>
+    </data>
+  <data name="InvalidEmailFormatInput" xml:space="preserve">
+        <value>Invalid email format</value>
+    </data>
+  <data name="ValidTokenNotFound" xml:space="preserve">
+        <value>Valid token not found</value>
+    </data>
+  <data name="ResetPasswordEmailVerificationText" xml:space="preserve">
+        <value>Hello,
+
+We received a request to reset your password. If you did not make this request, please ignore this message.
+
+To reset your password, please click the link below:</value>
+    </data>
+  <data name="ResetPasswordEmailBestRegardsText" xml:space="preserve">
+        <value>If you have any questions, please contact our support team.
+
+Best regards, &lt;/br&gt;
+Doerly</value>
+    </data>
+  <data name="ResetPasswordEmailSubject" xml:space="preserve">
+        <value>Reset password</value>
+    </data>
+  <data name="InvalidFirstNameInput" xml:space="preserve">
+        <value>Invalid first name format</value>
+    </data>
+  <data name="InvalidLastNameInput" xml:space="preserve">
+        <value>Invalid last name format</value>
+    </data>
+  <data name="InvalidPatronymicInput" xml:space="preserve">
+        <value>Invalid patronymic format</value>
+    </data>
+  <data name="InvalidDateOfBirthInput" xml:space="preserve">
+        <value>Invalid date of birth format</value>
+    </data>
+  <data name="InvalidSexInput" xml:space="preserve">
+        <value>Invalid sex format</value>
+    </data>
+  <data name="InvalidBioInput" xml:space="preserve">
+        <value>Invalid bio format</value>
+    </data>
+  <data name="ProfileNotFound" xml:space="preserve">
+        <value>Profile not found</value>
+    </data>
+  <data name="FirstNameTooLong" xml:space="preserve">
+        <value>First name too long</value>
+    </data>
+  <data name="FirstNameTooShort" xml:space="preserve">
+        <value>First name too short</value>
+    </data>
+  <data name="LastNameTooLong" xml:space="preserve">
+        <value>Last name too long</value>
+    </data>
+  <data name="LastNameTooShort" xml:space="preserve">
+        <value>Last name too short</value>
+    </data>
+  <data name="BioTooLong" xml:space="preserve">
+        <value>Bio too long</value>
+    </data>
+  <data name="EmailVerificationText" xml:space="preserve">
+        <value>Thank you for signing up with DOERLY! To complete your registration, please verify your email address by clicking the link below:</value>
+    </data>
+  <data name="Communication.ConversationNotFound" xml:space="preserve">
+        <value>Conversation not found</value>
+    </data>
+  <data name="Communication.MessageNotFound" xml:space="preserve">
+        <value>Message not found</value>
+    </data>
+  <data name="Communication.UnauthorizedSender" xml:space="preserve">
+        <value>The user is not a member of this conversation.</value>
+    </data>
+  <data name="Communication.CannotCreateConversationWithSelf" xml:space="preserve">
+        <value>You cannot create a conversation with yourself</value>
+    </data>
+  <data name="Communication.MessageContentCannotBeEmpty" xml:space="preserve">
+        <value>Message content cannot be empty</value>
+    </data>
+  <data name="Communication.FileCannotBeEmpty" xml:space="preserve">
+    <value>File cannot be empty</value>
+  </data>
+  <data name="OrderNotFound" xml:space="preserve">
+        <value>Order not found</value>
+     </data>
+  <data name="ExecutionProposalNotFound" xml:space="preserve">
+        <value>Execution proposal not found</value>
+    </data>
+  <data name="ExecutionProposalAlreadySent" xml:space="preserve">
+        <value>Execution proposal to this user has already been sent</value>
+    </data>
+  <data name="InvalidDocument" xml:space="preserve">
+        <value>Invalid document, please, check file format and size</value>
+    </data>
+  <data name="FailedToCreateCheckout" xml:space="preserve">
+        <value>Failed to process payment operation</value>
+    </data>
+  <data name="InvalidLanguageProficiencyLevelInput" xml:space="preserve">
+		<value>Invalid language proficiency level</value>
+	</data>
+  <data name="PostIndexTooLong" xml:space="preserve">
+		<value>Post index too long</value>
+	</data>
+  <data name="LanguageNotFound" xml:space="preserve">
+		<value>Language not found</value>
+	</data>
+  <data name="LanguageProficiencyAlreadyExists" xml:space="preserve">
+		<value>Language proficiency already exist</value>
+	</data>
+  <data name="LanguageProficiencyNotFound" xml:space="preserve">
+		<value>Language proficiency not found</value>
+	</data>
+  <data name="LanguageNameTooShort" xml:space="preserve">
+		<value>Language name is too short</value>
+	</data>
+  <data name="LanguageNameTooLong" xml:space="preserve">
+		<value>Language name is too long</value>
+	</data>
+  <data name="LanguageCodeTooLong" xml:space="preserve">
+		<value>Language code is too long</value>
+	</data>
+  <data name="LanguageCodeTooShort" xml:space="preserve">
+		<value>Language code is too short</value>
+	</data>
+  <data name="LanguageAlreadyExists" xml:space="preserve">
+		<value>Language already exist</value>
+	</data>
+  <data name="CompetenceAlreadyExists" xml:space="preserve">
+        <value>Competence already exists in profile</value>
+  </data>
+  <data name="OrderPaymentDescription" xml:space="preserve">
+    <value>Payment for order №{0}</value>
+  </data>
+  <data name="FieldIsRequired" xml:space="preserve">
+    <value>{0} is required</value>
+  </data>
+  <data name="FieldIsTooLong" xml:space="preserve">
+    <value>{0} exceeds maximum length in {1} symbols</value>
+  </data>
+  <data name="FieldIsTooShort" xml:space="preserve">
+    <value>{0} must be at least {1} symbols long</value>
+  </data>
+  <data name="FieldIsInRange" xml:space="preserve">
+    <value>{0} must be between {1} and {2}</value>
+  </data>
+  <data name="FieldIsUrl" xml:space="preserve">
+    <value>{0} must be {1}</value>
+  </data>
+  <data name="ORDER_NOT_FOUND" xml:space="preserve">
+    <value>Order not found</value>
+  </data>
+  <data name="EXECUTION_PROPOSAL_NOT_FOUND" xml:space="preserve">
+    <value>Execution proposal not found</value>
+  </data>
+  <data name="EXECUTION_PROPOSAL_ALREADY_SENT" xml:space="preserve">
+    <value>Execution proposal to this user has already been sent</value>
+  </data>
+  <data name="CategoryNotFound" xml:space="preserve">
+    <value>Category not found</value>
+  </data>
+  <data name="ServiceNotFound" xml:space="preserve">
+    <value>Service not found</value>
+  </data>
+  <data name="ServiceAlreadyDeleted" xml:space="preserve">
+    <value>Service already deleted</value>
+  </data>
+  <data name="CategoryAlreadyDeleted" xml:space="preserve">
+    <value>Category already deleted</value>
+  </data>
+  <data name="CategoryCannotBeOwnParent" xml:space="preserve">
+    <value>Сategory cannot be own parent</value>
+  </data>
+  <data name="ParentCategoryNotFound" xml:space="preserve">
+    <value>Parent category not found</value>
+  </data>
+  <data name="PaymentReceipt" xml:space="preserve">
+    <value>Payment receipt</value>
+  </data>
+  <data name="BillNotFound" xml:space="preserve">
+    <value>Bill not found</value>
+  </data>
+  <data name="BillAlreadyPaid" xml:space="preserve">
+    <value>Bill already paid</value>
+  </data>
+  <data name="AddressIsEmpty" xml:space="preserve">
+    <value>Address is empty</value>
+  </data>
+  <data name="InvalidUserForProposal" xml:space="preserve">
+    <value>Can't send execution proposal to this user</value>
+  </data>
+  <data name="Notification.NewMessage" xml:space="preserve">
+    <value>{0} sent you a message</value>
+  </data>
+  <data name="Notification.Order.StatusChanged" xml:space="preserve">
+    <value>Order #{0} status has been changed to {1}</value>
+  </data>
+</root>

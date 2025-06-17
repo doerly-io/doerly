@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>annotations</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>3851f2fa-89ab-4e93-9dbc-ca006ba5eaf5</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>    
+
+    <ItemGroup>
+        <PackageReference Include="Azure.Storage.Blobs" Version="12.24.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5"/>
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="9.0.5"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.5">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Azure" Version="1.11.0"/>
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.5"/>
+        <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="9.5.0"/>
+        <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1"/>
+        <PackageReference Include="SendGrid" Version="9.29.3"/>
+        <PackageReference Include="SendGrid.Extensions.DependencyInjection" Version="1.0.1"/>
+        <PackageReference Include="StackExchange.Redis" Version="2.8.37"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Doerly.Domain\Doerly.Domain.csproj"/>
+        <ProjectReference Include="..\Doerly.FileRepository\Doerly.FileRepository.csproj"/>
+        <ProjectReference Include="..\Doerly.Localization\Doerly.Localization.csproj"/>
+        <ProjectReference Include="..\Doerly.Messaging\Doerly.Messaging.csproj"/>
+        <ProjectReference Include="..\Doerly.Module.Communication\Doerly.Module.Communication.Api\Doerly.Module.Communication.Api.csproj"/>
+        <ProjectReference Include="..\Doerly.Module.Authorization\Doerly.Module.Authorization.Api\Doerly.Module.Authorization.Api.csproj"/>
+        <ProjectReference Include="..\Doerly.Module.Catalog\Doerly.Module.Catalog.Api\Doerly.Module.Catalog.Api.csproj"/>
+        <ProjectReference Include="..\Doerly.Module.Common\Doerly.Module.Common.Api\Doerly.Module.Common.Api.csproj"/>
+        <ProjectReference Include="..\Doerly.Module.Notification\Doerly.Module.Notification.Api\Doerly.Module.Notification.Api.csproj"/>
+        <ProjectReference Include="..\Doerly.Module.Profile\Doerly.Module.Profile.Api\Doerly.Module.Profile.Api.csproj"/>
+        <ProjectReference Include="..\Doerly.Module.Order\Doerly.Module.Order.Api\Doerly.Module.Order.Api.csproj"/>
+        <ProjectReference Include="..\Doerly.Module.Payments\Doerly.Module.Payments.Api\Doerly.Module.Payments.Api.csproj"/>
+        <ProjectReference Include="..\Doerly.Module.Statistics.Api\Doerly.Module.Statistics.Api.csproj"/>
+        <ProjectReference Include="..\Doerly.Proxy.Authorization\Doerly.Proxy.Authorization.csproj"/>
+        <ProjectReference Include="..\Doerly.Proxy.Catalog\Doerly.Proxy.Catalog.csproj"/>
+        <ProjectReference Include="..\Doerly.Proxy.Orders\Doerly.Proxy.Orders.csproj"/>
+        <ProjectReference Include="..\Doerly.Proxy.Payment\Doerly.Proxy.Payment.csproj"/>
+        <ProjectReference Include="..\Doerly.Proxy.Profile\Doerly.Proxy.Profile.csproj"/>
+    </ItemGroup>
+        
+</Project>

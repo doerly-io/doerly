@@ -1,0 +1,81 @@
+<section class="row justify-content-center mt-5">
+
+  <p-card styleClass="col-md-10 col-lg-8 offset-lg-2 offset-md-1 col-sm-12 offset-sm-0">
+
+    <div class="row justify-content-center">
+      <div class="col-sm-12 col-md-6 me-1">
+        <form [formGroup]="registerForm" class="row card login-form mx-0 px-0">
+          <div class="row px-0 mx-0">
+            <h3 class="c-primary text-center mb-3">{{ 'auth.register' | translate }}</h3>
+          </div>
+
+          <!-- Email -->
+          <div class="row mb-3 mx-0 px-0">
+            <div>
+              <label for="email">{{ 'auth.email' | translate }}</label>
+              <input pInputText formControlName="email" class="w-100" id="email"
+                     placeholder="example@mail.com"/>
+              <small *ngIf="isInvalid(registerForm,'email')" class="input-validation-item">
+                {{ getError(registerForm, 'email', 'required', 'common.field_required' | translate) }}
+                {{ getError(registerForm, 'email', 'email', 'auth.email_not_valid' | translate) }}
+                {{ getServersideError(registerForm, 'email') }}
+              </small>
+            </div>
+          </div>
+
+          <!-- FirstName -->
+          <div class="row mb-3 mx-0 px-0">
+            <div>
+              <label for="firstName">{{ 'profile.basic.firstName.title' | translate }}</label>
+              <input pInputText formControlName="firstName" class="w-100" id="firstName" maxlength="50"
+                     placeholder="{{ 'profile.basic.firstName.placeholder' | translate }}"/>
+              <small *ngIf="isInvalid(registerForm,'firstName')" class="input-validation-item">
+                {{ getError(registerForm, 'firstName', 'required', 'common.field_required' | translate) }}
+                {{ getError(registerForm, 'firstName', 'minLength', 'common.min_length' | translate: {length: 1}) }}
+                {{ getError(registerForm, 'firstName', 'maxLength', 'common.max_length' | translate: {length: 50}) }}
+                {{ getServersideError(registerForm, 'firstName') }}
+              </small>
+            </div>
+          </div>
+
+          <!-- LastName -->
+          <div class="row mb-3 mx-0 px-0">
+            <div>
+              <label for="lastName">{{ 'profile.basic.lastName.title' | translate }}</label>
+              <input pInputText formControlName="lastName" class="w-100" id="lastName" maxlength="50"
+                     placeholder="{{ 'profile.basic.lastName.placeholder' | translate }}"/>
+              <small *ngIf="isInvalid(registerForm,'lastName')" class="input-validation-item">
+                {{ getError(registerForm, 'lastName', 'required', 'common.field_required' | translate) }}
+                {{ getError(registerForm, 'lastName', 'minLength', 'common.min_length' | translate: {length: 1}) }}
+                {{ getError(registerForm, 'lastName', 'maxLength', 'common.max_length' | translate: {length: 50}) }}
+                {{ getServersideError(registerForm, 'lastName') }}
+              </small>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="row mb-3 mx-0 px-0">
+            <doerly-password-input
+              [inputControl]="registerForm.get('password')!"
+              [label]="'auth.password' | translate">
+            </doerly-password-input>
+          </div>
+          <div class="row mx-0 mt-3">
+            <button pButton pRipple label="{{'auth.register' | translate }}" icon="pi pi-user-plus" class="w-100"
+                    [disabled]="!registerForm.valid"
+                    (click)="register()"></button>
+          </div>
+        </form>
+      </div>
+
+      <p-divider [layout]="'vertical'" styleClass="col-1 d-md-block mx-0 d-none"/>
+
+      <div class="col-sm-12 col-md-4 d-flex flex-column align-items-center justify-content-center mt-3 text-center">
+        <h3 class="c-primary d-none d-md-inline">Doerly</h3>
+        <p>{{ 'auth.already_has_account' | translate }}
+          <a class="w-100 mt-3" routerLink="/auth/login">{{ 'auth.login_now' | translate }}</a>
+        </p>
+      </div>
+    </div>
+  </p-card>
+</section>

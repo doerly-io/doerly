@@ -1,0 +1,9 @@
+{
+  "label.email": "Електронна пошта",
+  "label.password": "Пароль",
+  "placeholder.email": "Введiть вашу електронну пошту",
+  "placeholder.password": "Введiть ваш пароль",
+  "signIn": "Увiйти",
+  "validationError.EMPTY_FIELD_LOGIN": "Електронна пошта не може бути порожньою",
+  "validationError.EMPTY_FIELD_PASSWORD": "Пароль не може бути порожнім"
+}

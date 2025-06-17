@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Doerly.Domain\Doerly.Domain.csproj" />
+        <ProjectReference Include="..\..\Doerly.Localization\Doerly.Localization.csproj" />
+        <ProjectReference Include="..\Doerly.Module.Notification.DataAccess\Doerly.Module.Notification.DataAccess.csproj" />
+        <ProjectReference Include="..\Doerly.Module.Notification.DataTransferObjects\Doerly.Module.Notification.DataTransferObjects.csproj" />
+    </ItemGroup>
+    
+</Project>

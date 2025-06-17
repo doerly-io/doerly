@@ -1,0 +1,11 @@
+{
+  "error.INTERNAL_SERVER_ERROR": "Some internal error occurred. Please try again later.",
+  "error.UNAUTHORIZED": "You don't have authorities to use system functionality.",
+  "page.catalog": "Catalog",
+  "page.default": "Home",
+  "page.orders": "Orders",
+  "page.reporting": "Reporting",
+  "page.users": "Users",
+  "page.settings": "Settings",
+  "signOut": "Sign Out"
+}

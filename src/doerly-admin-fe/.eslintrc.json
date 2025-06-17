@@ -1,0 +1,21 @@
+{
+  "extends": ["react-app"],
+  "plugins": [
+    "sort-keys-fix"
+  ],
+  "rules": {
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "always-multiline"
+    }],
+    "eol-last": ["error", "always"],
+    "indent": ["error", 2,  { "SwitchCase": 1 }],
+    "max-len": ["error", { "code": 80 }],
+    "object-curly-spacing": ["error", "always"],
+    "quotes": ["error", "single"],
+    "react-hooks/exhaustive-deps": "off",
+    "semi": ["error", "always"],
+    "sort-keys-fix/sort-keys-fix": ["error", "asc"]
+  }
+}

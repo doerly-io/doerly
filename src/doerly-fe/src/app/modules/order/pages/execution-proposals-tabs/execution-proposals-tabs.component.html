@@ -1,0 +1,14 @@
+<p-tabs [value]="`${tab}`" scrollable showNavigators="false" selectOnFocus="true">
+    <p-tablist>
+        <p-tab value="0">{{ 'ordering.received_proposals' | translate }}</p-tab>
+        <p-tab value="1">{{ 'ordering.sent_proposals' | translate }}</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+        <p-tabpanel value="0">
+            <app-execution-proposals-list [receiverId]="profileId"></app-execution-proposals-list>
+        </p-tabpanel>
+        <p-tabpanel value="1">
+            <app-execution-proposals-list [senderId]="profileId"></app-execution-proposals-list>
+        </p-tabpanel>
+    </p-tabpanels>
+</p-tabs>

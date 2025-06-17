@@ -1,0 +1,30 @@
+{
+  "profile": {
+    "message": {
+      "button": "Send Message",
+      "button.tooltip": "Send a message to the user",
+      "auth.required": "You need to log in to send messages"
+    }
+  },
+  "communication": {
+    "message": {
+      "button": "Send Message",
+      "button.tooltip": "Send a message to the user",
+      "auth.required": "You need to log in to send messages",
+      "modal": {
+        "title": "New Message",
+        "placeholder": "Enter your message...",
+        "send": "Send",
+        "cancel": "Cancel"
+      },
+      "success": {
+        "title": "Success",
+        "detail": "Message sent successfully"
+      },
+      "error": {
+        "title": "Error",
+        "detail": "Failed to send message"
+      }
+    }
+  }
+} 

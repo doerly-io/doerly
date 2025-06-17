@@ -1,0 +1,21 @@
+{
+  "cancel": "Cancel",
+  "catalog": "Catalog",
+  "catalog.addCategory": "Add Category to Catalog",
+  "catalog.noCategories": "No categories available",
+  "catalog.showDisabledCategories": "Disabled Categories",
+  "catalog.showDeletedCategories": "Deleted Categories",
+  "category.field.description": "Description",
+  "category.field.name": "Name",
+  "delete": "Delete",
+  "delete.title": "Delete Category",
+  "delete.subtitle": "Are you sure you want to delete this category?",
+  "save": "Save",
+  "snackbar.successCreateCategory": "Category created successfully",
+  "snackbar.successDeleteCategory": "Category deleted successfully",
+  "snackbar.successUpdateCategory": "Category updated successfully",
+  "title.create": "Create Category",
+  "title.update": "Edit Category",
+  "validationError.EMPTY_FIELD_DESCRIPTION": "Category description cannot be empty",
+  "validationError.EMPTY_FIELD_NAME": "Category name cannot be empty"
+}

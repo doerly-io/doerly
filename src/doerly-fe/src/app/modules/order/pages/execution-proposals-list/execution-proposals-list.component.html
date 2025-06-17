@@ -1,0 +1,54 @@
+<section class="execution-proposal-list row justify-content-center">
+    <p-dataview [value]="proposals" [paginator]="true" alwaysShowPaginator="false" [rows]="10" [rowsPerPageOptions]="[10, 20, 50, 100]"
+        [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="loadProposals($event)" [loading]="loading"
+        emptyMessage="{{ 'ordering.no_execution_proposals' | translate }}">
+        <ng-template #list>
+            <div *ngFor="let proposal of proposals">
+                <div class="execution-proposal-item d-flex flex-row align-items-center"
+                    [routerLink]="['/ordering/execution-proposal', proposal.id]" routerLinkActive="router-link-active">
+                    <p-skeleton />
+                    <!-- Аватар та ім'я -->
+                    <div class="proposal-avatar-block d-flex flex-column align-items-center me-3">
+                        <div class="position-relative" [routerLink]="['/profile', receiverId ? proposal.sender?.id : proposal.receiver?.id]" style="cursor: pointer;">
+                            <img *ngIf="(receiverId && proposal.sender?.avatarUrl) || (senderId && proposal.receiver?.avatarUrl)"
+                                [src]="receiverId ? proposal.sender?.avatarUrl : proposal.receiver?.avatarUrl"
+                                alt="{{ 'profile.basic.image.alt' | translate }}" class="avatar proposal-list-avatar"
+                                width="56" height="56" />
+                            <p-avatar
+                                *ngIf="(receiverId && !proposal.sender?.avatarUrl) || (senderId && !proposal.receiver?.avatarUrl)"
+                                icon="pi pi-user" shape="circle" size="large"
+                                class="avatar-bg proposal-list-avatar"></p-avatar>
+                            <div class="profile-hover-overlay">
+                                <i class="pi pi-user"></i>
+                                <span>{{ 'pages.profile.title' | translate }}</span>
+                            </div>
+                        </div>
+                        <span class="proposal-person-name text-center text-sm">
+                            {{ receiverId ? proposal.sender?.firstName : proposal.receiver?.firstName  }}
+                        </span>
+                    </div>
+
+                    <!-- Інформація та статус у два стовпчики -->
+                    <div class="info-status-container d-flex flex-grow-1">
+                        <div class="info-container flex-grow-1 d-flex flex-column justify-content-center">
+                            <div class="execution-proposal-header">
+                                <span class="text-lg font-medium text-surface-900 dark:text-surface-0">
+                                    {{ 'ordering.order_number' | translate: {orderId: proposal.orderId} }}
+                                </span>
+                                <span class="font-medium text-secondary text-sm">
+                                    {{ proposal.dateCreated | date:'dd.MM.yyyy HH:mm' }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="status-container d-flex flex-column justify-content-center align-items-center">
+                            <p-tag
+                                [value]="'ordering.proposal_statuses.' + EExecutionProposalStatus[proposal.status] | translate"
+                                [severity]="getExecutionProposalStatusSeverity(proposal.status)">
+                            </p-tag>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-dataview>
+</section>

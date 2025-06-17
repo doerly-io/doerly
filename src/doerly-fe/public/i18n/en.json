@@ -1,0 +1,612 @@
+{
+  "address": {
+    "region": {
+      "placeholder": "Select your region"
+    },
+    "city": {
+      "placeholder": "Select your city"
+    }
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "password_confirmation": "Password confirmation",
+    "remember_me": "Remember me",
+    "forgot_password": "Forgot password?",
+    "register": "Register",
+    "name": "Name",
+    "password_reset": "Password reset",
+    "send_password_reset_link": "Send password reset link",
+    "confirm_password": "Confirm password",
+    "reset_password": "Reset password",
+    "want_to_join_us": "Want to join us?",
+    "register_now": "Register now!",
+    "already_has_account": "Already has account?",
+    "login_now": "Login now!",
+    "reset_link_sent": "A password reset link has been sent to your email address.",
+    "password_mismatch": "Entered passwords do not match.",
+    "email_not_valid": "Enter a valid email address.",
+    "incorrect_credentials": "Incorrect email or password.",
+    "email_exists": "User with this email already exists.",
+    "register_success": "Registration was successful.",
+    "check_email": "Check your email and follow the verification link."
+  },
+  "profile": {
+    "title": "Personal info",
+    "subtitle": "Info about you and your preferences across Doerly services",
+    "view": {
+      "title": "View Profile",
+      "subtitle": "Viewing user profile",
+      "cv": {
+        "title": "CV",
+        "subtitle": {
+          "available": "User's CV is available for preview",
+          "none": "User has not uploaded a CV yet"
+        }
+      },
+      "image": {
+        "title": "Profile Picture",
+        "subtitle": "User's profile picture"
+      }
+    },
+    "basic": {
+      "actions": {
+        "cancel": "Cancel",
+        "edit": "Edit basic info",
+        "save": "Save basic info"
+      },
+      "address": {
+        "title": "Address"
+      },
+      "bio": {
+        "title": "Bio",
+        "placeholder": "Tell us about yourself"
+      },
+      "birthday": {
+        "title": "Birthday",
+        "placeholder": "Select your birthday"
+      },
+      "image": {
+        "alt": "User avatar",
+        "title": "Profile picture",
+        "subtitle": "Profile picture will help you be recognized in the service",
+        "upload": {
+          "button": {
+            "text": "Upload",
+            "tooltip": "Upload profile picture"
+          },
+          "select": "Select picture",
+          "title": "Upload picture"
+        },
+        "renew": {
+          "title": "Renew picture"
+        },
+        "delete": {
+          "text": "Delete",
+          "tooltip": "Delete profile picture"
+        }
+      },
+      "firstName": {
+        "title": "Name",
+        "placeholder": "Enter your name"
+      },
+      "lastName": {
+        "title": "Last name",
+        "placeholder": "Enter your last name"
+      },
+      "sex": {
+        "title": "Sex",
+        "options": {
+          "male": "Male",
+          "female": "Female"
+        },
+        "placeholder": "Select your sex"
+      },
+      "title": "Basic information"
+    },
+    "professional": {
+      "title": "Professional information",
+      "view": {
+        "title": "Professional Information",
+        "languages": {
+          "subtitle": "Languages known by the user"
+        },
+        "competences": {
+          "subtitle": "User's competences and skills"
+        }
+      },
+      "cv": {
+        "title": "CV",
+        "subtitle": {
+          "available": "Your CV is available for preview and download",
+          "none": "Upload your CV to help employers find you"
+        },
+        "preview": {
+          "title": "Preview CV"
+        },
+        "delete": {
+          "text": "Delete",
+          "tooltip": "Delete CV"
+        },
+        "download": {
+          "title": "Download CV"
+        },
+        "upload": {
+          "title": "Upload CV",
+          "select": "Select CV file",
+          "button": {
+            "text": "Upload"
+          }
+        },
+        "renew": {
+          "text": "Renew",
+          "tooltip": "Renew CV",
+          "title": "Renew CV"
+        },
+        "error": {
+          "loading": "An error occurred while loading the CV",
+          "navigation": "An error occurred while navigating the PDF"
+        }
+      },
+      "languages": {
+        "title": "Languages",
+        "subtitle": "Add languages you know and your proficiency level",
+        "add": {
+          "title": "Add language",
+          "success": "Language has been added successfully",
+          "error": "An error occurred while adding the language. Message: {{message}}"
+        },
+        "edit": {
+          "title": "Edit language"
+        },
+        "delete": {
+          "title": "Delete language",
+          "success": "Language has been deleted successfully",
+          "error": "An error occurred while deleting the language. Message: {{message}}"
+        },
+        "update": {
+          "success": "Language has been updated successfully",
+          "error": "An error occurred while updating the language. Message: {{message}}"
+        },
+        "load": {
+          "error": "An error occurred while loading languages. Message: {{message}}"
+        },
+        "language": {
+          "label": "Language",
+          "placeholder": "Select a language"
+        },
+        "level": {
+          "label": "Proficiency level",
+          "placeholder": "Select your proficiency level",
+          "beginner": "Beginner (A1)",
+          "elementary": "Elementary (A2)",
+          "intermediate": "Intermediate (B1)",
+          "upperIntermediate": "Upper Intermediate (B2)",
+          "advanced": "Advanced (C1)",
+          "proficient": "Proficient (C2)",
+          "native": "Native"
+        },
+        "view": {
+          "subtitle": "Languages known by the user"
+        }
+      },
+      "competences": {
+        "subtitle": "Add your categories of competences and skills",
+        "add": {
+          "title": "Add Competence",
+          "success": "Competence added successfully",
+          "error": "Failed to add competence. Message: {{message}}"
+        },
+        "edit": {
+          "title": "Edit Competence"
+        },
+        "delete": {
+          "title": "Delete Competence",
+          "success": "Competence deleted successfully",
+          "error": "Failed to delete competence"
+        },
+        "category": {
+          "label": "Category",
+          "placeholder": "Select a category"
+        },
+        "categories": {
+          "load": {
+            "error": "Failed to load categories"
+          }
+        },
+        "view": {
+          "subtitle": "User's competences categories"
+        }
+      },
+      "services": {
+        "subtitle": "Services",
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter service name"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Enter service description"
+        },
+        "category": {
+          "label": "Category",
+          "placeholder": "Select service category"
+        },
+        "price": {
+          "label": "Price",
+          "placeholder": "Enter service price"
+        },
+        "status": {
+          "label": "Status",
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        },
+        "add": {
+          "title": "Add service"
+        },
+        "edit": {
+          "title": "Edit service"
+        },
+        "disable": {
+          "title": "Disable service"
+        },
+        "enable": {
+          "title": "Enable service"
+        },
+        "delete": {
+          "title": "Delete service",
+          "success": "Service deleted successfully",
+          "error": "Failed to delete service"
+        }
+      }
+    },
+    "paymentHistory": {
+      "title": "Payment history",
+      "subtitle": "View your payment history and details",
+      "no_payments": "No payments found",
+      "date": "Date",
+      "amount": "Amount",
+      "status": "Status",
+      "details": "Details",
+      "loading": "Loading...",
+      "errors": {
+        "load": "An error occurred while loading payment history."
+      }
+    },
+    "message": {
+      "save": {
+        "success": "Profile has been saved successfully.",
+        "error": "An error occurred while saving the profile. Message: {{message}}"
+      },
+      "load": {
+        "error": "An error occurred while loading the profile. Message: {{message}}"
+      },
+      "upload": {
+        "success": "Profile picture has been uploaded successfully.",
+        "error": "An error occurred while uploading the profile picture. Message: {{message}}"
+      },
+      "cv": {
+        "upload": {
+          "success": "CV has been uploaded successfully.",
+          "error": "An error occurred while uploading the CV. Message: {{message}}"
+        },
+        "download": {
+          "error": "An error occurred while downloading the CV. Message: {{message}}"
+        },
+        "delete": {
+          "success": "CV has been deleted successfully.",
+          "error": "An error occurred while deleting the CV. Message: {{message}}"
+        }
+      },
+      "image": {
+        "delete": {
+          "success": "Profile picture has been deleted successfully",
+          "error": "An error occurred while deleting the profile picture. Please try again later"
+        }
+      },
+      "button": "Send Message",
+      "button.tooltip": "Send a message to the user",
+      "auth.required": "You need to log in to send messages"
+    },
+    "categories": {
+      "load": {
+        "error": "An error occurred while loading categories. Message: {{message}}"
+      }
+    }
+  },
+  "ordering": {
+    "orders": "Orders",
+    "my_orders": "My orders",
+    "order": "Order",
+    "execution_proposals": "Execution proposals",
+    "received_proposals": "Received proposals",
+    "sent_proposals": "Sent proposals",
+    "placed_orders": "Placed orders",
+    "accepted_orders": "Accepted orders",
+    "create_order": "Create order",
+    "order_details": "Order details",
+    "execution_proposal": "Execution proposal",
+    "category_id": "Category ID",
+    "title": "Title",
+    "description": "Description",
+    "price": "Price",
+    "price_negotiable": "Price is negotiable",
+    "use_profile_address": "Use profile address",
+    "address": "Address",
+    "placed": "Placed",
+    "due_date": "Due Date",
+    "customer_id": "Customer ID",
+    "executor_id": "Executor ID",
+    "execution_date": "Execution Date",
+    "bill_id": "Bill ID",
+    "field_required": "This field is required",
+    "address_required": "Address is required",
+    "price_min": "Minimum price is 1",
+    "minimum_length": "Мінімальна довжина {{length}} символів",
+    "send_execution_proposal": "Send execution proposal",
+    "comment": "Comment",
+    "loading": "Loading...",
+    "no_data": "No data",
+    "no_orders": "No Orders Found",
+    "no_execution_proposals": "No execution proposals",
+    "send": "Send",
+    "resolved_successfully": "Resolved successfully",
+    "execution_proposal_updated": "Execution proposal updated successfully",
+    "execution_proposal_sent": "Execution proposal sent successfully",
+    "order_created": "Order created successfully",
+    "order_updated": "Order updated successfully",
+    "id": "Id",
+    "sender_id": "Sender ID",
+    "receiver_id": "Receiver ID",
+    "execution_proposal_details": "Execution proposal details",
+    "execution_proposal_id": "Execution proposal ID",
+    "order_id": "Order ID",
+    "proposal_id": "Proposal ID",
+    "cancel": "Cancel",
+    "status": "Status",
+    "order_status": "Order status",
+    "order_statuses": {
+      "Placed": "Placed",
+      "InProgress": "In progress",
+      "AwaitingPayment": "Awaiting payment",
+      "ProcessingPayment": "Processing payment",
+      "AwaitingConfirmation": "Awaiting confirmation",
+      "Completed": "Completed",
+      "Canceled": "Canceled"
+    },
+    "proposal_status": "Proposal status",
+    "proposal_statuses": {
+      "Pending": "Pending",
+      "Accepted": "Accepted",
+      "Rejected": "Rejected",
+      "Revoked": "Revoked"
+    },
+    "payment_kind": "Payment kind",
+    "payment_kinds": {
+      "Online": "Online",
+      "Cash": "Cash"
+    },
+    "proposal_options": {
+      "accept": "Accept",
+      "reject": "Reject",
+      "revoke": "Revoke"
+    },
+    "cancelled_successfully": "Cancelled successfully",
+    "order_status_changed": "Order status has been changed",
+    "execution_proposal_editing": "Execution proposal editing",
+    "order_editing": "Order editing",
+    "payment_redirect": "You are gonna be redirected to the payment page in a few seconds",
+    "end": "End",
+    "pay": "Pay",
+    "view_profile": "View profile",
+    "sent": "Sent",
+    "executor": "Executor",
+    "order_number": "Order №{{orderId}}",
+    "execution_proposal_number": "Execution proposal №{{proposalId}}",
+    "size": "Size",
+    "added": "Added",
+    "uploaded": "Uploaded",
+    "drag_and_drop_images": "Drag and drop image files here to upload",
+    "download": "Download",
+    "uploaded_files": "Uploaded files",
+    "added_files": "Added files",
+    "add_files": "Add files",
+    "clear_files": "Clear files",
+    "delete_file": "Delete file",
+    "additional_files": "Additional files",
+    "file_limit_exceeded": "File limit exceeded. Maximum number of files is {{limit}}.",
+    "files_count": "Files",
+    "files_size": "Files size",
+    "files_size_limit_exceeded": "File size limit exceeded.",
+    "files_size_limit": "Maximum files size is {{size}}.",
+    "service_required": "Service is required for order creation",
+    "try_adjusting_search": "Try adjusting your search or filter to find what you're looking for."
+  },
+  "feedback": {
+    "title": "Feedback",
+    "history": "Feedback history",
+    "nohistory": "No feedback history found",
+    "submit": "Submit Feedback",
+    "delete": "Delete Feedback",
+    "feedback_created": "Feedback has been created successfully",
+    "feedback_updated": "Feedback has been updated successfully",
+    "feedback_deleted": "Feedback has been deleted successfully"
+  },
+  "payments": {
+    "status": {
+      "pending": "Pending",
+      "failed": "Failed to process payment",
+      "error": "Error entering payment details",
+      "expired" : "Expired",
+      "completed": "Successful",
+      "canceled": "Canceled",
+      "unknown": "Unknown status"
+    },
+    "currency": {
+      "usd": "USD",
+      "eur": "EUR",
+      "uah": "UAH"
+    },
+    "nohistory": "Payments history not found"
+  },
+  "communication": {
+    "title": "Messages",
+    "unknown_user": "Unknown User",
+    "no_messages": "No messages",
+    "no_messages_yet": "No messages yet",
+    "choose_conversation": "Choose a conversation to start messaging",
+    "conversation_not_found": "Conversation not found",
+    "user_status": {
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "typing": "is typing...",
+    "message_placeholder": "Type a message...",
+    "download_file": "Download file",
+    "errors": {
+      "load_conversation": "Failed to load conversation",
+      "send_message": "Failed to send message"
+    },
+    "send_message_before_sending": "Please enter a message before sending",
+    "dialog": {
+      "title": "New Message",
+      "content": {
+        "label": "Message",
+        "placeholder": "Enter your message..."
+      },
+      "send": "Send"
+    },
+    "message": {
+      "success": {
+        "title": "Success",
+        "detail": "Message sent successfully"
+      },
+      "error": {
+        "title": "Error",
+        "detail": "Failed to send message"
+      }
+    }
+  },
+  "catalog": {
+    "services": "Services",
+    "description": "Description",
+    "price": "Price",
+    "additionalInfo": "Additional Information",
+    "provider": "Service Provider",
+    "competences": "Competences",
+    "viewDetails": "View Details",
+    "recommendedServices": "Recommended Services",
+    "no_services": "No Services Found",
+    "try_adjusting_search": "Try adjusting your search or filter to find what you're looking for.",
+    "sort": "Sort by",
+    "sort_options": {
+      "price_asc": "Price: Low to High",
+      "price_desc": "Price: High to Low",
+      "name_asc": "Name: A to Z",
+      "name_desc": "Name: Z to A"
+    },
+    "filters":{
+      "filters": "Filters",
+      "sort_by": "Sort by",
+      "sort_direction": "Direction",
+      "ascending": "Ascending",
+      "descending": "Descending",
+      "apply": "Apply",
+      "title": "Title",
+      "price": "Price"
+    }
+  },
+  "common": {
+    "actions": "Actions",
+    "cancel": "Cancel",
+    "save": "Save",
+    "error": "Error",
+    "success": "Success",
+    "info": "Info",
+    "warning": "Warning",
+    "unauthorized": "Authorization required",
+    "max_length": "Max length is {{length}} characters",
+    "min_length": "Min length is {{length}} characters",
+    "field_required": "This field is required",
+    "page_not_found": "Page not found",
+    "edit": "Edit",
+    "delete": "Delete",
+    "error_occurred": "An error occurred",
+    "categories": "Categories",
+    "control": {
+      "unset": "Unset"
+    },
+    "edited": "Ed.",
+    "loadMore": "Load more",
+    "add": {
+      "value": "Add value"
+    },
+    "yes": "Yes",
+    "no": "No",
+    "search": {
+      "placeholder": "Search..."
+    }
+  },
+  "pages": {
+    "profile": {
+      "title": "Profile"
+    },
+    "communication": {
+      "title": "Conversation"
+    }
+  },
+  "pdf": {
+    "error": {
+      "load": "Error loading PDF document",
+      "render": "Error rendering PDF page",
+      "no-document": "No PDF document loaded",
+      "canvas-context": "Could not get canvas context"
+    }
+  },
+  "Notification": {
+    "Order": {
+      "StatusChanged": "Order #{{id}} status changed to '{{status}}'"
+    },
+    "Message": {
+      "NewMessage": "{{senderName}} sent you a message"
+    },
+    "ExecutionProposal": {
+      "StatusChanged": "Execution proposal #{{id}} status changed to '{{status}}'"
+    }
+  },
+  "notification": {
+    "title": "Notifications",
+    "mark_all_read": "Mark all as read",
+    "no_notifications": "No notifications",
+    "types": {
+      "Message": "Message",
+      "Order": "Order",
+      "ExecutionProposal": "Execution Proposal"
+    },
+    "message": "{{senderName}} sent you a message",
+    "order": "Order #{{orderId}} status has been changed to {{status}}",
+    "system": "{{message}}",
+    "task": "New task assigned: {{taskName}}",
+    "comment": "{{userName}} commented on your {{entityType}}",
+    "like": "{{userName}} liked your {{entityType}}",
+    "follow": "{{userName}} started following you",
+    "mention": "{{userName}} mentioned you in a {{entityType}}"
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "aboutUs": "About Us",
+    "services": "Services",
+    "contact": "Contact",
+    "faq": "FAQ",
+    "contactUs": "Contact Us",
+    "allRightsReserved": "All rights reserved",
+    "description": "Your trusted platform for professional services and local expertise."
+  },
+  "home":{
+    "welcome": "Welcome to Doerly!",
+    "welcome_description": "Find and offer services in any sphere",
+    "popular_categories": "Popular Categories"
+  }
+}
