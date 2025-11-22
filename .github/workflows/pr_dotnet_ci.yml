@@ -37,5 +37,5 @@ jobs:
 
     - name: Run tests
       env:
-          DOTNET_ENVIRONMENT: Test
+          DOTNET_ENVIRONMENT: Development
       run: dotnet test src/main-service/tests/Doerly.Module.Authorization.Tests/Doerly.Module.Authorization.Tests.csproj --configuration Release --verbosity normal
