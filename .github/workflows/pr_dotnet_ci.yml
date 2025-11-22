@@ -7,7 +7,10 @@ on:
   push:
     branches: [ "master" ]
   pull_request:
-    branches: [ "master" , "dev" ]
+    branches: [ "master", "dev" ]
+  
+  workflow_dispatch:
+  
 
 jobs:
   build:
@@ -16,11 +19,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
+
+    # Pull PostgreSQL 15 image for Testcontainers
+    - name: Pre-pull PostgreSQL 15 image
+      run: docker pull postgres:15
+      
     - name: Restore dependencies
-      run: dotnet restore src/main-service/Doerly.Host/Doerly.Host.csproj
+      run: dotnet restore src/main-service/Doerly.Host/Doerly.Host.csproj && dotnet restore src/main-service/tests/Doerly.Module.Authorization.Tests/Doerly.Module.Authorization.Tests.csproj
+      
     - name: Build
       run: dotnet build src/main-service/Doerly.Host/Doerly.Host.csproj --configuration Release --no-restore
+
+    - name: Run tests
+      env:
+          DOTNET_ENVIRONMENT: Development
+      run: dotnet test src/main-service/tests/Doerly.Module.Authorization.Tests/Doerly.Module.Authorization.Tests.csproj --configuration Release --verbosity normal
