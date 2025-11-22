@@ -30,7 +30,7 @@ jobs:
       run: docker pull postgres:15
       
     - name: Restore dependencies
-      run: dotnet restore src/main-service/Doerly.Host/Doerly.Host.csproj
+      run: dotnet restore src/main-service/Doerly.Host/Doerly.Host.csproj && dotnet restore src/main-service/tests/Doerly.Module.Authorization.Tests/Doerly.Module.Authorization.Tests.csproj
       
     - name: Build
       run: dotnet build src/main-service/Doerly.Host/Doerly.Host.csproj --configuration Release --no-restore
